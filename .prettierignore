@@ -1,0 +1,29 @@
+# Build outputs
+dist/
+.next/
+out/
+
+# Package manager
+node_modules/
+.pnpm-store/
+
+# Turbo cache
+.turbo/
+
+# Generated Prisma files
+apps/api/src/generated/
+
+# Lockfiles
+pnpm-lock.yaml
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Coverage
+coverage/
+
+# Auto-generated
+*.min.js
+*.d.ts

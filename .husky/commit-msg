@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Enforce conventional commit messages
+# Format: type(scope): description
+# Examples: feat(courses): add quiz module
+#           fix(auth): resolve token refresh race
+
+commit_regex='^(feat|fix|docs|style|refactor|perf|test|chore|revert|ci|build)(\(.+\))?: .{1,100}'
+
+commit_msg=$(cat "$1")
+
+if ! echo "$commit_msg" | grep -qE "$commit_regex"; then
+  echo ""
+  echo "❌ Invalid commit message format."
+  echo ""
+  echo "   Expected: type(scope): description"
+  echo "   Example:  feat(courses): add lesson reordering"
+  echo ""
+  echo "   Valid types: feat | fix | docs | style | refactor | perf | test | chore | revert | ci | build"
+  echo ""
+  exit 1
+fi

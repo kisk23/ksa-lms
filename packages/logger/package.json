@@ -1,0 +1,17 @@
+{
+  "name": "@lms/logger",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rimraf dist",
+    "lint": "eslint src/"
+  },
+  "devDependencies": {
+    "@lms/config": "workspace:*",
+    "typescript": "^5.5.0",
+    "rimraf": "^5.0.0"
+  }
+}

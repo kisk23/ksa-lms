@@ -1,0 +1,290 @@
+// ──────────────────────────────────────────
+// LMS Prisma Schema
+// ──────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User ────────────────────────────────
+
+enum UserRole {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  role      UserRole @default(STUDENT)
+  avatarUrl String?  @map("avatar_url")
+  bio       String?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  courses     Course[]     @relation("InstructorCourses")
+  enrollments Enrollment[]
+  quizAttempts QuizAttempt[]
+  submissions  AssignmentSubmission[]
+
+  @@map("users")
+}
+
+// ─── Category ────────────────────────────
+
+model Category {
+  id       String     @id @default(cuid())
+  name     String     @unique
+  slug     String     @unique
+  parentId String?    @map("parent_id")
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+  courses  Course[]
+
+  @@map("categories")
+}
+
+// ─── Course ──────────────────────────────
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model Course {
+  id           String          @id @default(cuid())
+  title        String
+  slug         String          @unique
+  description  String
+  thumbnailUrl String?         @map("thumbnail_url")
+  price        Int             @default(0)
+  status       CourseStatus    @default(DRAFT)
+  difficulty   DifficultyLevel @default(BEGINNER)
+  instructorId String          @map("instructor_id")
+  categoryId   String          @map("category_id")
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+
+  // Relations
+  instructor  User         @relation("InstructorCourses", fields: [instructorId], references: [id])
+  category    Category     @relation(fields: [categoryId], references: [id])
+  sections    Section[]
+  enrollments Enrollment[]
+
+  @@map("courses")
+}
+
+// ─── Section ─────────────────────────────
+
+model Section {
+  id       String   @id @default(cuid())
+  title    String
+  order    Int      @default(0)
+  courseId String   @map("course_id")
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons  Lesson[]
+
+  @@map("sections")
+}
+
+// ─── Lesson ──────────────────────────────
+
+enum LessonType {
+  VIDEO
+  TEXT
+  QUIZ
+}
+
+model Lesson {
+  id        String     @id @default(cuid())
+  title     String
+  content   String?
+  videoUrl  String?    @map("video_url")
+  type      LessonType @default(TEXT)
+  duration  Int?
+  order     Int        @default(0)
+  isFree    Boolean    @default(false) @map("is_free")
+  sectionId String     @map("section_id")
+  section   Section    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  completions LessonCompletion[]
+
+  @@map("lessons")
+}
+
+// ─── Enrollment ──────────────────────────
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model Enrollment {
+  id          String           @id @default(cuid())
+  userId      String           @map("user_id")
+  courseId     String           @map("course_id")
+  status      EnrollmentStatus @default(ACTIVE)
+  progress    Float            @default(0)
+  enrolledAt  DateTime         @default(now()) @map("enrolled_at")
+  completedAt DateTime?        @map("completed_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+// ─── Lesson Completion ───────────────────
+
+model LessonCompletion {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  lessonId    String   @map("lesson_id")
+  completedAt DateTime @default(now()) @map("completed_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("lesson_completions")
+}
+
+// ─── Quiz ────────────────────────────────
+
+model Quiz {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  courseId     String         @map("course_id")
+  passingScore Int           @default(70) @map("passing_score")
+  timeLimit   Int?           @map("time_limit")
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  questions QuizQuestion[]
+  attempts  QuizAttempt[]
+
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id            String   @id @default(cuid())
+  quizId        String   @map("quiz_id")
+  question      String
+  options       Json
+  correctAnswer String   @map("correct_answer")
+  points        Int      @default(1)
+  order         Int      @default(0)
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@map("quiz_questions")
+}
+
+model QuizAttempt {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  quizId      String   @map("quiz_id")
+  score       Float
+  passed      Boolean
+  answers     Json
+  startedAt   DateTime @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
+
+  user User @relation(fields: [userId], references: [id])
+  quiz Quiz @relation(fields: [quizId], references: [id])
+
+  @@map("quiz_attempts")
+}
+
+// ─── Assignment ──────────────────────────
+
+model Assignment {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  courseId     String   @map("course_id")
+  dueDate     DateTime? @map("due_date")
+  maxScore    Int       @default(100) @map("max_score")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  submissions AssignmentSubmission[]
+
+  @@map("assignments")
+}
+
+model AssignmentSubmission {
+  id           String   @id @default(cuid())
+  assignmentId String   @map("assignment_id")
+  userId       String   @map("user_id")
+  content      String
+  fileUrl      String?  @map("file_url")
+  score        Int?
+  feedback     String?
+  submittedAt  DateTime @default(now()) @map("submitted_at")
+  gradedAt     DateTime? @map("graded_at")
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+
+  @@unique([assignmentId, userId])
+  @@map("assignment_submissions")
+}
+
+// ─── Payment ─────────────────────────────
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  userId    String        @map("user_id")
+  courseId   String        @map("course_id")
+  amount    Int
+  currency  String        @default("USD")
+  status    PaymentStatus @default(PENDING)
+  provider  String?
+  providerPaymentId String? @map("provider_payment_id")
+  createdAt DateTime      @default(now()) @map("created_at")
+
+  @@map("payments")
+}
+
+// ─── Notification ────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  title     String
+  message   String
+  isRead    Boolean  @default(false) @map("is_read")
+  type      String   @default("info")
+  link      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}

@@ -1,0 +1,48 @@
+{
+  "name": "lms",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint -- --fix",
+    "type-check": "turbo type-check",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yaml,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yaml,css}\"",
+    "db:migrate": "pnpm --filter @lms/api exec prisma migrate dev",
+    "db:generate": "pnpm --filter @lms/api exec prisma generate",
+    "db:seed": "pnpm --filter @lms/api exec ts-node prisma/seed.ts",
+    "db:studio": "pnpm --filter @lms/api exec prisma studio",
+    "prepare": "husky",
+    "clean": "turbo clean && rimraf node_modules"
+  },
+  "devDependencies": {
+    "@lms/config": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.30.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.3.0",
+    "rimraf": "^5.0.0",
+    "turbo": "^2.3.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "**/*.{js,jsx,cjs,mjs}": [
+      "prettier --write"
+    ],
+    "**/*.{json,md,yaml,yml,css}": [
+      "prettier --write"
+    ]
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

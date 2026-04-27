@@ -1,0 +1,12 @@
+{
+  "extends": "./packages/config/tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "references": [
+    { "path": "./packages/shared-types" },
+    { "path": "./packages/utils" },
+    { "path": "./packages/logger" },
+    { "path": "./packages/ui" }
+  ]
+}
