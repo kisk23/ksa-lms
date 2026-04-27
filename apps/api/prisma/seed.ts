@@ -1,118 +1,150 @@
-import { PrismaClient, UserRole, CourseStatus, DifficultyLevel } from '@prisma/client';
+import { PrismaClient, UserRole, ParentRelationship } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding database...');
+  console.log('🌱 Seeding Phase 1 Lite database...');
 
-  // Categories
-  const devCategory = await prisma.category.upsert({
-    where: { slug: 'web-development' },
-    update: {},
-    create: { name: 'Web Development', slug: 'web-development' },
-  });
-
-  const designCategory = await prisma.category.upsert({
-    where: { slug: 'design' },
-    update: {},
-    create: { name: 'Design', slug: 'design' },
-  });
-
-  const dataCategory = await prisma.category.upsert({
-    where: { slug: 'data-science' },
-    update: {},
-    create: { name: 'Data Science', slug: 'data-science' },
-  });
-
-  // Admin user
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@lms.local' },
+  // ── Users ──────────────────────────────
+  // Using 'identity' instead of 'email' per latest schema
+  const superAdmin = await prisma.user.upsert({
+    where: { identity: 'superadmin@sulam.sa' },
     update: {},
     create: {
-      email: 'admin@lms.local',
-      password: '$2b$12$placeholder.hash', // TODO: hash with bcrypt
-      firstName: 'Admin',
-      lastName: 'User',
-      role: UserRole.ADMIN,
+      name: 'Super Admin',
+      identity: 'superadmin@sulam.sa',
+      phone: '+966500000001',
+      passwordHash: '$2b$12$placeholder.hash',
+      role: UserRole.SUPER_ADMIN,
+      isVerified: true,
     },
   });
 
-  // Instructor
-  const instructor = await prisma.user.upsert({
-    where: { email: 'instructor@lms.local' },
+  const teacher = await prisma.user.upsert({
+    where: { identity: 'teacher@sulam.sa' },
     update: {},
     create: {
-      email: 'instructor@lms.local',
-      password: '$2b$12$placeholder.hash',
-      firstName: 'Jane',
-      lastName: 'Instructor',
-      role: UserRole.INSTRUCTOR,
-      bio: 'Senior full-stack developer with 10+ years of experience.',
+      name: 'Ahmed Al-Harbi',
+      identity: 'teacher@sulam.sa',
+      phone: '+966500000002',
+      passwordHash: '$2b$12$placeholder.hash',
+      role: UserRole.TEACHER,
+      isVerified: true,
     },
   });
 
-  // Student
   const student = await prisma.user.upsert({
-    where: { email: 'student@lms.local' },
+    where: { identity: 'student@sulam.sa' },
     update: {},
     create: {
-      email: 'student@lms.local',
-      password: '$2b$12$placeholder.hash',
-      firstName: 'John',
-      lastName: 'Student',
+      name: 'Omar Al-Qahtani',
+      identity: 'student@sulam.sa',
+      phone: '+966500000003',
+      passwordHash: '$2b$12$placeholder.hash',
       role: UserRole.STUDENT,
+      isVerified: true,
     },
   });
 
-  // Sample course
-  const course = await prisma.course.upsert({
-    where: { slug: 'typescript-fundamentals' },
+  const parent = await prisma.user.upsert({
+    where: { identity: 'parent@sulam.sa' },
     update: {},
     create: {
-      title: 'TypeScript Fundamentals',
-      slug: 'typescript-fundamentals',
-      description: 'Master TypeScript from the ground up. Learn types, interfaces, generics, and advanced patterns.',
-      price: 2999,
-      status: CourseStatus.PUBLISHED,
-      difficulty: DifficultyLevel.BEGINNER,
-      instructorId: instructor.id,
-      categoryId: devCategory.id,
+      name: 'Khalid Al-Qahtani',
+      identity: 'parent@sulam.sa',
+      phone: '+966500000004',
+      passwordHash: '$2b$12$placeholder.hash',
+      role: UserRole.PARENT,
+      isVerified: true,
     },
   });
 
-  // Sections & lessons
-  const section1 = await prisma.section.create({
+  // ── Parent-Student Link ────────────────
+  await prisma.parentStudentLink.upsert({
+    where: {
+      parentUserId_studentUserId_relationship: {
+        parentUserId: parent.id,
+        studentUserId: student.id,
+        relationship: ParentRelationship.FATHER,
+      },
+    },
+    update: {},
+    create: {
+      parentUserId: parent.id,
+      studentUserId: student.id,
+      relationship: ParentRelationship.FATHER,
+    },
+  });
+
+  // ── Course ─────────────────────────────
+  const course = await prisma.course.create({
     data: {
-      title: 'Getting Started',
-      order: 1,
+      teacherUserId: teacher.id,
+      title: 'أساسيات البرمجة بلغة بايثون',
+      description: 'تعلم أساسيات البرمجة من الصفر باستخدام لغة بايثون',
+      price: new Decimal('199.00'),
+      isPublished: true,
+    },
+  });
+
+  // ── Chapter ────────────────────────────
+  const chapter1 = await prisma.chapter.create({
+    data: {
       courseId: course.id,
-      lessons: {
+      title: 'المقدمة وتهيئة بيئة العمل',
+      orderIndex: 1,
+    },
+  });
+
+  // ── Lessons (videoXp removed/commented out in schema) ──
+  const lesson1 = await prisma.lesson.create({
+    data: {
+      chapterId: chapter1.id,
+      title: 'مرحبا بالعالم — أول برنامج',
+      orderIndex: 1,
+      youtubeVideoId: 'dQw4w9WgXcQ',
+      // videoXp: 10, // Removed for Phase 1
+    },
+  });
+
+  // ── Assignment (Passing Score remains, xpValue and shuffle removed) ──
+  const assignment = await prisma.assignment.create({
+    data: {
+      lessonId: lesson1.id,
+      passingScorePct: 60,
+      maxAttempts: 3,
+      // xpValue: 20, // Removed for Phase 1
+      // shuffleQuestions: true, // Removed for Phase 1
+    },
+  });
+
+  // ── Questions + Options ────────────────
+  await prisma.question.create({
+    data: {
+      assignmentId: assignment.id,
+      text: 'ما هي الدالة المستخدمة لطباعة نص في بايثون؟',
+      orderIndex: 1,
+      options: {
         create: [
-          { title: 'Welcome & Course Overview', type: 'VIDEO', order: 1, duration: 300, isFree: true },
-          { title: 'Setting Up Your Environment', type: 'TEXT', order: 2, content: 'Install Node.js and TypeScript...' },
-          { title: 'Your First TypeScript File', type: 'VIDEO', order: 3, duration: 600 },
+          { text: 'print()', isCorrect: true, orderIndex: 1 },
+          { text: 'echo()', isCorrect: false, orderIndex: 2 },
+          { text: 'write()', isCorrect: false, orderIndex: 3 },
         ],
       },
     },
   });
 
-  const section2 = await prisma.section.create({
+  // ── Enrollment ─────────────────────────
+  await prisma.enrollment.create({
     data: {
-      title: 'Type System Deep Dive',
-      order: 2,
+      studentUserId: student.id,
       courseId: course.id,
-      lessons: {
-        create: [
-          { title: 'Primitive Types', type: 'VIDEO', order: 1, duration: 480 },
-          { title: 'Interfaces vs Types', type: 'TEXT', order: 2, content: 'Understanding the differences...' },
-          { title: 'Generics', type: 'VIDEO', order: 3, duration: 720 },
-        ],
-      },
+      amountPaid: new Decimal('199.00'),
     },
   });
 
-  console.log('✅ Seed completed!');
-  console.log({ admin: admin.email, instructor: instructor.email, student: student.email });
+  console.log('✅ Seed Phase 1 Lite completed!');
 }
 
 main()

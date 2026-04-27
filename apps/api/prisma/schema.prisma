@@ -1,5 +1,6 @@
 // ──────────────────────────────────────────
-// LMS Prisma Schema
+// LMS Platform — Prisma Schema (DOC-21)
+// Phase 1: Core LMS — no wallet/XP/leaderboard
 // ──────────────────────────────────────────
 
 generator client {
@@ -11,280 +12,444 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─── User ────────────────────────────────
+// ═══════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════
 
 enum UserRole {
   STUDENT
-  INSTRUCTOR
-  ADMIN
+  TEACHER
+  PARENT
+  ASSISTANT_ADMIN
+  SUPER_ADMIN
 }
 
+enum ParentRelationship {
+  FATHER
+  MOTHER
+  GUARDIAN
+}
+
+// ═══════════════════════════════════════════
+// USER & AUTH
+// ═══════════════════════════════════════════
+
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  firstName String   @map("first_name")
-  lastName  String   @map("last_name")
-  role      UserRole @default(STUDENT)
-  avatarUrl String?  @map("avatar_url")
-  bio       String?
-  isActive  Boolean  @default(true) @map("is_active")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String    @db.VarChar(255)
+  identity        String    @unique @db.VarChar(255)
+  phone        String?   @unique @db.VarChar(20)
+  passwordHash String    @map("password_hash") @db.Text
+  role         UserRole
+  isVerified   Boolean   @default(false) @map("is_verified")
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz
 
-  // Relations
-  courses     Course[]     @relation("InstructorCourses")
-  enrollments Enrollment[]
-  quizAttempts QuizAttempt[]
-  submissions  AssignmentSubmission[]
+  // ── Relations ──
+  otpVerifications          OtpVerification[]
+  refreshTokens             RefreshToken[]
 
+  // Teacher
+  taughtCourses             Course[]               @relation("TeacherCourses")
+
+  // Student
+  enrollments               Enrollment[]           @relation("StudentEnrollments")
+  lessonProgress            LessonProgress[]
+  assignmentAttempts        AssignmentAttempt[]
+  assignmentBestScores      AssignmentBestScore[]
+
+  // Parent ↔ Student links
+  parentLinks               ParentStudentLink[]    @relation("ParentSide")
+  childLinks                ParentStudentLink[]    @relation("StudentSide")
+
+  // Assistant admin
+  assistantPermissions      AssistantPermission[]  @relation("AssistantPerms")
+  grantedPermissions        AssistantPermission[]  @relation("GrantedByPerms")
+
+  // Enrollment enrolled_by (nullable)
+  enrolledByMe              Enrollment[]           @relation("EnrolledByUser")
+
+  // Leaderboard (Phase 2)
+  // studentXp             StudentXp?
+  // leaderboardSnapshots  LeaderboardWeeklySnapshot[]
+
+  @@index([role])
   @@map("users")
 }
 
-// ─── Category ────────────────────────────
+model OtpVerification {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  code      String    @db.Char(6)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz
+  usedAt    DateTime? @map("used_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
 
-model Category {
-  id       String     @id @default(cuid())
-  name     String     @unique
-  slug     String     @unique
-  parentId String?    @map("parent_id")
-  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryTree")
-  courses  Course[]
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
 
-  @@map("categories")
+  @@index([userId])
+  @@map("otp_verifications")
 }
 
-// ─── Course ──────────────────────────────
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @map("token_hash") @db.Text
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
 
-enum CourseStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@map("refresh_tokens")
 }
 
-enum DifficultyLevel {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
+model AssistantPermission {
+  id              String   @id @default(uuid()) @db.Uuid
+  assistantUserId String   @map("assistant_user_id") @db.Uuid
+  permission      String   @db.VarChar(100)
+  grantedBy       String   @map("granted_by") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  assistant User @relation("AssistantPerms", fields: [assistantUserId], references: [id], onDelete: Restrict)
+  granter   User @relation("GrantedByPerms", fields: [grantedBy], references: [id], onDelete: Restrict)
+
+  @@unique([assistantUserId, permission])
+  @@map("assistant_permissions")
 }
+
+model ParentStudentLink {
+  id            String             @id @default(uuid()) @db.Uuid
+  parentUserId  String             @map("parent_user_id") @db.Uuid
+  studentUserId String             @map("student_user_id") @db.Uuid
+  relationship  ParentRelationship
+  createdAt     DateTime           @default(now()) @map("created_at") @db.Timestamptz
+
+  parent  User @relation("ParentSide", fields: [parentUserId], references: [id], onDelete: Restrict)
+  student User @relation("StudentSide", fields: [studentUserId], references: [id], onDelete: Restrict)
+
+  @@unique([parentUserId, studentUserId, relationship])
+  @@map("parent_student_links")
+}
+
+// ═══════════════════════════════════════════
+// COURSE CONTENT
+// ═══════════════════════════════════════════
 
 model Course {
-  id           String          @id @default(cuid())
-  title        String
-  slug         String          @unique
-  description  String
-  thumbnailUrl String?         @map("thumbnail_url")
-  price        Int             @default(0)
-  status       CourseStatus    @default(DRAFT)
-  difficulty   DifficultyLevel @default(BEGINNER)
-  instructorId String          @map("instructor_id")
-  categoryId   String          @map("category_id")
-  createdAt    DateTime        @default(now()) @map("created_at")
-  updatedAt    DateTime        @updatedAt @map("updated_at")
+  id            String    @id @default(uuid()) @db.Uuid
+  teacherUserId String    @map("teacher_user_id") @db.Uuid
+  title         String    @db.VarChar(255)
+  description   String?   @db.Text
+  price         Decimal   @db.Decimal(10, 2)
+  isPublished   Boolean   @default(false) @map("is_published")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt     DateTime? @map("deleted_at") @db.Timestamptz
 
-  // Relations
-  instructor  User         @relation("InstructorCourses", fields: [instructorId], references: [id])
-  category    Category     @relation(fields: [categoryId], references: [id])
-  sections    Section[]
+  teacher     User         @relation("TeacherCourses", fields: [teacherUserId], references: [id], onDelete: Restrict)
+  chapters    Chapter[]
   enrollments Enrollment[]
 
+  @@index([teacherUserId])
+  @@index([isPublished])
   @@map("courses")
 }
 
-// ─── Section ─────────────────────────────
+model Chapter {
+  id         String    @id @default(uuid()) @db.Uuid
+  courseId    String    @map("course_id") @db.Uuid
+  title      String    @db.VarChar(255)
+  orderIndex Int       @map("order_index")
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt  DateTime? @map("deleted_at") @db.Timestamptz
 
-model Section {
-  id       String   @id @default(cuid())
-  title    String
-  order    Int      @default(0)
-  courseId String   @map("course_id")
-  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons  Lesson[]
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  lessons Lesson[]
 
-  @@map("sections")
-}
-
-// ─── Lesson ──────────────────────────────
-
-enum LessonType {
-  VIDEO
-  TEXT
-  QUIZ
+  @@index([courseId, orderIndex])
+  @@map("chapters")
 }
 
 model Lesson {
-  id        String     @id @default(cuid())
-  title     String
-  content   String?
-  videoUrl  String?    @map("video_url")
-  type      LessonType @default(TEXT)
-  duration  Int?
-  order     Int        @default(0)
-  isFree    Boolean    @default(false) @map("is_free")
-  sectionId String     @map("section_id")
-  section   Section    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
+  id             String   @id @default(uuid()) @db.Uuid
+  chapterId      String   @map("chapter_id") @db.Uuid
+  title          String   @db.VarChar(255)
+  orderIndex     Int      @map("order_index")
+  youtubeVideoId String   @map("youtube_video_id") @db.VarChar(20)
+  // videoXp        Int      @map("video_xp") //phase 2
+  version        Int      @default(1)
+  isArchived     Boolean  @default(false) @map("is_archived")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  completions LessonCompletion[]
+  chapter        Chapter          @relation(fields: [chapterId], references: [id], onDelete: Restrict)
+  assignment     Assignment?
+  lessonProgress LessonProgress[]
 
+  @@index([chapterId, orderIndex])
+  @@index([isArchived])
   @@map("lessons")
 }
 
-// ─── Enrollment ──────────────────────────
-
-enum EnrollmentStatus {
-  ACTIVE
-  COMPLETED
-  CANCELLED
-}
-
-model Enrollment {
-  id          String           @id @default(cuid())
-  userId      String           @map("user_id")
-  courseId     String           @map("course_id")
-  status      EnrollmentStatus @default(ACTIVE)
-  progress    Float            @default(0)
-  enrolledAt  DateTime         @default(now()) @map("enrolled_at")
-  completedAt DateTime?        @map("completed_at")
-
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
-
-  @@unique([userId, courseId])
-  @@map("enrollments")
-}
-
-// ─── Lesson Completion ───────────────────
-
-model LessonCompletion {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  lessonId    String   @map("lesson_id")
-  completedAt DateTime @default(now()) @map("completed_at")
-
-  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, lessonId])
-  @@map("lesson_completions")
-}
-
-// ─── Quiz ────────────────────────────────
-
-model Quiz {
-  id          String         @id @default(cuid())
-  title       String
-  description String?
-  courseId     String         @map("course_id")
-  passingScore Int           @default(70) @map("passing_score")
-  timeLimit   Int?           @map("time_limit")
-  createdAt   DateTime       @default(now()) @map("created_at")
-
-  questions QuizQuestion[]
-  attempts  QuizAttempt[]
-
-  @@map("quizzes")
-}
-
-model QuizQuestion {
-  id            String   @id @default(cuid())
-  quizId        String   @map("quiz_id")
-  question      String
-  options       Json
-  correctAnswer String   @map("correct_answer")
-  points        Int      @default(1)
-  order         Int      @default(0)
-
-  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
-
-  @@map("quiz_questions")
-}
-
-model QuizAttempt {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  quizId      String   @map("quiz_id")
-  score       Float
-  passed      Boolean
-  answers     Json
-  startedAt   DateTime @default(now()) @map("started_at")
-  completedAt DateTime? @map("completed_at")
-
-  user User @relation(fields: [userId], references: [id])
-  quiz Quiz @relation(fields: [quizId], references: [id])
-
-  @@map("quiz_attempts")
-}
-
-// ─── Assignment ──────────────────────────
+// ═══════════════════════════════════════════
+// ASSIGNMENTS & QUESTIONS
+// ═══════════════════════════════════════════
 
 model Assignment {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  courseId     String   @map("course_id")
-  dueDate     DateTime? @map("due_date")
-  maxScore    Int       @default(100) @map("max_score")
-  createdAt   DateTime  @default(now()) @map("created_at")
+  id               String   @id @default(uuid()) @db.Uuid
+  lessonId         String   @unique @map("lesson_id") @db.Uuid
+  passingScorePct  Int      @map("passing_score_pct") @db.SmallInt
+  // xpValue          Int      @map("xp_value") //phase 2
+  maxAttempts      Int?     @map("max_attempts")
+  // shuffleQuestions Boolean  @default(false) @map("shuffle_questions") //ask 
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  submissions AssignmentSubmission[]
+  lesson     Lesson              @relation(fields: [lessonId], references: [id], onDelete: Restrict)
+  questions  Question[]
+  attempts   AssignmentAttempt[]
+  bestScores AssignmentBestScore[]
 
   @@map("assignments")
 }
 
-model AssignmentSubmission {
-  id           String   @id @default(cuid())
-  assignmentId String   @map("assignment_id")
-  userId       String   @map("user_id")
-  content      String
-  fileUrl      String?  @map("file_url")
-  score        Int?
-  feedback     String?
-  submittedAt  DateTime @default(now()) @map("submitted_at")
-  gradedAt     DateTime? @map("graded_at")
+model Question {
+  id           String   @id @default(uuid()) @db.Uuid
+  assignmentId String   @map("assignment_id") @db.Uuid
+  text         String   @db.Text
+  orderIndex   Int      @map("order_index")
+  shuffleOptions Boolean @default(false) @map("shuffle_Options")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-  assignment Assignment @relation(fields: [assignmentId], references: [id])
-  user       User       @relation(fields: [userId], references: [id])
+  assignment Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Restrict)
+  options    QuestionOption[]
 
-  @@unique([assignmentId, userId])
-  @@map("assignment_submissions")
+  @@index([assignmentId])
+  @@map("questions")
 }
 
-// ─── Payment ─────────────────────────────
+model QuestionOption {
+  id         String  @id @default(uuid()) @db.Uuid
+  questionId String  @map("question_id") @db.Uuid
+  text       String  @db.Text
+  isCorrect  Boolean @default(false) @map("is_correct")
+  orderIndex Int     @map("order_index")
 
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
+  question Question @relation(fields: [questionId], references: [id], onDelete: Restrict)
+
+  @@index([questionId])
+  @@map("question_options")
 }
 
-model Payment {
-  id        String        @id @default(cuid())
-  userId    String        @map("user_id")
-  courseId   String        @map("course_id")
-  amount    Int
-  currency  String        @default("USD")
-  status    PaymentStatus @default(PENDING)
-  provider  String?
-  providerPaymentId String? @map("provider_payment_id")
-  createdAt DateTime      @default(now()) @map("created_at")
+// ═══════════════════════════════════════════
+// ENROLLMENTS & PROGRESS
+// ═══════════════════════════════════════════
 
-  @@map("payments")
+model Enrollment {
+  id            String   @id @default(uuid()) @db.Uuid
+  studentUserId String   @map("student_user_id") @db.Uuid
+  courseId       String   @map("course_id") @db.Uuid
+  enrolledBy    String?  @map("enrolled_by") @db.Uuid
+  amountPaid    Decimal  @map("amount_paid") @db.Decimal(10, 2)
+  enrolledAt    DateTime @default(now()) @map("enrolled_at") @db.Timestamptz
+
+  student    User   @relation("StudentEnrollments", fields: [studentUserId], references: [id], onDelete: Restrict)
+  course     Course @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  enrolledByUser User? @relation("EnrolledByUser", fields: [enrolledBy], references: [id], onDelete: Restrict)
+
+  @@unique([studentUserId, courseId])
+  @@index([studentUserId])
+  @@index([courseId])
+  @@map("enrollments")
 }
 
-// ─── Notification ────────────────────────
+model LessonProgress {
+  id               String    @id @default(uuid()) @db.Uuid
+  studentUserId    String    @map("student_user_id") @db.Uuid
+  lessonId         String    @map("lesson_id") @db.Uuid
+  lessonVersion    Int       @map("lesson_version")
+  videoWatchedPct  Int       @default(0) @map("video_watched_pct") @db.SmallInt
+  videoCompletedAt DateTime? @map("video_completed_at") @db.Timestamptz
+  // videoXpEarned    Int       @default(0) @map("video_xp_earned") //phase 2
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
-model Notification {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
-  title     String
-  message   String
-  isRead    Boolean  @default(false) @map("is_read")
-  type      String   @default("info")
-  link      String?
-  createdAt DateTime @default(now()) @map("created_at")
+  student User   @relation(fields: [studentUserId], references: [id], onDelete: Restrict)
+  lesson  Lesson @relation(fields: [lessonId], references: [id], onDelete: Restrict)
 
-  @@map("notifications")
+  @@unique([studentUserId, lessonId])
+  @@index([studentUserId])
+  @@map("lesson_progress")
 }
+
+model AssignmentAttempt {
+  id                  String   @id @default(uuid()) @db.Uuid
+  studentUserId       String   @map("student_user_id") @db.Uuid
+  assignmentId        String   @map("assignment_id") @db.Uuid
+  attemptNumber       Int      @map("attempt_number")
+  scorePct            Int      @map("score_pct") @db.SmallInt
+  isPassed            Boolean  @map("is_passed")
+  // xpEarnedThisAttempt Int      @default(0) @map("xp_earned_this_attempt") //phase 2
+  submittedAt         DateTime @default(now()) @map("submitted_at") @db.Timestamptz
+
+  student    User       @relation(fields: [studentUserId], references: [id], onDelete: Restrict)
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Restrict)
+
+  @@index([studentUserId, assignmentId])
+  @@map("assignment_attempts")
+}
+
+model AssignmentBestScore {
+  id             String   @id @default(uuid()) @db.Uuid
+  studentUserId  String   @map("student_user_id") @db.Uuid
+  assignmentId   String   @map("assignment_id") @db.Uuid
+  bestScorePct   Int      @map("best_score_pct") @db.SmallInt
+  // totalXpEarned  Int      @default(0) @map("total_xp_earned") //phase 2
+  isPassed       Boolean  @map("is_passed")
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  student    User       @relation(fields: [studentUserId], references: [id], onDelete: Restrict)
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Restrict)
+
+  @@unique([studentUserId, assignmentId])
+  @@map("assignment_best_scores")
+}
+
+// ═══════════════════════════════════════════
+// PHASE 2 — Uncomment when ready
+// ═══════════════════════════════════════════
+//
+// enum LeaderboardScope {
+//   PLATFORM
+//   COURSE
+// }
+//
+// enum WalletTxnType {
+//   ENROLLMENT
+//   REFUND
+//   REWARD
+//   MANUAL_ADJUSTMENT
+// }
+//
+// enum WalletDirection {
+//   CREDIT
+//   DEBIT
+// }
+//
+// enum WalletTxnStatus {
+//   SUCCESS
+//   FAILED
+//   PENDING
+// }
+//
+// enum GatewayStatus {
+//   INITIATED
+//   SUCCESS
+//   FAILED
+//   CANCELLED
+// }
+//
+// enum GatewayProvider {
+//   MOYASAR
+//   TABBY
+// }
+//
+// model StudentXp {
+//   id            String    @id @default(uuid()) @db.Uuid
+//   studentUserId String    @unique @map("student_user_id") @db.Uuid
+//   totalXp       Int       @default(0) @map("total_xp")
+//   weeklyXp      Int       @default(0) @map("weekly_xp")
+//   currentRankId String?   @map("current_rank_id") @db.Uuid
+//   updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+//
+//   student User       @relation(fields: [studentUserId], references: [id], onDelete: Restrict)
+//   rank    RankConfig? @relation(fields: [currentRankId], references: [id], onDelete: Restrict)
+//
+//   @@index([totalXp])
+//   @@index([weeklyXp])
+//   @@map("student_xp")
+// }
+//
+// model RankConfig {
+//   id          String   @id @default(uuid()) @db.Uuid
+//   name        String   @db.VarChar(100)
+//   minXp       Int      @map("min_xp")
+//   discountPct Int      @map("discount_pct") @db.SmallInt
+//   orderIndex  Int      @map("order_index")
+//   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+//
+//   students StudentXp[]
+//
+//   @@index([minXp])
+//   @@map("rank_configs")
+// }
+//
+// model LeaderboardWeeklySnapshot {
+//   id            String           @id @default(uuid()) @db.Uuid
+//   weekStart     DateTime         @map("week_start") @db.Date
+//   scope         LeaderboardScope
+//   courseId       String?          @map("course_id") @db.Uuid
+//   studentUserId String           @map("student_user_id") @db.Uuid
+//   weeklyXp      Int              @map("weekly_xp")
+//   rankPosition  Int              @map("rank_position")
+//   createdAt     DateTime         @default(now()) @map("created_at") @db.Timestamptz
+//
+//   course  Course? @relation(fields: [courseId], references: [id], onDelete: Restrict)
+//   student User    @relation(fields: [studentUserId], references: [id], onDelete: Restrict)
+//
+//   @@unique([weekStart, scope, courseId, studentUserId])
+//   @@index([weekStart, scope])
+//   @@map("leaderboard_weekly_snapshots")
+// }
+//
+// model Wallet {
+//   id        String   @id @default(uuid()) @db.Uuid
+//   userId    String   @unique @map("user_id") @db.Uuid
+//   balance   Decimal  @default(0) @db.Decimal(12, 2)
+//   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+//
+//   user         User                       @relation(fields: [userId], references: [id], onDelete: Restrict)
+//   transactions WalletTransaction[]
+//   gatewayTxns  PaymentGatewayTransaction[]
+//
+//   @@map("wallets")
+// }
+//
+// model WalletTransaction {
+//   id           String          @id @default(uuid()) @db.Uuid
+//   walletId     String          @map("wallet_id") @db.Uuid
+//   type         WalletTxnType
+//   amount       Decimal         @db.Decimal(12, 2)
+//   direction    WalletDirection
+//   balanceAfter Decimal         @map("balance_after") @db.Decimal(12, 2)
+//   referenceId  String?         @map("reference_id") @db.Uuid
+//   status       WalletTxnStatus
+//   createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz
+//
+//   wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Restrict)
+//
+//   @@index([walletId])
+//   @@index([status])
+//   @@map("wallet_transactions")
+// }
+//
+// model PaymentGatewayTransaction {
+//   id              String        @id @default(uuid()) @db.Uuid
+//   walletId        String        @map("wallet_id") @db.Uuid
+//   gateway         GatewayProvider
+//   gatewayOrderId  String        @map("gateway_order_id") @db.VarChar(100)
+//   amount          Decimal       @db.Decimal(12, 2)
+//   status          GatewayStatus
+//   callbackPayload Json?         @map("callback_payload")
+//   processedAt     DateTime?     @map("processed_at") @db.Timestamptz
+//   createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz
+//
+//   wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Restrict)
+//
+//   @@index([gatewayOrderId])
+//   @@map("payment_gateway_transactions")
+// }
