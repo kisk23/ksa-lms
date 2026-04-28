@@ -1,8 +1,10 @@
 // ─── User ────────────────────────────────────────────
 export enum UserRole {
   STUDENT = 'STUDENT',
-  INSTRUCTOR = 'INSTRUCTOR',
-  ADMIN = 'ADMIN',
+  TEACHER = 'TEACHER',
+  PARENT = 'PARENT',
+  ASSISTANT_ADMIN = 'ASSISTANT_ADMIN',
+  SUPER_ADMIN = 'SUPER_ADMIN',
 }
 
 export interface IUser {
