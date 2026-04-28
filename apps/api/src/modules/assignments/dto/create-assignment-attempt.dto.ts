@@ -4,24 +4,24 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateAssignmentAttemptDto {
   @ApiProperty({ example: 'student-uuid-here' })
   @IsUUID()
-  studentUserId: string;
+  studentUserId!: string;
 
   @ApiProperty({ example: 'assignment-uuid-here' })
   @IsUUID()
-  assignmentId: string;
+  assignmentId!: string;
 
   @ApiProperty({ example: 1 })
   @IsInt()
   @Min(1)
-  attemptNumber: number;
+  attemptNumber!: number;
 
   @ApiProperty({ example: 85, description: 'Score achieved in this attempt' })
   @IsInt()
   @Min(0)
   @Max(100)
-  scorePct: number;
+  scorePct!: number;
 
   @ApiProperty({ example: true })
   @IsBoolean()
-  isPassed: boolean;
+  isPassed!: boolean;
 }

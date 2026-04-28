@@ -43,6 +43,7 @@ model User {
   role         UserRole
   isVerified   Boolean   @default(false) @map("is_verified")
   isActive     Boolean   @default(true) @map("is_active")
+  guardianPhone String?   @map("guardian_phone") @db.VarChar(20)
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
   deletedAt    DateTime? @map("deleted_at") @db.Timestamptz
