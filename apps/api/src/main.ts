@@ -2,11 +2,18 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import cookieParser from 'cookie-parser';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
+
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalInterceptors(new TransformInterceptor());
+  app.use(cookieParser());
 
   // Global prefix
   const prefix = config.get<string>('API_PREFIX', '/api/v1');
