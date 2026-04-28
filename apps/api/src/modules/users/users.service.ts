@@ -55,6 +55,21 @@ export class UsersService {
     return this.prisma.user.update({ where: { id }, data: dto });
   }
 
+  async findByIdentity(identity: string) {
+    return this.prisma.user.findUnique({ where: { identity } });
+  }
+
+  async findByIdentityOrPhone(identifier: string) {
+    return this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { identity: identifier },
+          { phone: identifier },
+        ],
+      },
+    });
+  }
+
   async remove(id: string) {
     await this.findOne(id);
     return this.prisma.user.delete({ where: { id } });
