@@ -4,16 +4,16 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class CreateQuestionDto {
   @ApiProperty({ example: 'assignment-uuid-here' })
   @IsUUID()
-  assignmentId: string;
+  assignmentId!: string;
 
   @ApiProperty({ example: 'ما هي الدالة المستخدمة لطباعة نص في بايثون؟' })
   @IsString()
-  text: string;
+  text!: string;
 
   @ApiProperty({ example: 1 })
   @IsInt()
   @Min(1)
-  orderIndex: number;
+  orderIndex!: number;
 
   @ApiPropertyOptional({ example: true })
   @IsOptional()

@@ -5,11 +5,11 @@ import { Type } from 'class-transformer';
 export class CreateEnrollmentDto {
   @ApiProperty({ example: 'student-uuid-here' })
   @IsUUID()
-  studentUserId: string;
+  studentUserId!: string;
 
   @ApiProperty({ example: 'course-uuid-here' })
   @IsUUID()
-  courseId: string;
+  courseId!: string;
 
   @ApiPropertyOptional({ example: 'parent-uuid-here' })
   @IsOptional()
@@ -20,5 +20,5 @@ export class CreateEnrollmentDto {
   @IsNumber()
   @Min(0)
   @Type(() => Number)
-  amountPaid: number;
+  amountPaid!: number;
 }

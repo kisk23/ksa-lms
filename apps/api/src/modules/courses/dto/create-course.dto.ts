@@ -5,12 +5,12 @@ import { Type } from 'class-transformer';
 export class CreateCourseDto {
   @ApiProperty({ example: 'احمد الحربي' })
   @IsUUID()
-  teacherUserId: string;
+  teacherUserId!: string;
 
   @ApiProperty({ example: 'أساسيات البرمجة بلغة بايثون' })
   @IsString()
   @MinLength(5)
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({ example: 'تعلم أساسيات البرمجة من الصفر باستخدام لغة بايثون' })
   @IsOptional()
@@ -22,5 +22,5 @@ export class CreateCourseDto {
   @IsNumber()
   @Min(0)
   @Type(() => Number)
-  price: number;
+  price!: number;
 }

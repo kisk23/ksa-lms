@@ -31,8 +31,8 @@ export class RegisterDto {
   password!: string;
 
   //what will preent any user to make teacher account and have his previlage ? ask
-  @ApiPropertyOptional({ enum: [UserRole.STUDENT,UserRole.PARENT, UserRole.TEACHER], default: UserRole.STUDENT })
+  @ApiPropertyOptional({ enum: [UserRole.STUDENT,UserRole.PARENT], default: UserRole.STUDENT })
   @IsOptional()
-  @IsEnum([UserRole.STUDENT,UserRole.PARENT, UserRole.TEACHER])
+  @IsEnum([UserRole.STUDENT,UserRole.PARENT])
   role?: UserRole = UserRole.STUDENT;
 }
