@@ -1,12 +1,13 @@
-import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
-import { PrismaService } from '../../prisma/prisma.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
 import { UserRole } from '@lms/shared-types';
+import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+
+import { PrismaService } from '../../prisma/prisma.service';
+import { UsersService } from '../users/users.service';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -64,7 +65,6 @@ export class AuthService {
       throw new UnauthorizedException(`OTP_MAX_REQUESTS: Please wait ${minutesToWait} minutes`);
     }
 
-
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
@@ -81,7 +81,7 @@ export class AuthService {
 
     // TODO: Integrate with SMS Gateway (e.g. firebase auhtentication, Twilio)
     console.log(`[SMS OTP] To Phone ${user.phone} Your code is ${code}`);
-    
+
     return { success: true };
   }
 
@@ -169,7 +169,7 @@ export class AuthService {
   async updateRtHash(userId: string, rt: string) {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(rt, salt);
-    
+
     await this.prisma.refreshToken.create({
       data: {
         userId,
@@ -207,7 +207,6 @@ export class AuthService {
     //   }
     // });
 
-
     const activeRts = await this.prisma.refreshToken.findMany({
       where: {
         userId,
@@ -220,13 +219,13 @@ export class AuthService {
     for (const storedRt of activeRts) {
       if (await bcrypt.compare(rt, storedRt.tokenHash)) {
         isValid = true;
-                
-        // Revoke the token we just used so the new one is the only valid one 
+
+        // Revoke the token we just used so the new one is the only valid one
         await this.prisma.refreshToken.update({
           where: { id: storedRt.id },
-          data: { revokedAt: new Date() }
+          data: { revokedAt: new Date() },
         });
-        
+
         break;
       }
     }

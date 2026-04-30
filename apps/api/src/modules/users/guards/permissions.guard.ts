@@ -1,7 +1,8 @@
+import { UserRole } from '@lms/shared-types';
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+
 import { PrismaService } from '../../../prisma/prisma.service';
-import { UserRole } from '@lms/shared-types';
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
 
 @Injectable()
@@ -35,9 +36,9 @@ export class PermissionsGuard implements CanActivate {
 
     // Only AssistantAdmins need to check the permissions table
     if (user.role !== UserRole.ASSISTANT_ADMIN) {
-        // If they are not an assistant and not a superadmin, but permissions are required,
-        // it means they don't have access.
-        return false;
+      // If they are not an assistant and not a superadmin, but permissions are required,
+      // it means they don't have access.
+      return false;
     }
 
     // Fetch user permissions from DB
@@ -54,7 +55,9 @@ export class PermissionsGuard implements CanActivate {
     );
 
     if (!hasPermission) {
-      throw new ForbiddenException('You do not have the required permissions to perform this action');
+      throw new ForbiddenException(
+        'You do not have the required permissions to perform this action',
+      );
     }
 
     return true;

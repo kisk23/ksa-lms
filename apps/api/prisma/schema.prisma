@@ -3,14 +3,22 @@
 // Phase 1: Core LMS — no wallet/XP/leaderboard
 // ──────────────────────────────────────────
 
-generator client {
-  provider = "prisma-client-js"
-}
 
+
+// A lesson must be completed before assignment
+// A student must pass before progressing
+// Chapter order is respected      
+
+
+
+// we need to add model for check wich chapter student start from it 
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // ═══════════════════════════════════════════
@@ -61,6 +69,7 @@ model User {
   lessonProgress            LessonProgress[]
   assignmentAttempts        AssignmentAttempt[]
   assignmentBestScores      AssignmentBestScore[]
+  courseProgresses          CourseProgress[]
 
   // Parent ↔ Student links
   parentLinks               ParentStudentLink[]    @relation("ParentSide")
@@ -140,27 +149,54 @@ model ParentStudentLink {
 // ═══════════════════════════════════════════
 // COURSE CONTENT
 // ═══════════════════════════════════════════
+ enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 
 model Course {
   id            String    @id @default(uuid()) @db.Uuid
+  slug String @unique @db.VarChar(255)
   teacherUserId String    @map("teacher_user_id") @db.Uuid
   title         String    @db.VarChar(255)
   description   String?   @db.Text
   price         Decimal   @db.Decimal(10, 2)
-  isPublished   Boolean   @default(false) @map("is_published")
+  status        CourseStatus  @default(DRAFT)  
+  publishedAt   DateTime? @map("published_at") @db.Timestamptz
   createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz
   deletedAt     DateTime? @map("deleted_at") @db.Timestamptz
 
-  teacher     User         @relation("TeacherCourses", fields: [teacherUserId], references: [id], onDelete: Restrict)
-  chapters    Chapter[]
-  enrollments Enrollment[]
+  teacher          User            @relation("TeacherCourses", fields: [teacherUserId], references: [id], onDelete: Restrict)
+  chapters         Chapter[]
+  enrollments      Enrollment[]
+  courseProgresses CourseProgress[]
 
   @@index([teacherUserId])
-  @@index([isPublished])
+  @@index([status])
   @@map("courses")
 }
 
+
+
+
+//course progress
+model CourseProgress {
+  id             String   @id @default(uuid()) @db.Uuid
+  studentUserId  String   @db.Uuid
+  courseId       String   @db.Uuid
+  completedLessons Int    @default(0)
+  totalLessons     Int
+  progressPct      Int    @default(0)
+  completedAt      DateTime?
+
+  student User   @relation(fields: [studentUserId], references: [id])
+  course  Course @relation(fields: [courseId], references: [id])
+
+  @@unique([studentUserId, courseId])
+}
 model Chapter {
   id         String    @id @default(uuid()) @db.Uuid
   courseId    String    @map("course_id") @db.Uuid
@@ -173,7 +209,9 @@ model Chapter {
   course  Course   @relation(fields: [courseId], references: [id], onDelete: Restrict)
   lessons Lesson[]
 
-  @@index([courseId, orderIndex])
+  @@index([courseId, orderIndex]) 
+  // to make sure the order index is unique for each course
+  @@unique([courseId, orderIndex])
   @@map("chapters")
 }
 
@@ -185,7 +223,9 @@ model Lesson {
   youtubeVideoId String   @map("youtube_video_id") @db.VarChar(20)
   // videoXp        Int      @map("video_xp") //phase 2
   version        Int      @default(1)
+  //do we really need this? 
   isArchived     Boolean  @default(false) @map("is_archived")
+
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
@@ -194,6 +234,8 @@ model Lesson {
   lessonProgress LessonProgress[]
 
   @@index([chapterId, orderIndex])
+  // to make sure the order index is unique for each lesson ?
+  @@unique([chapterId, orderIndex])
   @@index([isArchived])
   @@map("lessons")
 }
@@ -207,7 +249,20 @@ model Assignment {
   lessonId         String   @unique @map("lesson_id") @db.Uuid
   passingScorePct  Int      @map("passing_score_pct") @db.SmallInt
   // xpValue          Int      @map("xp_value") //phase 2
+
+// const attemptsCount = await prisma.assignmentAttempt.count({
+//   where: {
+//     studentUserId,
+//     assignmentId
+//   }
+// })
+
+// if (assignment.maxAttempts !== null && attemptsCount >= assignment.maxAttempts) {
+//   throw new Error("Max attempts reached")
+// }
+
   maxAttempts      Int?     @map("max_attempts")
+  // maybe shuffleOptions is not needed cause we can do it in the frontend
   // shuffleQuestions Boolean  @default(false) @map("shuffle_questions") //ask 
   createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
@@ -225,7 +280,7 @@ model Question {
   assignmentId String   @map("assignment_id") @db.Uuid
   text         String   @db.Text
   orderIndex   Int      @map("order_index")
-  shuffleOptions Boolean @default(false) @map("shuffle_Options")
+  // shuffleOptions Boolean @default(false) @map("shuffle_Options")
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
 
   assignment Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Restrict)
@@ -252,6 +307,12 @@ model QuestionOption {
 // ENROLLMENTS & PROGRESS
 // ═══════════════════════════════════════════
 
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+}
+
 model Enrollment {
   id            String   @id @default(uuid()) @db.Uuid
   studentUserId String   @map("student_user_id") @db.Uuid
@@ -259,6 +320,8 @@ model Enrollment {
   enrolledBy    String?  @map("enrolled_by") @db.Uuid
   amountPaid    Decimal  @map("amount_paid") @db.Decimal(10, 2)
   enrolledAt    DateTime @default(now()) @map("enrolled_at") @db.Timestamptz
+  status        EnrollmentStatus @default(ACTIVE) @map("status")
+  expiryDate    DateTime? @map("expiry_date") @db.Timestamptz
 
   student    User   @relation("StudentEnrollments", fields: [studentUserId], references: [id], onDelete: Restrict)
   course     Course @relation(fields: [courseId], references: [id], onDelete: Restrict)
@@ -278,6 +341,11 @@ model LessonProgress {
   videoWatchedPct  Int       @default(0) @map("video_watched_pct") @db.SmallInt
   videoCompletedAt DateTime? @map("video_completed_at") @db.Timestamptz
   // videoXpEarned    Int       @default(0) @map("video_xp_earned") //phase 2
+  //   if (videoWatchedPct >= 80 && assignmentPassed) {
+//   isCompleted = true
+// }
+  isCompleted    Boolean  @default(false) @map("is_completed")
+  completedAt DateTime? @map("completed_at") @db.Timestamptz
   updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
   student User   @relation(fields: [studentUserId], references: [id], onDelete: Restrict)

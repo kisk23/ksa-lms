@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
 import { UserRole } from '@lms/shared-types';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+
 import { CreateUserDto, UpdateUserDto } from './dto';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
@@ -71,10 +72,7 @@ export class UsersService {
   async findByIdentityOrPhone(identifier: string) {
     return this.prisma.user.findFirst({
       where: {
-        OR: [
-          { identity: identifier },
-          { phone: identifier },
-        ],
+        OR: [{ identity: identifier }, { phone: identifier }],
       },
     });
   }
@@ -123,7 +121,6 @@ export class UsersService {
   }
 
   async setAssistantPermissions(granterId: string, assistantId: string, permissions: string[]) {
-
     const assistant = await this.findOne(assistantId);
     if (assistant.role !== UserRole.ASSISTANT_ADMIN) {
       throw new Error('User is not an assistant admin');

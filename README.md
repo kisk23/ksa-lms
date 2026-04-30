@@ -4,16 +4,16 @@ A modern LMS monorepo built with **NestJS**, **Next.js**, **Prisma**, and **Post
 
 ## Architecture
 
-| App / Package | Description | Port |
-|---|---|---|
-| `apps/web` | Student & Instructor portal (Next.js) | 3000 |
-| `apps/admin` | Admin dashboard (Next.js) | 3001 |
-| `apps/api` | REST API (NestJS + Prisma) | 4000 |
-| `packages/ui` | Shared React component library | — |
-| `packages/shared-types` | TypeScript interfaces shared across apps | — |
-| `packages/utils` | Generic utility functions | — |
-| `packages/logger` | Structured logging | — |
-| `packages/config` | Shared ESLint, TSConfig, Prettier | — |
+| App / Package           | Description                              | Port |
+| ----------------------- | ---------------------------------------- | ---- |
+| `apps/web`              | Student & Instructor portal (Next.js)    | 3000 |
+| `apps/admin`            | Admin dashboard (Next.js)                | 3001 |
+| `apps/api`              | REST API (NestJS + Prisma)               | 4000 |
+| `packages/ui`           | Shared React component library           | —    |
+| `packages/shared-types` | TypeScript interfaces shared across apps | —    |
+| `packages/utils`        | Generic utility functions                | —    |
+| `packages/logger`       | Structured logging                       | —    |
+| `packages/config`       | Shared ESLint, TSConfig, Prettier        | —    |
 
 ## Quick Start
 

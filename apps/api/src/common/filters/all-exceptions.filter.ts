@@ -1,12 +1,7 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import type { Request, Response } from 'express';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import type { Request, Response } from 'express';
+
 import { PrismaErrorRegistry } from '../utils/prisma-error-mapper';
 
 @Catch()
@@ -23,9 +18,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       message = exception.getResponse();
-    } 
+    }
     // Handle Prisma Known Request Errors
-    else if (exception && typeof exception === 'object' && (exception as any).name === 'PrismaClientKnownRequestError') {
+    else if (
+      exception &&
+      typeof exception === 'object' &&
+      (exception as any).name === 'PrismaClientKnownRequestError'
+    ) {
       const { code, meta, message: prismaMsg } = exception as any;
       const errorConfig = PrismaErrorRegistry[code];
       if (errorConfig) {
@@ -37,7 +36,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
     }
     // Handle other Prisma errors (Initialization, etc.)
-    else if (exception && typeof exception === 'object' && 'name' in exception && exception.name === 'PrismaClientValidationError') {
+    else if (
+      exception &&
+      typeof exception === 'object' &&
+      'name' in exception &&
+      exception.name === 'PrismaClientValidationError'
+    ) {
       status = HttpStatus.BAD_REQUEST;
       message = 'Validation error: One or more fields are invalid.';
     }

@@ -1,15 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { UserRole } from '@lms/shared-types';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { UsersService } from './users.service';
+
+import { Permissions } from './decorators/permissions.decorator';
 import { CreateUserDto, UpdateUserDto, AssistantPermissionsDto } from './dto';
+import { PermissionsGuard } from './guards/permissions.guard';
+import { UsersService } from './users.service';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { PermissionsGuard } from './guards/permissions.guard';
-import { Permissions } from './decorators/permissions.decorator';
-import { UserRole } from '@lms/shared-types';
-import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 
 @ApiTags('Admin / User Management')
 @ApiBearerAuth()
@@ -47,7 +58,6 @@ export class AdminUsersController {
     return this.usersService.findOne(id);
   }
 
-
   @Patch('users/:id')
   @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('UPDATE_USER')
@@ -68,6 +78,10 @@ export class AdminUsersController {
   @Roles(UserRole.SUPER_ADMIN)
   @ApiOperation({ summary: 'Set Assistant permissions' })
   setPermissions(@GetCurrentUser('id') granterId: string, @Body() dto: AssistantPermissionsDto) {
-    return this.usersService.setAssistantPermissions(granterId, dto.assistant_user_id, dto.permissions);
+    return this.usersService.setAssistantPermissions(
+      granterId,
+      dto.assistant_user_id,
+      dto.permissions,
+    );
   }
 }

@@ -1,6 +1,14 @@
-import { IsString, MinLength, IsEnum, IsOptional, IsPhoneNumber, Matches, ValidateIf } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UserRole } from '@lms/shared-types';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsString,
+  MinLength,
+  IsEnum,
+  IsOptional,
+  IsPhoneNumber,
+  Matches,
+  ValidateIf,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'احمد الحربي' })
@@ -17,7 +25,10 @@ export class CreateUserDto {
   @IsPhoneNumber('SA') //only allow saudi number
   phone!: string;
 
-  @ApiPropertyOptional({ example: '+966500000002', description: 'Father, Mother or Guardian phone (Required for Students)' })
+  @ApiPropertyOptional({
+    example: '+966500000002',
+    description: 'Father, Mother or Guardian phone (Required for Students)',
+  })
   @ValidateIf((o) => o.role === UserRole.STUDENT)
   @IsPhoneNumber('SA')
   guardianPhone!: string;
@@ -26,8 +37,8 @@ export class CreateUserDto {
   @IsString()
   @MinLength(8)
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-  message: 'Password is too weak. Must include Uppercase, Lowercase, and a Number/Symbol',
-})
+    message: 'Password is too weak. Must include Uppercase, Lowercase, and a Number/Symbol',
+  })
   password!: string;
 
   @ApiPropertyOptional({ enum: UserRole, default: UserRole.STUDENT })

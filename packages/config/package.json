@@ -2,7 +2,11 @@
   "name": "@lms/config",
   "version": "0.1.0",
   "private": true,
-  "files": ["eslint", "tsconfig", "prettier"],
+  "files": [
+    "eslint",
+    "tsconfig",
+    "prettier"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",

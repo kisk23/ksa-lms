@@ -41,7 +41,10 @@ class ApiClient {
   }
 
   async post<T>(endpoint: string, data?: unknown): Promise<T> {
-    return this.request<T>(endpoint, { method: 'POST', body: data ? JSON.stringify(data) : undefined });
+    return this.request<T>(endpoint, {
+      method: 'POST',
+      body: data ? JSON.stringify(data) : undefined,
+    });
   }
 
   async patch<T>(endpoint: string, data: unknown): Promise<T> {

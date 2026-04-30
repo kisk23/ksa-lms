@@ -8,9 +8,7 @@ interface CourseCardProps {
 export function CourseCard({ course }: CourseCardProps) {
   return (
     <article className="course-card">
-      {course.thumbnailUrl && (
-        <img src={course.thumbnailUrl} alt={course.title} />
-      )}
+      {course.thumbnailUrl && <img src={course.thumbnailUrl} alt={course.title} />}
       <div className="course-card__body">
         <h3>{course.title}</h3>
         <p>{course.description}</p>

@@ -1,5 +1,5 @@
-import { IsString, IsOptional, IsPhoneNumber, MinLength } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsOptional, IsPhoneNumber, MinLength } from 'class-validator';
 
 export class UpdateMeDto {
   @ApiPropertyOptional({ example: 'احمد الحربي' })
@@ -12,6 +12,4 @@ export class UpdateMeDto {
   @IsOptional()
   @IsPhoneNumber()
   phone?: string;
-
-  
 }

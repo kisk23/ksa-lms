@@ -36,14 +36,14 @@ pnpm dev
 ## Available URLs
 
 | Service         | URL                          |
-|-----------------|------------------------------|
-| Web App         | http://localhost:3000         |
-| Admin Dashboard | http://localhost:3001         |
-| API             | http://localhost:4000/api/v1  |
-| Swagger Docs    | http://localhost:4000/docs    |
+| --------------- | ---------------------------- |
+| Web App         | http://localhost:3000        |
+| Admin Dashboard | http://localhost:3001        |
+| API             | http://localhost:4000/api/v1 |
+| Swagger Docs    | http://localhost:4000/docs   |
 | Prisma Studio   | Run `pnpm db:studio`         |
-| Mailpit Web UI  | http://localhost:8025         |
-| MinIO Console   | http://localhost:9001         |
+| Mailpit Web UI  | http://localhost:8025        |
+| MinIO Console   | http://localhost:9001        |
 
 ## Running a Single App
 

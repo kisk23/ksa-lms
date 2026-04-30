@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import type { IUser } from '@lms/shared-types';
+import { useState, useEffect } from 'react';
 
 export function useAuth() {
   const [user, setUser] = useState<IUser | null>(null);
@@ -21,7 +21,12 @@ export function useAuth() {
     // TODO: Clear tokens
   };
 
-  const register = async (data: { email: string; password: string; firstName: string; lastName: string }) => {
+  const register = async (data: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  }) => {
     // TODO: Implement register
   };
 

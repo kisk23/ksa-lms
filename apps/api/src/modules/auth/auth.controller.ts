@@ -1,14 +1,15 @@
 import { Controller, Post, Body, Res, UseGuards, HttpStatus } from '@nestjs/common';
-import { Response } from 'express';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Response } from 'express';
+
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
+import { GetCurrentUser } from './decorators/get-user.decorator';
 import { LoginDto } from './dto/login.dto';
-import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { RegisterDto } from './dto/register.dto';
 import { ResendOtpDto } from './dto/resend-otp.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RtAuthGuard } from './guards/rt-auth.guard';
-import { GetCurrentUser } from './decorators/get-user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -31,12 +32,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Login and get access token' })
   async login(@Body() dto: LoginDto, @Res() res: Response) {
     const result = await this.authService.login(dto);
-    
+
     res.cookie('refresh_token', result.refresh_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(HttpStatus.OK).json({
@@ -54,11 +55,10 @@ export class AuthController {
   async refresh(
     @GetCurrentUser('sub') userId: string,
     @GetCurrentUser('refreshToken') refreshToken: string,
-    @Res() res: Response
+    @Res() res: Response,
   ) {
-
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
-    
+
     res.cookie('refresh_token', tokens.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -78,7 +78,7 @@ export class AuthController {
   @Post('logout')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Logout and revoke refresh token' })
-  async logout(@GetCurrentUser('id') userId:string, @Res() res: Response) {
+  async logout(@GetCurrentUser('id') userId: string, @Res() res: Response) {
     await this.authService.logout(userId);
     res.clearCookie('refresh_token');
     return res.status(HttpStatus.OK).json({ success: true });

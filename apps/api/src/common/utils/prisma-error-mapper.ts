@@ -23,7 +23,7 @@ export const PrismaErrorRegistry: Record<string, PrismaErrorDetail> = {
   },
   P2000: {
     status: HttpStatus.BAD_REQUEST,
-    message: () => 'The provided value for the column is too long for the column\'s type.',
+    message: () => "The provided value for the column is too long for the column's type.",
   },
   P2014: {
     status: HttpStatus.CONFLICT,

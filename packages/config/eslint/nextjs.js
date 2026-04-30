@@ -23,8 +23,8 @@ const config = {
   rules: {
     ...base.rules,
     // ─── React ───────────────────────────────────
-    'react/react-in-jsx-scope': 'off',           // Not needed with React 17+ JSX transform
-    'react/prop-types': 'off',                   // We use TypeScript for prop validation
+    'react/react-in-jsx-scope': 'off', // Not needed with React 17+ JSX transform
+    'react/prop-types': 'off', // We use TypeScript for prop validation
     'react/display-name': 'warn',
     'react/no-unescaped-entities': 'warn',
     'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
