@@ -13,7 +13,7 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 import { Permissions } from './decorators/permissions.decorator';
-import { CreateUserDto, UpdateUserDto, AssistantPermissionsDto } from './dto';
+import { CreateUserDto, UpdateUserDto, AssistantPermissionsDto, AdminLinkChildDto } from './dto';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { UsersService } from './users.service';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
@@ -83,5 +83,21 @@ export class AdminUsersController {
       dto.assistant_user_id,
       dto.permissions,
     );
+  }
+
+  @Post('link-parent-student')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Link any student to any parent' })
+  linkParentStudent(@Body() dto: AdminLinkChildDto) {
+    return this.usersService.linkChild(dto.parent_id, dto.student_id, dto.relationship);
+  }
+
+  @Delete('unlink-parent-student')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Unlink any student from any parent' })
+  unlinkParentStudent(@Query('parentId') parentId: string, @Query('studentId') studentId: string) {
+    return this.usersService.unlinkChild(parentId, studentId);
   }
 }

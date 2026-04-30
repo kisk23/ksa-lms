@@ -47,7 +47,7 @@ export class PermissionsGuard implements CanActivate {
       select: { permission: true },
     });
 
-    const userPermissions = assistantPermissions.map((p) => p.permission);
+    const userPermissions = assistantPermissions.map((p: { permission: string }) => p.permission);
 
     // Check if the user has all the required permissions
     const hasPermission = requiredPermissions.every((permission) =>

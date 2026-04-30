@@ -4,18 +4,18 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateQuestionOptionDto {
   @ApiProperty({ example: 'question-uuid-here' })
   @IsUUID()
-  questionId: string;
+  questionId!: string;
 
   @ApiProperty({ example: 'print()' })
   @IsString()
-  text: string;
+  text!: string;
 
   @ApiProperty({ example: true })
   @IsBoolean()
-  isCorrect: boolean;
+  isCorrect!: boolean;
 
   @ApiProperty({ example: 1 })
   @IsInt()
   @Min(1)
-  orderIndex: number;
+  orderIndex!: number;
 }

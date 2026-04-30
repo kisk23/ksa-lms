@@ -104,6 +104,18 @@ export class UsersService {
     });
   }
 
+  async unlinkChild(parentId: string, studentId: string) {
+    // We use deleteMany because we might not know the relationship type here,
+    // and there should only be one link between a specific parent and student for a specific relationship anyway.
+    // However, the schema allows multiple relationships. Usually, we want to remove ALL links between them.
+    return this.prisma.parentStudentLink.deleteMany({
+      where: {
+        parentUserId: parentId,
+        studentUserId: studentId,
+      },
+    });
+  }
+
   async listChildren(parentId: string) {
     return this.prisma.parentStudentLink.findMany({
       where: { parentUserId: parentId },

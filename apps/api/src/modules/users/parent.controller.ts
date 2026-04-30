@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Delete, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { LinkChildDto } from './dto';
@@ -27,5 +27,12 @@ export class ParentController {
   @ApiOperation({ summary: 'List all linked children' })
   listChildren(@GetCurrentUser('id') parentId: string) {
     return this.usersService.listChildren(parentId);
+  }
+
+  @Delete('unlink-child/:studentId')
+  @Roles(UserRole.PARENT)
+  @ApiOperation({ summary: 'Unlink a child' })
+  unlinkChild(@GetCurrentUser('id') parentId: string, @Param('studentId') studentId: string) {
+    return this.usersService.unlinkChild(parentId, studentId);
   }
 }
