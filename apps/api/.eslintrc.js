@@ -1,7 +1,7 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
-  extends: ['@lms/config/eslint/nestjs'],
+  extends: ['../../packages/config/eslint/nestjs.js'],
   parserOptions: {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
