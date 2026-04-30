@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # Enforce conventional commit messages
 # Format: type(scope): description
 # Examples: feat(courses): add quiz module
