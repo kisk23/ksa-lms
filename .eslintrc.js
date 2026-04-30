@@ -1,8 +1,7 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
-  // Only runs on files not covered by app-level configs
-  extends: ['@lms/config/eslint'],
+  extends: [require.resolve('./packages/config/eslint/index.js')],
   ignorePatterns: [
     '**/node_modules/**',
     '**/dist/**',

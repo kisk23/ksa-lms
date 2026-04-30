@@ -2,7 +2,19 @@
   "name": "@lms/config",
   "version": "0.1.0",
   "private": true,
-  "files": ["eslint", "tsconfig", "prettier"],
+  "main": "./eslint/index.js",
+  "files": [
+    "eslint",
+    "tsconfig",
+    "prettier"
+  ],
+  "exports": {
+    ".": "./eslint/index.js",
+    "./eslint": "./eslint/index.js",
+    "./eslint/nextjs": "./eslint/nextjs.js",
+    "./eslint/nestjs": "./eslint/nestjs.js",
+    "./prettier": "./prettier/index.js"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",

@@ -7,6 +7,10 @@ out/
 node_modules/
 .pnpm-store/
 
+# IDE
+.vscode/
+.idea/
+
 # Turbo cache
 .turbo/
 
