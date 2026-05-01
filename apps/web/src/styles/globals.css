@@ -1,8 +1,8 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --font-inter: 'Inter', sans-serif;
-  --color-primary: #2446B8;
+  --color-primary: #2446b8;
   --color-primary-hover: #1a35a0;
   --color-secondary: #7c3aed;
   --color-bg: #0f172a;
