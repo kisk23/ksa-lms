@@ -1,7 +1,14 @@
-import { PrismaClient, UserRole, ParentRelationship } from '@prisma/client';
-import { Decimal } from '@prisma/client/runtime/library';
+import 'dotenv/config';
+import { PrismaPg } from '@prisma/adapter-pg';
+import pg from 'pg';
 
-const prisma = new PrismaClient();
+import { PrismaClient, UserRole, ParentRelationship, Prisma } from '../src/generated/prisma/client';
+
+const connectionString = process.env.DATABASE_URL!;
+const pool = new pg.Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
+const Decimal = Prisma.Decimal;
 
 async function main() {
   console.log('🌱 Seeding Phase 1 Lite database...');
