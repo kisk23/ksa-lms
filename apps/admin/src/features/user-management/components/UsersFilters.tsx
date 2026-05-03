@@ -2,7 +2,6 @@
 
 import { StatusDot } from '@shared/components/ui/StatusDot';
 import { SlidersHorizontal } from 'lucide-react';
-import { useState } from 'react';
 
 import type { RoleFilter, StatusFilter } from '../types';
 
@@ -24,10 +23,14 @@ const statusFilters: {
   { value: 'pending', label: 'معلق', dot: 'warning' },
 ];
 
-export function UsersFilters() {
-  const [activeRole, setActiveRole] = useState<RoleFilter>('all');
-  const [activeStatus, setActiveStatus] = useState<StatusFilter>('all');
+type UsersFiltersProps = {
+  role: RoleFilter;
+  status: StatusFilter;
+  onRoleChange: (role: RoleFilter) => void;
+  onStatusChange: (status: StatusFilter) => void;
+};
 
+export function UsersFilters({ role, status, onRoleChange, onStatusChange }: UsersFiltersProps) {
   const chipBase =
     'px-3 py-1.5 rounded-full font-caption-ar text-xs transition-colors flex items-center gap-1';
   const chipActive = 'bg-primary-container text-on-primary';
@@ -36,15 +39,15 @@ export function UsersFilters() {
   return (
     <div className="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex flex-wrap gap-4 items-center justify-between">
       <div className="flex flex-wrap gap-3">
-        {/* Role filters */}
+        {/* Role */}
         <div className="flex items-center gap-2">
           <span className="font-caption-ar text-caption-ar text-on-surface-variant">الدور:</span>
           <div className="flex gap-2">
             {roleFilters.map((filter) => (
               <button
                 key={filter.value}
-                onClick={() => setActiveRole(filter.value)}
-                className={`${chipBase} ${activeRole === filter.value ? chipActive : chipInactive}`}
+                onClick={() => onRoleChange(filter.value)}
+                className={`${chipBase} ${role === filter.value ? chipActive : chipInactive}`}
               >
                 {filter.label}
               </button>
@@ -54,17 +57,15 @@ export function UsersFilters() {
 
         <div className="w-px h-8 bg-outline-variant/30 hidden md:block" />
 
-        {/* Status filters */}
+        {/* Status */}
         <div className="flex items-center gap-2">
           <span className="font-caption-ar text-caption-ar text-on-surface-variant">الحالة:</span>
           <div className="flex gap-2">
             {statusFilters.map((filter) => (
               <button
                 key={filter.value}
-                onClick={() => setActiveStatus(filter.value)}
-                className={`${chipBase} ${
-                  activeStatus === filter.value ? chipActive : chipInactive
-                }`}
+                onClick={() => onStatusChange(filter.value)}
+                className={`${chipBase} ${status === filter.value ? chipActive : chipInactive}`}
               >
                 {filter.dot && <StatusDot variant={filter.dot} />}
                 {filter.label}

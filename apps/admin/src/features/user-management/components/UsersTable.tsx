@@ -1,14 +1,34 @@
+'use client';
+
+import { Pagination } from '@shared/components/ui/Pagination';
+import { useState, useMemo, useEffect } from 'react';
+
 import { UserRow } from './UserRow';
 import type { User } from '../types';
-import { UsersPagination } from './UsersPagination';
 
 type UsersTableProps = {
   users: User[];
+  pageSize?: number;
 };
 
 const columns = ['المستخدم', 'البريد الإلكتروني', 'الدور', 'تاريخ التسجيل', 'الحالة'];
 
-export function UsersTable({ users }: UsersTableProps) {
+export function UsersTable({ users, pageSize = 6 }: UsersTableProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Reset to page 1 whenever the filtered list changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [users]);
+
+  const totalItems = users.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+  const visibleUsers = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return users.slice(start, start + pageSize);
+  }, [users, currentPage, pageSize]);
+
   return (
     <div className="bg-surface-container-lowest rounded-xl shadow-card-soft border border-outline-variant/20 overflow-hidden">
       <div className="overflow-x-auto">
@@ -24,14 +44,32 @@ export function UsersTable({ users }: UsersTableProps) {
             </tr>
           </thead>
           <tbody className="font-body-md-ar text-sm text-on-surface divide-y divide-outline-variant/10">
-            {users.map((user, idx) => (
-              <UserRow key={user.id} user={user} zebra={idx % 2 === 1} />
-            ))}
+            {visibleUsers.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={columns.length + 1}
+                  className="py-12 text-center text-on-surface-variant font-caption-ar"
+                >
+                  لا توجد نتائج مطابقة للفلاتر المحددة
+                </td>
+              </tr>
+            ) : (
+              visibleUsers.map((user, idx) => (
+                <UserRow key={user.id} user={user} zebra={idx % 2 === 1} />
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
-      <UsersPagination currentPage={1} totalPages={25} totalItems={245} pageSize={10} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        pageSize={pageSize}
+        itemLabel="مستخدم"
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

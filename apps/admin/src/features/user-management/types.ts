@@ -16,6 +16,12 @@ export type User = {
 export type RoleFilter = 'all' | UserRole;
 export type StatusFilter = 'all' | UserStatus;
 
+export type UsersFiltersState = {
+  role: RoleFilter;
+  status: StatusFilter;
+  search: string;
+};
+
 export type FilterChip<T extends string> = {
   value: T;
   label: string;
