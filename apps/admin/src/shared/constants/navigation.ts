@@ -18,11 +18,11 @@ export type NavItem = {
 
 export const SIDEBAR_NAV: NavItem[] = [
   { label: 'لوحة التحكم', icon: LayoutDashboard, href: '/' },
-  { label: 'المستخدمين', icon: Users, href: '/users' },
-  { label: 'الدورات', icon: BookOpen, href: '/courses' },
-  { label: 'الموافقات', icon: BadgeCheck, href: '/approvals' },
-  { label: 'المدفوعات', icon: CreditCard, href: '/payments' },
-  { label: 'الاستردادات', icon: Undo2, href: '/refunds' },
+  { label: 'إدارة المستخدمين', icon: Users, href: '/users' },
+  { label: 'إدارة الكورسات', icon: BookOpen, href: '/courses' },
+  { label: 'طلبات الموافقة', icon: BadgeCheck, href: '/approvals' },
+  { label: 'إدارة المدفوعات', icon: CreditCard, href: '/payments' },
+  { label: 'طلب الاسترجاع', icon: Undo2, href: '/refunds' },
   { label: 'التقارير', icon: BarChart3, href: '/reports' },
-  { label: 'الإعدادات', icon: Settings, href: '/settings' },
+  { label: 'إعدادات المنصة', icon: Settings, href: '/settings' },
 ];
