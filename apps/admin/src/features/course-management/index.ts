@@ -2,4 +2,15 @@
 // Course Management Feature
 // ─────────────────────────────────────────
 // Export components, hooks, services as built
-export {};
+export { CoursesHeader } from './components/CoursesHeader';
+export { CoursesFilters } from './components/CoursesFilters';
+export { CoursesTable } from './components/CoursesTable';
+export { MOCK_COURSES } from './data/mock-courses';
+export type {
+  Course,
+  CourseStatus,
+  CourseStatusFilter,
+  PriceRangeFilter,
+  SubjectFilter,
+  TeacherFilter,
+} from './types';
