@@ -16,6 +16,8 @@ export class CreateUserDto {
   @MinLength(3)
   name!: string;
 
+  //todo email and gurdianidentity
+
   @ApiProperty({ example: 'ahmed@sulam.sa', description: 'Email, Username or National ID' })
   @IsString()
   @MinLength(3)
