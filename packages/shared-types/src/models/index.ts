@@ -7,6 +7,19 @@ export enum UserRole {
   SUPER_ADMIN = 'SUPER_ADMIN',
 }
 
+export enum ParentRelationship {
+  FATHER = 'FATHER',
+  MOTHER = 'MOTHER',
+  GUARDIAN = 'GUARDIAN',
+}
+
+export interface IParentStudent {
+  id: string;
+  parentId: string;
+  studentId: string;
+  relationship: ParentRelationship;
+}
+
 export interface IUser {
   id: string;
   email: string;
