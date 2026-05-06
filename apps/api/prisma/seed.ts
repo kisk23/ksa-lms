@@ -102,6 +102,7 @@ async function main() {
       slug: 'python-basics',
       title: 'أساسيات البرمجة بلغة بايثون',
       description: 'تعلم أساسيات البرمجة من الصفر باستخدام لغة بايثون',
+      slug: 'python-basics',
       price: new Decimal('199.00'),
       status: CourseStatus.PUBLISHED,
     },

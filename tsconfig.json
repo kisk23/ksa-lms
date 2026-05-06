@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "."
   },
+  "composite": true,
   "references": [
     { "path": "./packages/shared-types" },
     { "path": "./packages/utils" },
