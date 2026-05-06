@@ -96,21 +96,29 @@ async function main() {
   });
 
   // ── Course ─────────────────────────────
-  const course = await prisma.course.create({
-    data: {
+  const course = await prisma.course.upsert({
+    where: { slug: 'python-basics' },
+    update: {},
+    create: {
       teacherUserId: teacher.id,
       slug: 'python-basics',
       title: 'أساسيات البرمجة بلغة بايثون',
       description: 'تعلم أساسيات البرمجة من الصفر باستخدام لغة بايثون',
-      slug: 'python-basics',
       price: new Decimal('199.00'),
       status: CourseStatus.PUBLISHED,
     },
   });
 
   // ── Chapter ────────────────────────────
-  const chapter1 = await prisma.chapter.create({
-    data: {
+  const chapter1 = await prisma.chapter.upsert({
+    where: {
+      courseId_orderIndex: {
+        courseId: course.id,
+        orderIndex: 1,
+      },
+    },
+    update: {},
+    create: {
       courseId: course.id,
       title: 'المقدمة وتهيئة بيئة العمل',
       orderIndex: 1,
@@ -118,24 +126,30 @@ async function main() {
   });
 
   // ── Lessons (videoXp removed/commented out in schema) ──
-  const lesson1 = await prisma.lesson.create({
-    data: {
+  const lesson1 = await prisma.lesson.upsert({
+    where: {
+      chapterId_orderIndex: {
+        chapterId: chapter1.id,
+        orderIndex: 1,
+      },
+    },
+    update: {},
+    create: {
       chapterId: chapter1.id,
       title: 'مرحبا بالعالم — أول برنامج',
       orderIndex: 1,
       youtubeVideoId: 'dQw4w9WgXcQ',
-      // videoXp: 10, // Removed for Phase 1
     },
   });
 
   // ── Assignment (Passing Score remains, xpValue and shuffle removed) ──
-  const assignment = await prisma.assignment.create({
-    data: {
+  const assignment = await prisma.assignment.upsert({
+    where: { lessonId: lesson1.id },
+    update: {},
+    create: {
       lessonId: lesson1.id,
       passingScorePct: 60,
       maxAttempts: 3,
-      // xpValue: 20, // Removed for Phase 1
-      // shuffleQuestions: true, // Removed for Phase 1
     },
   });
 
@@ -156,8 +170,15 @@ async function main() {
   });
 
   // ── Enrollment ─────────────────────────
-  await prisma.enrollment.create({
-    data: {
+  await prisma.enrollment.upsert({
+    where: {
+      studentUserId_courseId: {
+        studentUserId: student.id,
+        courseId: course.id,
+      },
+    },
+    update: {},
+    create: {
       studentUserId: student.id,
       courseId: course.id,
       amountPaid: new Decimal('199.00'),
