@@ -1,5 +1,5 @@
-import { IsString, IsInt, IsUUID, Min, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsInt, IsUUID, Min, IsBoolean } from 'class-validator';
 
 export class CreateQuestionOptionDto {
   @ApiProperty({ example: 'question-uuid-here' })

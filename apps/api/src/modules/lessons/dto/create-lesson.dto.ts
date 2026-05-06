@@ -1,5 +1,5 @@
-import { IsString, IsInt, IsUUID, Min, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsInt, IsUUID, Min, MaxLength } from 'class-validator';
 
 export class CreateLessonDto {
   @ApiProperty({ example: 'chapter-uuid-here' })

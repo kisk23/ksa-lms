@@ -1,5 +1,5 @@
-import { IsString, IsInt, IsUUID, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsInt, IsUUID, Min } from 'class-validator';
 
 export class CreateChapterDto {
   @ApiProperty({ example: 'course-uuid-here' })

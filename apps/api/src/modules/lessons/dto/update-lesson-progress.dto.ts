@@ -1,5 +1,5 @@
-import { IsInt, IsUUID, Min, Max, IsOptional, IsDateString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsInt, IsUUID, Min, Max, IsOptional, IsDateString } from 'class-validator';
 
 export class UpdateLessonProgressDto {
   @ApiProperty({ example: 'student-uuid-here' })

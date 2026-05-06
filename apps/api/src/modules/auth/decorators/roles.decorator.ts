@@ -1,5 +1,5 @@
+import type { UserRole } from '@lms/shared-types';
 import { SetMetadata } from '@nestjs/common';
-import { UserRole } from '@lms/shared-types';
 
 export const ROLES_KEY = 'roles';
 export const Roles = (...roles: UserRole[]) => SetMetadata(ROLES_KEY, roles);

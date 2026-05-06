@@ -1,12 +1,13 @@
+import { UserRole } from '@lms/shared-types';
 import { Controller, Get, Post, Body, UseGuards, Delete, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { UsersService } from './users.service';
+
 import { LinkChildDto } from './dto';
+import { UsersService } from './users.service';
+import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRole } from '@lms/shared-types';
-import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 
 @ApiTags('Parent')
 @ApiBearerAuth()

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsUUID } from 'class-validator';
 
-import { ParentRelationship } from '../../../generated/prisma/client';
+import { ParentRelationship } from '../../../generated/client';
 
 export class LinkChildDto {
   @ApiProperty({ example: 'student-uuid-here' })

@@ -1,5 +1,5 @@
-import { IsUUID, IsArray, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsUUID, IsArray, IsString } from 'class-validator';
 
 export class AssistantPermissionsDto {
   @ApiProperty({ example: 'assistant-uuid-here' })

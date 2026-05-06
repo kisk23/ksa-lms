@@ -1,7 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateCourseDto } from './create-course.dto';
-import { IsOptional, IsEnum } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsEnum } from 'class-validator';
+
+import { CreateCourseDto } from './create-course.dto';
 
 enum CourseStatus {
   DRAFT = 'DRAFT',

@@ -1,5 +1,5 @@
-import { IsInt, IsOptional, IsUUID, Min, Max } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsInt, IsOptional, IsUUID, Min, Max } from 'class-validator';
 
 export class CreateAssignmentDto {
   @ApiProperty({ example: 'lesson-uuid-here' })
