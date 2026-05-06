@@ -2,7 +2,14 @@ import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
-import { PrismaClient, UserRole, ParentRelationship, Prisma } from '../src/generated/prisma/client';
+import {
+  PrismaClient,
+  UserRole,
+  ParentRelationship,
+  Prisma,
+  CourseStatus,
+  EnrollmentStatus,
+} from '../src/generated/client';
 
 const connectionString = process.env.DATABASE_URL!;
 const pool = new pg.Pool({ connectionString });
@@ -15,12 +22,13 @@ async function main() {
 
   // ── Users ──────────────────────────────
   // Using 'identity' instead of 'email' per latest schema
-  const superAdmin = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { identity: 'superadmin@sulam.sa' },
     update: {},
     create: {
       name: 'Super Admin',
       identity: 'superadmin@sulam.sa',
+      email: 'superadmin@sulam.sa',
       phone: '+966500000001',
       passwordHash: '$2b$12$placeholder.hash',
       role: UserRole.SUPER_ADMIN,
@@ -34,6 +42,7 @@ async function main() {
     create: {
       name: 'Ahmed Al-Harbi',
       identity: 'teacher@sulam.sa',
+      email: 'teacher@sulam.sa',
       phone: '+966500000002',
       passwordHash: '$2b$12$placeholder.hash',
       role: UserRole.TEACHER,
@@ -47,6 +56,7 @@ async function main() {
     create: {
       name: 'Omar Al-Qahtani',
       identity: 'student@sulam.sa',
+      email: 'student@sulam.sa',
       phone: '+966500000003',
       passwordHash: '$2b$12$placeholder.hash',
       role: UserRole.STUDENT,
@@ -60,6 +70,7 @@ async function main() {
     create: {
       name: 'Khalid Al-Qahtani',
       identity: 'parent@sulam.sa',
+      email: 'parent@sulam.sa',
       phone: '+966500000004',
       passwordHash: '$2b$12$placeholder.hash',
       role: UserRole.PARENT,
@@ -88,10 +99,11 @@ async function main() {
   const course = await prisma.course.create({
     data: {
       teacherUserId: teacher.id,
+      slug: 'python-basics',
       title: 'أساسيات البرمجة بلغة بايثون',
       description: 'تعلم أساسيات البرمجة من الصفر باستخدام لغة بايثون',
       price: new Decimal('199.00'),
-      isPublished: true,
+      status: CourseStatus.PUBLISHED,
     },
   });
 
@@ -148,6 +160,7 @@ async function main() {
       studentUserId: student.id,
       courseId: course.id,
       amountPaid: new Decimal('199.00'),
+      status: EnrollmentStatus.ACTIVE,
     },
   });
 

@@ -240,8 +240,8 @@ export type CourseProgressWhereInput = {
   totalLessons?: Prisma.IntFilter<"CourseProgress"> | number
   progressPct?: Prisma.IntFilter<"CourseProgress"> | number
   completedAt?: Prisma.DateTimeNullableFilter<"CourseProgress"> | Date | string | null
-  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type CourseProgressOrderByWithRelationInput = {
@@ -252,8 +252,8 @@ export type CourseProgressOrderByWithRelationInput = {
   totalLessons?: Prisma.SortOrder
   progressPct?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  student?: Prisma.UserOrderByWithRelationInput
   course?: Prisma.CourseOrderByWithRelationInput
+  student?: Prisma.UserOrderByWithRelationInput
 }
 
 export type CourseProgressWhereUniqueInput = Prisma.AtLeast<{
@@ -268,8 +268,8 @@ export type CourseProgressWhereUniqueInput = Prisma.AtLeast<{
   totalLessons?: Prisma.IntFilter<"CourseProgress"> | number
   progressPct?: Prisma.IntFilter<"CourseProgress"> | number
   completedAt?: Prisma.DateTimeNullableFilter<"CourseProgress"> | Date | string | null
-  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "studentUserId_courseId">
 
 export type CourseProgressOrderByWithAggregationInput = {
@@ -306,8 +306,8 @@ export type CourseProgressCreateInput = {
   totalLessons: number
   progressPct?: number
   completedAt?: Date | string | null
-  student: Prisma.UserCreateNestedOneWithoutCourseProgressesInput
   course: Prisma.CourseCreateNestedOneWithoutCourseProgressesInput
+  student: Prisma.UserCreateNestedOneWithoutCourseProgressesInput
 }
 
 export type CourseProgressUncheckedCreateInput = {
@@ -326,8 +326,8 @@ export type CourseProgressUpdateInput = {
   totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  student?: Prisma.UserUpdateOneRequiredWithoutCourseProgressesNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutCourseProgressesNestedInput
+  student?: Prisma.UserUpdateOneRequiredWithoutCourseProgressesNestedInput
 }
 
 export type CourseProgressUncheckedUpdateInput = {
@@ -700,8 +700,8 @@ export type CourseProgressSelect<ExtArgs extends runtime.Types.Extensions.Intern
   totalLessons?: boolean
   progressPct?: boolean
   completedAt?: boolean
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseProgress"]>
 
 export type CourseProgressSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -712,8 +712,8 @@ export type CourseProgressSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   totalLessons?: boolean
   progressPct?: boolean
   completedAt?: boolean
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseProgress"]>
 
 export type CourseProgressSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -724,8 +724,8 @@ export type CourseProgressSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   totalLessons?: boolean
   progressPct?: boolean
   completedAt?: boolean
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseProgress"]>
 
 export type CourseProgressSelectScalar = {
@@ -740,23 +740,23 @@ export type CourseProgressSelectScalar = {
 
 export type CourseProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentUserId" | "courseId" | "completedLessons" | "totalLessons" | "progressPct" | "completedAt", ExtArgs["result"]["courseProgress"]>
 export type CourseProgressInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CourseProgressIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CourseProgressIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $CourseProgressPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CourseProgress"
   objects: {
-    student: Prisma.$UserPayload<ExtArgs>
     course: Prisma.$CoursePayload<ExtArgs>
+    student: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1160,8 +1160,8 @@ readonly fields: CourseProgressFieldRefs;
  */
 export interface Prisma__CourseProgressClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

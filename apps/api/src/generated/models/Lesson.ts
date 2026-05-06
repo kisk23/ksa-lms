@@ -252,9 +252,9 @@ export type LessonWhereInput = {
   isArchived?: Prisma.BoolFilter<"Lesson"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
-  chapter?: Prisma.XOR<Prisma.ChapterScalarRelationFilter, Prisma.ChapterWhereInput>
   assignment?: Prisma.XOR<Prisma.AssignmentNullableScalarRelationFilter, Prisma.AssignmentWhereInput> | null
   lessonProgress?: Prisma.LessonProgressListRelationFilter
+  chapter?: Prisma.XOR<Prisma.ChapterScalarRelationFilter, Prisma.ChapterWhereInput>
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -267,9 +267,9 @@ export type LessonOrderByWithRelationInput = {
   isArchived?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  chapter?: Prisma.ChapterOrderByWithRelationInput
   assignment?: Prisma.AssignmentOrderByWithRelationInput
   lessonProgress?: Prisma.LessonProgressOrderByRelationAggregateInput
+  chapter?: Prisma.ChapterOrderByWithRelationInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -286,9 +286,9 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   isArchived?: Prisma.BoolFilter<"Lesson"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
-  chapter?: Prisma.XOR<Prisma.ChapterScalarRelationFilter, Prisma.ChapterWhereInput>
   assignment?: Prisma.XOR<Prisma.AssignmentNullableScalarRelationFilter, Prisma.AssignmentWhereInput> | null
   lessonProgress?: Prisma.LessonProgressListRelationFilter
+  chapter?: Prisma.XOR<Prisma.ChapterScalarRelationFilter, Prisma.ChapterWhereInput>
 }, "id" | "chapterId_orderIndex">
 
 export type LessonOrderByWithAggregationInput = {
@@ -332,9 +332,9 @@ export type LessonCreateInput = {
   isArchived?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -360,9 +360,9 @@ export type LessonUpdateInput = {
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -626,8 +626,8 @@ export type LessonCreateWithoutAssignmentInput = {
   isArchived?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
 }
 
 export type LessonUncheckedCreateWithoutAssignmentInput = {
@@ -668,8 +668,8 @@ export type LessonUpdateWithoutAssignmentInput = {
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutAssignmentInput = {
@@ -694,8 +694,8 @@ export type LessonCreateWithoutLessonProgressInput = {
   isArchived?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
+  chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
 }
 
 export type LessonUncheckedCreateWithoutLessonProgressInput = {
@@ -736,8 +736,8 @@ export type LessonUpdateWithoutLessonProgressInput = {
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
+  chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutLessonProgressInput = {
@@ -842,9 +842,9 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   isArchived?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.Lesson$assignmentArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.Lesson$lessonProgressArgs<ExtArgs>
+  chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -888,9 +888,9 @@ export type LessonSelectScalar = {
 
 export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "chapterId" | "title" | "orderIndex" | "youtubeVideoId" | "version" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.Lesson$assignmentArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.Lesson$lessonProgressArgs<ExtArgs>
+  chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -903,9 +903,9 @@ export type LessonIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Lesson"
   objects: {
-    chapter: Prisma.$ChapterPayload<ExtArgs>
     assignment: Prisma.$AssignmentPayload<ExtArgs> | null
     lessonProgress: Prisma.$LessonProgressPayload<ExtArgs>[]
+    chapter: Prisma.$ChapterPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1311,9 +1311,9 @@ readonly fields: LessonFieldRefs;
  */
 export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  chapter<T extends Prisma.ChapterDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChapterDefaultArgs<ExtArgs>>): Prisma.Prisma__ChapterClient<runtime.Types.Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assignment<T extends Prisma.Lesson$assignmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$assignmentArgs<ExtArgs>>): Prisma.Prisma__AssignmentClient<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   lessonProgress<T extends Prisma.Lesson$lessonProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$lessonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chapter<T extends Prisma.ChapterDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChapterDefaultArgs<ExtArgs>>): Prisma.Prisma__ChapterClient<runtime.Types.Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

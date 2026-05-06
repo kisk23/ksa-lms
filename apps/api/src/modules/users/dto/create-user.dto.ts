@@ -5,9 +5,12 @@ import {
   MinLength,
   IsEnum,
   IsOptional,
+  IsEmail,
+  IsNotEmpty,
   IsPhoneNumber,
   Matches,
   ValidateIf,
+  Length,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -16,11 +19,13 @@ export class CreateUserDto {
   @MinLength(3)
   name!: string;
 
-  //todo email and gurdianidentity
+  @ApiPropertyOptional({ example: 'ahmed@sulam.sa' })
+  @IsEmail()
+  email!: string;
 
   @ApiProperty({ example: 'ahmed@sulam.sa', description: 'Email, Username or National ID' })
   @IsString()
-  @MinLength(3)
+  @Length(3, 20)
   identity!: string;
 
   @ApiProperty({ example: '+966500000001' })
@@ -34,6 +39,16 @@ export class CreateUserDto {
   @ValidateIf((o) => o.role === UserRole.STUDENT)
   @IsPhoneNumber('SA')
   guardianPhone!: string;
+
+  @ApiPropertyOptional({
+    example: '1000000001',
+    description: 'Guardian National ID (Required for Students)',
+  })
+  @ValidateIf((o) => o.role === UserRole.STUDENT)
+  @IsNotEmpty()
+  @IsString()
+  @Length(3, 20)
+  guardianIdentity?: string;
 
   @ApiProperty({ minLength: 8 })
   @IsString()

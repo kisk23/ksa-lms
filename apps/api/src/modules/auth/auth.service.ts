@@ -21,7 +21,14 @@ export class AuthService {
   async register(dto: RegisterDto) {
     const existingUser = await this.usersService.findByIdentity(dto.identity);
     if (existingUser) {
-      throw new ConflictException('ALREADY_ENROLLED'); // Using contract error code
+      throw new ConflictException('ALREADY_ENROLLED');
+    }
+
+    if (dto.email) {
+      const userByEmail = await this.prisma.user.findUnique({ where: { email: dto.email } });
+      if (userByEmail) {
+        throw new ConflictException('EMAIL_ALREADY_EXISTS');
+      }
     }
 
     const salt = await bcrypt.genSalt();
@@ -30,9 +37,11 @@ export class AuthService {
     const user = await this.prisma.user.create({
       data: {
         name: dto.name,
+        email: dto.email,
         identity: dto.identity,
         phone: dto.phone,
         guardianPhone: dto.guardianPhone,
+        guardianIdentity: dto.guardianIdentity,
         passwordHash: passwordHash,
         role: dto.role || UserRole.STUDENT,
       },
