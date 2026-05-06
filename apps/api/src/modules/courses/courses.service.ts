@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { CreateCourseDto, UpdateCourseDto } from './dto';
 import { slugify } from '@lms/utils';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { CreateCourseDto, UpdateCourseDto } from './dto';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class CoursesService {
@@ -13,7 +14,7 @@ export class CoursesService {
       data: {
         ...dto,
         slug,
-        instructorId,
+        teacherUserId: instructorId,
       },
     });
   }
@@ -38,9 +39,8 @@ export class CoursesService {
         take: limit,
         orderBy: { createdAt: 'desc' },
         include: {
-          instructor: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
-          category: { select: { id: true, name: true, slug: true } },
-          _count: { select: { enrollments: true, sections: true } },
+          teacher: { select: { id: true, name: true, identity: true } },
+          _count: { select: { enrollments: true, chapters: true } },
         },
       }),
       this.prisma.course.count({ where }),
@@ -63,12 +63,11 @@ export class CoursesService {
     const course = await this.prisma.course.findUnique({
       where: { id },
       include: {
-        instructor: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
-        category: true,
-        sections: {
-          orderBy: { order: 'asc' },
+        teacher: { select: { id: true, name: true, identity: true } },
+        chapters: {
+          orderBy: { orderIndex: 'asc' },
           include: {
-            lessons: { orderBy: { order: 'asc' } },
+            lessons: { orderBy: { orderIndex: 'asc' } },
           },
         },
       },

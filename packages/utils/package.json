@@ -2,8 +2,8 @@
   "name": "@lms/utils",
   "version": "0.1.0",
   "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc --build",
     "clean": "rimraf dist",

@@ -1,8 +1,9 @@
 import { UserRole } from '@lms/shared-types';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto, UpdateUserDto } from './dto';
+import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
@@ -10,8 +11,16 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
+    const { password, ...rest } = dto;
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+
     return this.prisma.user.create({
-      data: dto,
+      data: {
+        ...rest,
+        role: rest.role || UserRole.STUDENT,
+        passwordHash,
+      },
     });
   }
 

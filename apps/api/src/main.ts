@@ -1,23 +1,24 @@
-import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import cookieParser from 'cookie-parser';
-import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { NestFactory } from '@nestjs/core';
+// import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+// import cookieParser from 'cookie-parser';
+
 import { AppModule } from './app.module';
+// import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+// import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
 
-  app.useGlobalFilters(new AllExceptionsFilter());
-  app.useGlobalInterceptors(new TransformInterceptor());
-  app.use(cookieParser());
+  // app.useGlobalFilters(new AllExceptionsFilter());
+  // app.useGlobalInterceptors(new TransformInterceptor());
+  // app.use(cookieParser());
 
   // Global prefix
-  const prefix = config.get<string>('API_PREFIX', '/api/v1');
-  app.setGlobalPrefix(prefix);
+  // const prefix = config.get<string>('API_PREFIX', '/api/v1');
+  // app.setGlobalPrefix(prefix);
 
   // Global validation pipe (DTOs)
   app.useGlobalPipes(
@@ -41,19 +42,22 @@ async function bootstrap() {
   });
 
   // Swagger
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('LMS API')
-    .setDescription('Learning Management System API')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, document);
+  // const swaggerConfig = new DocumentBuilder()
+  //   .setTitle('LMS API')
+  //   .setDescription('Learning Management System API')
+  //   .setVersion('1.0')
+  //   .addBearerAuth()
+  //   .build();
+  // const document = SwaggerModule.createDocument(app, swaggerConfig);
+  // SwaggerModule.setup('docs', app, document);
 
   const port = config.get<number>('API_PORT', 4000);
   await app.listen(port);
-  console.log(`🚀 API running on http://localhost:${port}${prefix}`);
+  console.log(`🚀 API running on http://localhost:${port}`);
   console.log(`📚 Swagger docs at http://localhost:${port}/docs`);
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Error starting server:', err);
+  process.exit(1);
+});

@@ -2,7 +2,13 @@ import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
-import { PrismaClient, UserRole, ParentRelationship, Prisma } from '../src/generated/prisma/client';
+import {
+  PrismaClient,
+  UserRole,
+  ParentRelationship,
+  Prisma,
+  CourseStatus,
+} from '../src/generated/prisma/client';
 
 const connectionString = process.env.DATABASE_URL!;
 const pool = new pg.Pool({ connectionString });
@@ -15,7 +21,7 @@ async function main() {
 
   // ── Users ──────────────────────────────
   // Using 'identity' instead of 'email' per latest schema
-  const superAdmin = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { identity: 'superadmin@sulam.sa' },
     update: {},
     create: {
@@ -90,8 +96,10 @@ async function main() {
       teacherUserId: teacher.id,
       title: 'أساسيات البرمجة بلغة بايثون',
       description: 'تعلم أساسيات البرمجة من الصفر باستخدام لغة بايثون',
+      slug: 'python-basics',
       price: new Decimal('199.00'),
-      isPublished: true,
+      status: CourseStatus.PUBLISHED,
+      publishedAt: new Date(),
     },
   });
 
