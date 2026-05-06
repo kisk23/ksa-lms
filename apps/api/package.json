@@ -61,5 +61,5 @@
     "tsx": "^4.21.0",
     "typescript": "^5.5.0"
   },
-  "type": "module"
+  "type": "commonjs"
 }
