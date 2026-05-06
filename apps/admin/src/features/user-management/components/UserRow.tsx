@@ -21,11 +21,11 @@ type UserRowProps = {
 // Role → Tag config
 const roleConfig: Record<
   UserRole,
-  { label: string; variant: 'primary' | 'secondary' | 'tertiary' | 'neutral' }
+  { label: string; variant: 'primary' | 'secondary' | 'default' }
 > = {
-  student: { label: 'طالب', variant: 'tertiary' },
+  student: { label: 'طالب', variant: 'secondary' },
   teacher: { label: 'مدرس', variant: 'primary' },
-  parent: { label: 'ولي أمر', variant: 'neutral' },
+  parent: { label: 'ولي أمر', variant: 'default' },
 };
 
 // Status → display config
@@ -80,7 +80,7 @@ export function UserRow({ user, zebra = false }: UserRowProps) {
       </td>
 
       <td className={`py-3 px-6 ${isBlocked ? 'opacity-50' : ''}`}>
-        <Tag variant={role.variant}>{role.label}</Tag>
+        <Tag label={role.label} variant={role.variant} />
       </td>
 
       <td className={`py-3 px-6 text-on-surface-variant text-sm ${isBlocked ? 'opacity-50' : ''}`}>

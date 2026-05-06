@@ -1,26 +1,26 @@
-import type { ReactNode } from 'react';
+interface TagProps {
+  label: string;
+  variant?: 'primary' | 'secondary' | 'default';
+  size?: 'sm' | 'md';
+}
 
-type TagVariant = 'primary' | 'secondary' | 'tertiary' | 'neutral';
-
-type TagProps = {
-  children: ReactNode;
-  variant?: TagVariant;
-  className?: string;
+const VARIANT_CLASSES = {
+  primary: 'bg-primary/10 text-primary',
+  secondary: 'bg-secondary/10 text-secondary',
+  default: 'bg-surface-container-high text-on-surface',
 };
 
-const variantStyles: Record<TagVariant, string> = {
-  primary: 'bg-primary-container/10 text-primary',
-  secondary: 'bg-secondary-container/20 text-on-secondary-container',
-  tertiary: 'bg-tertiary-fixed text-on-tertiary-fixed',
-  neutral: 'bg-outline-variant/30 text-on-surface-variant',
+const SIZE_CLASSES = {
+  sm: 'px-sm py-[2px] text-caption-ar',
+  md: 'px-3 py-1 text-caption-ar',
 };
 
-export function Tag({ children, variant = 'neutral', className = '' }: TagProps) {
+export function Tag({ label, variant = 'default', size = 'md' }: TagProps) {
   return (
     <span
-      className={`inline-flex px-2.5 py-1 rounded-md text-xs font-medium ${variantStyles[variant]} ${className}`}
+      className={`inline-flex items-center rounded-full font-caption-ar ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]}`}
     >
-      {children}
+      {label}
     </span>
   );
 }

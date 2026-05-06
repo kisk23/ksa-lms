@@ -28,7 +28,7 @@ export const SIDEBAR_NAV: NavItem[] = [
     badgeKey: 'pendingApprovals',
   },
   { label: 'إدارة المدفوعات', icon: CreditCard, href: '/payments' },
-  { label: 'طلب الاسترجاع', icon: Undo2, href: '/refunds' },
+  { label: 'إدارة الاسترجاعات', icon: Undo2, href: '/refunds' },
   { label: 'التقارير', icon: BarChart3, href: '/reports' },
   { label: 'إعدادات المنصة', icon: Settings, href: '/settings' },
 ];
