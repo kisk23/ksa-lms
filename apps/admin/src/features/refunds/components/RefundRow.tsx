@@ -1,5 +1,8 @@
+'use client';
+
 import { Tag } from '@shared/components/ui/Tag';
 import { Check, X, Eye } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import type { Refund } from '../types';
 import { RefundStatusBadge } from './RefundStatusBadge';
@@ -8,7 +11,6 @@ interface RefundRowProps {
   refund: Refund;
   onApprove?: (id: string) => void;
   onReject?: (id: string) => void;
-  onView: (id: string) => void;
 }
 
 const CATEGORY_CONFIG = {
@@ -17,9 +19,14 @@ const CATEGORY_CONFIG = {
   humanities: { label: 'أدبي', variant: 'default' as const },
 };
 
-export function RefundRow({ refund, onApprove, onReject, onView }: RefundRowProps) {
+export function RefundRow({ refund, onApprove, onReject }: RefundRowProps) {
+  const router = useRouter();
   const categoryConfig = CATEGORY_CONFIG[refund.courseCategory];
   const isPending = refund.status === 'pending';
+
+  const handleView = () => {
+    router.push(`/refunds/${refund.id}`);
+  };
 
   return (
     <tr className="hover:bg-surface-container-low/30 transition-colors group">
@@ -98,7 +105,7 @@ export function RefundRow({ refund, onApprove, onReject, onView }: RefundRowProp
           {isPending && <div className="w-[1px] h-4 bg-outline-variant/50 mx-1" />}
 
           <button
-            onClick={() => onView(refund.id)}
+            onClick={handleView}
             className="w-8 h-8 rounded-full flex items-center justify-center text-primary hover:bg-primary-container hover:text-on-primary-container transition-colors"
             title="عرض التفاصيل"
           >

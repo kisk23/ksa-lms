@@ -69,10 +69,6 @@ export default function RefundsPage() {
     }
   };
 
-  const handleView = (_id: string) => {
-    // TODO: Navigate to refund detail page or open modal
-  };
-
   return (
     <main className="flex-1 p-margin pt-24 space-y-md">
       <RefundsHeader />
@@ -92,7 +88,6 @@ export default function RefundsPage() {
           onPageChange={setCurrentPage}
           onApprove={handleApprove}
           onReject={handleReject}
-          onView={handleView}
         />
       </div>
     </main>

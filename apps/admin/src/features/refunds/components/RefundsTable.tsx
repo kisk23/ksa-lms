@@ -14,7 +14,6 @@ interface RefundsTableProps {
   onPageChange: (page: number) => void;
   onApprove?: (id: string) => void;
   onReject?: (id: string) => void;
-  onView: (id: string) => void;
 }
 
 export function RefundsTable({
@@ -26,7 +25,6 @@ export function RefundsTable({
   onPageChange,
   onApprove,
   onReject,
-  onView,
 }: RefundsTableProps) {
   const startItem = (currentPage - 1) * refunds.length + 1;
   const endItem = Math.min(startItem + refunds.length - 1, totalItems);
@@ -75,7 +73,6 @@ export function RefundsTable({
                   refund={refund}
                   onApprove={onApprove}
                   onReject={onReject}
-                  onView={onView}
                 />
               ))
             )}

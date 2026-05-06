@@ -1,5 +1,6 @@
 export type RefundStatus = 'pending' | 'approved' | 'rejected';
 export type CourseCategory = 'science' | 'foundation' | 'humanities';
+export type PaymentMethod = 'mada' | 'visa' | 'mastercard' | 'bank';
 
 export interface Refund {
   id: string;
@@ -24,4 +25,21 @@ export interface RefundSummary {
 export interface RefundFilters {
   search: string;
   status: RefundStatus | 'all';
+}
+
+// Detail page types
+export interface RefundDetail extends Refund {
+  requestNumber: string;
+  studentIdNumber: string;
+  purchaseDate: string;
+  paymentMethod: PaymentMethod;
+  transactionId: string;
+  timeline: RefundTimelineEvent[];
+}
+
+export interface RefundTimelineEvent {
+  id: string;
+  title: string;
+  timestamp?: string;
+  status: 'completed' | 'current' | 'pending';
 }

@@ -1,4 +1,4 @@
-import type { Refund, RefundSummary } from '../types';
+import type { Refund, RefundSummary, RefundDetail } from '../types';
 
 export const REFUND_SUMMARY: RefundSummary = {
   totalRequests: 142,
@@ -47,3 +47,47 @@ export const MOCK_REFUNDS: Refund[] = [
     status: 'rejected',
   },
 ];
+
+export const MOCK_REFUND_DETAIL: RefundDetail = {
+  id: '1',
+  requestNumber: 'REF-8492',
+  studentName: 'أحمد عبدالله محمد',
+  studentInitial: 'أ',
+  studentEmail: 'ahmed.am@example.com',
+  studentIdNumber: '1098273645',
+  courseName: 'الرياضيات المتقدمة - الصف الثالث ثانوي',
+  courseCategory: 'science',
+  amount: 450,
+  purchaseDate: '2023-10-15',
+  paymentMethod: 'mada',
+  transactionId: 'TRX-9938-MAD-2023',
+  reason: 'لم يعجبني المحتوى التعليمي ولم أجد الإجابات الكافية على تساؤلاتي خلال الحصص المباشرة',
+  requestDate: '01 نوفمبر 2023',
+  requestTime: '10:30 صباحاً',
+  status: 'pending',
+  timeline: [
+    {
+      id: 'event-1',
+      title: 'بانتظار المراجعة',
+      timestamp: 'الآن',
+      status: 'current',
+    },
+    {
+      id: 'event-2',
+      title: 'تم استلام الطلب',
+      timestamp: '2023-11-01 10:30 AM',
+      status: 'completed',
+    },
+    {
+      id: 'event-3',
+      title: 'شراء الدورة',
+      timestamp: '2023-10-15 08:15 PM',
+      status: 'pending',
+    },
+  ],
+};
+
+export function getRefundById(id: string): RefundDetail | null {
+  if (id === '1') return MOCK_REFUND_DETAIL;
+  return null;
+}
