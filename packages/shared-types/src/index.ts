@@ -1,2 +1,2 @@
-export * from './models/index';
-export * from './api/index';
+export * from './models/index.js';
+export * from './api/index.js';

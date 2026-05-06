@@ -22,15 +22,18 @@ export interface IParentStudent {
 
 export interface IUser {
   id: string;
+  name: string;
+  identity: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  phone?: string;
   role: UserRole;
-  avatarUrl?: string;
-  bio?: string;
+  isVerified: boolean;
   isActive: boolean;
+  guardianPhone?: string;
+  guardianIdentity?: string;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date;
 }
 
 // ─── Course ──────────────────────────────────────────
