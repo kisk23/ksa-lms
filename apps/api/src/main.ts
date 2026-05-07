@@ -1,24 +1,30 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-// import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-// import cookieParser from 'cookie-parser';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
-// import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-// import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
 
-  // app.useGlobalFilters(new AllExceptionsFilter());
-  // app.useGlobalInterceptors(new TransformInterceptor());
-  // app.use(cookieParser());
+  // Cookie parser — required by RtStrategy to read the refresh_token cookie
+  app.use(cookieParser());
+
+  // Global exception filter — handles Prisma + HTTP errors uniformly
+  app.useGlobalFilters(new AllExceptionsFilter());
+
+  // Global response interceptor — wraps non-@Res() endpoints in { success, data, timestamp }
+  // Note: endpoints using @Res() directly (login, refresh, logout) bypass this automatically
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   // Global prefix
-  // const prefix = config.get<string>('API_PREFIX', '/api/v1');
-  // app.setGlobalPrefix(prefix);
+  const prefix = config.get<string>('API_PREFIX', 'api/v1');
+  app.setGlobalPrefix(prefix);
 
   // Global validation pipe (DTOs)
   app.useGlobalPipes(
@@ -42,18 +48,19 @@ async function bootstrap() {
   });
 
   // Swagger
-  // const swaggerConfig = new DocumentBuilder()
-  //   .setTitle('LMS API')
-  //   .setDescription('Learning Management System API')
-  //   .setVersion('1.0')
-  //   .addBearerAuth()
-  //   .build();
-  // const document = SwaggerModule.createDocument(app, swaggerConfig);
-  // SwaggerModule.setup('docs', app, document);
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('LMS API')
+    .setDescription('Learning Management System API')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .addCookieAuth('refresh_token')
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('docs', app, document);
 
   const port = config.get<number>('API_PORT', 4000);
   await app.listen(port);
-  console.log(`🚀 API running on http://localhost:${port}`);
+  console.log(`🚀 API running on http://localhost:${port}/${prefix}`);
   console.log(`📚 Swagger docs at http://localhost:${port}/docs`);
 }
 
