@@ -22,9 +22,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
     else if (
       exception &&
       typeof exception === 'object' &&
-      (exception as any).name === 'PrismaClientKnownRequestError'
+      (exception as Record<string, unknown>).name === 'PrismaClientKnownRequestError'
     ) {
-      const { code, meta, message: prismaMsg } = exception as any;
+      const {
+        code,
+        meta,
+        message: prismaMsg,
+      } = exception as { code: string; meta?: Record<string, unknown>; message: string };
       const errorConfig = PrismaErrorRegistry[code];
       if (errorConfig) {
         status = errorConfig.status;
@@ -51,7 +55,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
       method: request.method,
-      message: typeof message === 'string' ? message : (message as any).message || message,
+      message:
+        typeof message === 'string'
+          ? message
+          : (message as Record<string, unknown>).message || message,
     };
 
     response.status(status).json(errorResponse);

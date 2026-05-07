@@ -7,17 +7,33 @@ export enum UserRole {
   SUPER_ADMIN = 'SUPER_ADMIN',
 }
 
+export enum ParentRelationship {
+  FATHER = 'FATHER',
+  MOTHER = 'MOTHER',
+  GUARDIAN = 'GUARDIAN',
+}
+
+export interface IParentStudent {
+  id: string;
+  parentId: string;
+  studentId: string;
+  relationship: ParentRelationship;
+}
+
 export interface IUser {
   id: string;
+  name: string;
+  identity: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  phone?: string;
   role: UserRole;
-  avatarUrl?: string;
-  bio?: string;
+  isVerified: boolean;
   isActive: boolean;
+  guardianPhone?: string;
+  guardianIdentity?: string;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date;
 }
 
 // ─── Course ──────────────────────────────────────────

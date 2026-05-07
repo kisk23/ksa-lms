@@ -236,8 +236,8 @@ export type AssignmentAttemptWhereInput = {
   scorePct?: Prisma.IntFilter<"AssignmentAttempt"> | number
   isPassed?: Prisma.BoolFilter<"AssignmentAttempt"> | boolean
   submittedAt?: Prisma.DateTimeFilter<"AssignmentAttempt"> | Date | string
-  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   assignment?: Prisma.XOR<Prisma.AssignmentScalarRelationFilter, Prisma.AssignmentWhereInput>
+  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type AssignmentAttemptOrderByWithRelationInput = {
@@ -248,12 +248,13 @@ export type AssignmentAttemptOrderByWithRelationInput = {
   scorePct?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
-  student?: Prisma.UserOrderByWithRelationInput
   assignment?: Prisma.AssignmentOrderByWithRelationInput
+  student?: Prisma.UserOrderByWithRelationInput
 }
 
 export type AssignmentAttemptWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  studentUserId_assignmentId_attemptNumber?: Prisma.AssignmentAttemptStudentUserIdAssignmentIdAttemptNumberCompoundUniqueInput
   AND?: Prisma.AssignmentAttemptWhereInput | Prisma.AssignmentAttemptWhereInput[]
   OR?: Prisma.AssignmentAttemptWhereInput[]
   NOT?: Prisma.AssignmentAttemptWhereInput | Prisma.AssignmentAttemptWhereInput[]
@@ -263,9 +264,9 @@ export type AssignmentAttemptWhereUniqueInput = Prisma.AtLeast<{
   scorePct?: Prisma.IntFilter<"AssignmentAttempt"> | number
   isPassed?: Prisma.BoolFilter<"AssignmentAttempt"> | boolean
   submittedAt?: Prisma.DateTimeFilter<"AssignmentAttempt"> | Date | string
-  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   assignment?: Prisma.XOR<Prisma.AssignmentScalarRelationFilter, Prisma.AssignmentWhereInput>
-}, "id">
+  student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+}, "id" | "studentUserId_assignmentId_attemptNumber">
 
 export type AssignmentAttemptOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -301,8 +302,8 @@ export type AssignmentAttemptCreateInput = {
   scorePct: number
   isPassed: boolean
   submittedAt?: Date | string
-  student: Prisma.UserCreateNestedOneWithoutAssignmentAttemptsInput
   assignment: Prisma.AssignmentCreateNestedOneWithoutAttemptsInput
+  student: Prisma.UserCreateNestedOneWithoutAssignmentAttemptsInput
 }
 
 export type AssignmentAttemptUncheckedCreateInput = {
@@ -321,8 +322,8 @@ export type AssignmentAttemptUpdateInput = {
   scorePct?: Prisma.IntFieldUpdateOperationsInput | number
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   submittedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  student?: Prisma.UserUpdateOneRequiredWithoutAssignmentAttemptsNestedInput
   assignment?: Prisma.AssignmentUpdateOneRequiredWithoutAttemptsNestedInput
+  student?: Prisma.UserUpdateOneRequiredWithoutAssignmentAttemptsNestedInput
 }
 
 export type AssignmentAttemptUncheckedUpdateInput = {
@@ -371,6 +372,12 @@ export type AssignmentAttemptListRelationFilter = {
 
 export type AssignmentAttemptOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type AssignmentAttemptStudentUserIdAssignmentIdAttemptNumberCompoundUniqueInput = {
+  studentUserId: string
+  assignmentId: string
+  attemptNumber: number
 }
 
 export type AssignmentAttemptCountOrderByAggregateInput = {
@@ -680,8 +687,8 @@ export type AssignmentAttemptSelect<ExtArgs extends runtime.Types.Extensions.Int
   scorePct?: boolean
   isPassed?: boolean
   submittedAt?: boolean
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["assignmentAttempt"]>
 
 export type AssignmentAttemptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -692,8 +699,8 @@ export type AssignmentAttemptSelectCreateManyAndReturn<ExtArgs extends runtime.T
   scorePct?: boolean
   isPassed?: boolean
   submittedAt?: boolean
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["assignmentAttempt"]>
 
 export type AssignmentAttemptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -704,8 +711,8 @@ export type AssignmentAttemptSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   scorePct?: boolean
   isPassed?: boolean
   submittedAt?: boolean
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["assignmentAttempt"]>
 
 export type AssignmentAttemptSelectScalar = {
@@ -720,23 +727,23 @@ export type AssignmentAttemptSelectScalar = {
 
 export type AssignmentAttemptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentUserId" | "assignmentId" | "attemptNumber" | "scorePct" | "isPassed" | "submittedAt", ExtArgs["result"]["assignmentAttempt"]>
 export type AssignmentAttemptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type AssignmentAttemptIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type AssignmentAttemptIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
+  student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $AssignmentAttemptPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AssignmentAttempt"
   objects: {
-    student: Prisma.$UserPayload<ExtArgs>
     assignment: Prisma.$AssignmentPayload<ExtArgs>
+    student: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1140,8 +1147,8 @@ readonly fields: AssignmentAttemptFieldRefs;
  */
 export interface Prisma__AssignmentAttemptClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assignment<T extends Prisma.AssignmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AssignmentDefaultArgs<ExtArgs>>): Prisma.Prisma__AssignmentClient<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

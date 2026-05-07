@@ -119,3 +119,38 @@ export type AssignmentAttempt = Prisma.AssignmentAttemptModel
  * 
  */
 export type AssignmentBestScore = Prisma.AssignmentBestScoreModel
+/**
+ * Model LiveSession
+ * 
+ */
+export type LiveSession = Prisma.LiveSessionModel
+/**
+ * Model LiveSessionNotification
+ * 
+ */
+export type LiveSessionNotification = Prisma.LiveSessionNotificationModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model PromoCode
+ * 
+ */
+export type PromoCode = Prisma.PromoCodeModel
+/**
+ * Model PromoCodeUsage
+ * 
+ */
+export type PromoCodeUsage = Prisma.PromoCodeUsageModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model Refund
+ * 
+ */
+export type Refund = Prisma.RefundModel

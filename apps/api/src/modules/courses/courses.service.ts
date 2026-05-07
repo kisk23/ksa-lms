@@ -8,13 +8,14 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class CoursesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(instructorId: string, dto: CreateCourseDto) {
+  async create(teacherUserId: string, dto: CreateCourseDto) {
+    const { teacherUserId: _dtoTeacherId, ...rest } = dto;
     const slug = slugify(dto.title);
     return this.prisma.course.create({
       data: {
-        ...dto,
+        ...rest,
         slug,
-        teacherUserId: instructorId,
+        teacherUserId,
       },
     });
   }
@@ -39,7 +40,7 @@ export class CoursesService {
         take: limit,
         orderBy: { createdAt: 'desc' },
         include: {
-          teacher: { select: { id: true, name: true, identity: true } },
+          teacher: { select: { id: true, name: true } },
           _count: { select: { enrollments: true, chapters: true } },
         },
       }),
@@ -63,7 +64,7 @@ export class CoursesService {
     const course = await this.prisma.course.findUnique({
       where: { id },
       include: {
-        teacher: { select: { id: true, name: true, identity: true } },
+        teacher: { select: { id: true, name: true } },
         chapters: {
           orderBy: { orderIndex: 'asc' },
           include: {

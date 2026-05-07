@@ -66,7 +66,14 @@ export const ModelName = {
   Enrollment: 'Enrollment',
   LessonProgress: 'LessonProgress',
   AssignmentAttempt: 'AssignmentAttempt',
-  AssignmentBestScore: 'AssignmentBestScore'
+  AssignmentBestScore: 'AssignmentBestScore',
+  LiveSession: 'LiveSession',
+  LiveSessionNotification: 'LiveSessionNotification',
+  Notification: 'Notification',
+  PromoCode: 'PromoCode',
+  PromoCodeUsage: 'PromoCodeUsage',
+  Payment: 'Payment',
+  Refund: 'Refund'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -89,12 +96,14 @@ export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
   identity: 'identity',
+  email: 'email',
   phone: 'phone',
   passwordHash: 'passwordHash',
   role: 'role',
   isVerified: 'isVerified',
   isActive: 'isActive',
   guardianPhone: 'guardianPhone',
+  guardianIdentity: 'guardianIdentity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -156,6 +165,7 @@ export const CourseScalarFieldEnum = {
   title: 'title',
   description: 'description',
   price: 'price',
+  currency: 'currency',
   status: 'status',
   publishedAt: 'publishedAt',
   createdAt: 'createdAt',
@@ -246,6 +256,7 @@ export const EnrollmentScalarFieldEnum = {
   studentUserId: 'studentUserId',
   courseId: 'courseId',
   enrolledBy: 'enrolledBy',
+  paymentId: 'paymentId',
   amountPaid: 'amountPaid',
   enrolledAt: 'enrolledAt',
   status: 'status',
@@ -295,12 +306,144 @@ export const AssignmentBestScoreScalarFieldEnum = {
 export type AssignmentBestScoreScalarFieldEnum = (typeof AssignmentBestScoreScalarFieldEnum)[keyof typeof AssignmentBestScoreScalarFieldEnum]
 
 
+export const LiveSessionScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  teacherUserId: 'teacherUserId',
+  title: 'title',
+  meetingUrl: 'meetingUrl',
+  platform: 'platform',
+  scheduledAt: 'scheduledAt',
+  durationMinutes: 'durationMinutes',
+  status: 'status',
+  cancelledAt: 'cancelledAt',
+  cancelledBy: 'cancelledBy',
+  cancelReason: 'cancelReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LiveSessionScalarFieldEnum = (typeof LiveSessionScalarFieldEnum)[keyof typeof LiveSessionScalarFieldEnum]
+
+
+export const LiveSessionNotificationScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  recipientId: 'recipientId',
+  type: 'type',
+  status: 'status',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type LiveSessionNotificationScalarFieldEnum = (typeof LiveSessionNotificationScalarFieldEnum)[keyof typeof LiveSessionNotificationScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  recipientId: 'recipientId',
+  type: 'type',
+  channel: 'channel',
+  status: 'status',
+  referenceId: 'referenceId',
+  referenceType: 'referenceType',
+  payload: 'payload',
+  scheduledAt: 'scheduledAt',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const PromoCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  discountType: 'discountType',
+  discountValue: 'discountValue',
+  maxUses: 'maxUses',
+  usedCount: 'usedCount',
+  courseId: 'courseId',
+  startsAt: 'startsAt',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdBy: 'createdBy',
+  periodVersion: 'periodVersion',
+  createdAt: 'createdAt'
+} as const
+
+export type PromoCodeScalarFieldEnum = (typeof PromoCodeScalarFieldEnum)[keyof typeof PromoCodeScalarFieldEnum]
+
+
+export const PromoCodeUsageScalarFieldEnum = {
+  id: 'id',
+  promoCodeId: 'promoCodeId',
+  studentUserId: 'studentUserId',
+  periodVersion: 'periodVersion',
+  usedAt: 'usedAt'
+} as const
+
+export type PromoCodeUsageScalarFieldEnum = (typeof PromoCodeUsageScalarFieldEnum)[keyof typeof PromoCodeUsageScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  payerUserId: 'payerUserId',
+  initiatorRole: 'initiatorRole',
+  studentUserId: 'studentUserId',
+  courseId: 'courseId',
+  originalAmount: 'originalAmount',
+  discountAmount: 'discountAmount',
+  finalAmount: 'finalAmount',
+  currency: 'currency',
+  promoCodeId: 'promoCodeId',
+  moyasarPaymentId: 'moyasarPaymentId',
+  moyasarStatus: 'moyasarStatus',
+  paymentMethod: 'paymentMethod',
+  status: 'status',
+  idempotencyKey: 'idempotencyKey',
+  paidAt: 'paidAt',
+  failedAt: 'failedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  metadata: 'metadata'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const RefundScalarFieldEnum = {
+  id: 'id',
+  paymentId: 'paymentId',
+  requestedBy: 'requestedBy',
+  refundAmount: 'refundAmount',
+  currency: 'currency',
+  reason: 'reason',
+  method: 'method',
+  status: 'status',
+  moyasarRefundId: 'moyasarRefundId',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RefundScalarFieldEnum = (typeof RefundScalarFieldEnum)[keyof typeof RefundScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -317,4 +460,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

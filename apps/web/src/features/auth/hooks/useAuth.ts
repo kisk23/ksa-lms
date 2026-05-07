@@ -12,7 +12,7 @@ export function useAuth() {
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (_email: string, _password: string) => {
     // TODO: Implement login
   };
 
@@ -22,10 +22,10 @@ export function useAuth() {
   };
 
   const register = async (data: {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
+    _email: string;
+    _password: string;
+    _firstName: string;
+    _lastName: string;
   }) => {
     // TODO: Implement register
   };

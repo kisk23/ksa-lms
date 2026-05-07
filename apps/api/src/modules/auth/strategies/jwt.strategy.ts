@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   //"exp": 1714310900        // Expiration (Timestamp)
   //} as payload to validate
 
-  async validate(payload: any) {
+  async validate(payload: { sub: string; [key: string]: unknown }) {
     const user = await this.usersService.findOne(payload.sub);
     if (!user?.isActive) {
       //ensure that the controller will have an existed active user

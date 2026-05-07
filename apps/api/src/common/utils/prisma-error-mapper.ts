@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 
 export interface PrismaErrorDetail {
   status: HttpStatus;
-  message: (meta: any) => string;
+  message: (meta: Record<string, unknown> | undefined) => string;
 }
 
 export const PrismaErrorRegistry: Record<string, PrismaErrorDetail> = {

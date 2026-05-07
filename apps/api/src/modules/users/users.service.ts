@@ -1,9 +1,8 @@
-import { UserRole } from '@lms/shared-types';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto, UpdateUserDto } from './dto';
-import { Prisma } from '../../generated/prisma/client';
+import { ParentRelationship, Prisma, UserRole } from '../../generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
@@ -11,14 +10,13 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
-    const { password, ...rest } = dto;
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    const { password, role, ...rest } = dto;
+    const passwordHash = await bcrypt.hash(password, 12);
 
     return this.prisma.user.create({
       data: {
         ...rest,
-        role: rest.role || UserRole.STUDENT,
+        role: role || UserRole.STUDENT,
         passwordHash,
       },
     });
@@ -28,13 +26,15 @@ export class UsersService {
     const { role, page, limit, search } = params;
     const skip = (page - 1) * limit;
 
-    const where: any = {
+    const where: Prisma.UserWhereInput = {
       ...(role && { role }),
       ...(search && {
         OR: [
           { name: { contains: search, mode: 'insensitive' as const } },
+          { email: { contains: search, mode: 'insensitive' as const } },
           { identity: { contains: search, mode: 'insensitive' as const } },
           { phone: { contains: search, mode: 'insensitive' as const } },
+          { guardianIdentity: { contains: search, mode: 'insensitive' as const } },
         ],
       }),
     };
@@ -69,9 +69,15 @@ export class UsersService {
   }
 
   async update(id: string, dto: UpdateUserDto) {
-    //can improve performance with 'one trip' depend on prisma error
     await this.findOne(id);
-    return this.prisma.user.update({ where: { id }, data: dto });
+    const { password, ...rest } = dto;
+    const data: Prisma.UserUpdateInput = { ...rest };
+
+    if (password) {
+      data.passwordHash = await bcrypt.hash(password, 12);
+    }
+
+    return this.prisma.user.update({ where: { id }, data });
   }
 
   async findByIdentity(identity: string) {
@@ -81,7 +87,7 @@ export class UsersService {
   async findByIdentityOrPhone(identifier: string) {
     return this.prisma.user.findFirst({
       where: {
-        OR: [{ identity: identifier }, { phone: identifier }],
+        OR: [{ identity: identifier }, { phone: identifier }, { email: identifier }],
       },
     });
   }
@@ -97,7 +103,7 @@ export class UsersService {
     });
   }
 
-  async linkChild(parentId: string, studentId: string, relationship: any) {
+  async linkChild(parentId: string, studentId: string, relationship: ParentRelationship) {
     // Verify student exists and has STUDENT role
     const student = await this.findOne(studentId);
     if (student.role !== UserRole.STUDENT) {
