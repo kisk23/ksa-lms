@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { RegisterStudentDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,43 +18,155 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async register(dto: RegisterDto) {
-    const existingUser = await this.usersService.findByIdentity(dto.identity);
-    if (existingUser) {
-      throw new ConflictException('ALREADY_ENROLLED');
-    }
+  // async register(dto: RegisterDto) {
+  //   const existingUser = await this.usersService.findByIdentity(dto.identity);
+  //   if (existingUser) {
+  //     throw new ConflictException('ALREADY_ENROLLED');
+  //   }
 
-    if (dto.email) {
-      const userByEmail = await this.prisma.user.findUnique({ where: { email: dto.email } });
-      if (userByEmail) {
-        throw new ConflictException('EMAIL_ALREADY_EXISTS');
+  //   if (dto.email) {
+  //     const userByEmail = await this.prisma.user.findUnique({ where: { email: dto.email } });
+  //     if (userByEmail) {
+  //       throw new ConflictException('EMAIL_ALREADY_EXISTS');
+  //     }
+  //   }
+
+  //   const salt = await bcrypt.genSalt();
+  //   const passwordHash = await bcrypt.hash(dto.password, salt);
+
+  //   const user = await this.prisma.user.create({
+  //     data:  {
+  //       name: dto.name,
+  //       email: dto.email,
+  //       identity: dto.identity,
+  //       phone: dto.phone,
+  //       guardianPhone: dto.guardianPhone,
+  //       guardianIdentity: dto.guardianIdentity,
+  //       passwordHash: passwordHash,
+  //       role: dto.role,
+  //     },
+  //   });
+
+  //   //how to enuser the gurdian phone related to the user do we need to send OTP to him?
+
+  //   // Generate OTP for verification
+  //   //redirct to otp screen to make the user verified after entering the code
+  //   await this.generateOtp(user.id);
+
+  //   const { passwordHash: _, ...result } = user;
+  //   return result;
+  // }
+  // auth.service.ts  (register method)
+  async register(dto: RegisterStudentDto) {
+    const studentPasswordHash = await bcrypt.hash(dto.password, 10);
+    const temporaryGuardianPassword = dto.guardian.identity;
+    const guardianPasswordHash = await bcrypt.hash(temporaryGuardianPassword, 10);
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      // ── 1. Student uniqueness ──────────────────────────────────────────
+      const existingStudent = await tx.user.findFirst({
+        where: {
+          OR: [{ identity: dto.identity }, { email: dto.email }, { phone: dto.phone }],
+        },
+      });
+      if (existingStudent) {
+        throw new ConflictException('STUDENT_ALREADY_EXISTS');
       }
-    }
 
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(dto.password, salt);
+      // ── 2. Guardian lookup by identity ────────────────────────────────
+      let guardian = await tx.user.findUnique({
+        where: { identity: dto.guardian.identity },
+      });
 
-    const user = await this.prisma.user.create({
-      data: {
-        name: dto.name,
-        email: dto.email,
-        identity: dto.identity,
-        phone: dto.phone,
-        guardianPhone: dto.guardianPhone,
-        guardianIdentity: dto.guardianIdentity,
-        passwordHash: passwordHash,
-        role: dto.role || UserRole.STUDENT,
-      },
+      let isNewGuardian = false;
+
+      if (!guardian) {
+        // ── 3a. New guardian — check their email/phone aren't taken ─────
+        const conflictingUser = await tx.user.findFirst({
+          where: {
+            OR: [{ email: dto.guardian.email }, { phone: dto.guardian.phone }],
+          },
+        });
+        if (conflictingUser) {
+          throw new ConflictException('GUARDIAN_CONTACT_CONFLICT');
+        }
+
+        guardian = await tx.user.create({
+          data: {
+            name: dto.guardian.name,
+            email: dto.guardian.email,
+            phone: dto.guardian.phone,
+            identity: dto.guardian.identity,
+            passwordHash: guardianPasswordHash,
+            role: UserRole.PARENT,
+          },
+        });
+        isNewGuardian = true;
+      } else {
+        // ── 3b. Existing guardian — must actually be a PARENT ────────────
+        if (guardian.role !== UserRole.PARENT) {
+          throw new ConflictException('GUARDIAN_ROLE_MISMATCH');
+        }
+      }
+
+      // ── 4. Create student ─────────────────────────────────────────────
+      const student = await tx.user.create({
+        data: {
+          name: dto.name,
+          email: dto.email,
+          phone: dto.phone,
+          identity: dto.identity,
+          passwordHash: studentPasswordHash,
+          role: UserRole.STUDENT,
+        },
+      });
+
+      // ── 5. Link guardian ↔ student (unique constraint handles dups) ───
+      // upsert avoids a redundant findFirst + create round-trip.
+      // The @@unique([parentUserId, studentUserId, relationship]) on the
+      // model means a true duplicate just becomes a no-op update.
+      await tx.parentStudentLink.upsert({
+        where: {
+          parentUserId_studentUserId_relationship: {
+            parentUserId: guardian.id,
+            studentUserId: student.id,
+            relationship: dto.guardian.relationship,
+          },
+        },
+        create: {
+          parentUserId: guardian.id,
+          studentUserId: student.id,
+          relationship: dto.guardian.relationship,
+        },
+        update: {}, // already linked — no-op
+      });
+
+      return { student, guardian, isNewGuardian, temporaryGuardianPassword };
     });
 
-    //how to enuser the gurdian phone related to the user do we need to send OTP to him?
+    // ── 6. Post-transaction side-effects ──────────────────────────────
+    // Always send OTP to the new student.
+    // Only send OTP + credentials to guardian if they were just created.
+    const otpTasks: Promise<unknown>[] = [this.generateOtp(result.student.id)];
 
-    // Generate OTP for verification
-    //redirct to otp screen to make the user verified after entering the code
-    await this.generateOtp(user.id);
+    if (result.isNewGuardian) {
+      otpTasks.push(this.generateOtp(result.guardian.id));
+    }
 
-    const { passwordHash: _, ...result } = user;
-    return result;
+    await Promise.all(otpTasks);
+
+    // if (result.isNewGuardian) {
+    //   await this.notificationsService.sendGuardianCredentials({
+    //     phone: result.guardian.phone!,
+    //     password: result.temporaryGuardianPassword,
+    //   });
+    // }
+
+    return {
+      message: 'REGISTER_SUCCESS',
+      studentId: result.student.id,
+      guardianId: result.guardian.id,
+    };
   }
 
   async generateOtp(userId: string) {

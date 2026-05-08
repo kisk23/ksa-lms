@@ -1,3 +1,7 @@
 import { Module } from '@nestjs/common';
-@Module({ controllers: [], providers: [], exports: [] })
+
+// eslint-disable-next-line import/no-unresolved
+import { NotificationsService } from './notifications.service';
+
+@Module({ controllers: [], providers: [NotificationsService], exports: [NotificationsService] })
 export class NotificationsModule {}
