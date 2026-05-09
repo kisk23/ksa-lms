@@ -1,62 +1,49 @@
+import axios, { AxiosError } from 'axios';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
 
-class ApiClient {
-  private baseUrl: string;
+export const axiosClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+});
 
-  constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
-  }
-
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`;
-
-    const config: RequestInit = {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...this.getAuthHeaders(),
-        ...options.headers,
-      },
-    };
-
-    const response = await fetch(url, config);
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Request failed' }));
-      throw new Error(error.message || `HTTP ${response.status}`);
-    }
-
-    const json = await response.json();
-    return json.data ?? json;
-  }
-
-  private getAuthHeaders(): Record<string, string> {
-    if (typeof window === 'undefined') return {};
+axiosClient.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
     const token = localStorage.getItem('accessToken');
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    if (token) config.headers.Authorization = `Bearer ${token}`;
   }
+  return config;
+});
 
+axiosClient.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError<{ message?: string }>) => {
+    throw new Error(error.response?.data?.message ?? error.message ?? 'Request failed');
+  },
+);
+
+class ApiClient {
   async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint);
+    const response = await axiosClient.get(endpoint);
+    return response.data?.data ?? response.data;
   }
 
-  async post<T>(endpoint: string, data?: unknown): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
+  async post<T>(endpoint: string, data?: unknown, idempotencyKey?: string): Promise<T> {
+    const response = await axiosClient.post(endpoint, data, {
+      headers: idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : undefined,
     });
+    return response.data?.data ?? response.data;
   }
 
   async patch<T>(endpoint: string, data: unknown): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-    });
+    const response = await axiosClient.patch(endpoint, data);
+    return response.data?.data ?? response.data;
   }
 
   async delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' });
+    const response = await axiosClient.delete(endpoint);
+    return response.data?.data ?? response.data;
   }
 }
 
-export const apiClient = new ApiClient(API_BASE_URL);
+export const apiClient = new ApiClient();

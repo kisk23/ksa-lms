@@ -406,6 +406,7 @@ export const ModelName = {
   PromoCode: 'PromoCode',
   PromoCodeUsage: 'PromoCodeUsage',
   Payment: 'Payment',
+  PaymentWebhookEvent: 'PaymentWebhookEvent',
   Refund: 'Refund'
 } as const
 
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "otpVerification" | "refreshToken" | "assistantPermission" | "parentStudentLink" | "course" | "courseProgress" | "chapter" | "lesson" | "assignment" | "question" | "questionOption" | "enrollment" | "lessonProgress" | "assignmentAttempt" | "assignmentBestScore" | "liveSession" | "liveSessionNotification" | "notification" | "promoCode" | "promoCodeUsage" | "payment" | "refund"
+    modelProps: "user" | "otpVerification" | "refreshToken" | "assistantPermission" | "parentStudentLink" | "course" | "courseProgress" | "chapter" | "lesson" | "assignment" | "question" | "questionOption" | "enrollment" | "lessonProgress" | "assignmentAttempt" | "assignmentBestScore" | "liveSession" | "liveSessionNotification" | "notification" | "promoCode" | "promoCodeUsage" | "payment" | "paymentWebhookEvent" | "refund"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2054,6 +2055,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PaymentWebhookEvent: {
+      payload: Prisma.$PaymentWebhookEventPayload<ExtArgs>
+      fields: Prisma.PaymentWebhookEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PaymentWebhookEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PaymentWebhookEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>
+        }
+        findFirst: {
+          args: Prisma.PaymentWebhookEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PaymentWebhookEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>
+        }
+        findMany: {
+          args: Prisma.PaymentWebhookEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>[]
+        }
+        create: {
+          args: Prisma.PaymentWebhookEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>
+        }
+        createMany: {
+          args: Prisma.PaymentWebhookEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PaymentWebhookEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>[]
+        }
+        delete: {
+          args: Prisma.PaymentWebhookEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>
+        }
+        update: {
+          args: Prisma.PaymentWebhookEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.PaymentWebhookEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PaymentWebhookEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PaymentWebhookEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.PaymentWebhookEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentWebhookEventPayload>
+        }
+        aggregate: {
+          args: Prisma.PaymentWebhookEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePaymentWebhookEvent>
+        }
+        groupBy: {
+          args: Prisma.PaymentWebhookEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PaymentWebhookEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PaymentWebhookEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PaymentWebhookEventCountAggregateOutputType> | number
+        }
+      }
+    }
     Refund: {
       payload: Prisma.$RefundPayload<ExtArgs>
       fields: Prisma.RefundFieldRefs
@@ -2463,6 +2538,7 @@ export type PromoCodeUsageScalarFieldEnum = (typeof PromoCodeUsageScalarFieldEnu
 
 export const PaymentScalarFieldEnum = {
   id: 'id',
+  orderId: 'orderId',
   payerUserId: 'payerUserId',
   initiatorRole: 'initiatorRole',
   studentUserId: 'studentUserId',
@@ -2470,7 +2546,10 @@ export const PaymentScalarFieldEnum = {
   originalAmount: 'originalAmount',
   discountAmount: 'discountAmount',
   finalAmount: 'finalAmount',
+  amount: 'amount',
   currency: 'currency',
+  refundedAmount: 'refundedAmount',
+  capturedAmount: 'capturedAmount',
   promoCodeId: 'promoCodeId',
   moyasarPaymentId: 'moyasarPaymentId',
   moyasarStatus: 'moyasarStatus',
@@ -2481,10 +2560,24 @@ export const PaymentScalarFieldEnum = {
   failedAt: 'failedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  metadata: 'metadata'
+  metadata: 'metadata',
+  rawGatewayResponse: 'rawGatewayResponse'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const PaymentWebhookEventScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  paymentId: 'paymentId',
+  moyasarPaymentId: 'moyasarPaymentId',
+  eventType: 'eventType',
+  payload: 'payload',
+  processedAt: 'processedAt'
+} as const
+
+export type PaymentWebhookEventScalarFieldEnum = (typeof PaymentWebhookEventScalarFieldEnum)[keyof typeof PaymentWebhookEventScalarFieldEnum]
 
 
 export const RefundScalarFieldEnum = {
@@ -2519,6 +2612,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -3012,6 +3112,7 @@ export type GlobalOmitConfig = {
   promoCode?: Prisma.PromoCodeOmit
   promoCodeUsage?: Prisma.PromoCodeUsageOmit
   payment?: Prisma.PaymentOmit
+  paymentWebhookEvent?: Prisma.PaymentWebhookEventOmit
   refund?: Prisma.RefundOmit
 }
 

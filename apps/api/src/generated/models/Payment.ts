@@ -30,16 +30,23 @@ export type PaymentAvgAggregateOutputType = {
   originalAmount: runtime.Decimal | null
   discountAmount: runtime.Decimal | null
   finalAmount: runtime.Decimal | null
+  amount: number | null
+  refundedAmount: number | null
+  capturedAmount: number | null
 }
 
 export type PaymentSumAggregateOutputType = {
   originalAmount: runtime.Decimal | null
   discountAmount: runtime.Decimal | null
   finalAmount: runtime.Decimal | null
+  amount: number | null
+  refundedAmount: number | null
+  capturedAmount: number | null
 }
 
 export type PaymentMinAggregateOutputType = {
   id: string | null
+  orderId: string | null
   payerUserId: string | null
   initiatorRole: $Enums.PaymentInitiatorRole | null
   studentUserId: string | null
@@ -47,7 +54,10 @@ export type PaymentMinAggregateOutputType = {
   originalAmount: runtime.Decimal | null
   discountAmount: runtime.Decimal | null
   finalAmount: runtime.Decimal | null
+  amount: number | null
   currency: string | null
+  refundedAmount: number | null
+  capturedAmount: number | null
   promoCodeId: string | null
   moyasarPaymentId: string | null
   moyasarStatus: string | null
@@ -62,6 +72,7 @@ export type PaymentMinAggregateOutputType = {
 
 export type PaymentMaxAggregateOutputType = {
   id: string | null
+  orderId: string | null
   payerUserId: string | null
   initiatorRole: $Enums.PaymentInitiatorRole | null
   studentUserId: string | null
@@ -69,7 +80,10 @@ export type PaymentMaxAggregateOutputType = {
   originalAmount: runtime.Decimal | null
   discountAmount: runtime.Decimal | null
   finalAmount: runtime.Decimal | null
+  amount: number | null
   currency: string | null
+  refundedAmount: number | null
+  capturedAmount: number | null
   promoCodeId: string | null
   moyasarPaymentId: string | null
   moyasarStatus: string | null
@@ -84,6 +98,7 @@ export type PaymentMaxAggregateOutputType = {
 
 export type PaymentCountAggregateOutputType = {
   id: number
+  orderId: number
   payerUserId: number
   initiatorRole: number
   studentUserId: number
@@ -91,7 +106,10 @@ export type PaymentCountAggregateOutputType = {
   originalAmount: number
   discountAmount: number
   finalAmount: number
+  amount: number
   currency: number
+  refundedAmount: number
+  capturedAmount: number
   promoCodeId: number
   moyasarPaymentId: number
   moyasarStatus: number
@@ -103,6 +121,7 @@ export type PaymentCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   metadata: number
+  rawGatewayResponse: number
   _all: number
 }
 
@@ -111,16 +130,23 @@ export type PaymentAvgAggregateInputType = {
   originalAmount?: true
   discountAmount?: true
   finalAmount?: true
+  amount?: true
+  refundedAmount?: true
+  capturedAmount?: true
 }
 
 export type PaymentSumAggregateInputType = {
   originalAmount?: true
   discountAmount?: true
   finalAmount?: true
+  amount?: true
+  refundedAmount?: true
+  capturedAmount?: true
 }
 
 export type PaymentMinAggregateInputType = {
   id?: true
+  orderId?: true
   payerUserId?: true
   initiatorRole?: true
   studentUserId?: true
@@ -128,7 +154,10 @@ export type PaymentMinAggregateInputType = {
   originalAmount?: true
   discountAmount?: true
   finalAmount?: true
+  amount?: true
   currency?: true
+  refundedAmount?: true
+  capturedAmount?: true
   promoCodeId?: true
   moyasarPaymentId?: true
   moyasarStatus?: true
@@ -143,6 +172,7 @@ export type PaymentMinAggregateInputType = {
 
 export type PaymentMaxAggregateInputType = {
   id?: true
+  orderId?: true
   payerUserId?: true
   initiatorRole?: true
   studentUserId?: true
@@ -150,7 +180,10 @@ export type PaymentMaxAggregateInputType = {
   originalAmount?: true
   discountAmount?: true
   finalAmount?: true
+  amount?: true
   currency?: true
+  refundedAmount?: true
+  capturedAmount?: true
   promoCodeId?: true
   moyasarPaymentId?: true
   moyasarStatus?: true
@@ -165,6 +198,7 @@ export type PaymentMaxAggregateInputType = {
 
 export type PaymentCountAggregateInputType = {
   id?: true
+  orderId?: true
   payerUserId?: true
   initiatorRole?: true
   studentUserId?: true
@@ -172,7 +206,10 @@ export type PaymentCountAggregateInputType = {
   originalAmount?: true
   discountAmount?: true
   finalAmount?: true
+  amount?: true
   currency?: true
+  refundedAmount?: true
+  capturedAmount?: true
   promoCodeId?: true
   moyasarPaymentId?: true
   moyasarStatus?: true
@@ -184,6 +221,7 @@ export type PaymentCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   metadata?: true
+  rawGatewayResponse?: true
   _all?: true
 }
 
@@ -275,6 +313,7 @@ export type PaymentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type PaymentGroupByOutputType = {
   id: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
@@ -282,7 +321,10 @@ export type PaymentGroupByOutputType = {
   originalAmount: runtime.Decimal
   discountAmount: runtime.Decimal
   finalAmount: runtime.Decimal
+  amount: number
   currency: string
+  refundedAmount: number
+  capturedAmount: number
   promoCodeId: string | null
   moyasarPaymentId: string | null
   moyasarStatus: string | null
@@ -294,6 +336,7 @@ export type PaymentGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   metadata: runtime.JsonValue | null
+  rawGatewayResponse: runtime.JsonValue | null
   _count: PaymentCountAggregateOutputType | null
   _avg: PaymentAvgAggregateOutputType | null
   _sum: PaymentSumAggregateOutputType | null
@@ -321,6 +364,7 @@ export type PaymentWhereInput = {
   OR?: Prisma.PaymentWhereInput[]
   NOT?: Prisma.PaymentWhereInput | Prisma.PaymentWhereInput[]
   id?: Prisma.UuidFilter<"Payment"> | string
+  orderId?: Prisma.StringFilter<"Payment"> | string
   payerUserId?: Prisma.UuidFilter<"Payment"> | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFilter<"Payment"> | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.UuidFilter<"Payment"> | string
@@ -328,7 +372,10 @@ export type PaymentWhereInput = {
   originalAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFilter<"Payment"> | number
   currency?: Prisma.StringFilter<"Payment"> | string
+  refundedAmount?: Prisma.IntFilter<"Payment"> | number
+  capturedAmount?: Prisma.IntFilter<"Payment"> | number
   promoCodeId?: Prisma.UuidNullableFilter<"Payment"> | string | null
   moyasarPaymentId?: Prisma.StringNullableFilter<"Payment"> | string | null
   moyasarStatus?: Prisma.StringNullableFilter<"Payment"> | string | null
@@ -340,16 +387,19 @@ export type PaymentWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   metadata?: Prisma.JsonNullableFilter<"Payment">
+  rawGatewayResponse?: Prisma.JsonNullableFilter<"Payment">
   payer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   promoCode?: Prisma.XOR<Prisma.PromoCodeNullableScalarRelationFilter, Prisma.PromoCodeWhereInput> | null
   enrollment?: Prisma.XOR<Prisma.EnrollmentNullableScalarRelationFilter, Prisma.EnrollmentWhereInput> | null
   refunds?: Prisma.RefundListRelationFilter
+  webhookEvents?: Prisma.PaymentWebhookEventListRelationFilter
 }
 
 export type PaymentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   payerUserId?: Prisma.SortOrder
   initiatorRole?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
@@ -357,7 +407,10 @@ export type PaymentOrderByWithRelationInput = {
   originalAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   finalAmount?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  refundedAmount?: Prisma.SortOrder
+  capturedAmount?: Prisma.SortOrder
   promoCodeId?: Prisma.SortOrderInput | Prisma.SortOrder
   moyasarPaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   moyasarStatus?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -369,12 +422,14 @@ export type PaymentOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
+  rawGatewayResponse?: Prisma.SortOrderInput | Prisma.SortOrder
   payer?: Prisma.UserOrderByWithRelationInput
   student?: Prisma.UserOrderByWithRelationInput
   course?: Prisma.CourseOrderByWithRelationInput
   promoCode?: Prisma.PromoCodeOrderByWithRelationInput
   enrollment?: Prisma.EnrollmentOrderByWithRelationInput
   refunds?: Prisma.RefundOrderByRelationAggregateInput
+  webhookEvents?: Prisma.PaymentWebhookEventOrderByRelationAggregateInput
 }
 
 export type PaymentWhereUniqueInput = Prisma.AtLeast<{
@@ -384,6 +439,7 @@ export type PaymentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PaymentWhereInput | Prisma.PaymentWhereInput[]
   OR?: Prisma.PaymentWhereInput[]
   NOT?: Prisma.PaymentWhereInput | Prisma.PaymentWhereInput[]
+  orderId?: Prisma.StringFilter<"Payment"> | string
   payerUserId?: Prisma.UuidFilter<"Payment"> | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFilter<"Payment"> | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.UuidFilter<"Payment"> | string
@@ -391,7 +447,10 @@ export type PaymentWhereUniqueInput = Prisma.AtLeast<{
   originalAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFilter<"Payment"> | number
   currency?: Prisma.StringFilter<"Payment"> | string
+  refundedAmount?: Prisma.IntFilter<"Payment"> | number
+  capturedAmount?: Prisma.IntFilter<"Payment"> | number
   promoCodeId?: Prisma.UuidNullableFilter<"Payment"> | string | null
   moyasarStatus?: Prisma.StringNullableFilter<"Payment"> | string | null
   paymentMethod?: Prisma.EnumPaymentMethodNullableFilter<"Payment"> | $Enums.PaymentMethod | null
@@ -401,16 +460,19 @@ export type PaymentWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   metadata?: Prisma.JsonNullableFilter<"Payment">
+  rawGatewayResponse?: Prisma.JsonNullableFilter<"Payment">
   payer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   promoCode?: Prisma.XOR<Prisma.PromoCodeNullableScalarRelationFilter, Prisma.PromoCodeWhereInput> | null
   enrollment?: Prisma.XOR<Prisma.EnrollmentNullableScalarRelationFilter, Prisma.EnrollmentWhereInput> | null
   refunds?: Prisma.RefundListRelationFilter
+  webhookEvents?: Prisma.PaymentWebhookEventListRelationFilter
 }, "id" | "moyasarPaymentId" | "idempotencyKey">
 
 export type PaymentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   payerUserId?: Prisma.SortOrder
   initiatorRole?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
@@ -418,7 +480,10 @@ export type PaymentOrderByWithAggregationInput = {
   originalAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   finalAmount?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  refundedAmount?: Prisma.SortOrder
+  capturedAmount?: Prisma.SortOrder
   promoCodeId?: Prisma.SortOrderInput | Prisma.SortOrder
   moyasarPaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
   moyasarStatus?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -430,6 +495,7 @@ export type PaymentOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
+  rawGatewayResponse?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PaymentCountOrderByAggregateInput
   _avg?: Prisma.PaymentAvgOrderByAggregateInput
   _max?: Prisma.PaymentMaxOrderByAggregateInput
@@ -442,6 +508,7 @@ export type PaymentScalarWhereWithAggregatesInput = {
   OR?: Prisma.PaymentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PaymentScalarWhereWithAggregatesInput | Prisma.PaymentScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Payment"> | string
+  orderId?: Prisma.StringWithAggregatesFilter<"Payment"> | string
   payerUserId?: Prisma.UuidWithAggregatesFilter<"Payment"> | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleWithAggregatesFilter<"Payment"> | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.UuidWithAggregatesFilter<"Payment"> | string
@@ -449,7 +516,10 @@ export type PaymentScalarWhereWithAggregatesInput = {
   originalAmount?: Prisma.DecimalWithAggregatesFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalWithAggregatesFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalWithAggregatesFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntWithAggregatesFilter<"Payment"> | number
   currency?: Prisma.StringWithAggregatesFilter<"Payment"> | string
+  refundedAmount?: Prisma.IntWithAggregatesFilter<"Payment"> | number
+  capturedAmount?: Prisma.IntWithAggregatesFilter<"Payment"> | number
   promoCodeId?: Prisma.UuidNullableWithAggregatesFilter<"Payment"> | string | null
   moyasarPaymentId?: Prisma.StringNullableWithAggregatesFilter<"Payment"> | string | null
   moyasarStatus?: Prisma.StringNullableWithAggregatesFilter<"Payment"> | string | null
@@ -461,15 +531,20 @@ export type PaymentScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Payment"> | Date | string
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"Payment">
+  rawGatewayResponse?: Prisma.JsonNullableWithAggregatesFilter<"Payment">
 }
 
 export type PaymentCreateInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -480,16 +555,19 @@ export type PaymentCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer: Prisma.UserCreateNestedOneWithoutPaidPaymentsInput
   student: Prisma.UserCreateNestedOneWithoutStudentPaymentsInput
   course: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   promoCode?: Prisma.PromoCodeCreateNestedOneWithoutPaymentsInput
   enrollment?: Prisma.EnrollmentCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
@@ -497,7 +575,10 @@ export type PaymentUncheckedCreateInput = {
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -509,17 +590,23 @@ export type PaymentUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -530,16 +617,19 @@ export type PaymentUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer?: Prisma.UserUpdateOneRequiredWithoutPaidPaymentsNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutStudentPaymentsNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutPaymentsNestedInput
   promoCode?: Prisma.PromoCodeUpdateOneWithoutPaymentsNestedInput
   enrollment?: Prisma.EnrollmentUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -547,7 +637,10 @@ export type PaymentUncheckedUpdateInput = {
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -559,12 +652,15 @@ export type PaymentUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentCreateManyInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
@@ -572,7 +668,10 @@ export type PaymentCreateManyInput = {
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -584,15 +683,20 @@ export type PaymentCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -603,10 +707,12 @@ export type PaymentUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -614,7 +720,10 @@ export type PaymentUncheckedUpdateManyInput = {
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -626,6 +735,7 @@ export type PaymentUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentListRelationFilter = {
@@ -645,6 +755,7 @@ export type PaymentNullableScalarRelationFilter = {
 
 export type PaymentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   payerUserId?: Prisma.SortOrder
   initiatorRole?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
@@ -652,7 +763,10 @@ export type PaymentCountOrderByAggregateInput = {
   originalAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   finalAmount?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  refundedAmount?: Prisma.SortOrder
+  capturedAmount?: Prisma.SortOrder
   promoCodeId?: Prisma.SortOrder
   moyasarPaymentId?: Prisma.SortOrder
   moyasarStatus?: Prisma.SortOrder
@@ -664,16 +778,21 @@ export type PaymentCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
+  rawGatewayResponse?: Prisma.SortOrder
 }
 
 export type PaymentAvgOrderByAggregateInput = {
   originalAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   finalAmount?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
+  refundedAmount?: Prisma.SortOrder
+  capturedAmount?: Prisma.SortOrder
 }
 
 export type PaymentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   payerUserId?: Prisma.SortOrder
   initiatorRole?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
@@ -681,7 +800,10 @@ export type PaymentMaxOrderByAggregateInput = {
   originalAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   finalAmount?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  refundedAmount?: Prisma.SortOrder
+  capturedAmount?: Prisma.SortOrder
   promoCodeId?: Prisma.SortOrder
   moyasarPaymentId?: Prisma.SortOrder
   moyasarStatus?: Prisma.SortOrder
@@ -696,6 +818,7 @@ export type PaymentMaxOrderByAggregateInput = {
 
 export type PaymentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   payerUserId?: Prisma.SortOrder
   initiatorRole?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
@@ -703,7 +826,10 @@ export type PaymentMinOrderByAggregateInput = {
   originalAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   finalAmount?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  refundedAmount?: Prisma.SortOrder
+  capturedAmount?: Prisma.SortOrder
   promoCodeId?: Prisma.SortOrder
   moyasarPaymentId?: Prisma.SortOrder
   moyasarStatus?: Prisma.SortOrder
@@ -720,6 +846,9 @@ export type PaymentSumOrderByAggregateInput = {
   originalAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   finalAmount?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
+  refundedAmount?: Prisma.SortOrder
+  capturedAmount?: Prisma.SortOrder
 }
 
 export type PaymentScalarRelationFilter = {
@@ -923,6 +1052,22 @@ export type EnumPaymentStatusFieldUpdateOperationsInput = {
   set?: $Enums.PaymentStatus
 }
 
+export type PaymentCreateNestedOneWithoutWebhookEventsInput = {
+  create?: Prisma.XOR<Prisma.PaymentCreateWithoutWebhookEventsInput, Prisma.PaymentUncheckedCreateWithoutWebhookEventsInput>
+  connectOrCreate?: Prisma.PaymentCreateOrConnectWithoutWebhookEventsInput
+  connect?: Prisma.PaymentWhereUniqueInput
+}
+
+export type PaymentUpdateOneWithoutWebhookEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.PaymentCreateWithoutWebhookEventsInput, Prisma.PaymentUncheckedCreateWithoutWebhookEventsInput>
+  connectOrCreate?: Prisma.PaymentCreateOrConnectWithoutWebhookEventsInput
+  upsert?: Prisma.PaymentUpsertWithoutWebhookEventsInput
+  disconnect?: Prisma.PaymentWhereInput | boolean
+  delete?: Prisma.PaymentWhereInput | boolean
+  connect?: Prisma.PaymentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentUpdateToOneWithWhereWithoutWebhookEventsInput, Prisma.PaymentUpdateWithoutWebhookEventsInput>, Prisma.PaymentUncheckedUpdateWithoutWebhookEventsInput>
+}
+
 export type PaymentCreateNestedOneWithoutRefundsInput = {
   create?: Prisma.XOR<Prisma.PaymentCreateWithoutRefundsInput, Prisma.PaymentUncheckedCreateWithoutRefundsInput>
   connectOrCreate?: Prisma.PaymentCreateOrConnectWithoutRefundsInput
@@ -939,11 +1084,15 @@ export type PaymentUpdateOneRequiredWithoutRefundsNestedInput = {
 
 export type PaymentCreateWithoutPayerInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -954,22 +1103,28 @@ export type PaymentCreateWithoutPayerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   student: Prisma.UserCreateNestedOneWithoutStudentPaymentsInput
   course: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   promoCode?: Prisma.PromoCodeCreateNestedOneWithoutPaymentsInput
   enrollment?: Prisma.EnrollmentCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutPayerInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
   courseId: string
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -981,8 +1136,10 @@ export type PaymentUncheckedCreateWithoutPayerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutPayerInput = {
@@ -997,11 +1154,15 @@ export type PaymentCreateManyPayerInputEnvelope = {
 
 export type PaymentCreateWithoutStudentInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -1012,22 +1173,28 @@ export type PaymentCreateWithoutStudentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer: Prisma.UserCreateNestedOneWithoutPaidPaymentsInput
   course: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   promoCode?: Prisma.PromoCodeCreateNestedOneWithoutPaymentsInput
   enrollment?: Prisma.EnrollmentCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutStudentInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   courseId: string
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -1039,8 +1206,10 @@ export type PaymentUncheckedCreateWithoutStudentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutStudentInput = {
@@ -1074,6 +1243,7 @@ export type PaymentScalarWhereInput = {
   OR?: Prisma.PaymentScalarWhereInput[]
   NOT?: Prisma.PaymentScalarWhereInput | Prisma.PaymentScalarWhereInput[]
   id?: Prisma.UuidFilter<"Payment"> | string
+  orderId?: Prisma.StringFilter<"Payment"> | string
   payerUserId?: Prisma.UuidFilter<"Payment"> | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFilter<"Payment"> | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.UuidFilter<"Payment"> | string
@@ -1081,7 +1251,10 @@ export type PaymentScalarWhereInput = {
   originalAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFilter<"Payment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFilter<"Payment"> | number
   currency?: Prisma.StringFilter<"Payment"> | string
+  refundedAmount?: Prisma.IntFilter<"Payment"> | number
+  capturedAmount?: Prisma.IntFilter<"Payment"> | number
   promoCodeId?: Prisma.UuidNullableFilter<"Payment"> | string | null
   moyasarPaymentId?: Prisma.StringNullableFilter<"Payment"> | string | null
   moyasarStatus?: Prisma.StringNullableFilter<"Payment"> | string | null
@@ -1093,6 +1266,7 @@ export type PaymentScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   metadata?: Prisma.JsonNullableFilter<"Payment">
+  rawGatewayResponse?: Prisma.JsonNullableFilter<"Payment">
 }
 
 export type PaymentUpsertWithWhereUniqueWithoutStudentInput = {
@@ -1113,11 +1287,15 @@ export type PaymentUpdateManyWithWhereWithoutStudentInput = {
 
 export type PaymentCreateWithoutCourseInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -1128,22 +1306,28 @@ export type PaymentCreateWithoutCourseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer: Prisma.UserCreateNestedOneWithoutPaidPaymentsInput
   student: Prisma.UserCreateNestedOneWithoutStudentPaymentsInput
   promoCode?: Prisma.PromoCodeCreateNestedOneWithoutPaymentsInput
   enrollment?: Prisma.EnrollmentCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutCourseInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -1155,8 +1339,10 @@ export type PaymentUncheckedCreateWithoutCourseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutCourseInput = {
@@ -1187,11 +1373,15 @@ export type PaymentUpdateManyWithWhereWithoutCourseInput = {
 
 export type PaymentCreateWithoutEnrollmentInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -1202,15 +1392,18 @@ export type PaymentCreateWithoutEnrollmentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer: Prisma.UserCreateNestedOneWithoutPaidPaymentsInput
   student: Prisma.UserCreateNestedOneWithoutStudentPaymentsInput
   course: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   promoCode?: Prisma.PromoCodeCreateNestedOneWithoutPaymentsInput
   refunds?: Prisma.RefundCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutEnrollmentInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
@@ -1218,7 +1411,10 @@ export type PaymentUncheckedCreateWithoutEnrollmentInput = {
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -1230,7 +1426,9 @@ export type PaymentUncheckedCreateWithoutEnrollmentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutEnrollmentInput = {
@@ -1251,11 +1449,15 @@ export type PaymentUpdateToOneWithWhereWithoutEnrollmentInput = {
 
 export type PaymentUpdateWithoutEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -1266,15 +1468,18 @@ export type PaymentUpdateWithoutEnrollmentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer?: Prisma.UserUpdateOneRequiredWithoutPaidPaymentsNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutStudentPaymentsNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutPaymentsNestedInput
   promoCode?: Prisma.PromoCodeUpdateOneWithoutPaymentsNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutEnrollmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1282,7 +1487,10 @@ export type PaymentUncheckedUpdateWithoutEnrollmentInput = {
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1294,16 +1502,22 @@ export type PaymentUncheckedUpdateWithoutEnrollmentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentCreateWithoutPromoCodeInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -1314,15 +1528,18 @@ export type PaymentCreateWithoutPromoCodeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer: Prisma.UserCreateNestedOneWithoutPaidPaymentsInput
   student: Prisma.UserCreateNestedOneWithoutStudentPaymentsInput
   course: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   enrollment?: Prisma.EnrollmentCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutPromoCodeInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
@@ -1330,7 +1547,10 @@ export type PaymentUncheckedCreateWithoutPromoCodeInput = {
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -1341,8 +1561,10 @@ export type PaymentUncheckedCreateWithoutPromoCodeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedCreateNestedOneWithoutPaymentInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutPromoCodeInput = {
@@ -1371,13 +1593,17 @@ export type PaymentUpdateManyWithWhereWithoutPromoCodeInput = {
   data: Prisma.XOR<Prisma.PaymentUpdateManyMutationInput, Prisma.PaymentUncheckedUpdateManyWithoutPromoCodeInput>
 }
 
-export type PaymentCreateWithoutRefundsInput = {
+export type PaymentCreateWithoutWebhookEventsInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -1388,15 +1614,18 @@ export type PaymentCreateWithoutRefundsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer: Prisma.UserCreateNestedOneWithoutPaidPaymentsInput
   student: Prisma.UserCreateNestedOneWithoutStudentPaymentsInput
   course: Prisma.CourseCreateNestedOneWithoutPaymentsInput
   promoCode?: Prisma.PromoCodeCreateNestedOneWithoutPaymentsInput
   enrollment?: Prisma.EnrollmentCreateNestedOneWithoutPaymentInput
+  refunds?: Prisma.RefundCreateNestedManyWithoutPaymentInput
 }
 
-export type PaymentUncheckedCreateWithoutRefundsInput = {
+export type PaymentUncheckedCreateWithoutWebhookEventsInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
@@ -1404,7 +1633,10 @@ export type PaymentUncheckedCreateWithoutRefundsInput = {
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -1416,7 +1648,145 @@ export type PaymentUncheckedCreateWithoutRefundsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedCreateNestedOneWithoutPaymentInput
+  refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutPaymentInput
+}
+
+export type PaymentCreateOrConnectWithoutWebhookEventsInput = {
+  where: Prisma.PaymentWhereUniqueInput
+  create: Prisma.XOR<Prisma.PaymentCreateWithoutWebhookEventsInput, Prisma.PaymentUncheckedCreateWithoutWebhookEventsInput>
+}
+
+export type PaymentUpsertWithoutWebhookEventsInput = {
+  update: Prisma.XOR<Prisma.PaymentUpdateWithoutWebhookEventsInput, Prisma.PaymentUncheckedUpdateWithoutWebhookEventsInput>
+  create: Prisma.XOR<Prisma.PaymentCreateWithoutWebhookEventsInput, Prisma.PaymentUncheckedCreateWithoutWebhookEventsInput>
+  where?: Prisma.PaymentWhereInput
+}
+
+export type PaymentUpdateToOneWithWhereWithoutWebhookEventsInput = {
+  where?: Prisma.PaymentWhereInput
+  data: Prisma.XOR<Prisma.PaymentUpdateWithoutWebhookEventsInput, Prisma.PaymentUncheckedUpdateWithoutWebhookEventsInput>
+}
+
+export type PaymentUpdateWithoutWebhookEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
+  originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payer?: Prisma.UserUpdateOneRequiredWithoutPaidPaymentsNestedInput
+  student?: Prisma.UserUpdateOneRequiredWithoutStudentPaymentsNestedInput
+  course?: Prisma.CourseUpdateOneRequiredWithoutPaymentsNestedInput
+  promoCode?: Prisma.PromoCodeUpdateOneWithoutPaymentsNestedInput
+  enrollment?: Prisma.EnrollmentUpdateOneWithoutPaymentNestedInput
+  refunds?: Prisma.RefundUpdateManyWithoutPaymentNestedInput
+}
+
+export type PaymentUncheckedUpdateWithoutWebhookEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
+  studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enrollment?: Prisma.EnrollmentUncheckedUpdateOneWithoutPaymentNestedInput
+  refunds?: Prisma.RefundUncheckedUpdateManyWithoutPaymentNestedInput
+}
+
+export type PaymentCreateWithoutRefundsInput = {
+  id?: string
+  orderId: string
+  initiatorRole: $Enums.PaymentInitiatorRole
+  originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
+  currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
+  moyasarPaymentId?: string | null
+  moyasarStatus?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
+  idempotencyKey: string
+  paidAt?: Date | string | null
+  failedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  payer: Prisma.UserCreateNestedOneWithoutPaidPaymentsInput
+  student: Prisma.UserCreateNestedOneWithoutStudentPaymentsInput
+  course: Prisma.CourseCreateNestedOneWithoutPaymentsInput
+  promoCode?: Prisma.PromoCodeCreateNestedOneWithoutPaymentsInput
+  enrollment?: Prisma.EnrollmentCreateNestedOneWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventCreateNestedManyWithoutPaymentInput
+}
+
+export type PaymentUncheckedCreateWithoutRefundsInput = {
+  id?: string
+  orderId: string
+  payerUserId: string
+  initiatorRole: $Enums.PaymentInitiatorRole
+  studentUserId: string
+  courseId: string
+  originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
+  currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
+  promoCodeId?: string | null
+  moyasarPaymentId?: string | null
+  moyasarStatus?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
+  idempotencyKey: string
+  paidAt?: Date | string | null
+  failedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enrollment?: Prisma.EnrollmentUncheckedCreateNestedOneWithoutPaymentInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedCreateNestedManyWithoutPaymentInput
 }
 
 export type PaymentCreateOrConnectWithoutRefundsInput = {
@@ -1437,11 +1807,15 @@ export type PaymentUpdateToOneWithWhereWithoutRefundsInput = {
 
 export type PaymentUpdateWithoutRefundsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -1452,15 +1826,18 @@ export type PaymentUpdateWithoutRefundsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer?: Prisma.UserUpdateOneRequiredWithoutPaidPaymentsNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutStudentPaymentsNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutPaymentsNestedInput
   promoCode?: Prisma.PromoCodeUpdateOneWithoutPaymentsNestedInput
   enrollment?: Prisma.EnrollmentUpdateOneWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutRefundsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1468,7 +1845,10 @@ export type PaymentUncheckedUpdateWithoutRefundsInput = {
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1480,18 +1860,24 @@ export type PaymentUncheckedUpdateWithoutRefundsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedUpdateOneWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentCreateManyPayerInput = {
   id?: string
+  orderId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
   courseId: string
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -1503,17 +1889,22 @@ export type PaymentCreateManyPayerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentCreateManyStudentInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   courseId: string
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -1525,15 +1916,20 @@ export type PaymentCreateManyStudentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentUpdateWithoutPayerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -1544,22 +1940,28 @@ export type PaymentUpdateWithoutPayerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   student?: Prisma.UserUpdateOneRequiredWithoutStudentPaymentsNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutPaymentsNestedInput
   promoCode?: Prisma.PromoCodeUpdateOneWithoutPaymentsNestedInput
   enrollment?: Prisma.EnrollmentUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutPayerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1571,19 +1973,25 @@ export type PaymentUncheckedUpdateWithoutPayerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateManyWithoutPayerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1595,15 +2003,20 @@ export type PaymentUncheckedUpdateManyWithoutPayerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -1614,22 +2027,28 @@ export type PaymentUpdateWithoutStudentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer?: Prisma.UserUpdateOneRequiredWithoutPaidPaymentsNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutPaymentsNestedInput
   promoCode?: Prisma.PromoCodeUpdateOneWithoutPaymentsNestedInput
   enrollment?: Prisma.EnrollmentUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1641,19 +2060,25 @@ export type PaymentUncheckedUpdateWithoutStudentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1665,17 +2090,22 @@ export type PaymentUncheckedUpdateManyWithoutStudentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentCreateManyCourseInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   promoCodeId?: string | null
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
@@ -1687,15 +2117,20 @@ export type PaymentCreateManyCourseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -1706,22 +2141,28 @@ export type PaymentUpdateWithoutCourseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer?: Prisma.UserUpdateOneRequiredWithoutPaidPaymentsNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutStudentPaymentsNestedInput
   promoCode?: Prisma.PromoCodeUpdateOneWithoutPaymentsNestedInput
   enrollment?: Prisma.EnrollmentUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1733,19 +2174,25 @@ export type PaymentUncheckedUpdateWithoutCourseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateManyWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   promoCodeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1757,10 +2204,12 @@ export type PaymentUncheckedUpdateManyWithoutCourseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentCreateManyPromoCodeInput = {
   id?: string
+  orderId: string
   payerUserId: string
   initiatorRole: $Enums.PaymentInitiatorRole
   studentUserId: string
@@ -1768,7 +2217,10 @@ export type PaymentCreateManyPromoCodeInput = {
   originalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: number
   currency?: string
+  refundedAmount?: number
+  capturedAmount?: number
   moyasarPaymentId?: string | null
   moyasarStatus?: string | null
   paymentMethod?: $Enums.PaymentMethod | null
@@ -1779,15 +2231,20 @@ export type PaymentCreateManyPromoCodeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type PaymentUpdateWithoutPromoCodeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -1798,15 +2255,18 @@ export type PaymentUpdateWithoutPromoCodeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   payer?: Prisma.UserUpdateOneRequiredWithoutPaidPaymentsNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutStudentPaymentsNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutPaymentsNestedInput
   enrollment?: Prisma.EnrollmentUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutPromoCodeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1814,7 +2274,10 @@ export type PaymentUncheckedUpdateWithoutPromoCodeInput = {
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -1825,12 +2288,15 @@ export type PaymentUncheckedUpdateWithoutPromoCodeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enrollment?: Prisma.EnrollmentUncheckedUpdateOneWithoutPaymentNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutPaymentNestedInput
+  webhookEvents?: Prisma.PaymentWebhookEventUncheckedUpdateManyWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateManyWithoutPromoCodeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   payerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   initiatorRole?: Prisma.EnumPaymentInitiatorRoleFieldUpdateOperationsInput | $Enums.PaymentInitiatorRole
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1838,7 +2304,10 @@ export type PaymentUncheckedUpdateManyWithoutPromoCodeInput = {
   originalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discountAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   finalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  refundedAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  capturedAmount?: Prisma.IntFieldUpdateOperationsInput | number
   moyasarPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   moyasarStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
@@ -1849,6 +2318,7 @@ export type PaymentUncheckedUpdateManyWithoutPromoCodeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawGatewayResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 
@@ -1858,10 +2328,12 @@ export type PaymentUncheckedUpdateManyWithoutPromoCodeInput = {
 
 export type PaymentCountOutputType = {
   refunds: number
+  webhookEvents: number
 }
 
 export type PaymentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refunds?: boolean | PaymentCountOutputTypeCountRefundsArgs
+  webhookEvents?: boolean | PaymentCountOutputTypeCountWebhookEventsArgs
 }
 
 /**
@@ -1881,9 +2353,17 @@ export type PaymentCountOutputTypeCountRefundsArgs<ExtArgs extends runtime.Types
   where?: Prisma.RefundWhereInput
 }
 
+/**
+ * PaymentCountOutputType without action
+ */
+export type PaymentCountOutputTypeCountWebhookEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWebhookEventWhereInput
+}
+
 
 export type PaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  orderId?: boolean
   payerUserId?: boolean
   initiatorRole?: boolean
   studentUserId?: boolean
@@ -1891,7 +2371,10 @@ export type PaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   originalAmount?: boolean
   discountAmount?: boolean
   finalAmount?: boolean
+  amount?: boolean
   currency?: boolean
+  refundedAmount?: boolean
+  capturedAmount?: boolean
   promoCodeId?: boolean
   moyasarPaymentId?: boolean
   moyasarStatus?: boolean
@@ -1903,17 +2386,20 @@ export type PaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   metadata?: boolean
+  rawGatewayResponse?: boolean
   payer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   promoCode?: boolean | Prisma.Payment$promoCodeArgs<ExtArgs>
   enrollment?: boolean | Prisma.Payment$enrollmentArgs<ExtArgs>
   refunds?: boolean | Prisma.Payment$refundsArgs<ExtArgs>
+  webhookEvents?: boolean | Prisma.Payment$webhookEventsArgs<ExtArgs>
   _count?: boolean | Prisma.PaymentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["payment"]>
 
 export type PaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  orderId?: boolean
   payerUserId?: boolean
   initiatorRole?: boolean
   studentUserId?: boolean
@@ -1921,7 +2407,10 @@ export type PaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   originalAmount?: boolean
   discountAmount?: boolean
   finalAmount?: boolean
+  amount?: boolean
   currency?: boolean
+  refundedAmount?: boolean
+  capturedAmount?: boolean
   promoCodeId?: boolean
   moyasarPaymentId?: boolean
   moyasarStatus?: boolean
@@ -1933,6 +2422,7 @@ export type PaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   metadata?: boolean
+  rawGatewayResponse?: boolean
   payer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
@@ -1941,6 +2431,7 @@ export type PaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type PaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  orderId?: boolean
   payerUserId?: boolean
   initiatorRole?: boolean
   studentUserId?: boolean
@@ -1948,7 +2439,10 @@ export type PaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   originalAmount?: boolean
   discountAmount?: boolean
   finalAmount?: boolean
+  amount?: boolean
   currency?: boolean
+  refundedAmount?: boolean
+  capturedAmount?: boolean
   promoCodeId?: boolean
   moyasarPaymentId?: boolean
   moyasarStatus?: boolean
@@ -1960,6 +2454,7 @@ export type PaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   metadata?: boolean
+  rawGatewayResponse?: boolean
   payer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
@@ -1968,6 +2463,7 @@ export type PaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type PaymentSelectScalar = {
   id?: boolean
+  orderId?: boolean
   payerUserId?: boolean
   initiatorRole?: boolean
   studentUserId?: boolean
@@ -1975,7 +2471,10 @@ export type PaymentSelectScalar = {
   originalAmount?: boolean
   discountAmount?: boolean
   finalAmount?: boolean
+  amount?: boolean
   currency?: boolean
+  refundedAmount?: boolean
+  capturedAmount?: boolean
   promoCodeId?: boolean
   moyasarPaymentId?: boolean
   moyasarStatus?: boolean
@@ -1987,9 +2486,10 @@ export type PaymentSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   metadata?: boolean
+  rawGatewayResponse?: boolean
 }
 
-export type PaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "payerUserId" | "initiatorRole" | "studentUserId" | "courseId" | "originalAmount" | "discountAmount" | "finalAmount" | "currency" | "promoCodeId" | "moyasarPaymentId" | "moyasarStatus" | "paymentMethod" | "status" | "idempotencyKey" | "paidAt" | "failedAt" | "createdAt" | "updatedAt" | "metadata", ExtArgs["result"]["payment"]>
+export type PaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "payerUserId" | "initiatorRole" | "studentUserId" | "courseId" | "originalAmount" | "discountAmount" | "finalAmount" | "amount" | "currency" | "refundedAmount" | "capturedAmount" | "promoCodeId" | "moyasarPaymentId" | "moyasarStatus" | "paymentMethod" | "status" | "idempotencyKey" | "paidAt" | "failedAt" | "createdAt" | "updatedAt" | "metadata" | "rawGatewayResponse", ExtArgs["result"]["payment"]>
 export type PaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   payer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1997,6 +2497,7 @@ export type PaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   promoCode?: boolean | Prisma.Payment$promoCodeArgs<ExtArgs>
   enrollment?: boolean | Prisma.Payment$enrollmentArgs<ExtArgs>
   refunds?: boolean | Prisma.Payment$refundsArgs<ExtArgs>
+  webhookEvents?: boolean | Prisma.Payment$webhookEventsArgs<ExtArgs>
   _count?: boolean | Prisma.PaymentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PaymentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2021,9 +2522,11 @@ export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     promoCode: Prisma.$PromoCodePayload<ExtArgs> | null
     enrollment: Prisma.$EnrollmentPayload<ExtArgs> | null
     refunds: Prisma.$RefundPayload<ExtArgs>[]
+    webhookEvents: Prisma.$PaymentWebhookEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    orderId: string
     payerUserId: string
     initiatorRole: $Enums.PaymentInitiatorRole
     studentUserId: string
@@ -2031,7 +2534,10 @@ export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     originalAmount: runtime.Decimal
     discountAmount: runtime.Decimal
     finalAmount: runtime.Decimal
+    amount: number
     currency: string
+    refundedAmount: number
+    capturedAmount: number
     promoCodeId: string | null
     moyasarPaymentId: string | null
     moyasarStatus: string | null
@@ -2043,6 +2549,7 @@ export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     createdAt: Date
     updatedAt: Date
     metadata: runtime.JsonValue | null
+    rawGatewayResponse: runtime.JsonValue | null
   }, ExtArgs["result"]["payment"]>
   composites: {}
 }
@@ -2443,6 +2950,7 @@ export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends runtime.
   promoCode<T extends Prisma.Payment$promoCodeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$promoCodeArgs<ExtArgs>>): Prisma.Prisma__PromoCodeClient<runtime.Types.Result.GetResult<Prisma.$PromoCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   enrollment<T extends Prisma.Payment$enrollmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$enrollmentArgs<ExtArgs>>): Prisma.Prisma__EnrollmentClient<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   refunds<T extends Prisma.Payment$refundsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$refundsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  webhookEvents<T extends Prisma.Payment$webhookEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$webhookEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentWebhookEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2473,6 +2981,7 @@ export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface PaymentFieldRefs {
   readonly id: Prisma.FieldRef<"Payment", 'String'>
+  readonly orderId: Prisma.FieldRef<"Payment", 'String'>
   readonly payerUserId: Prisma.FieldRef<"Payment", 'String'>
   readonly initiatorRole: Prisma.FieldRef<"Payment", 'PaymentInitiatorRole'>
   readonly studentUserId: Prisma.FieldRef<"Payment", 'String'>
@@ -2480,7 +2989,10 @@ export interface PaymentFieldRefs {
   readonly originalAmount: Prisma.FieldRef<"Payment", 'Decimal'>
   readonly discountAmount: Prisma.FieldRef<"Payment", 'Decimal'>
   readonly finalAmount: Prisma.FieldRef<"Payment", 'Decimal'>
+  readonly amount: Prisma.FieldRef<"Payment", 'Int'>
   readonly currency: Prisma.FieldRef<"Payment", 'String'>
+  readonly refundedAmount: Prisma.FieldRef<"Payment", 'Int'>
+  readonly capturedAmount: Prisma.FieldRef<"Payment", 'Int'>
   readonly promoCodeId: Prisma.FieldRef<"Payment", 'String'>
   readonly moyasarPaymentId: Prisma.FieldRef<"Payment", 'String'>
   readonly moyasarStatus: Prisma.FieldRef<"Payment", 'String'>
@@ -2492,6 +3004,7 @@ export interface PaymentFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Payment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Payment", 'DateTime'>
   readonly metadata: Prisma.FieldRef<"Payment", 'Json'>
+  readonly rawGatewayResponse: Prisma.FieldRef<"Payment", 'Json'>
 }
     
 
@@ -2952,6 +3465,30 @@ export type Payment$refundsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.RefundScalarFieldEnum | Prisma.RefundScalarFieldEnum[]
+}
+
+/**
+ * Payment.webhookEvents
+ */
+export type Payment$webhookEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentWebhookEvent
+   */
+  select?: Prisma.PaymentWebhookEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentWebhookEvent
+   */
+  omit?: Prisma.PaymentWebhookEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentWebhookEventInclude<ExtArgs> | null
+  where?: Prisma.PaymentWebhookEventWhereInput
+  orderBy?: Prisma.PaymentWebhookEventOrderByWithRelationInput | Prisma.PaymentWebhookEventOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWebhookEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentWebhookEventScalarFieldEnum | Prisma.PaymentWebhookEventScalarFieldEnum[]
 }
 
 /**

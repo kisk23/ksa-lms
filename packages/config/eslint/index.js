@@ -8,7 +8,7 @@ const config = {
     'plugin:import/typescript',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'import'],
+  plugins: ['@typescript-eslint'],
   env: {
     node: true,
     es2022: true,

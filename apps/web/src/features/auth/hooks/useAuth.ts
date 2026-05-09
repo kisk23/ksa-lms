@@ -21,7 +21,7 @@ export function useAuth() {
     // TODO: Clear tokens
   };
 
-  const register = async (data: {
+  const register = async (_data: {
     _email: string;
     _password: string;
     _firstName: string;

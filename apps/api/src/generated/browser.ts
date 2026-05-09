@@ -128,6 +128,11 @@ export type PromoCodeUsage = Prisma.PromoCodeUsageModel
  */
 export type Payment = Prisma.PaymentModel
 /**
+ * Model PaymentWebhookEvent
+ * 
+ */
+export type PaymentWebhookEvent = Prisma.PaymentWebhookEventModel
+/**
  * Model Refund
  * 
  */

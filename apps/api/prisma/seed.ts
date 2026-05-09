@@ -9,6 +9,8 @@ import {
   Prisma,
   CourseStatus,
   EnrollmentStatus,
+  PaymentInitiatorRole,
+  PaymentStatus,
 } from '../src/generated/client';
 
 const connectionString = process.env.DATABASE_URL!;
@@ -187,6 +189,28 @@ async function main() {
   });
 
   console.log('✅ Seed Phase 1 Lite completed!');
+  await prisma.payment.upsert({
+    where: { idempotencyKey: 'seed-moyasar-payment-python-basics' },
+    update: {},
+    create: {
+      payerUserId: student.id,
+      initiatorRole: PaymentInitiatorRole.STUDENT,
+      studentUserId: student.id,
+      courseId: course.id,
+      orderId: 'SEED-ORDER-001',
+      originalAmount: new Decimal('199.00'),
+      discountAmount: new Decimal('0.00'),
+      finalAmount: new Decimal('199.00'),
+      amount: 19900,
+      currency: 'SAR',
+      refundedAmount: 0,
+      capturedAmount: 0,
+      status: PaymentStatus.initiated,
+      idempotencyKey: 'seed-moyasar-payment-python-basics',
+      metadata: { seed: true },
+      rawGatewayResponse: { source: 'seed' },
+    },
+  });
 }
 
 main()

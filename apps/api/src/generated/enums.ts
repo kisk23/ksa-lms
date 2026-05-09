@@ -117,11 +117,13 @@ export type NotificationStatus = (typeof NotificationStatus)[keyof typeof Notifi
 
 
 export const PaymentStatus = {
-  PENDING: 'PENDING',
-  PAID: 'PAID',
-  FAILED: 'FAILED',
-  REFUNDED: 'REFUNDED',
-  PARTIALLY_REFUNDED: 'PARTIALLY_REFUNDED'
+  initiated: 'initiated',
+  paid: 'paid',
+  authorized: 'authorized',
+  captured: 'captured',
+  refunded: 'refunded',
+  failed: 'failed',
+  voided: 'voided'
 } as const
 
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
