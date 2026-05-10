@@ -5,6 +5,8 @@ import type { ICourse, PaginatedResponse } from '@lms/shared-types';
 import { coursesService } from '../services/courses.service';
 
 export function useCourses(params?: { page?: number; search?: string }) {
+  const page = params?.page;
+  const search = params?.search;
   const [data, setData] = useState<PaginatedResponse<ICourse> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +15,7 @@ export function useCourses(params?: { page?: number; search?: string }) {
     const fetchCourses = async () => {
       try {
         setIsLoading(true);
-        const result = await coursesService.getAll(params);
+        const result = await coursesService.getAll({ page, search });
         setData(result);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch courses');
@@ -23,7 +25,7 @@ export function useCourses(params?: { page?: number; search?: string }) {
     };
 
     fetchCourses();
-  }, [params?.page, params?.search]);
+  }, [page, search]);
 
   return { courses: data?.data ?? [], meta: data?.meta, isLoading, error };
 }

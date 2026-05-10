@@ -73,6 +73,7 @@ export const ModelName = {
   PromoCode: 'PromoCode',
   PromoCodeUsage: 'PromoCodeUsage',
   Payment: 'Payment',
+  PaymentWebhookEvent: 'PaymentWebhookEvent',
   Refund: 'Refund'
 } as const
 
@@ -388,6 +389,7 @@ export type PromoCodeUsageScalarFieldEnum = (typeof PromoCodeUsageScalarFieldEnu
 
 export const PaymentScalarFieldEnum = {
   id: 'id',
+  orderId: 'orderId',
   payerUserId: 'payerUserId',
   initiatorRole: 'initiatorRole',
   studentUserId: 'studentUserId',
@@ -395,7 +397,10 @@ export const PaymentScalarFieldEnum = {
   originalAmount: 'originalAmount',
   discountAmount: 'discountAmount',
   finalAmount: 'finalAmount',
+  amount: 'amount',
   currency: 'currency',
+  refundedAmount: 'refundedAmount',
+  capturedAmount: 'capturedAmount',
   promoCodeId: 'promoCodeId',
   moyasarPaymentId: 'moyasarPaymentId',
   moyasarStatus: 'moyasarStatus',
@@ -406,10 +411,24 @@ export const PaymentScalarFieldEnum = {
   failedAt: 'failedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  metadata: 'metadata'
+  metadata: 'metadata',
+  rawGatewayResponse: 'rawGatewayResponse'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const PaymentWebhookEventScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  paymentId: 'paymentId',
+  moyasarPaymentId: 'moyasarPaymentId',
+  eventType: 'eventType',
+  payload: 'payload',
+  processedAt: 'processedAt'
+} as const
+
+export type PaymentWebhookEventScalarFieldEnum = (typeof PaymentWebhookEventScalarFieldEnum)[keyof typeof PaymentWebhookEventScalarFieldEnum]
 
 
 export const RefundScalarFieldEnum = {
@@ -444,6 +463,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

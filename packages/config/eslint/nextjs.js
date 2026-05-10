@@ -4,12 +4,11 @@ const base = require('./index.js');
 const config = {
   ...base,
   extends: [
-    ...base.extends,
+    ...base.extends.filter((item) => !item.startsWith('plugin:import/')),
     'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
     'next/core-web-vitals',
   ],
-  plugins: [...base.plugins, 'react', 'react-hooks'],
+  plugins: [...base.plugins, 'react'],
   env: {
     ...base.env,
     browser: true,
@@ -30,8 +29,6 @@ const config = {
     'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
     'react/self-closing-comp': 'error',
     // ─── React Hooks ─────────────────────────────
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
     // ─── Next.js ─────────────────────────────────
     '@next/next/no-html-link-for-pages': 'error',
   },
