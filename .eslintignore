@@ -3,3 +3,5 @@ dist/
 .next/
 .turbo/
 coverage/
+*.d.ts
+prisma/**/*.d.ts
