@@ -1,7 +1,9 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
+
   extends: ['../../packages/config/eslint/nextjs.js'],
+
   parserOptions: {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
@@ -11,6 +13,9 @@ module.exports = {
       typescript: {
         project: './tsconfig.json',
       },
+    },
+    next: {
+      rootDir: __dirname,
     },
   },
   rules: {

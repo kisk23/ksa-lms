@@ -1,18 +1,19 @@
+import { DashboardLayout } from '@shared/components/DashboardLayout';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+
 import '@/styles/globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-
 export const metadata: Metadata = {
-  title: 'LMS Admin',
-  description: 'LMS Administration Dashboard',
+  title: 'Admin Dashboard - Overview',
+  description: 'نظام إدارة التعلم - سُلَّم',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+    <html lang="ar" dir="rtl">
+      <body className="bg-surface font-body-md-ar text-on-surface antialiased min-h-screen">
+        <DashboardLayout>{children}</DashboardLayout>
+      </body>
     </html>
   );
 }

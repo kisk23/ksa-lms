@@ -1,5 +1,4 @@
 
-
 # Enforce conventional commit messages
 # Format: type(scope): description
 # Examples: feat(courses): add quiz module

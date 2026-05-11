@@ -1,8 +1,25 @@
-export default function AdminDashboardPage() {
+import {
+  DashboardHeader,
+  OverviewCards,
+  SecondaryStatsCards,
+  RevenueChart,
+  EnrollmentsChart,
+  RecentActivity,
+} from '@features/dashboard';
+
+export default function DashboardPage() {
   return (
-    <main>
-      <h1>Admin Dashboard</h1>
-      {/* TODO: Wire up admin dashboard feature */}
-    </main>
+    <>
+      <DashboardHeader />
+      <OverviewCards />
+      <SecondaryStatsCards />
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-xl">
+        <RevenueChart />
+        <EnrollmentsChart />
+      </div>
+
+      <RecentActivity />
+    </>
   );
 }
