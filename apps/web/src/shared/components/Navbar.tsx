@@ -12,7 +12,6 @@ export default function Navbar() {
   const [collapsActive, setCollapsActive] = useState(false);
 
   return (
-
     <nav className="sticky top-0 z-50 w-full backdrop-blur-md border-b shadow-sm">
       <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo */}
@@ -22,8 +21,8 @@ export default function Navbar() {
           </Link>
         </div>
 
+        {/*collapse button*/}
         <div className="flex items-center gap-3">
-          {/*collapse button*/}
           <button
             type="button"
             aria-label="Toggle collapse"
@@ -94,19 +93,22 @@ export default function Navbar() {
             </ul>
           </div>
           <div className="w-full md:w-2/6 flex items-center md:justify-end lg:gap-4 gap-2 mt-4 md:mt-0">
-             <div
-          className="flex flex-row-reverse gap-3"
-        >
-          <button className="font-semibold text-sm bg-primary text-white hover:bg-primary/80 transition-all duration-200 active:scale-95 px-4 py-2 rounded-lg cursor-pointer">
-            تسجيل جديد
-          </button>
-          <button className="font-semibold text-sm text-primary hover:bg-primary/20 transition-all duration-200 active:scale-95 px-4 py-2 rounded-lg border-2 border-[#2446B8] cursor-pointer">
-            تسجيل الدخول
-          </button>
-        </div>
+            <div className="flex flex-row-reverse gap-3">
+              <Link
+                href="/register"
+                className="font-semibold text-sm bg-primary text-white hover:bg-primary/80 transition-all duration-200 active:scale-95 px-4 py-2 rounded-lg cursor-pointer"
+              >
+                تسجيل جديد
+              </Link>
+              <Link
+                href="/login"
+                className="font-semibold text-sm text-primary hover:bg-primary/20 transition-all duration-200 active:scale-95 px-4 py-2 rounded-lg border-2 border-[#2446B8] cursor-pointer"
+              >
+                تسجيل الدخول
+              </Link>
+            </div>
           </div>
         </div>
-
       </div>
     </nav>
   );
