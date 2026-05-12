@@ -34,11 +34,10 @@ export class PermissionsGuard implements CanActivate {
       return true;
     }
 
-    // Only AssistantAdmins need to check the permissions table
+    // Only AssistantAdmins need to check the permissions table.
+    // Other roles (like TEACHER) rely on RolesGuard for their access.
     if (user.role !== UserRole.ASSISTANT_ADMIN) {
-      // If they are not an assistant and not a superadmin, but permissions are required,
-      // it means they don't have access.
-      return false;
+      return true;
     }
 
     // Fetch user permissions from DB
