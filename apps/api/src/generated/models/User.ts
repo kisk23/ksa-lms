@@ -38,7 +38,6 @@ export type UserMinAggregateOutputType = {
   guardianIdentity: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  deletedAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -55,7 +54,6 @@ export type UserMaxAggregateOutputType = {
   guardianIdentity: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  deletedAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -72,7 +70,6 @@ export type UserCountAggregateOutputType = {
   guardianIdentity: number
   createdAt: number
   updatedAt: number
-  deletedAt: number
   _all: number
 }
 
@@ -91,7 +88,6 @@ export type UserMinAggregateInputType = {
   guardianIdentity?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -108,7 +104,6 @@ export type UserMaxAggregateInputType = {
   guardianIdentity?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -125,7 +120,6 @@ export type UserCountAggregateInputType = {
   guardianIdentity?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
   _all?: true
 }
 
@@ -215,7 +209,6 @@ export type UserGroupByOutputType = {
   guardianIdentity: string | null
   createdAt: Date
   updatedAt: Date
-  deletedAt: Date | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -253,13 +246,15 @@ export type UserWhereInput = {
   guardianIdentity?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   courseProgresses?: Prisma.CourseProgressListRelationFilter
   assignmentAttempts?: Prisma.AssignmentAttemptListRelationFilter
   assignmentBestScores?: Prisma.AssignmentBestScoreListRelationFilter
   assistantPermissions?: Prisma.AssistantPermissionListRelationFilter
   grantedPermissions?: Prisma.AssistantPermissionListRelationFilter
   taughtCourses?: Prisma.CourseListRelationFilter
+  publishedCourses?: Prisma.CourseListRelationFilter
+  archivedCourses?: Prisma.CourseListRelationFilter
+  courseAuditLogs?: Prisma.CourseAuditLogListRelationFilter
   enrolledByMe?: Prisma.EnrollmentListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
@@ -292,13 +287,15 @@ export type UserOrderByWithRelationInput = {
   guardianIdentity?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   courseProgresses?: Prisma.CourseProgressOrderByRelationAggregateInput
   assignmentAttempts?: Prisma.AssignmentAttemptOrderByRelationAggregateInput
   assignmentBestScores?: Prisma.AssignmentBestScoreOrderByRelationAggregateInput
   assistantPermissions?: Prisma.AssistantPermissionOrderByRelationAggregateInput
   grantedPermissions?: Prisma.AssistantPermissionOrderByRelationAggregateInput
   taughtCourses?: Prisma.CourseOrderByRelationAggregateInput
+  publishedCourses?: Prisma.CourseOrderByRelationAggregateInput
+  archivedCourses?: Prisma.CourseOrderByRelationAggregateInput
+  courseAuditLogs?: Prisma.CourseAuditLogOrderByRelationAggregateInput
   enrolledByMe?: Prisma.EnrollmentOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   lessonProgress?: Prisma.LessonProgressOrderByRelationAggregateInput
@@ -334,13 +331,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   guardianIdentity?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   courseProgresses?: Prisma.CourseProgressListRelationFilter
   assignmentAttempts?: Prisma.AssignmentAttemptListRelationFilter
   assignmentBestScores?: Prisma.AssignmentBestScoreListRelationFilter
   assistantPermissions?: Prisma.AssistantPermissionListRelationFilter
   grantedPermissions?: Prisma.AssistantPermissionListRelationFilter
   taughtCourses?: Prisma.CourseListRelationFilter
+  publishedCourses?: Prisma.CourseListRelationFilter
+  archivedCourses?: Prisma.CourseListRelationFilter
+  courseAuditLogs?: Prisma.CourseAuditLogListRelationFilter
   enrolledByMe?: Prisma.EnrollmentListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
@@ -373,7 +372,6 @@ export type UserOrderByWithAggregationInput = {
   guardianIdentity?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -396,7 +394,6 @@ export type UserScalarWhereWithAggregatesInput = {
   guardianIdentity?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
 }
 
 export type UserCreateInput = {
@@ -413,13 +410,15 @@ export type UserCreateInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -452,13 +451,15 @@ export type UserUncheckedCreateInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -491,13 +492,15 @@ export type UserUpdateInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -530,13 +533,15 @@ export type UserUncheckedUpdateInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -569,7 +574,6 @@ export type UserCreateManyInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -586,7 +590,6 @@ export type UserUpdateManyMutationInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -603,7 +606,6 @@ export type UserUncheckedUpdateManyInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -620,7 +622,6 @@ export type UserCountOrderByAggregateInput = {
   guardianIdentity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -637,7 +638,6 @@ export type UserMaxOrderByAggregateInput = {
   guardianIdentity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -654,7 +654,6 @@ export type UserMinOrderByAggregateInput = {
   guardianIdentity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -685,10 +684,6 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
 }
 
 export type UserCreateNestedOneWithoutOtpVerificationsInput = {
@@ -781,12 +776,58 @@ export type UserCreateNestedOneWithoutTaughtCoursesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutPublishedCoursesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPublishedCoursesInput, Prisma.UserUncheckedCreateWithoutPublishedCoursesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPublishedCoursesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutArchivedCoursesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutArchivedCoursesInput, Prisma.UserUncheckedCreateWithoutArchivedCoursesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutArchivedCoursesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutTaughtCoursesNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutTaughtCoursesInput, Prisma.UserUncheckedCreateWithoutTaughtCoursesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaughtCoursesInput
   upsert?: Prisma.UserUpsertWithoutTaughtCoursesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTaughtCoursesInput, Prisma.UserUpdateWithoutTaughtCoursesInput>, Prisma.UserUncheckedUpdateWithoutTaughtCoursesInput>
+}
+
+export type UserUpdateOneWithoutPublishedCoursesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPublishedCoursesInput, Prisma.UserUncheckedCreateWithoutPublishedCoursesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPublishedCoursesInput
+  upsert?: Prisma.UserUpsertWithoutPublishedCoursesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPublishedCoursesInput, Prisma.UserUpdateWithoutPublishedCoursesInput>, Prisma.UserUncheckedUpdateWithoutPublishedCoursesInput>
+}
+
+export type UserUpdateOneWithoutArchivedCoursesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutArchivedCoursesInput, Prisma.UserUncheckedCreateWithoutArchivedCoursesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutArchivedCoursesInput
+  upsert?: Prisma.UserUpsertWithoutArchivedCoursesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutArchivedCoursesInput, Prisma.UserUpdateWithoutArchivedCoursesInput>, Prisma.UserUncheckedUpdateWithoutArchivedCoursesInput>
+}
+
+export type UserCreateNestedOneWithoutCourseAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCourseAuditLogsInput, Prisma.UserUncheckedCreateWithoutCourseAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCourseAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCourseAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCourseAuditLogsInput, Prisma.UserUncheckedCreateWithoutCourseAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCourseAuditLogsInput
+  upsert?: Prisma.UserUpsertWithoutCourseAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCourseAuditLogsInput, Prisma.UserUpdateWithoutCourseAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutCourseAuditLogsInput>
 }
 
 export type UserCreateNestedOneWithoutCourseProgressesInput = {
@@ -1017,13 +1058,15 @@ export type UserCreateWithoutOtpVerificationsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -1055,13 +1098,15 @@ export type UserUncheckedCreateWithoutOtpVerificationsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -1109,13 +1154,15 @@ export type UserUpdateWithoutOtpVerificationsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -1147,13 +1194,15 @@ export type UserUncheckedUpdateWithoutOtpVerificationsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -1185,13 +1234,15 @@ export type UserCreateWithoutRefreshTokensInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -1223,13 +1274,15 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -1277,13 +1330,15 @@ export type UserUpdateWithoutRefreshTokensInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -1315,13 +1370,15 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -1353,12 +1410,14 @@ export type UserCreateWithoutAssistantPermissionsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -1391,12 +1450,14 @@ export type UserUncheckedCreateWithoutAssistantPermissionsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -1434,12 +1495,14 @@ export type UserCreateWithoutGrantedPermissionsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -1472,12 +1535,14 @@ export type UserUncheckedCreateWithoutGrantedPermissionsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -1526,12 +1591,14 @@ export type UserUpdateWithoutAssistantPermissionsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -1564,12 +1631,14 @@ export type UserUncheckedUpdateWithoutAssistantPermissionsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -1613,12 +1682,14 @@ export type UserUpdateWithoutGrantedPermissionsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -1651,12 +1722,14 @@ export type UserUncheckedUpdateWithoutGrantedPermissionsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -1689,13 +1762,15 @@ export type UserCreateWithoutParentLinksInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -1727,13 +1802,15 @@ export type UserUncheckedCreateWithoutParentLinksInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -1770,13 +1847,15 @@ export type UserCreateWithoutChildLinksInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -1808,13 +1887,15 @@ export type UserUncheckedCreateWithoutChildLinksInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -1862,13 +1943,15 @@ export type UserUpdateWithoutParentLinksInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -1900,13 +1983,15 @@ export type UserUncheckedUpdateWithoutParentLinksInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -1949,13 +2034,15 @@ export type UserUpdateWithoutChildLinksInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -1987,13 +2074,15 @@ export type UserUncheckedUpdateWithoutChildLinksInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -2025,12 +2114,14 @@ export type UserCreateWithoutTaughtCoursesInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -2063,12 +2154,14 @@ export type UserUncheckedCreateWithoutTaughtCoursesInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -2090,6 +2183,176 @@ export type UserUncheckedCreateWithoutTaughtCoursesInput = {
 export type UserCreateOrConnectWithoutTaughtCoursesInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutTaughtCoursesInput, Prisma.UserUncheckedCreateWithoutTaughtCoursesInput>
+}
+
+export type UserCreateWithoutPublishedCoursesInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutPublishedCoursesInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutPublishedCoursesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPublishedCoursesInput, Prisma.UserUncheckedCreateWithoutPublishedCoursesInput>
+}
+
+export type UserCreateWithoutArchivedCoursesInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutArchivedCoursesInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutArchivedCoursesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutArchivedCoursesInput, Prisma.UserUncheckedCreateWithoutArchivedCoursesInput>
 }
 
 export type UserUpsertWithoutTaughtCoursesInput = {
@@ -2117,12 +2380,14 @@ export type UserUpdateWithoutTaughtCoursesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -2155,12 +2420,372 @@ export type UserUncheckedUpdateWithoutTaughtCoursesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUncheckedUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUpsertWithoutPublishedCoursesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPublishedCoursesInput, Prisma.UserUncheckedUpdateWithoutPublishedCoursesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPublishedCoursesInput, Prisma.UserUncheckedCreateWithoutPublishedCoursesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPublishedCoursesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPublishedCoursesInput, Prisma.UserUncheckedUpdateWithoutPublishedCoursesInput>
+}
+
+export type UserUpdateWithoutPublishedCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPublishedCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUncheckedUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUpsertWithoutArchivedCoursesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutArchivedCoursesInput, Prisma.UserUncheckedUpdateWithoutArchivedCoursesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutArchivedCoursesInput, Prisma.UserUncheckedCreateWithoutArchivedCoursesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutArchivedCoursesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutArchivedCoursesInput, Prisma.UserUncheckedUpdateWithoutArchivedCoursesInput>
+}
+
+export type UserUpdateWithoutArchivedCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutArchivedCoursesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUncheckedUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutCourseAuditLogsInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutCourseAuditLogsInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutCourseAuditLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCourseAuditLogsInput, Prisma.UserUncheckedCreateWithoutCourseAuditLogsInput>
+}
+
+export type UserUpsertWithoutCourseAuditLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCourseAuditLogsInput, Prisma.UserUncheckedUpdateWithoutCourseAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCourseAuditLogsInput, Prisma.UserUncheckedCreateWithoutCourseAuditLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCourseAuditLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCourseAuditLogsInput, Prisma.UserUncheckedUpdateWithoutCourseAuditLogsInput>
+}
+
+export type UserUpdateWithoutCourseAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCourseAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -2193,12 +2818,14 @@ export type UserCreateWithoutCourseProgressesInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -2231,12 +2858,14 @@ export type UserUncheckedCreateWithoutCourseProgressesInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -2285,12 +2914,14 @@ export type UserUpdateWithoutCourseProgressesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -2323,12 +2954,14 @@ export type UserUncheckedUpdateWithoutCourseProgressesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -2361,13 +2994,15 @@ export type UserCreateWithoutEnrolledByMeInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
@@ -2399,13 +3034,15 @@ export type UserUncheckedCreateWithoutEnrolledByMeInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
@@ -2442,13 +3079,15 @@ export type UserCreateWithoutEnrollmentsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
@@ -2480,13 +3119,15 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
@@ -2534,13 +3175,15 @@ export type UserUpdateWithoutEnrolledByMeInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
@@ -2572,13 +3215,15 @@ export type UserUncheckedUpdateWithoutEnrolledByMeInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
@@ -2621,13 +3266,15 @@ export type UserUpdateWithoutEnrollmentsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
@@ -2659,13 +3306,15 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
@@ -2697,13 +3346,15 @@ export type UserCreateWithoutLessonProgressInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
@@ -2735,13 +3386,15 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
@@ -2789,13 +3442,15 @@ export type UserUpdateWithoutLessonProgressInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
@@ -2827,13 +3482,15 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
@@ -2865,12 +3522,14 @@ export type UserCreateWithoutAssignmentAttemptsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -2903,12 +3562,14 @@ export type UserUncheckedCreateWithoutAssignmentAttemptsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -2957,12 +3618,14 @@ export type UserUpdateWithoutAssignmentAttemptsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -2995,12 +3658,14 @@ export type UserUncheckedUpdateWithoutAssignmentAttemptsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -3033,12 +3698,14 @@ export type UserCreateWithoutAssignmentBestScoresInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -3071,12 +3738,14 @@ export type UserUncheckedCreateWithoutAssignmentBestScoresInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -3125,12 +3794,14 @@ export type UserUpdateWithoutAssignmentBestScoresInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -3163,12 +3834,14 @@ export type UserUncheckedUpdateWithoutAssignmentBestScoresInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -3201,13 +3874,15 @@ export type UserCreateWithoutCreatedSessionsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -3239,13 +3914,15 @@ export type UserUncheckedCreateWithoutCreatedSessionsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -3282,13 +3959,15 @@ export type UserCreateWithoutCancelledSessionsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -3320,13 +3999,15 @@ export type UserUncheckedCreateWithoutCancelledSessionsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -3374,13 +4055,15 @@ export type UserUpdateWithoutCreatedSessionsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -3412,13 +4095,15 @@ export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -3461,13 +4146,15 @@ export type UserUpdateWithoutCancelledSessionsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -3499,13 +4186,15 @@ export type UserUncheckedUpdateWithoutCancelledSessionsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -3537,13 +4226,15 @@ export type UserCreateWithoutSessionNotificationsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -3575,13 +4266,15 @@ export type UserUncheckedCreateWithoutSessionNotificationsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -3629,13 +4322,15 @@ export type UserUpdateWithoutSessionNotificationsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -3667,13 +4362,15 @@ export type UserUncheckedUpdateWithoutSessionNotificationsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -3705,13 +4402,15 @@ export type UserCreateWithoutNotificationsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -3743,13 +4442,15 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -3797,13 +4498,15 @@ export type UserUpdateWithoutNotificationsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -3835,13 +4538,15 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -3873,13 +4578,15 @@ export type UserCreateWithoutCreatedPromoCodesInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -3911,13 +4618,15 @@ export type UserUncheckedCreateWithoutCreatedPromoCodesInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -3965,13 +4674,15 @@ export type UserUpdateWithoutCreatedPromoCodesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -4003,13 +4714,15 @@ export type UserUncheckedUpdateWithoutCreatedPromoCodesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -4041,13 +4754,15 @@ export type UserCreateWithoutPromoCodeUsagesInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -4079,13 +4794,15 @@ export type UserUncheckedCreateWithoutPromoCodeUsagesInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -4133,13 +4850,15 @@ export type UserUpdateWithoutPromoCodeUsagesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -4171,13 +4890,15 @@ export type UserUncheckedUpdateWithoutPromoCodeUsagesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -4209,13 +4930,15 @@ export type UserCreateWithoutPaidPaymentsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -4247,13 +4970,15 @@ export type UserUncheckedCreateWithoutPaidPaymentsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -4290,13 +5015,15 @@ export type UserCreateWithoutStudentPaymentsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -4328,13 +5055,15 @@ export type UserUncheckedCreateWithoutStudentPaymentsInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -4382,13 +5111,15 @@ export type UserUpdateWithoutPaidPaymentsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -4420,13 +5151,15 @@ export type UserUncheckedUpdateWithoutPaidPaymentsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -4469,13 +5202,15 @@ export type UserUpdateWithoutStudentPaymentsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -4507,13 +5242,15 @@ export type UserUncheckedUpdateWithoutStudentPaymentsInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -4545,13 +5282,15 @@ export type UserCreateWithoutRefundsRequestedInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
@@ -4583,13 +5322,15 @@ export type UserUncheckedCreateWithoutRefundsRequestedInput = {
   guardianIdentity?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
   taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
@@ -4637,13 +5378,15 @@ export type UserUpdateWithoutRefundsRequestedInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
@@ -4675,13 +5418,15 @@ export type UserUncheckedUpdateWithoutRefundsRequestedInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
   grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
   taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
@@ -4711,6 +5456,9 @@ export type UserCountOutputType = {
   assistantPermissions: number
   grantedPermissions: number
   taughtCourses: number
+  publishedCourses: number
+  archivedCourses: number
+  courseAuditLogs: number
   enrolledByMe: number
   enrollments: number
   lessonProgress: number
@@ -4736,6 +5484,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   assistantPermissions?: boolean | UserCountOutputTypeCountAssistantPermissionsArgs
   grantedPermissions?: boolean | UserCountOutputTypeCountGrantedPermissionsArgs
   taughtCourses?: boolean | UserCountOutputTypeCountTaughtCoursesArgs
+  publishedCourses?: boolean | UserCountOutputTypeCountPublishedCoursesArgs
+  archivedCourses?: boolean | UserCountOutputTypeCountArchivedCoursesArgs
+  courseAuditLogs?: boolean | UserCountOutputTypeCountCourseAuditLogsArgs
   enrolledByMe?: boolean | UserCountOutputTypeCountEnrolledByMeArgs
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
   lessonProgress?: boolean | UserCountOutputTypeCountLessonProgressArgs
@@ -4804,6 +5555,27 @@ export type UserCountOutputTypeCountGrantedPermissionsArgs<ExtArgs extends runti
  */
 export type UserCountOutputTypeCountTaughtCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CourseWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPublishedCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountArchivedCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCourseAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseAuditLogWhereInput
 }
 
 /**
@@ -4933,13 +5705,15 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   guardianIdentity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
   courseProgresses?: boolean | Prisma.User$courseProgressesArgs<ExtArgs>
   assignmentAttempts?: boolean | Prisma.User$assignmentAttemptsArgs<ExtArgs>
   assignmentBestScores?: boolean | Prisma.User$assignmentBestScoresArgs<ExtArgs>
   assistantPermissions?: boolean | Prisma.User$assistantPermissionsArgs<ExtArgs>
   grantedPermissions?: boolean | Prisma.User$grantedPermissionsArgs<ExtArgs>
   taughtCourses?: boolean | Prisma.User$taughtCoursesArgs<ExtArgs>
+  publishedCourses?: boolean | Prisma.User$publishedCoursesArgs<ExtArgs>
+  archivedCourses?: boolean | Prisma.User$archivedCoursesArgs<ExtArgs>
+  courseAuditLogs?: boolean | Prisma.User$courseAuditLogsArgs<ExtArgs>
   enrolledByMe?: boolean | Prisma.User$enrolledByMeArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
@@ -4973,7 +5747,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   guardianIdentity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -4990,7 +5763,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   guardianIdentity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -5007,10 +5779,9 @@ export type UserSelectScalar = {
   guardianIdentity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "identity" | "email" | "phone" | "passwordHash" | "role" | "isVerified" | "isActive" | "guardianPhone" | "guardianIdentity" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "identity" | "email" | "phone" | "passwordHash" | "role" | "isVerified" | "isActive" | "guardianPhone" | "guardianIdentity" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   courseProgresses?: boolean | Prisma.User$courseProgressesArgs<ExtArgs>
   assignmentAttempts?: boolean | Prisma.User$assignmentAttemptsArgs<ExtArgs>
@@ -5018,6 +5789,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   assistantPermissions?: boolean | Prisma.User$assistantPermissionsArgs<ExtArgs>
   grantedPermissions?: boolean | Prisma.User$grantedPermissionsArgs<ExtArgs>
   taughtCourses?: boolean | Prisma.User$taughtCoursesArgs<ExtArgs>
+  publishedCourses?: boolean | Prisma.User$publishedCoursesArgs<ExtArgs>
+  archivedCourses?: boolean | Prisma.User$archivedCoursesArgs<ExtArgs>
+  courseAuditLogs?: boolean | Prisma.User$courseAuditLogsArgs<ExtArgs>
   enrolledByMe?: boolean | Prisma.User$enrolledByMeArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
@@ -5048,6 +5822,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     assistantPermissions: Prisma.$AssistantPermissionPayload<ExtArgs>[]
     grantedPermissions: Prisma.$AssistantPermissionPayload<ExtArgs>[]
     taughtCourses: Prisma.$CoursePayload<ExtArgs>[]
+    publishedCourses: Prisma.$CoursePayload<ExtArgs>[]
+    archivedCourses: Prisma.$CoursePayload<ExtArgs>[]
+    courseAuditLogs: Prisma.$CourseAuditLogPayload<ExtArgs>[]
     enrolledByMe: Prisma.$EnrollmentPayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     lessonProgress: Prisma.$LessonProgressPayload<ExtArgs>[]
@@ -5079,7 +5856,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     guardianIdentity: string | null
     createdAt: Date
     updatedAt: Date
-    deletedAt: Date | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -5480,6 +6256,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   assistantPermissions<T extends Prisma.User$assistantPermissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assistantPermissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssistantPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   grantedPermissions<T extends Prisma.User$grantedPermissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$grantedPermissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssistantPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   taughtCourses<T extends Prisma.User$taughtCoursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$taughtCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  publishedCourses<T extends Prisma.User$publishedCoursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$publishedCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  archivedCourses<T extends Prisma.User$archivedCoursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$archivedCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  courseAuditLogs<T extends Prisma.User$courseAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$courseAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrolledByMe<T extends Prisma.User$enrolledByMeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrolledByMeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessonProgress<T extends Prisma.User$lessonProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lessonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5538,7 +6317,6 @@ export interface UserFieldRefs {
   readonly guardianIdentity: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
-  readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 
@@ -6073,6 +6851,78 @@ export type User$taughtCoursesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.CourseScalarFieldEnum | Prisma.CourseScalarFieldEnum[]
+}
+
+/**
+ * User.publishedCourses
+ */
+export type User$publishedCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Course
+   */
+  select?: Prisma.CourseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Course
+   */
+  omit?: Prisma.CourseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseInclude<ExtArgs> | null
+  where?: Prisma.CourseWhereInput
+  orderBy?: Prisma.CourseOrderByWithRelationInput | Prisma.CourseOrderByWithRelationInput[]
+  cursor?: Prisma.CourseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseScalarFieldEnum | Prisma.CourseScalarFieldEnum[]
+}
+
+/**
+ * User.archivedCourses
+ */
+export type User$archivedCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Course
+   */
+  select?: Prisma.CourseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Course
+   */
+  omit?: Prisma.CourseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseInclude<ExtArgs> | null
+  where?: Prisma.CourseWhereInput
+  orderBy?: Prisma.CourseOrderByWithRelationInput | Prisma.CourseOrderByWithRelationInput[]
+  cursor?: Prisma.CourseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseScalarFieldEnum | Prisma.CourseScalarFieldEnum[]
+}
+
+/**
+ * User.courseAuditLogs
+ */
+export type User$courseAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CourseAuditLog
+   */
+  select?: Prisma.CourseAuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CourseAuditLog
+   */
+  omit?: Prisma.CourseAuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseAuditLogInclude<ExtArgs> | null
+  where?: Prisma.CourseAuditLogWhereInput
+  orderBy?: Prisma.CourseAuditLogOrderByWithRelationInput | Prisma.CourseAuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.CourseAuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseAuditLogScalarFieldEnum | Prisma.CourseAuditLogScalarFieldEnum[]
 }
 
 /**

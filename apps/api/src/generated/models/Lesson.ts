@@ -41,9 +41,10 @@ export type LessonMinAggregateOutputType = {
   chapterId: string | null
   title: string | null
   orderIndex: number | null
-  youtubeVideoId: string | null
+  videoUrl: string | null
+  videoProvider: $Enums.VideoProvider | null
   version: number | null
-  isArchived: boolean | null
+  archivedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,9 +54,10 @@ export type LessonMaxAggregateOutputType = {
   chapterId: string | null
   title: string | null
   orderIndex: number | null
-  youtubeVideoId: string | null
+  videoUrl: string | null
+  videoProvider: $Enums.VideoProvider | null
   version: number | null
-  isArchived: boolean | null
+  archivedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -65,9 +67,10 @@ export type LessonCountAggregateOutputType = {
   chapterId: number
   title: number
   orderIndex: number
-  youtubeVideoId: number
+  videoUrl: number
+  videoProvider: number
   version: number
-  isArchived: number
+  archivedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -89,9 +92,10 @@ export type LessonMinAggregateInputType = {
   chapterId?: true
   title?: true
   orderIndex?: true
-  youtubeVideoId?: true
+  videoUrl?: true
+  videoProvider?: true
   version?: true
-  isArchived?: true
+  archivedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -101,9 +105,10 @@ export type LessonMaxAggregateInputType = {
   chapterId?: true
   title?: true
   orderIndex?: true
-  youtubeVideoId?: true
+  videoUrl?: true
+  videoProvider?: true
   version?: true
-  isArchived?: true
+  archivedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -113,9 +118,10 @@ export type LessonCountAggregateInputType = {
   chapterId?: true
   title?: true
   orderIndex?: true
-  youtubeVideoId?: true
+  videoUrl?: true
+  videoProvider?: true
   version?: true
-  isArchived?: true
+  archivedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -212,9 +218,10 @@ export type LessonGroupByOutputType = {
   chapterId: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider: $Enums.VideoProvider
   version: number
-  isArchived: boolean
+  archivedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: LessonCountAggregateOutputType | null
@@ -247,13 +254,15 @@ export type LessonWhereInput = {
   chapterId?: Prisma.UuidFilter<"Lesson"> | string
   title?: Prisma.StringFilter<"Lesson"> | string
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
-  youtubeVideoId?: Prisma.StringFilter<"Lesson"> | string
+  videoUrl?: Prisma.StringFilter<"Lesson"> | string
+  videoProvider?: Prisma.EnumVideoProviderFilter<"Lesson"> | $Enums.VideoProvider
   version?: Prisma.IntFilter<"Lesson"> | number
-  isArchived?: Prisma.BoolFilter<"Lesson"> | boolean
+  archivedAt?: Prisma.DateTimeNullableFilter<"Lesson"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   assignment?: Prisma.XOR<Prisma.AssignmentNullableScalarRelationFilter, Prisma.AssignmentWhereInput> | null
   lessonProgress?: Prisma.LessonProgressListRelationFilter
+  progressBookmarks?: Prisma.CourseProgressListRelationFilter
   chapter?: Prisma.XOR<Prisma.ChapterScalarRelationFilter, Prisma.ChapterWhereInput>
 }
 
@@ -262,13 +271,15 @@ export type LessonOrderByWithRelationInput = {
   chapterId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
-  youtubeVideoId?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  videoProvider?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  isArchived?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   assignment?: Prisma.AssignmentOrderByWithRelationInput
   lessonProgress?: Prisma.LessonProgressOrderByRelationAggregateInput
+  progressBookmarks?: Prisma.CourseProgressOrderByRelationAggregateInput
   chapter?: Prisma.ChapterOrderByWithRelationInput
 }
 
@@ -281,13 +292,15 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   chapterId?: Prisma.UuidFilter<"Lesson"> | string
   title?: Prisma.StringFilter<"Lesson"> | string
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
-  youtubeVideoId?: Prisma.StringFilter<"Lesson"> | string
+  videoUrl?: Prisma.StringFilter<"Lesson"> | string
+  videoProvider?: Prisma.EnumVideoProviderFilter<"Lesson"> | $Enums.VideoProvider
   version?: Prisma.IntFilter<"Lesson"> | number
-  isArchived?: Prisma.BoolFilter<"Lesson"> | boolean
+  archivedAt?: Prisma.DateTimeNullableFilter<"Lesson"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   assignment?: Prisma.XOR<Prisma.AssignmentNullableScalarRelationFilter, Prisma.AssignmentWhereInput> | null
   lessonProgress?: Prisma.LessonProgressListRelationFilter
+  progressBookmarks?: Prisma.CourseProgressListRelationFilter
   chapter?: Prisma.XOR<Prisma.ChapterScalarRelationFilter, Prisma.ChapterWhereInput>
 }, "id" | "chapterId_orderIndex">
 
@@ -296,9 +309,10 @@ export type LessonOrderByWithAggregationInput = {
   chapterId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
-  youtubeVideoId?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  videoProvider?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  isArchived?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.LessonCountOrderByAggregateInput
@@ -316,9 +330,10 @@ export type LessonScalarWhereWithAggregatesInput = {
   chapterId?: Prisma.UuidWithAggregatesFilter<"Lesson"> | string
   title?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
   orderIndex?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
-  youtubeVideoId?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
+  videoUrl?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
+  videoProvider?: Prisma.EnumVideoProviderWithAggregatesFilter<"Lesson"> | $Enums.VideoProvider
   version?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
-  isArchived?: Prisma.BoolWithAggregatesFilter<"Lesson"> | boolean
+  archivedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Lesson"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Lesson"> | Date | string
 }
@@ -327,13 +342,15 @@ export type LessonCreateInput = {
   id?: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
   chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
 }
 
@@ -342,26 +359,30 @@ export type LessonUncheckedCreateInput = {
   chapterId: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
 }
 
 export type LessonUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
   chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
 }
 
@@ -370,13 +391,15 @@ export type LessonUncheckedUpdateInput = {
   chapterId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -384,9 +407,10 @@ export type LessonCreateManyInput = {
   chapterId: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -395,9 +419,10 @@ export type LessonUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -407,11 +432,17 @@ export type LessonUncheckedUpdateManyInput = {
   chapterId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LessonNullableScalarRelationFilter = {
+  is?: Prisma.LessonWhereInput | null
+  isNot?: Prisma.LessonWhereInput | null
 }
 
 export type LessonListRelationFilter = {
@@ -434,9 +465,10 @@ export type LessonCountOrderByAggregateInput = {
   chapterId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
-  youtubeVideoId?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  videoProvider?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  isArchived?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -451,9 +483,10 @@ export type LessonMaxOrderByAggregateInput = {
   chapterId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
-  youtubeVideoId?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  videoProvider?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  isArchived?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -463,9 +496,10 @@ export type LessonMinOrderByAggregateInput = {
   chapterId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
-  youtubeVideoId?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  videoProvider?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  isArchived?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -478,6 +512,22 @@ export type LessonSumOrderByAggregateInput = {
 export type LessonScalarRelationFilter = {
   is?: Prisma.LessonWhereInput
   isNot?: Prisma.LessonWhereInput
+}
+
+export type LessonCreateNestedOneWithoutProgressBookmarksInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutProgressBookmarksInput, Prisma.LessonUncheckedCreateWithoutProgressBookmarksInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutProgressBookmarksInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneWithoutProgressBookmarksNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutProgressBookmarksInput, Prisma.LessonUncheckedCreateWithoutProgressBookmarksInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutProgressBookmarksInput
+  upsert?: Prisma.LessonUpsertWithoutProgressBookmarksInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutProgressBookmarksInput, Prisma.LessonUpdateWithoutProgressBookmarksInput>, Prisma.LessonUncheckedUpdateWithoutProgressBookmarksInput>
 }
 
 export type LessonCreateNestedManyWithoutChapterInput = {
@@ -522,6 +572,10 @@ export type LessonUncheckedUpdateManyWithoutChapterNestedInput = {
   deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
 }
 
+export type EnumVideoProviderFieldUpdateOperationsInput = {
+  set?: $Enums.VideoProvider
+}
+
 export type LessonCreateNestedOneWithoutAssignmentInput = {
   create?: Prisma.XOR<Prisma.LessonCreateWithoutAssignmentInput, Prisma.LessonUncheckedCreateWithoutAssignmentInput>
   connectOrCreate?: Prisma.LessonCreateOrConnectWithoutAssignmentInput
@@ -550,30 +604,110 @@ export type LessonUpdateOneRequiredWithoutLessonProgressNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutLessonProgressInput, Prisma.LessonUpdateWithoutLessonProgressInput>, Prisma.LessonUncheckedUpdateWithoutLessonProgressInput>
 }
 
-export type LessonCreateWithoutChapterInput = {
+export type LessonCreateWithoutProgressBookmarksInput = {
   id?: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+}
+
+export type LessonUncheckedCreateWithoutProgressBookmarksInput = {
+  id?: string
+  chapterId: string
+  title: string
+  orderIndex: number
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
+  version?: number
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutProgressBookmarksInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutProgressBookmarksInput, Prisma.LessonUncheckedCreateWithoutProgressBookmarksInput>
+}
+
+export type LessonUpsertWithoutProgressBookmarksInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutProgressBookmarksInput, Prisma.LessonUncheckedUpdateWithoutProgressBookmarksInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutProgressBookmarksInput, Prisma.LessonUncheckedCreateWithoutProgressBookmarksInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutProgressBookmarksInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutProgressBookmarksInput, Prisma.LessonUncheckedUpdateWithoutProgressBookmarksInput>
+}
+
+export type LessonUpdateWithoutProgressBookmarksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutProgressBookmarksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  chapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutChapterInput = {
+  id?: string
+  title: string
+  orderIndex: number
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
+  version?: number
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
 }
 
 export type LessonUncheckedCreateWithoutChapterInput = {
   id?: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
 }
 
 export type LessonCreateOrConnectWithoutChapterInput = {
@@ -610,9 +744,10 @@ export type LessonScalarWhereInput = {
   chapterId?: Prisma.UuidFilter<"Lesson"> | string
   title?: Prisma.StringFilter<"Lesson"> | string
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
-  youtubeVideoId?: Prisma.StringFilter<"Lesson"> | string
+  videoUrl?: Prisma.StringFilter<"Lesson"> | string
+  videoProvider?: Prisma.EnumVideoProviderFilter<"Lesson"> | $Enums.VideoProvider
   version?: Prisma.IntFilter<"Lesson"> | number
-  isArchived?: Prisma.BoolFilter<"Lesson"> | boolean
+  archivedAt?: Prisma.DateTimeNullableFilter<"Lesson"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
 }
@@ -621,12 +756,14 @@ export type LessonCreateWithoutAssignmentInput = {
   id?: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
   chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
 }
 
@@ -635,12 +772,14 @@ export type LessonUncheckedCreateWithoutAssignmentInput = {
   chapterId: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
 }
 
 export type LessonCreateOrConnectWithoutAssignmentInput = {
@@ -663,12 +802,14 @@ export type LessonUpdateWithoutAssignmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
   chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
 }
 
@@ -677,24 +818,28 @@ export type LessonUncheckedUpdateWithoutAssignmentInput = {
   chapterId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
 }
 
 export type LessonCreateWithoutLessonProgressInput = {
   id?: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
   chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
 }
 
@@ -703,12 +848,14 @@ export type LessonUncheckedCreateWithoutLessonProgressInput = {
   chapterId: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
 }
 
 export type LessonCreateOrConnectWithoutLessonProgressInput = {
@@ -731,12 +878,14 @@ export type LessonUpdateWithoutLessonProgressInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
   chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
 }
 
@@ -745,21 +894,24 @@ export type LessonUncheckedUpdateWithoutLessonProgressInput = {
   chapterId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
 }
 
 export type LessonCreateManyChapterInput = {
   id?: string
   title: string
   orderIndex: number
-  youtubeVideoId: string
+  videoUrl: string
+  videoProvider?: $Enums.VideoProvider
   version?: number
-  isArchived?: boolean
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -768,35 +920,40 @@ export type LessonUpdateWithoutChapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutChapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutChapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  youtubeVideoId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -808,10 +965,12 @@ export type LessonUncheckedUpdateManyWithoutChapterInput = {
 
 export type LessonCountOutputType = {
   lessonProgress: number
+  progressBookmarks: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lessonProgress?: boolean | LessonCountOutputTypeCountLessonProgressArgs
+  progressBookmarks?: boolean | LessonCountOutputTypeCountProgressBookmarksArgs
 }
 
 /**
@@ -831,19 +990,28 @@ export type LessonCountOutputTypeCountLessonProgressArgs<ExtArgs extends runtime
   where?: Prisma.LessonProgressWhereInput
 }
 
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountProgressBookmarksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseProgressWhereInput
+}
+
 
 export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   chapterId?: boolean
   title?: boolean
   orderIndex?: boolean
-  youtubeVideoId?: boolean
+  videoUrl?: boolean
+  videoProvider?: boolean
   version?: boolean
-  isArchived?: boolean
+  archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   assignment?: boolean | Prisma.Lesson$assignmentArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.Lesson$lessonProgressArgs<ExtArgs>
+  progressBookmarks?: boolean | Prisma.Lesson$progressBookmarksArgs<ExtArgs>
   chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
@@ -853,9 +1021,10 @@ export type LessonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   chapterId?: boolean
   title?: boolean
   orderIndex?: boolean
-  youtubeVideoId?: boolean
+  videoUrl?: boolean
+  videoProvider?: boolean
   version?: boolean
-  isArchived?: boolean
+  archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
@@ -866,9 +1035,10 @@ export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   chapterId?: boolean
   title?: boolean
   orderIndex?: boolean
-  youtubeVideoId?: boolean
+  videoUrl?: boolean
+  videoProvider?: boolean
   version?: boolean
-  isArchived?: boolean
+  archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
@@ -879,17 +1049,19 @@ export type LessonSelectScalar = {
   chapterId?: boolean
   title?: boolean
   orderIndex?: boolean
-  youtubeVideoId?: boolean
+  videoUrl?: boolean
+  videoProvider?: boolean
   version?: boolean
-  isArchived?: boolean
+  archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "chapterId" | "title" | "orderIndex" | "youtubeVideoId" | "version" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["lesson"]>
+export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "chapterId" | "title" | "orderIndex" | "videoUrl" | "videoProvider" | "version" | "archivedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignment?: boolean | Prisma.Lesson$assignmentArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.Lesson$lessonProgressArgs<ExtArgs>
+  progressBookmarks?: boolean | Prisma.Lesson$progressBookmarksArgs<ExtArgs>
   chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -905,6 +1077,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     assignment: Prisma.$AssignmentPayload<ExtArgs> | null
     lessonProgress: Prisma.$LessonProgressPayload<ExtArgs>[]
+    progressBookmarks: Prisma.$CourseProgressPayload<ExtArgs>[]
     chapter: Prisma.$ChapterPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -912,9 +1085,10 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     chapterId: string
     title: string
     orderIndex: number
-    youtubeVideoId: string
+    videoUrl: string
+    videoProvider: $Enums.VideoProvider
     version: number
-    isArchived: boolean
+    archivedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["lesson"]>
@@ -1313,6 +1487,7 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   assignment<T extends Prisma.Lesson$assignmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$assignmentArgs<ExtArgs>>): Prisma.Prisma__AssignmentClient<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   lessonProgress<T extends Prisma.Lesson$lessonProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$lessonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  progressBookmarks<T extends Prisma.Lesson$progressBookmarksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$progressBookmarksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   chapter<T extends Prisma.ChapterDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChapterDefaultArgs<ExtArgs>>): Prisma.Prisma__ChapterClient<runtime.Types.Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1347,9 +1522,10 @@ export interface LessonFieldRefs {
   readonly chapterId: Prisma.FieldRef<"Lesson", 'String'>
   readonly title: Prisma.FieldRef<"Lesson", 'String'>
   readonly orderIndex: Prisma.FieldRef<"Lesson", 'Int'>
-  readonly youtubeVideoId: Prisma.FieldRef<"Lesson", 'String'>
+  readonly videoUrl: Prisma.FieldRef<"Lesson", 'String'>
+  readonly videoProvider: Prisma.FieldRef<"Lesson", 'VideoProvider'>
   readonly version: Prisma.FieldRef<"Lesson", 'Int'>
-  readonly isArchived: Prisma.FieldRef<"Lesson", 'Boolean'>
+  readonly archivedAt: Prisma.FieldRef<"Lesson", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Lesson", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Lesson", 'DateTime'>
 }
@@ -1793,6 +1969,30 @@ export type Lesson$lessonProgressArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.LessonProgressScalarFieldEnum | Prisma.LessonProgressScalarFieldEnum[]
+}
+
+/**
+ * Lesson.progressBookmarks
+ */
+export type Lesson$progressBookmarksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CourseProgress
+   */
+  select?: Prisma.CourseProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CourseProgress
+   */
+  omit?: Prisma.CourseProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseProgressInclude<ExtArgs> | null
+  where?: Prisma.CourseProgressWhereInput
+  orderBy?: Prisma.CourseProgressOrderByWithRelationInput | Prisma.CourseProgressOrderByWithRelationInput[]
+  cursor?: Prisma.CourseProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseProgressScalarFieldEnum | Prisma.CourseProgressScalarFieldEnum[]
 }
 
 /**

@@ -57,6 +57,7 @@ export const ModelName = {
   AssistantPermission: 'AssistantPermission',
   ParentStudentLink: 'ParentStudentLink',
   Course: 'Course',
+  CourseAuditLog: 'CourseAuditLog',
   CourseProgress: 'CourseProgress',
   Chapter: 'Chapter',
   Lesson: 'Lesson',
@@ -106,8 +107,7 @@ export const UserScalarFieldEnum = {
   guardianPhone: 'guardianPhone',
   guardianIdentity: 'guardianIdentity',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -165,22 +165,40 @@ export const CourseScalarFieldEnum = {
   teacherUserId: 'teacherUserId',
   title: 'title',
   description: 'description',
+  thumbnailUrl: 'thumbnailUrl',
+  promoVideoUrl: 'promoVideoUrl',
+  promoVideoProvider: 'promoVideoProvider',
   price: 'price',
   currency: 'currency',
   status: 'status',
   publishedAt: 'publishedAt',
+  publishedBy: 'publishedBy',
+  archivedAt: 'archivedAt',
+  archivedBy: 'archivedBy',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  updatedAt: 'updatedAt'
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
+
+
+export const CourseAuditLogScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  action: 'action',
+  performedBy: 'performedBy',
+  performedAt: 'performedAt',
+  metadata: 'metadata'
+} as const
+
+export type CourseAuditLogScalarFieldEnum = (typeof CourseAuditLogScalarFieldEnum)[keyof typeof CourseAuditLogScalarFieldEnum]
 
 
 export const CourseProgressScalarFieldEnum = {
   id: 'id',
   studentUserId: 'studentUserId',
   courseId: 'courseId',
+  lastLessonId: 'lastLessonId',
   completedLessons: 'completedLessons',
   totalLessons: 'totalLessons',
   progressPct: 'progressPct',
@@ -197,7 +215,7 @@ export const ChapterScalarFieldEnum = {
   orderIndex: 'orderIndex',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  archivedAt: 'archivedAt'
 } as const
 
 export type ChapterScalarFieldEnum = (typeof ChapterScalarFieldEnum)[keyof typeof ChapterScalarFieldEnum]
@@ -208,9 +226,10 @@ export const LessonScalarFieldEnum = {
   chapterId: 'chapterId',
   title: 'title',
   orderIndex: 'orderIndex',
-  youtubeVideoId: 'youtubeVideoId',
+  videoUrl: 'videoUrl',
+  videoProvider: 'videoProvider',
   version: 'version',
-  isArchived: 'isArchived',
+  archivedAt: 'archivedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -271,7 +290,6 @@ export const LessonProgressScalarFieldEnum = {
   id: 'id',
   studentUserId: 'studentUserId',
   lessonId: 'lessonId',
-  lessonVersion: 'lessonVersion',
   videoWatchedPct: 'videoWatchedPct',
   videoCompletedAt: 'videoCompletedAt',
   isCompleted: 'isCompleted',

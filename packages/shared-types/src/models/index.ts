@@ -49,6 +49,20 @@ export enum DifficultyLevel {
   ADVANCED = 'ADVANCED',
 }
 
+export enum VideoProvider {
+  YOUTUBE = 'YOUTUBE',
+  BUNNY = 'BUNNY',
+}
+
+export enum CourseAuditAction {
+  CREATED = 'CREATED',
+  UPDATED = 'UPDATED',
+  PUBLISHED = 'PUBLISHED',
+  ARCHIVED = 'ARCHIVED',
+  RESTORED = 'RESTORED',
+  DELETED = 'DELETED'
+}
+
 export interface ICourse {
   id: string;
   title: string;
@@ -82,6 +96,7 @@ export interface ILesson {
   courseId: string;
   sectionId: string;
   isFree: boolean;
+  archivedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -117,4 +132,5 @@ export interface ISection {
   title: string;
   order: number;
   courseId: string;
+  archivedAt?: Date;
 }
