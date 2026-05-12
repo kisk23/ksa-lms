@@ -9,16 +9,20 @@ import { ShieldCheck, LogIn, User } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import { loginSchema, type LoginFormValues } from '../validations';
+
 import { useQueryClient } from '@tanstack/react-query';
 import { authService, AUTH_ERROR_MESSAGES } from '../services/auth.service';
 import { AUTH_QUERY_KEY } from '../hooks/useAuth';
 import { redirectPathForUser } from '../lib/session';
+
 import { FormInput } from './FormInput';
 import { PasswordInput } from './PasswordInput';
 
 export function LoginForm() {
   const router = useRouter();
+
   const queryClient = useQueryClient();
+
 
   const {
     register,
@@ -28,6 +32,7 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
+
   const mutation = useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
@@ -35,6 +40,7 @@ export function LoginForm() {
       router.push(redirectPathForUser(data.user));
     },
     onError: (error: Error) => {
+
       toast.error(
         AUTH_ERROR_MESSAGES[error.message] ??
           error.message ??

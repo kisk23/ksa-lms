@@ -15,10 +15,12 @@ import {
   type RegisterStep1Values,
   type RegisterStep2Values,
 } from '../validations';
+
 import { useQueryClient } from '@tanstack/react-query';
 import { authService, AUTH_ERROR_MESSAGES } from '../services/auth.service';
 import { AUTH_QUERY_KEY } from '../hooks/useAuth';
 import { redirectPathForUser } from '../lib/session';
+
 import { FormInput } from './FormInput';
 import { PasswordInput } from './PasswordInput';
 import { StepIndicator } from './StepIndicator';
@@ -36,7 +38,9 @@ const RELATIONSHIP_OPTIONS = [
 
 export function RegisterForm() {
   const router = useRouter();
+
   const queryClient = useQueryClient();
+
   const [step, setStep] = useState<1 | 2>(1);
 
   // Persisted step-1 data
@@ -56,6 +60,7 @@ export function RegisterForm() {
   // Mutation — register returns RegisterResponse (message only, no token)
   const mutation = useMutation({
     mutationFn: (payload: RegisterRequest) => authService.register(payload),
+
     onSuccess: (data) => {
       if (data.user) {
         queryClient.setQueryData(AUTH_QUERY_KEY, data.user);
@@ -63,6 +68,7 @@ export function RegisterForm() {
       } else {
         router.push('/verify-otp');
       }
+
     },
     onError: (error: Error) => {
       const mapped = AUTH_ERROR_MESSAGES[error.message];
