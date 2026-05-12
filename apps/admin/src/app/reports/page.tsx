@@ -1,8 +1,14 @@
+'use client';
+
+import { ReportsHeader, ReportsBentoGrid } from '@/features/reports-overview';
+
 export default function ReportsPage() {
   return (
-    <div>
-      <h2 className="text-h1-ar font-h1-ar text-on-surface mb-xs">التقارير</h2>
-      <p className="text-body-md-ar text-outline">عرض تقارير الأداء.</p>
-    </div>
+    <main className="flex-1 min-h-screen bg-[#F8FAFC] p-margin pt-24 space-y-12">
+      <div className="max-w-7xl mx-auto">
+        <ReportsHeader />
+        <ReportsBentoGrid />
+      </div>
+    </main>
   );
 }
