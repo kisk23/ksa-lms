@@ -1,6 +1,34 @@
+// This file re-exports the axiosClient and ApiClient instance provided by the project.
+// Place the original api-client.ts content here or import from your shared package.
+// The content below mirrors the provided api-client.ts exactly.
+
 import axios, { AxiosError } from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+
+/** Body shape from AllExceptionsFilter / Nest ValidationPipe */
+type ApiErrorPayload = {
+  message?: string | string[];
+  errors?: Record<string, string[]>;
+};
+
+function messageFromApiPayload(data: ApiErrorPayload | undefined): string | undefined {
+  if (!data) return undefined;
+
+  const { message, errors } = data;
+  if (typeof message === 'string' && message.trim()) return message.trim();
+  if (Array.isArray(message) && message.length > 0) {
+    const parts = message.filter((m): m is string => typeof m === 'string' && m.trim().length > 0);
+    if (parts.length > 0) return parts.join(' • ');
+  }
+  if (errors && typeof errors === 'object') {
+    const first = Object.values(errors)
+      .flat()
+      .find((m): m is string => typeof m === 'string');
+    if (first?.trim()) return first.trim();
+  }
+  return undefined;
+}
 
 export const axiosClient = axios.create({
   baseURL: API_BASE_URL,
@@ -17,8 +45,10 @@ axiosClient.interceptors.request.use((config) => {
 
 axiosClient.interceptors.response.use(
   (response) => response,
-  (error: AxiosError<{ message?: string }>) => {
-    throw new Error(error.response?.data?.message ?? error.message ?? 'Request failed');
+  (error: AxiosError<ApiErrorPayload>) => {
+    const fromBody = messageFromApiPayload(error.response?.data);
+    const text = fromBody ?? error.message ?? 'Request failed';
+    throw new Error(text);
   },
 );
 
