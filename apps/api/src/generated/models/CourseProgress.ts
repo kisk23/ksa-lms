@@ -42,6 +42,7 @@ export type CourseProgressMinAggregateOutputType = {
   id: string | null
   studentUserId: string | null
   courseId: string | null
+  lastLessonId: string | null
   completedLessons: number | null
   totalLessons: number | null
   progressPct: number | null
@@ -52,6 +53,7 @@ export type CourseProgressMaxAggregateOutputType = {
   id: string | null
   studentUserId: string | null
   courseId: string | null
+  lastLessonId: string | null
   completedLessons: number | null
   totalLessons: number | null
   progressPct: number | null
@@ -62,6 +64,7 @@ export type CourseProgressCountAggregateOutputType = {
   id: number
   studentUserId: number
   courseId: number
+  lastLessonId: number
   completedLessons: number
   totalLessons: number
   progressPct: number
@@ -86,6 +89,7 @@ export type CourseProgressMinAggregateInputType = {
   id?: true
   studentUserId?: true
   courseId?: true
+  lastLessonId?: true
   completedLessons?: true
   totalLessons?: true
   progressPct?: true
@@ -96,6 +100,7 @@ export type CourseProgressMaxAggregateInputType = {
   id?: true
   studentUserId?: true
   courseId?: true
+  lastLessonId?: true
   completedLessons?: true
   totalLessons?: true
   progressPct?: true
@@ -106,6 +111,7 @@ export type CourseProgressCountAggregateInputType = {
   id?: true
   studentUserId?: true
   courseId?: true
+  lastLessonId?: true
   completedLessons?: true
   totalLessons?: true
   progressPct?: true
@@ -203,6 +209,7 @@ export type CourseProgressGroupByOutputType = {
   id: string
   studentUserId: string
   courseId: string
+  lastLessonId: string | null
   completedLessons: number
   totalLessons: number
   progressPct: number
@@ -236,24 +243,28 @@ export type CourseProgressWhereInput = {
   id?: Prisma.UuidFilter<"CourseProgress"> | string
   studentUserId?: Prisma.UuidFilter<"CourseProgress"> | string
   courseId?: Prisma.UuidFilter<"CourseProgress"> | string
+  lastLessonId?: Prisma.UuidNullableFilter<"CourseProgress"> | string | null
   completedLessons?: Prisma.IntFilter<"CourseProgress"> | number
   totalLessons?: Prisma.IntFilter<"CourseProgress"> | number
   progressPct?: Prisma.IntFilter<"CourseProgress"> | number
   completedAt?: Prisma.DateTimeNullableFilter<"CourseProgress"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  lastLesson?: Prisma.XOR<Prisma.LessonNullableScalarRelationFilter, Prisma.LessonWhereInput> | null
 }
 
 export type CourseProgressOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  lastLessonId?: Prisma.SortOrderInput | Prisma.SortOrder
   completedLessons?: Prisma.SortOrder
   totalLessons?: Prisma.SortOrder
   progressPct?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
   student?: Prisma.UserOrderByWithRelationInput
+  lastLesson?: Prisma.LessonOrderByWithRelationInput
 }
 
 export type CourseProgressWhereUniqueInput = Prisma.AtLeast<{
@@ -264,18 +275,21 @@ export type CourseProgressWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CourseProgressWhereInput | Prisma.CourseProgressWhereInput[]
   studentUserId?: Prisma.UuidFilter<"CourseProgress"> | string
   courseId?: Prisma.UuidFilter<"CourseProgress"> | string
+  lastLessonId?: Prisma.UuidNullableFilter<"CourseProgress"> | string | null
   completedLessons?: Prisma.IntFilter<"CourseProgress"> | number
   totalLessons?: Prisma.IntFilter<"CourseProgress"> | number
   progressPct?: Prisma.IntFilter<"CourseProgress"> | number
   completedAt?: Prisma.DateTimeNullableFilter<"CourseProgress"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  lastLesson?: Prisma.XOR<Prisma.LessonNullableScalarRelationFilter, Prisma.LessonWhereInput> | null
 }, "id" | "studentUserId_courseId">
 
 export type CourseProgressOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  lastLessonId?: Prisma.SortOrderInput | Prisma.SortOrder
   completedLessons?: Prisma.SortOrder
   totalLessons?: Prisma.SortOrder
   progressPct?: Prisma.SortOrder
@@ -294,6 +308,7 @@ export type CourseProgressScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"CourseProgress"> | string
   studentUserId?: Prisma.UuidWithAggregatesFilter<"CourseProgress"> | string
   courseId?: Prisma.UuidWithAggregatesFilter<"CourseProgress"> | string
+  lastLessonId?: Prisma.UuidNullableWithAggregatesFilter<"CourseProgress"> | string | null
   completedLessons?: Prisma.IntWithAggregatesFilter<"CourseProgress"> | number
   totalLessons?: Prisma.IntWithAggregatesFilter<"CourseProgress"> | number
   progressPct?: Prisma.IntWithAggregatesFilter<"CourseProgress"> | number
@@ -308,12 +323,14 @@ export type CourseProgressCreateInput = {
   completedAt?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutCourseProgressesInput
   student: Prisma.UserCreateNestedOneWithoutCourseProgressesInput
+  lastLesson?: Prisma.LessonCreateNestedOneWithoutProgressBookmarksInput
 }
 
 export type CourseProgressUncheckedCreateInput = {
   id?: string
   studentUserId: string
   courseId: string
+  lastLessonId?: string | null
   completedLessons?: number
   totalLessons: number
   progressPct?: number
@@ -328,12 +345,14 @@ export type CourseProgressUpdateInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutCourseProgressesNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutCourseProgressesNestedInput
+  lastLesson?: Prisma.LessonUpdateOneWithoutProgressBookmarksNestedInput
 }
 
 export type CourseProgressUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
   totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
@@ -344,6 +363,7 @@ export type CourseProgressCreateManyInput = {
   id?: string
   studentUserId: string
   courseId: string
+  lastLessonId?: string | null
   completedLessons?: number
   totalLessons: number
   progressPct?: number
@@ -362,6 +382,7 @@ export type CourseProgressUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
   totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
@@ -387,6 +408,7 @@ export type CourseProgressCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  lastLessonId?: Prisma.SortOrder
   completedLessons?: Prisma.SortOrder
   totalLessons?: Prisma.SortOrder
   progressPct?: Prisma.SortOrder
@@ -403,6 +425,7 @@ export type CourseProgressMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  lastLessonId?: Prisma.SortOrder
   completedLessons?: Prisma.SortOrder
   totalLessons?: Prisma.SortOrder
   progressPct?: Prisma.SortOrder
@@ -413,6 +436,7 @@ export type CourseProgressMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  lastLessonId?: Prisma.SortOrder
   completedLessons?: Prisma.SortOrder
   totalLessons?: Prisma.SortOrder
   progressPct?: Prisma.SortOrder
@@ -517,6 +541,48 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type CourseProgressCreateNestedManyWithoutLastLessonInput = {
+  create?: Prisma.XOR<Prisma.CourseProgressCreateWithoutLastLessonInput, Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput> | Prisma.CourseProgressCreateWithoutLastLessonInput[] | Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput[]
+  connectOrCreate?: Prisma.CourseProgressCreateOrConnectWithoutLastLessonInput | Prisma.CourseProgressCreateOrConnectWithoutLastLessonInput[]
+  createMany?: Prisma.CourseProgressCreateManyLastLessonInputEnvelope
+  connect?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+}
+
+export type CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput = {
+  create?: Prisma.XOR<Prisma.CourseProgressCreateWithoutLastLessonInput, Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput> | Prisma.CourseProgressCreateWithoutLastLessonInput[] | Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput[]
+  connectOrCreate?: Prisma.CourseProgressCreateOrConnectWithoutLastLessonInput | Prisma.CourseProgressCreateOrConnectWithoutLastLessonInput[]
+  createMany?: Prisma.CourseProgressCreateManyLastLessonInputEnvelope
+  connect?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+}
+
+export type CourseProgressUpdateManyWithoutLastLessonNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseProgressCreateWithoutLastLessonInput, Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput> | Prisma.CourseProgressCreateWithoutLastLessonInput[] | Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput[]
+  connectOrCreate?: Prisma.CourseProgressCreateOrConnectWithoutLastLessonInput | Prisma.CourseProgressCreateOrConnectWithoutLastLessonInput[]
+  upsert?: Prisma.CourseProgressUpsertWithWhereUniqueWithoutLastLessonInput | Prisma.CourseProgressUpsertWithWhereUniqueWithoutLastLessonInput[]
+  createMany?: Prisma.CourseProgressCreateManyLastLessonInputEnvelope
+  set?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+  disconnect?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+  delete?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+  connect?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+  update?: Prisma.CourseProgressUpdateWithWhereUniqueWithoutLastLessonInput | Prisma.CourseProgressUpdateWithWhereUniqueWithoutLastLessonInput[]
+  updateMany?: Prisma.CourseProgressUpdateManyWithWhereWithoutLastLessonInput | Prisma.CourseProgressUpdateManyWithWhereWithoutLastLessonInput[]
+  deleteMany?: Prisma.CourseProgressScalarWhereInput | Prisma.CourseProgressScalarWhereInput[]
+}
+
+export type CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseProgressCreateWithoutLastLessonInput, Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput> | Prisma.CourseProgressCreateWithoutLastLessonInput[] | Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput[]
+  connectOrCreate?: Prisma.CourseProgressCreateOrConnectWithoutLastLessonInput | Prisma.CourseProgressCreateOrConnectWithoutLastLessonInput[]
+  upsert?: Prisma.CourseProgressUpsertWithWhereUniqueWithoutLastLessonInput | Prisma.CourseProgressUpsertWithWhereUniqueWithoutLastLessonInput[]
+  createMany?: Prisma.CourseProgressCreateManyLastLessonInputEnvelope
+  set?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+  disconnect?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+  delete?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+  connect?: Prisma.CourseProgressWhereUniqueInput | Prisma.CourseProgressWhereUniqueInput[]
+  update?: Prisma.CourseProgressUpdateWithWhereUniqueWithoutLastLessonInput | Prisma.CourseProgressUpdateWithWhereUniqueWithoutLastLessonInput[]
+  updateMany?: Prisma.CourseProgressUpdateManyWithWhereWithoutLastLessonInput | Prisma.CourseProgressUpdateManyWithWhereWithoutLastLessonInput[]
+  deleteMany?: Prisma.CourseProgressScalarWhereInput | Prisma.CourseProgressScalarWhereInput[]
+}
+
 export type CourseProgressCreateWithoutStudentInput = {
   id?: string
   completedLessons?: number
@@ -524,11 +590,13 @@ export type CourseProgressCreateWithoutStudentInput = {
   progressPct?: number
   completedAt?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutCourseProgressesInput
+  lastLesson?: Prisma.LessonCreateNestedOneWithoutProgressBookmarksInput
 }
 
 export type CourseProgressUncheckedCreateWithoutStudentInput = {
   id?: string
   courseId: string
+  lastLessonId?: string | null
   completedLessons?: number
   totalLessons: number
   progressPct?: number
@@ -568,6 +636,7 @@ export type CourseProgressScalarWhereInput = {
   id?: Prisma.UuidFilter<"CourseProgress"> | string
   studentUserId?: Prisma.UuidFilter<"CourseProgress"> | string
   courseId?: Prisma.UuidFilter<"CourseProgress"> | string
+  lastLessonId?: Prisma.UuidNullableFilter<"CourseProgress"> | string | null
   completedLessons?: Prisma.IntFilter<"CourseProgress"> | number
   totalLessons?: Prisma.IntFilter<"CourseProgress"> | number
   progressPct?: Prisma.IntFilter<"CourseProgress"> | number
@@ -581,11 +650,13 @@ export type CourseProgressCreateWithoutCourseInput = {
   progressPct?: number
   completedAt?: Date | string | null
   student: Prisma.UserCreateNestedOneWithoutCourseProgressesInput
+  lastLesson?: Prisma.LessonCreateNestedOneWithoutProgressBookmarksInput
 }
 
 export type CourseProgressUncheckedCreateWithoutCourseInput = {
   id?: string
   studentUserId: string
+  lastLessonId?: string | null
   completedLessons?: number
   totalLessons: number
   progressPct?: number
@@ -618,9 +689,56 @@ export type CourseProgressUpdateManyWithWhereWithoutCourseInput = {
   data: Prisma.XOR<Prisma.CourseProgressUpdateManyMutationInput, Prisma.CourseProgressUncheckedUpdateManyWithoutCourseInput>
 }
 
+export type CourseProgressCreateWithoutLastLessonInput = {
+  id?: string
+  completedLessons?: number
+  totalLessons: number
+  progressPct?: number
+  completedAt?: Date | string | null
+  course: Prisma.CourseCreateNestedOneWithoutCourseProgressesInput
+  student: Prisma.UserCreateNestedOneWithoutCourseProgressesInput
+}
+
+export type CourseProgressUncheckedCreateWithoutLastLessonInput = {
+  id?: string
+  studentUserId: string
+  courseId: string
+  completedLessons?: number
+  totalLessons: number
+  progressPct?: number
+  completedAt?: Date | string | null
+}
+
+export type CourseProgressCreateOrConnectWithoutLastLessonInput = {
+  where: Prisma.CourseProgressWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseProgressCreateWithoutLastLessonInput, Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput>
+}
+
+export type CourseProgressCreateManyLastLessonInputEnvelope = {
+  data: Prisma.CourseProgressCreateManyLastLessonInput | Prisma.CourseProgressCreateManyLastLessonInput[]
+  skipDuplicates?: boolean
+}
+
+export type CourseProgressUpsertWithWhereUniqueWithoutLastLessonInput = {
+  where: Prisma.CourseProgressWhereUniqueInput
+  update: Prisma.XOR<Prisma.CourseProgressUpdateWithoutLastLessonInput, Prisma.CourseProgressUncheckedUpdateWithoutLastLessonInput>
+  create: Prisma.XOR<Prisma.CourseProgressCreateWithoutLastLessonInput, Prisma.CourseProgressUncheckedCreateWithoutLastLessonInput>
+}
+
+export type CourseProgressUpdateWithWhereUniqueWithoutLastLessonInput = {
+  where: Prisma.CourseProgressWhereUniqueInput
+  data: Prisma.XOR<Prisma.CourseProgressUpdateWithoutLastLessonInput, Prisma.CourseProgressUncheckedUpdateWithoutLastLessonInput>
+}
+
+export type CourseProgressUpdateManyWithWhereWithoutLastLessonInput = {
+  where: Prisma.CourseProgressScalarWhereInput
+  data: Prisma.XOR<Prisma.CourseProgressUpdateManyMutationInput, Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonInput>
+}
+
 export type CourseProgressCreateManyStudentInput = {
   id?: string
   courseId: string
+  lastLessonId?: string | null
   completedLessons?: number
   totalLessons: number
   progressPct?: number
@@ -634,11 +752,13 @@ export type CourseProgressUpdateWithoutStudentInput = {
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutCourseProgressesNestedInput
+  lastLesson?: Prisma.LessonUpdateOneWithoutProgressBookmarksNestedInput
 }
 
 export type CourseProgressUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
   totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
@@ -648,6 +768,7 @@ export type CourseProgressUncheckedUpdateWithoutStudentInput = {
 export type CourseProgressUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
   totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
@@ -657,6 +778,7 @@ export type CourseProgressUncheckedUpdateManyWithoutStudentInput = {
 export type CourseProgressCreateManyCourseInput = {
   id?: string
   studentUserId: string
+  lastLessonId?: string | null
   completedLessons?: number
   totalLessons: number
   progressPct?: number
@@ -670,11 +792,13 @@ export type CourseProgressUpdateWithoutCourseInput = {
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   student?: Prisma.UserUpdateOneRequiredWithoutCourseProgressesNestedInput
+  lastLesson?: Prisma.LessonUpdateOneWithoutProgressBookmarksNestedInput
 }
 
 export type CourseProgressUncheckedUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
   totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
@@ -684,6 +808,47 @@ export type CourseProgressUncheckedUpdateWithoutCourseInput = {
 export type CourseProgressUncheckedUpdateManyWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLessonId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
+  totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
+  progressPct?: Prisma.IntFieldUpdateOperationsInput | number
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type CourseProgressCreateManyLastLessonInput = {
+  id?: string
+  studentUserId: string
+  courseId: string
+  completedLessons?: number
+  totalLessons: number
+  progressPct?: number
+  completedAt?: Date | string | null
+}
+
+export type CourseProgressUpdateWithoutLastLessonInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
+  totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
+  progressPct?: Prisma.IntFieldUpdateOperationsInput | number
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  course?: Prisma.CourseUpdateOneRequiredWithoutCourseProgressesNestedInput
+  student?: Prisma.UserUpdateOneRequiredWithoutCourseProgressesNestedInput
+}
+
+export type CourseProgressUncheckedUpdateWithoutLastLessonInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
+  totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
+  progressPct?: Prisma.IntFieldUpdateOperationsInput | number
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type CourseProgressUncheckedUpdateManyWithoutLastLessonInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
   completedLessons?: Prisma.IntFieldUpdateOperationsInput | number
   totalLessons?: Prisma.IntFieldUpdateOperationsInput | number
   progressPct?: Prisma.IntFieldUpdateOperationsInput | number
@@ -696,60 +861,70 @@ export type CourseProgressSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   studentUserId?: boolean
   courseId?: boolean
+  lastLessonId?: boolean
   completedLessons?: boolean
   totalLessons?: boolean
   progressPct?: boolean
   completedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  lastLesson?: boolean | Prisma.CourseProgress$lastLessonArgs<ExtArgs>
 }, ExtArgs["result"]["courseProgress"]>
 
 export type CourseProgressSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   studentUserId?: boolean
   courseId?: boolean
+  lastLessonId?: boolean
   completedLessons?: boolean
   totalLessons?: boolean
   progressPct?: boolean
   completedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  lastLesson?: boolean | Prisma.CourseProgress$lastLessonArgs<ExtArgs>
 }, ExtArgs["result"]["courseProgress"]>
 
 export type CourseProgressSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   studentUserId?: boolean
   courseId?: boolean
+  lastLessonId?: boolean
   completedLessons?: boolean
   totalLessons?: boolean
   progressPct?: boolean
   completedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  lastLesson?: boolean | Prisma.CourseProgress$lastLessonArgs<ExtArgs>
 }, ExtArgs["result"]["courseProgress"]>
 
 export type CourseProgressSelectScalar = {
   id?: boolean
   studentUserId?: boolean
   courseId?: boolean
+  lastLessonId?: boolean
   completedLessons?: boolean
   totalLessons?: boolean
   progressPct?: boolean
   completedAt?: boolean
 }
 
-export type CourseProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentUserId" | "courseId" | "completedLessons" | "totalLessons" | "progressPct" | "completedAt", ExtArgs["result"]["courseProgress"]>
+export type CourseProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentUserId" | "courseId" | "lastLessonId" | "completedLessons" | "totalLessons" | "progressPct" | "completedAt", ExtArgs["result"]["courseProgress"]>
 export type CourseProgressInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  lastLesson?: boolean | Prisma.CourseProgress$lastLessonArgs<ExtArgs>
 }
 export type CourseProgressIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  lastLesson?: boolean | Prisma.CourseProgress$lastLessonArgs<ExtArgs>
 }
 export type CourseProgressIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  lastLesson?: boolean | Prisma.CourseProgress$lastLessonArgs<ExtArgs>
 }
 
 export type $CourseProgressPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -757,11 +932,13 @@ export type $CourseProgressPayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     course: Prisma.$CoursePayload<ExtArgs>
     student: Prisma.$UserPayload<ExtArgs>
+    lastLesson: Prisma.$LessonPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     studentUserId: string
     courseId: string
+    lastLessonId: string | null
     completedLessons: number
     totalLessons: number
     progressPct: number
@@ -1162,6 +1339,7 @@ export interface Prisma__CourseProgressClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  lastLesson<T extends Prisma.CourseProgress$lastLessonArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseProgress$lastLessonArgs<ExtArgs>>): Prisma.Prisma__LessonClient<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1194,6 +1372,7 @@ export interface CourseProgressFieldRefs {
   readonly id: Prisma.FieldRef<"CourseProgress", 'String'>
   readonly studentUserId: Prisma.FieldRef<"CourseProgress", 'String'>
   readonly courseId: Prisma.FieldRef<"CourseProgress", 'String'>
+  readonly lastLessonId: Prisma.FieldRef<"CourseProgress", 'String'>
   readonly completedLessons: Prisma.FieldRef<"CourseProgress", 'Int'>
   readonly totalLessons: Prisma.FieldRef<"CourseProgress", 'Int'>
   readonly progressPct: Prisma.FieldRef<"CourseProgress", 'Int'>
@@ -1596,6 +1775,25 @@ export type CourseProgressDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many CourseProgresses to delete.
    */
   limit?: number
+}
+
+/**
+ * CourseProgress.lastLesson
+ */
+export type CourseProgress$lastLessonArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lesson
+   */
+  select?: Prisma.LessonSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lesson
+   */
+  omit?: Prisma.LessonOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonInclude<ExtArgs> | null
+  where?: Prisma.LessonWhereInput
 }
 
 /**

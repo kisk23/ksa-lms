@@ -29,6 +29,14 @@ export const ParentRelationship = {
 export type ParentRelationship = (typeof ParentRelationship)[keyof typeof ParentRelationship]
 
 
+export const VideoProvider = {
+  YOUTUBE: 'YOUTUBE',
+  BUNNY: 'BUNNY'
+} as const
+
+export type VideoProvider = (typeof VideoProvider)[keyof typeof VideoProvider]
+
+
 export const CourseStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',
@@ -36,6 +44,18 @@ export const CourseStatus = {
 } as const
 
 export type CourseStatus = (typeof CourseStatus)[keyof typeof CourseStatus]
+
+
+export const CourseAuditAction = {
+  CREATED: 'CREATED',
+  UPDATED: 'UPDATED',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED',
+  RESTORED: 'RESTORED',
+  DELETED: 'DELETED'
+} as const
+
+export type CourseAuditAction = (typeof CourseAuditAction)[keyof typeof CourseAuditAction]
 
 
 export const EnrollmentStatus = {

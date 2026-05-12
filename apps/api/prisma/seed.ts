@@ -140,7 +140,7 @@ async function main() {
       chapterId: chapter1.id,
       title: 'مرحبا بالعالم — أول برنامج',
       orderIndex: 1,
-      youtubeVideoId: 'dQw4w9WgXcQ',
+      videoUrl: 'dQw4w9WgXcQ',
     },
   });
 

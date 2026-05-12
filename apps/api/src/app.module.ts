@@ -12,6 +12,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { QuizzesModule } from './modules/quizzes/quizzes.module';
 import { UsersModule } from './modules/users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PrismaModule } from './prisma/prisma.module';
     // Database
     PrismaModule,
 
+    EventEmitterModule.forRoot(),
     // Feature modules
     UsersModule,
     CoursesModule,
