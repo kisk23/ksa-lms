@@ -1,5 +1,11 @@
 export type RefundStatus = 'pending' | 'approved' | 'rejected';
-export type CourseCategory = 'science' | 'foundation' | 'humanities';
+export type CourseCategory =
+  | 'science'
+  | 'foundation'
+  | 'humanities'
+  | 'business'
+  | 'technology'
+  | 'design';
 export type PaymentMethod = 'mada' | 'visa' | 'mastercard' | 'bank';
 
 export interface Refund {
