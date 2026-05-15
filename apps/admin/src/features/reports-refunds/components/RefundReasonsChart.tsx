@@ -10,10 +10,10 @@ interface RefundReasonsChartProps {
 
 export function RefundReasonsChart({ reasons }: RefundReasonsChartProps) {
   return (
-    <div className="lg:col-span-4 bg-white border border-outline-variant/40 rounded-2xl p-8 shadow-sm flex flex-col">
+    <div className="lg:col-span-4 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_4px_20px_rgba(22,33,62,0.06)] flex flex-col">
       <div className="flex justify-between items-center mb-10">
-        <h3 className="font-h2-ar text-xl font-bold text-on-background">أسباب الاسترجاع</h3>
-        <Info className="w-5 h-5 text-on-surface-variant cursor-help" />
+        <h3 className="text-lg font-semibold text-[#0F172A]">أسباب الاسترجاع</h3>
+        <Info className="w-5 h-5 text-[#64748B] cursor-help" />
       </div>
 
       <div className="flex-1 flex flex-col items-center">
@@ -27,8 +27,8 @@ export function RefundReasonsChart({ reasons }: RefundReasonsChartProps) {
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-32 h-32 rounded-full bg-white flex flex-col items-center justify-center text-center">
-              <span className="text-3xl font-bold text-on-background">150+</span>
-              <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest">
+              <span className="text-3xl font-bold text-[#0F172A]">150+</span>
+              <span className="text-[10px] text-[#64748B] font-medium uppercase tracking-widest">
                 إجمالي الطلبات
               </span>
             </div>
@@ -43,11 +43,11 @@ export function RefundReasonsChart({ reasons }: RefundReasonsChartProps) {
             >
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="text-sm font-medium text-on-surface-variant group-hover:text-on-background transition-colors">
+                <span className="text-sm font-medium text-[#64748B] group-hover:text-[#0F172A] transition-colors">
                   {item.label}
                 </span>
               </div>
-              <span className="text-sm font-bold text-on-background">{item.value}%</span>
+              <span className="text-sm font-bold text-[#0F172A]">{item.value}%</span>
             </div>
           ))}
         </div>

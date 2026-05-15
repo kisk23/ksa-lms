@@ -1,7 +1,5 @@
 'use client';
 
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
 import {
@@ -55,18 +53,8 @@ export default function ReportsRefundsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background pt-24 text-on-background">
-      <div className="p-10 max-w-[1440px] mx-auto w-full flex-1 flex flex-col gap-10">
-        <div className="py-4">
-          <Link
-            href="/reports"
-            className="inline-flex items-center gap-2 text-primary hover:text-primary-container transition-colors font-medium text-sm"
-          >
-            <ArrowRight className="w-4 h-4 rotate-180" />
-            العودة للتقارير
-          </Link>
-        </div>
-
+    <main className="min-h-screen bg-[#F8FAFC] pt-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-8 py-8">
         <RefundsReportHeader
           dateRange={dateRange}
           onDateRangeChange={handleDateRangeChange}
@@ -75,7 +63,7 @@ export default function ReportsRefundsPage() {
 
         <RefundsSummaryCards summary={REFUND_SUMMARY} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <RefundReasonsChart reasons={REFUND_REASONS} />
 
           <RefundsTableSection

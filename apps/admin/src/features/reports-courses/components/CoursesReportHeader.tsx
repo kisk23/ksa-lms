@@ -24,7 +24,7 @@ export function CoursesReportHeader({
         </Link>
 
         <div>
-          <h1 className="text-5xl font-bold text-[#1E293B]">تقرير الدورات الأكثر مبيعاً</h1>
+          <h1 className="text-5xl font-bold text-[#0F172A]">تقرير الدورات الأكثر مبيعاً</h1>
           <p className="text-xl text-[#64748B] mt-2 max-w-2xl leading-relaxed">
             نظرة عامة على أداء المقررات الدراسية ومبيعاتها.
           </p>
@@ -35,7 +35,7 @@ export function CoursesReportHeader({
         <div className="relative">
           <select
             onChange={(e) => onCategoryChange(e.target.value as CourseCategory)}
-            className="appearance-none bg-white border border-slate-200 text-[#1E293B] font-body-md-ar py-2 pl-xl pr-md rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent cursor-pointer shadow-sm"
+            className="appearance-none bg-white border border-slate-200 text-[#0F172A] font-body-md-ar py-2 pl-xl pr-md rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent cursor-pointer shadow-sm"
           >
             <option value="all">جميع التصنيفات</option>
             <option value="math">الرياضيات</option>
@@ -51,7 +51,7 @@ export function CoursesReportHeader({
         <div className="relative">
           <button
             onClick={() => onDateRangeChange('last_30' as DateRange)}
-            className="flex items-center gap-xs bg-white border border-slate-200 text-[#1E293B] font-body-md-ar py-2 px-md rounded-lg hover:bg-slate-50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-container"
+            className="flex items-center gap-xs bg-white border border-slate-200 text-[#0F172A] font-body-md-ar py-2 px-md rounded-lg hover:bg-slate-50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-container"
           >
             <Calendar className="w-5 h-5 text-primary-container" />
             آخر 30 يوم
