@@ -49,7 +49,7 @@ export function ReportCard({ card }: ReportCardProps) {
         </div>
       </div>
 
-      <h3 className="font-h2-ar text-[26px] font-bold text-[#1E293B] mb-4 leading-tight">
+      <h3 className="font-h2-ar text-[26px] font-bold text-[#0F172A] mb-4 leading-tight">
         {card.title}
       </h3>
 

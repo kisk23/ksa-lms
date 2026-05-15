@@ -13,15 +13,24 @@ interface RefundRowProps {
   onReject?: (id: string) => void;
 }
 
-const CATEGORY_CONFIG = {
-  science: { label: 'علمي', variant: 'primary' as const },
-  foundation: { label: 'تأسيس', variant: 'secondary' as const },
-  humanities: { label: 'أدبي', variant: 'default' as const },
+const CATEGORY_CONFIG: Record<
+  string,
+  { label: string; variant: 'primary' | 'secondary' | 'default' }
+> = {
+  science: { label: 'علمي', variant: 'primary' },
+  foundation: { label: 'تأسيس', variant: 'secondary' },
+  humanities: { label: 'أدبي', variant: 'default' },
+  business: { label: 'أعمال', variant: 'primary' },
+  technology: { label: 'تقنية', variant: 'secondary' },
+  design: { label: 'تصميم', variant: 'default' },
 };
 
 export function RefundRow({ refund, onApprove, onReject }: RefundRowProps) {
   const router = useRouter();
-  const categoryConfig = CATEGORY_CONFIG[refund.courseCategory];
+  const categoryConfig = CATEGORY_CONFIG[refund.courseCategory] || {
+    label: 'أخرى',
+    variant: 'default',
+  };
   const isPending = refund.status === 'pending';
 
   const handleView = () => {
