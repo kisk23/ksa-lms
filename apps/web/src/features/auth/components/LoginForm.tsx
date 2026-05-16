@@ -9,12 +9,16 @@ import { ShieldCheck, LogIn, User } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import { loginSchema, type LoginFormValues } from '../validations';
-import { authService, AUTH_ERRORS, AUTH_ERROR_MESSAGES } from '../services/auth.service';
+import { useQueryClient } from '@tanstack/react-query';
+import { authService, AUTH_ERROR_MESSAGES } from '../services/auth.service';
+import { AUTH_QUERY_KEY } from '../hooks/useAuth';
+import { redirectPathForUser } from '../lib/session';
 import { FormInput } from './FormInput';
 import { PasswordInput } from './PasswordInput';
 
 export function LoginForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -24,21 +28,13 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  // In LoginForm.tsx — fix the onSuccess handler
   const mutation = useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
-      // Backend returns snake_case access_token
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', data.access_token);
-      }
-      router.push('/dashboard');
+      queryClient.setQueryData(AUTH_QUERY_KEY, data.user);
+      router.push(redirectPathForUser(data.user));
     },
     onError: (error: Error) => {
-      if (error.message === AUTH_ERRORS.OTP_VERIFICATION_REQUIRED) {
-        router.push('/verify-otp');
-        return;
-      }
       toast.error(
         AUTH_ERROR_MESSAGES[error.message] ??
           error.message ??

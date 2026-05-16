@@ -1,13 +1,20 @@
 import { UserRole } from '@lms/shared-types';
-import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  UnauthorizedException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
+import type { User } from '../../generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterStudentDto } from './dto/register.dto';
+import { sanitizeUser, type SafeUser } from './utils/sanitize-user';
 
 @Injectable()
 export class AuthService {
@@ -99,6 +106,8 @@ export class AuthService {
             identity: dto.guardian.identity,
             passwordHash: guardianPasswordHash,
             role: UserRole.PARENT,
+            guardianIdentity: null,
+            guardianPhone: null,
           },
         });
         isNewGuardian = true;
@@ -118,6 +127,8 @@ export class AuthService {
           identity: dto.identity,
           passwordHash: studentPasswordHash,
           role: UserRole.STUDENT,
+          guardianIdentity: dto.guardian.identity,
+          guardianPhone: dto.guardian.phone,
         },
       });
 
@@ -155,17 +166,14 @@ export class AuthService {
 
     await Promise.all(otpTasks);
 
-    // if (result.isNewGuardian) {
-    //   await this.notificationsService.sendGuardianCredentials({
-    //     phone: result.guardian.phone!,
-    //     password: result.temporaryGuardianPassword,
-    //   });
-    // }
+    const session = await this.createSession(result.student);
 
     return {
       message: 'REGISTER_SUCCESS',
       studentId: result.student.id,
       guardianId: result.guardian.id,
+      user: session.user,
+      tokens: session.tokens,
     };
   }
 
@@ -178,7 +186,7 @@ export class AuthService {
       take: 3,
     });
 
-    if (recentOtps.length >= 3) {
+    if (recentOtps.length >= 5) {
       const oldestOtp = recentOtps[0];
       const nextAvailableTime = oldestOtp.createdAt.getTime() + 60 * 60 * 1000;
       const minutesToWait = Math.ceil((nextAvailableTime - Date.now()) / (60 * 1000));
@@ -206,9 +214,8 @@ export class AuthService {
     return { success: true };
   }
 
-  async verifyOtp(identifier: string, code: string) {
-    const user = await this.usersService.findByIdentityOrPhone(identifier);
-    if (!user) throw new UnauthorizedException('INVALID_CREDENTIALS');
+  async verifyOtp(userId: string, code: string) {
+    const user = await this.usersService.findOne(userId);
 
     const otp = await this.prisma.otpVerification.findFirst({
       where: {
@@ -222,17 +229,19 @@ export class AuthService {
     if (!otp) throw new UnauthorizedException('OTP_INVALID');
     if (otp.expiresAt < new Date()) throw new UnauthorizedException('OTP_EXPIRED');
 
-    await this.prisma.otpVerification.update({
-      where: { id: otp.id },
-      data: { usedAt: new Date() },
-    });
+    await this.prisma.$transaction([
+      this.prisma.otpVerification.update({
+        where: { id: otp.id },
+        data: { usedAt: new Date() },
+      }),
+      this.prisma.user.update({
+        where: { id: user.id },
+        data: { isVerified: true },
+      }),
+    ]);
 
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { isVerified: true },
-    });
-
-    return { success: true };
+    const verifiedUser = { ...user, isVerified: true };
+    return this.createSession(verifiedUser);
   }
 
   async login(dto: LoginDto) {
@@ -242,36 +251,38 @@ export class AuthService {
     const isPasswordValid = await bcrypt.compare(dto.password, user.passwordHash);
     if (!isPasswordValid) throw new UnauthorizedException('INVALID_CREDENTIALS');
 
-    if (!user.isVerified) {
-      throw new UnauthorizedException('OTP_VERIFICATION_REQUIRED');
-    }
-
-    const tokens = await this.getTokens(user.id, user.role);
-    await this.updateRtHash(user.id, tokens.refreshToken);
-
-    const { passwordHash: _, ...userResult } = user;
-    return {
-      access_token: tokens.accessToken,
-      user: userResult,
-      refresh_token: tokens.refreshToken, // This will be handled by cookie in controller
-    };
+    return this.createSession(user);
   }
 
-  async resendOtp(identity: string) {
-    const user = await this.usersService.findByIdentityOrPhone(identity);
-    if (!user) throw new UnauthorizedException('INVALID_CREDENTIALS');
+  async resendOtp(userId: string) {
+    const user = await this.usersService.findOne(userId);
+    if (user.isVerified) {
+      throw new ForbiddenException('ALREADY_VERIFIED');
+    }
     return this.generateOtp(user.id);
   }
 
-  async getTokens(userId: string, role: string) {
+  async getMe(userId: string): Promise<SafeUser> {
+    const user = await this.usersService.findOne(userId);
+    return sanitizeUser(user);
+  }
+
+  async createSession(user: User) {
+    const tokens = await this.getTokens(user.id, user.role, user.isVerified);
+    await this.updateRtHash(user.id, tokens.refreshToken);
+    return {
+      user: sanitizeUser(user),
+      tokens,
+    };
+  }
+
+  async getTokens(userId: string, role: string, isVerified: boolean) {
+    const payload = { sub: userId, role, isVerified };
     const [at, rt] = await Promise.all([
-      this.jwtService.signAsync(
-        { sub: userId, role },
-        {
-          secret: this.configService.get<string>('JWT_SECRET'),
-          expiresIn: '15m',
-        },
-      ),
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+        expiresIn: '15m',
+      }),
       this.jwtService.signAsync(
         { sub: userId, role },
         {
@@ -353,7 +364,7 @@ export class AuthService {
 
     if (!isValid) throw new UnauthorizedException('REFRESH_TOKEN_INVALID');
 
-    const tokens = await this.getTokens(user.id, user.role);
+    const tokens = await this.getTokens(user.id, user.role, user.isVerified);
     await this.updateRtHash(user.id, tokens.refreshToken);
 
     return tokens;

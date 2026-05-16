@@ -1,34 +1,31 @@
 'use client';
 
-import type { IUser } from '@lms/shared-types';
-import { useState, useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { authService } from '../services/auth.service';
+
+export const AUTH_QUERY_KEY = ['auth', 'me'] as const;
 
 export function useAuth() {
-  const [user, setUser] = useState<IUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    // TODO: Check for existing session/token
-    setIsLoading(false);
-  }, []);
+  const query = useQuery({
+    queryKey: AUTH_QUERY_KEY,
+    queryFn: authService.getMe,
+    retry: false,
+    staleTime: 60_000,
+  });
 
-  const login = async (_email: string, _password: string) => {
-    // TODO: Implement login
+  return {
+    user: query.data ?? null,
+    isLoading: query.isLoading,
+    isAuthenticated: Boolean(query.data),
+    isVerified: Boolean(query.data?.isVerified),
+    refetch: query.refetch,
+    logout: async () => {
+      await authService.logout();
+      queryClient.setQueryData(AUTH_QUERY_KEY, null);
+      queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEY });
+    },
   };
-
-  const logout = async () => {
-    setUser(null);
-    // TODO: Clear tokens
-  };
-
-  const register = async (_data: {
-    _email: string;
-    _password: string;
-    _firstName: string;
-    _lastName: string;
-  }) => {
-    // TODO: Implement register
-  };
-
-  return { user, isLoading, login, logout, register, isAuthenticated: !!user };
 }

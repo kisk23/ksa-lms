@@ -1,9 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import type { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { UsersService } from '../../users/users.service';
+import { ACCESS_TOKEN_COOKIE } from '../constants/auth-cookies';
+
+export type JwtPayload = {
+  sub: string;
+  role: string;
+  isVerified: boolean;
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -12,22 +20,18 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly usersService: UsersService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) => req?.cookies?.[ACCESS_TOKEN_COOKIE] ?? null,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_SECRET', 'jwt-secret'), //remove before deploy
+      secretOrKey: configService.get<string>('JWT_SECRET', 'jwt-secret'),
     });
   }
-  //return {
-  //"sub": "user_uuid_123",  // This is the User ID
-  //"role": "STUDENT",
-  //"iat": 1714310000,       // Issued At (Timestamp)
-  //"exp": 1714310900        // Expiration (Timestamp)
-  //} as payload to validate
 
-  async validate(payload: { sub: string; [key: string]: unknown }) {
+  async validate(payload: JwtPayload) {
     const user = await this.usersService.findOne(payload.sub);
     if (!user?.isActive) {
-      //ensure that the controller will have an existed active user
       throw new UnauthorizedException();
     }
     return user;

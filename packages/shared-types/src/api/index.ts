@@ -56,33 +56,22 @@ export interface RegisterRequest {
   guardian: GuardianRequest;
 }
 
-/**
- * Login response — backend sends snake_case.
- * axiosClient unwraps response.data.data so frontend receives this shape directly.
- */
-export interface LoginResponse {
-  access_token: string;
+/** Session payload — tokens live in HttpOnly cookies, not the response body */
+export interface AuthSessionResponse {
   user: AuthUser;
-}
-
-/**
- * Register response — no token, OTP verification required next.
- * Backend returns whatever authService.register() returns (likely a message).
- */
-export interface RegisterResponse {
   message?: string;
 }
 
-/** Authenticated user profile embedded in login response */
+export type LoginResponse = AuthSessionResponse;
+export type RegisterResponse = AuthSessionResponse;
+
+/** Authenticated user profile */
 export interface AuthUser {
   id: string;
   name: string;
   email: string;
-  phone: string;
+  phone: string | null;
+  identity: string;
   role: string;
-}
-
-// Keep AuthTokens for refresh endpoint
-export interface AuthTokens {
-  accessToken: string; // refresh endpoint returns camelCase
+  isVerified: boolean;
 }

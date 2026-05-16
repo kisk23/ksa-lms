@@ -1,10 +1,7 @@
-// This file re-exports the axiosClient and ApiClient instance provided by the project.
-// Place the original api-client.ts content here or import from your shared package.
-// The content below mirrors the provided api-client.ts exactly.
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
-import axios, { AxiosError } from 'axios';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+/** Same-origin proxy via next.config rewrites — cookies are sent automatically */
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
 
 /** Body shape from AllExceptionsFilter / Nest ValidationPipe */
 type ApiErrorPayload = {
@@ -33,19 +30,46 @@ function messageFromApiPayload(data: ApiErrorPayload | undefined): string | unde
 export const axiosClient = axios.create({
   baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 });
 
-axiosClient.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('accessToken');
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+let refreshPromise: Promise<void> | null = null;
+
+async function refreshAccessToken(): Promise<void> {
+  if (!refreshPromise) {
+    refreshPromise = axiosClient
+      .post('/auth/refresh')
+      .then(() => undefined)
+      .finally(() => {
+        refreshPromise = null;
+      });
   }
-  return config;
-});
+  await refreshPromise;
+}
 
 axiosClient.interceptors.response.use(
   (response) => response,
-  (error: AxiosError<ApiErrorPayload>) => {
+  async (error: AxiosError<ApiErrorPayload>) => {
+    const original = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const status = error.response?.status;
+
+    if (
+      status === 401 &&
+      original &&
+      !original._retry &&
+      !original.url?.includes('/auth/login') &&
+      !original.url?.includes('/auth/register') &&
+      !original.url?.includes('/auth/refresh')
+    ) {
+      original._retry = true;
+      try {
+        await refreshAccessToken();
+        return axiosClient(original);
+      } catch {
+        // fall through to normalized error
+      }
+    }
+
     const fromBody = messageFromApiPayload(error.response?.data);
     const text = fromBody ?? error.message ?? 'Request failed';
     throw new Error(text);

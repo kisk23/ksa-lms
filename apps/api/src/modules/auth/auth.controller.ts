@@ -1,15 +1,16 @@
-import { Controller, Post, Body, Res, UseGuards, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Post, Get, Body, Res, UseGuards, HttpStatus } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiCookieAuth } from '@nestjs/swagger';
 import type { Response } from 'express';
 
 import { AuthService } from './auth.service';
+import { clearAuthCookies, setAuthCookies } from './constants/auth-cookies';
 import { GetCurrentUser } from './decorators/get-user.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterStudentDto } from './dto/register.dto';
-import { ResendOtpDto } from './dto/resend-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RtAuthGuard } from './guards/rt-auth.guard';
+import type { User } from '../../generated/client';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -17,36 +18,52 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @ApiOperation({ summary: 'Register a new account' })
-  async register(@Body() dto: RegisterStudentDto) {
-    return this.authService.register(dto);
-  }
+  @ApiOperation({ summary: 'Register a new student account' })
+  async register(@Body() dto: RegisterStudentDto, @Res() res: Response) {
+    const result = await this.authService.register(dto);
+    setAuthCookies(res, result.tokens);
 
-  @Post('verify-otp')
-  @ApiOperation({ summary: 'Verify number OTP' })
-  async verifyOtp(@Body() dto: VerifyOtpDto) {
-    return this.authService.verifyOtp(dto.identity, dto.code);
-  }
-
-  @Post('login')
-  @ApiOperation({ summary: 'Login and get access token' })
-  async login(@Body() dto: LoginDto, @Res() res: Response) {
-    const result = await this.authService.login(dto);
-
-    res.cookie('refresh_token', result.refresh_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    return res.status(HttpStatus.OK).json({
+    return res.status(HttpStatus.CREATED).json({
       success: true,
       data: {
-        access_token: result.access_token,
+        message: result.message,
         user: result.user,
       },
     });
+  }
+
+  @Post('verify-otp')
+  @UseGuards(JwtAuthGuard)
+  @ApiCookieAuth('access_token')
+  @ApiOperation({ summary: 'Verify phone OTP (authenticated)' })
+  async verifyOtp(@GetCurrentUser() user: User, @Body() dto: VerifyOtpDto, @Res() res: Response) {
+    const session = await this.authService.verifyOtp(user.id, dto.code);
+    setAuthCookies(res, session.tokens);
+
+    return res.status(HttpStatus.OK).json({
+      success: true,
+      data: { user: session.user },
+    });
+  }
+
+  @Post('login')
+  @ApiOperation({ summary: 'Login and set HttpOnly auth cookies' })
+  async login(@Body() dto: LoginDto, @Res() res: Response) {
+    const session = await this.authService.login(dto);
+    setAuthCookies(res, session.tokens);
+
+    return res.status(HttpStatus.OK).json({
+      success: true,
+      data: { user: session.user },
+    });
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiCookieAuth('access_token')
+  @ApiOperation({ summary: 'Get current authenticated user' })
+  async me(@GetCurrentUser('id') userId: string) {
+    return this.authService.getMe(userId);
   }
 
   @UseGuards(RtAuthGuard)
@@ -58,35 +75,32 @@ export class AuthController {
     @Res() res: Response,
   ) {
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
-
-    res.cookie('refresh_token', tokens.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+    setAuthCookies(res, {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
     });
 
     return res.status(HttpStatus.OK).json({
       success: true,
-      data: {
-        access_token: tokens.accessToken,
-      },
+      data: { ok: true },
     });
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('logout')
-  @ApiBearerAuth()
+  @ApiCookieAuth('access_token')
   @ApiOperation({ summary: 'Logout and revoke refresh token' })
   async logout(@GetCurrentUser('id') userId: string, @Res() res: Response) {
     await this.authService.logout(userId);
-    res.clearCookie('refresh_token');
+    clearAuthCookies(res);
     return res.status(HttpStatus.OK).json({ success: true });
   }
 
   @Post('resend-otp')
-  @ApiOperation({ summary: 'Resend OTP' })
-  async resendOtp(@Body() dto: ResendOtpDto) {
-    return this.authService.resendOtp(dto.identity);
+  @UseGuards(JwtAuthGuard)
+  @ApiCookieAuth('access_token')
+  @ApiOperation({ summary: 'Resend OTP (authenticated)' })
+  async resendOtp(@GetCurrentUser('id') userId: string) {
+    return this.authService.resendOtp(userId);
   }
 }
