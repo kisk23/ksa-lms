@@ -257,6 +257,7 @@ export type UserWhereInput = {
   courseAuditLogs?: Prisma.CourseAuditLogListRelationFilter
   enrolledByMe?: Prisma.EnrollmentListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
+  archivedAssignments?: Prisma.AssignmentListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
   otpVerifications?: Prisma.OtpVerificationListRelationFilter
   parentLinks?: Prisma.ParentStudentLinkListRelationFilter
@@ -298,6 +299,7 @@ export type UserOrderByWithRelationInput = {
   courseAuditLogs?: Prisma.CourseAuditLogOrderByRelationAggregateInput
   enrolledByMe?: Prisma.EnrollmentOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
+  archivedAssignments?: Prisma.AssignmentOrderByRelationAggregateInput
   lessonProgress?: Prisma.LessonProgressOrderByRelationAggregateInput
   otpVerifications?: Prisma.OtpVerificationOrderByRelationAggregateInput
   parentLinks?: Prisma.ParentStudentLinkOrderByRelationAggregateInput
@@ -342,6 +344,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   courseAuditLogs?: Prisma.CourseAuditLogListRelationFilter
   enrolledByMe?: Prisma.EnrollmentListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
+  archivedAssignments?: Prisma.AssignmentListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
   otpVerifications?: Prisma.OtpVerificationListRelationFilter
   parentLinks?: Prisma.ParentStudentLinkListRelationFilter
@@ -421,6 +424,7 @@ export type UserCreateInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -462,6 +466,7 @@ export type UserUncheckedCreateInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -503,6 +508,7 @@ export type UserUpdateInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -544,6 +550,7 @@ export type UserUncheckedUpdateInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -844,6 +851,22 @@ export type UserUpdateOneRequiredWithoutCourseProgressesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCourseProgressesInput, Prisma.UserUpdateWithoutCourseProgressesInput>, Prisma.UserUncheckedUpdateWithoutCourseProgressesInput>
 }
 
+export type UserCreateNestedOneWithoutArchivedAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutArchivedAssignmentsInput, Prisma.UserUncheckedCreateWithoutArchivedAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutArchivedAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutArchivedAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutArchivedAssignmentsInput, Prisma.UserUncheckedCreateWithoutArchivedAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutArchivedAssignmentsInput
+  upsert?: Prisma.UserUpsertWithoutArchivedAssignmentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutArchivedAssignmentsInput, Prisma.UserUpdateWithoutArchivedAssignmentsInput>, Prisma.UserUncheckedUpdateWithoutArchivedAssignmentsInput>
+}
+
 export type UserCreateNestedOneWithoutEnrolledByMeInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutEnrolledByMeInput, Prisma.UserUncheckedCreateWithoutEnrolledByMeInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutEnrolledByMeInput
@@ -1069,6 +1092,7 @@ export type UserCreateWithoutOtpVerificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
   childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
@@ -1109,6 +1133,7 @@ export type UserUncheckedCreateWithoutOtpVerificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
   childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
@@ -1165,6 +1190,7 @@ export type UserUpdateWithoutOtpVerificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
   childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
@@ -1205,6 +1231,7 @@ export type UserUncheckedUpdateWithoutOtpVerificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
   childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
@@ -1245,6 +1272,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -1285,6 +1313,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -1341,6 +1370,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -1381,6 +1411,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -1420,6 +1451,7 @@ export type UserCreateWithoutAssistantPermissionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -1460,6 +1492,7 @@ export type UserUncheckedCreateWithoutAssistantPermissionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -1505,6 +1538,7 @@ export type UserCreateWithoutGrantedPermissionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -1545,6 +1579,7 @@ export type UserUncheckedCreateWithoutGrantedPermissionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -1601,6 +1636,7 @@ export type UserUpdateWithoutAssistantPermissionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -1641,6 +1677,7 @@ export type UserUncheckedUpdateWithoutAssistantPermissionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -1692,6 +1729,7 @@ export type UserUpdateWithoutGrantedPermissionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -1732,6 +1770,7 @@ export type UserUncheckedUpdateWithoutGrantedPermissionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -1773,6 +1812,7 @@ export type UserCreateWithoutParentLinksInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
@@ -1813,6 +1853,7 @@ export type UserUncheckedCreateWithoutParentLinksInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
@@ -1858,6 +1899,7 @@ export type UserCreateWithoutChildLinksInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -1898,6 +1940,7 @@ export type UserUncheckedCreateWithoutChildLinksInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -1954,6 +1997,7 @@ export type UserUpdateWithoutParentLinksInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
@@ -1994,6 +2038,7 @@ export type UserUncheckedUpdateWithoutParentLinksInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
@@ -2045,6 +2090,7 @@ export type UserUpdateWithoutChildLinksInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -2085,6 +2131,7 @@ export type UserUncheckedUpdateWithoutChildLinksInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -2124,6 +2171,7 @@ export type UserCreateWithoutTaughtCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -2164,6 +2212,7 @@ export type UserUncheckedCreateWithoutTaughtCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -2209,6 +2258,7 @@ export type UserCreateWithoutPublishedCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -2249,6 +2299,7 @@ export type UserUncheckedCreateWithoutPublishedCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -2294,6 +2345,7 @@ export type UserCreateWithoutArchivedCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -2334,6 +2386,7 @@ export type UserUncheckedCreateWithoutArchivedCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -2390,6 +2443,7 @@ export type UserUpdateWithoutTaughtCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -2430,6 +2484,7 @@ export type UserUncheckedUpdateWithoutTaughtCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -2481,6 +2536,7 @@ export type UserUpdateWithoutPublishedCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -2521,6 +2577,7 @@ export type UserUncheckedUpdateWithoutPublishedCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -2572,6 +2629,7 @@ export type UserUpdateWithoutArchivedCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -2612,6 +2670,7 @@ export type UserUncheckedUpdateWithoutArchivedCoursesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -2652,6 +2711,7 @@ export type UserCreateWithoutCourseAuditLogsInput = {
   archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -2692,6 +2752,7 @@ export type UserUncheckedCreateWithoutCourseAuditLogsInput = {
   archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -2748,6 +2809,7 @@ export type UserUpdateWithoutCourseAuditLogsInput = {
   archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -2788,6 +2850,7 @@ export type UserUncheckedUpdateWithoutCourseAuditLogsInput = {
   archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -2828,6 +2891,7 @@ export type UserCreateWithoutCourseProgressesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -2868,6 +2932,7 @@ export type UserUncheckedCreateWithoutCourseProgressesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -2924,6 +2989,7 @@ export type UserUpdateWithoutCourseProgressesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -2954,6 +3020,187 @@ export type UserUncheckedUpdateWithoutCourseProgressesInput = {
   guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUncheckedUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutArchivedAssignmentsInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutArchivedAssignmentsInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutArchivedAssignmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutArchivedAssignmentsInput, Prisma.UserUncheckedCreateWithoutArchivedAssignmentsInput>
+}
+
+export type UserUpsertWithoutArchivedAssignmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutArchivedAssignmentsInput, Prisma.UserUncheckedUpdateWithoutArchivedAssignmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutArchivedAssignmentsInput, Prisma.UserUncheckedCreateWithoutArchivedAssignmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutArchivedAssignmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutArchivedAssignmentsInput, Prisma.UserUncheckedUpdateWithoutArchivedAssignmentsInput>
+}
+
+export type UserUpdateWithoutArchivedAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutArchivedAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
   assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
   assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
   assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
@@ -3004,6 +3251,7 @@ export type UserCreateWithoutEnrolledByMeInput = {
   archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -3044,6 +3292,7 @@ export type UserUncheckedCreateWithoutEnrolledByMeInput = {
   archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -3089,6 +3338,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -3129,6 +3379,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -3185,6 +3436,7 @@ export type UserUpdateWithoutEnrolledByMeInput = {
   archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -3225,6 +3477,7 @@ export type UserUncheckedUpdateWithoutEnrolledByMeInput = {
   archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -3276,6 +3529,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -3316,6 +3570,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -3357,6 +3612,7 @@ export type UserCreateWithoutLessonProgressInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
   childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
@@ -3397,6 +3653,7 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
   childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
@@ -3453,6 +3710,7 @@ export type UserUpdateWithoutLessonProgressInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
   childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
@@ -3493,6 +3751,7 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
   childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
@@ -3532,6 +3791,7 @@ export type UserCreateWithoutAssignmentAttemptsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -3572,6 +3832,7 @@ export type UserUncheckedCreateWithoutAssignmentAttemptsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -3628,6 +3889,7 @@ export type UserUpdateWithoutAssignmentAttemptsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -3668,6 +3930,7 @@ export type UserUncheckedUpdateWithoutAssignmentAttemptsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -3708,6 +3971,7 @@ export type UserCreateWithoutAssignmentBestScoresInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -3748,6 +4012,7 @@ export type UserUncheckedCreateWithoutAssignmentBestScoresInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -3804,6 +4069,7 @@ export type UserUpdateWithoutAssignmentBestScoresInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -3844,6 +4110,7 @@ export type UserUncheckedUpdateWithoutAssignmentBestScoresInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -3885,6 +4152,7 @@ export type UserCreateWithoutCreatedSessionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -3925,6 +4193,7 @@ export type UserUncheckedCreateWithoutCreatedSessionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -3970,6 +4239,7 @@ export type UserCreateWithoutCancelledSessionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -4010,6 +4280,7 @@ export type UserUncheckedCreateWithoutCancelledSessionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -4066,6 +4337,7 @@ export type UserUpdateWithoutCreatedSessionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -4106,6 +4378,7 @@ export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -4157,6 +4430,7 @@ export type UserUpdateWithoutCancelledSessionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -4197,6 +4471,7 @@ export type UserUncheckedUpdateWithoutCancelledSessionsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -4237,6 +4512,7 @@ export type UserCreateWithoutSessionNotificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -4277,6 +4553,7 @@ export type UserUncheckedCreateWithoutSessionNotificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -4333,6 +4610,7 @@ export type UserUpdateWithoutSessionNotificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -4373,6 +4651,7 @@ export type UserUncheckedUpdateWithoutSessionNotificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -4413,6 +4692,7 @@ export type UserCreateWithoutNotificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -4453,6 +4733,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -4509,6 +4790,7 @@ export type UserUpdateWithoutNotificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -4549,6 +4831,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -4589,6 +4872,7 @@ export type UserCreateWithoutCreatedPromoCodesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -4629,6 +4913,7 @@ export type UserUncheckedCreateWithoutCreatedPromoCodesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -4685,6 +4970,7 @@ export type UserUpdateWithoutCreatedPromoCodesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -4725,6 +5011,7 @@ export type UserUncheckedUpdateWithoutCreatedPromoCodesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -4765,6 +5052,7 @@ export type UserCreateWithoutPromoCodeUsagesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -4805,6 +5093,7 @@ export type UserUncheckedCreateWithoutPromoCodeUsagesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -4861,6 +5150,7 @@ export type UserUpdateWithoutPromoCodeUsagesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -4901,6 +5191,7 @@ export type UserUncheckedUpdateWithoutPromoCodeUsagesInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -4941,6 +5232,7 @@ export type UserCreateWithoutPaidPaymentsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -4981,6 +5273,7 @@ export type UserUncheckedCreateWithoutPaidPaymentsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -5026,6 +5319,7 @@ export type UserCreateWithoutStudentPaymentsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -5066,6 +5360,7 @@ export type UserUncheckedCreateWithoutStudentPaymentsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -5122,6 +5417,7 @@ export type UserUpdateWithoutPaidPaymentsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -5162,6 +5458,7 @@ export type UserUncheckedUpdateWithoutPaidPaymentsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -5213,6 +5510,7 @@ export type UserUpdateWithoutStudentPaymentsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -5253,6 +5551,7 @@ export type UserUncheckedUpdateWithoutStudentPaymentsInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -5293,6 +5592,7 @@ export type UserCreateWithoutRefundsRequestedInput = {
   courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
@@ -5333,6 +5633,7 @@ export type UserUncheckedCreateWithoutRefundsRequestedInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
   enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
   otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
@@ -5389,6 +5690,7 @@ export type UserUpdateWithoutRefundsRequestedInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
@@ -5429,6 +5731,7 @@ export type UserUncheckedUpdateWithoutRefundsRequestedInput = {
   courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
   enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
   otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
   parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
@@ -5461,6 +5764,7 @@ export type UserCountOutputType = {
   courseAuditLogs: number
   enrolledByMe: number
   enrollments: number
+  archivedAssignments: number
   lessonProgress: number
   otpVerifications: number
   parentLinks: number
@@ -5489,6 +5793,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   courseAuditLogs?: boolean | UserCountOutputTypeCountCourseAuditLogsArgs
   enrolledByMe?: boolean | UserCountOutputTypeCountEnrolledByMeArgs
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
+  archivedAssignments?: boolean | UserCountOutputTypeCountArchivedAssignmentsArgs
   lessonProgress?: boolean | UserCountOutputTypeCountLessonProgressArgs
   otpVerifications?: boolean | UserCountOutputTypeCountOtpVerificationsArgs
   parentLinks?: boolean | UserCountOutputTypeCountParentLinksArgs
@@ -5590,6 +5895,13 @@ export type UserCountOutputTypeCountEnrolledByMeArgs<ExtArgs extends runtime.Typ
  */
 export type UserCountOutputTypeCountEnrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EnrollmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountArchivedAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssignmentWhereInput
 }
 
 /**
@@ -5716,6 +6028,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   courseAuditLogs?: boolean | Prisma.User$courseAuditLogsArgs<ExtArgs>
   enrolledByMe?: boolean | Prisma.User$enrolledByMeArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
+  archivedAssignments?: boolean | Prisma.User$archivedAssignmentsArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
   otpVerifications?: boolean | Prisma.User$otpVerificationsArgs<ExtArgs>
   parentLinks?: boolean | Prisma.User$parentLinksArgs<ExtArgs>
@@ -5794,6 +6107,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   courseAuditLogs?: boolean | Prisma.User$courseAuditLogsArgs<ExtArgs>
   enrolledByMe?: boolean | Prisma.User$enrolledByMeArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
+  archivedAssignments?: boolean | Prisma.User$archivedAssignmentsArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
   otpVerifications?: boolean | Prisma.User$otpVerificationsArgs<ExtArgs>
   parentLinks?: boolean | Prisma.User$parentLinksArgs<ExtArgs>
@@ -5827,6 +6141,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     courseAuditLogs: Prisma.$CourseAuditLogPayload<ExtArgs>[]
     enrolledByMe: Prisma.$EnrollmentPayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+    archivedAssignments: Prisma.$AssignmentPayload<ExtArgs>[]
     lessonProgress: Prisma.$LessonProgressPayload<ExtArgs>[]
     otpVerifications: Prisma.$OtpVerificationPayload<ExtArgs>[]
     parentLinks: Prisma.$ParentStudentLinkPayload<ExtArgs>[]
@@ -6261,6 +6576,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   courseAuditLogs<T extends Prisma.User$courseAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$courseAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrolledByMe<T extends Prisma.User$enrolledByMeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrolledByMeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  archivedAssignments<T extends Prisma.User$archivedAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$archivedAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessonProgress<T extends Prisma.User$lessonProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lessonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   otpVerifications<T extends Prisma.User$otpVerificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$otpVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OtpVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   parentLinks<T extends Prisma.User$parentLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$parentLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParentStudentLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6971,6 +7287,30 @@ export type User$enrollmentsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.EnrollmentScalarFieldEnum | Prisma.EnrollmentScalarFieldEnum[]
+}
+
+/**
+ * User.archivedAssignments
+ */
+export type User$archivedAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Assignment
+   */
+  select?: Prisma.AssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Assignment
+   */
+  omit?: Prisma.AssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssignmentInclude<ExtArgs> | null
+  where?: Prisma.AssignmentWhereInput
+  orderBy?: Prisma.AssignmentOrderByWithRelationInput | Prisma.AssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.AssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssignmentScalarFieldEnum | Prisma.AssignmentScalarFieldEnum[]
 }
 
 /**

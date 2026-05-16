@@ -342,7 +342,7 @@ export type LessonCreateInput = {
   id?: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -359,7 +359,7 @@ export type LessonUncheckedCreateInput = {
   chapterId: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -407,7 +407,7 @@ export type LessonCreateManyInput = {
   chapterId: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -608,7 +608,7 @@ export type LessonCreateWithoutProgressBookmarksInput = {
   id?: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -624,7 +624,7 @@ export type LessonUncheckedCreateWithoutProgressBookmarksInput = {
   chapterId: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -684,7 +684,7 @@ export type LessonCreateWithoutChapterInput = {
   id?: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -699,7 +699,7 @@ export type LessonUncheckedCreateWithoutChapterInput = {
   id?: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -756,7 +756,7 @@ export type LessonCreateWithoutAssignmentInput = {
   id?: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -772,7 +772,7 @@ export type LessonUncheckedCreateWithoutAssignmentInput = {
   chapterId: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -832,7 +832,7 @@ export type LessonCreateWithoutLessonProgressInput = {
   id?: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -848,7 +848,7 @@ export type LessonUncheckedCreateWithoutLessonProgressInput = {
   chapterId: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null
@@ -908,7 +908,7 @@ export type LessonCreateManyChapterInput = {
   id?: string
   title: string
   orderIndex: number
-  videoUrl: string
+  videoUrl?: string
   videoProvider?: $Enums.VideoProvider
   version?: number
   archivedAt?: Date | string | null

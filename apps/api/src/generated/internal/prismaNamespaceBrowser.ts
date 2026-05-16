@@ -243,7 +243,9 @@ export const AssignmentScalarFieldEnum = {
   passingScorePct: 'passingScorePct',
   maxAttempts: 'maxAttempts',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  archivedAt: 'archivedAt',
+  archivedBy: 'archivedBy'
 } as const
 
 export type AssignmentScalarFieldEnum = (typeof AssignmentScalarFieldEnum)[keyof typeof AssignmentScalarFieldEnum]
@@ -307,7 +309,8 @@ export const AssignmentAttemptScalarFieldEnum = {
   attemptNumber: 'attemptNumber',
   scorePct: 'scorePct',
   isPassed: 'isPassed',
-  submittedAt: 'submittedAt'
+  submittedAt: 'submittedAt',
+  snapshot: 'snapshot'
 } as const
 
 export type AssignmentAttemptScalarFieldEnum = (typeof AssignmentAttemptScalarFieldEnum)[keyof typeof AssignmentAttemptScalarFieldEnum]
@@ -318,6 +321,7 @@ export const AssignmentBestScoreScalarFieldEnum = {
   studentUserId: 'studentUserId',
   assignmentId: 'assignmentId',
   bestScorePct: 'bestScorePct',
+  bestAttemptId: 'bestAttemptId',
   isPassed: 'isPassed',
   updatedAt: 'updatedAt'
 } as const

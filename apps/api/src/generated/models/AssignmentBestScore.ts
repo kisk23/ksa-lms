@@ -39,6 +39,7 @@ export type AssignmentBestScoreMinAggregateOutputType = {
   studentUserId: string | null
   assignmentId: string | null
   bestScorePct: number | null
+  bestAttemptId: string | null
   isPassed: boolean | null
   updatedAt: Date | null
 }
@@ -48,6 +49,7 @@ export type AssignmentBestScoreMaxAggregateOutputType = {
   studentUserId: string | null
   assignmentId: string | null
   bestScorePct: number | null
+  bestAttemptId: string | null
   isPassed: boolean | null
   updatedAt: Date | null
 }
@@ -57,6 +59,7 @@ export type AssignmentBestScoreCountAggregateOutputType = {
   studentUserId: number
   assignmentId: number
   bestScorePct: number
+  bestAttemptId: number
   isPassed: number
   updatedAt: number
   _all: number
@@ -76,6 +79,7 @@ export type AssignmentBestScoreMinAggregateInputType = {
   studentUserId?: true
   assignmentId?: true
   bestScorePct?: true
+  bestAttemptId?: true
   isPassed?: true
   updatedAt?: true
 }
@@ -85,6 +89,7 @@ export type AssignmentBestScoreMaxAggregateInputType = {
   studentUserId?: true
   assignmentId?: true
   bestScorePct?: true
+  bestAttemptId?: true
   isPassed?: true
   updatedAt?: true
 }
@@ -94,6 +99,7 @@ export type AssignmentBestScoreCountAggregateInputType = {
   studentUserId?: true
   assignmentId?: true
   bestScorePct?: true
+  bestAttemptId?: true
   isPassed?: true
   updatedAt?: true
   _all?: true
@@ -190,6 +196,7 @@ export type AssignmentBestScoreGroupByOutputType = {
   studentUserId: string
   assignmentId: string
   bestScorePct: number
+  bestAttemptId: string
   isPassed: boolean
   updatedAt: Date
   _count: AssignmentBestScoreCountAggregateOutputType | null
@@ -222,10 +229,12 @@ export type AssignmentBestScoreWhereInput = {
   studentUserId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   assignmentId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   bestScorePct?: Prisma.IntFilter<"AssignmentBestScore"> | number
+  bestAttemptId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   isPassed?: Prisma.BoolFilter<"AssignmentBestScore"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"AssignmentBestScore"> | Date | string
   assignment?: Prisma.XOR<Prisma.AssignmentScalarRelationFilter, Prisma.AssignmentWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  bestAttempt?: Prisma.XOR<Prisma.AssignmentAttemptNullableScalarRelationFilter, Prisma.AssignmentAttemptWhereInput> | null
 }
 
 export type AssignmentBestScoreOrderByWithRelationInput = {
@@ -233,10 +242,12 @@ export type AssignmentBestScoreOrderByWithRelationInput = {
   studentUserId?: Prisma.SortOrder
   assignmentId?: Prisma.SortOrder
   bestScorePct?: Prisma.SortOrder
+  bestAttemptId?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   assignment?: Prisma.AssignmentOrderByWithRelationInput
   student?: Prisma.UserOrderByWithRelationInput
+  bestAttempt?: Prisma.AssignmentAttemptOrderByWithRelationInput
 }
 
 export type AssignmentBestScoreWhereUniqueInput = Prisma.AtLeast<{
@@ -248,10 +259,12 @@ export type AssignmentBestScoreWhereUniqueInput = Prisma.AtLeast<{
   studentUserId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   assignmentId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   bestScorePct?: Prisma.IntFilter<"AssignmentBestScore"> | number
+  bestAttemptId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   isPassed?: Prisma.BoolFilter<"AssignmentBestScore"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"AssignmentBestScore"> | Date | string
   assignment?: Prisma.XOR<Prisma.AssignmentScalarRelationFilter, Prisma.AssignmentWhereInput>
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  bestAttempt?: Prisma.XOR<Prisma.AssignmentAttemptNullableScalarRelationFilter, Prisma.AssignmentAttemptWhereInput> | null
 }, "id" | "studentUserId_assignmentId">
 
 export type AssignmentBestScoreOrderByWithAggregationInput = {
@@ -259,6 +272,7 @@ export type AssignmentBestScoreOrderByWithAggregationInput = {
   studentUserId?: Prisma.SortOrder
   assignmentId?: Prisma.SortOrder
   bestScorePct?: Prisma.SortOrder
+  bestAttemptId?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AssignmentBestScoreCountOrderByAggregateInput
@@ -276,6 +290,7 @@ export type AssignmentBestScoreScalarWhereWithAggregatesInput = {
   studentUserId?: Prisma.UuidWithAggregatesFilter<"AssignmentBestScore"> | string
   assignmentId?: Prisma.UuidWithAggregatesFilter<"AssignmentBestScore"> | string
   bestScorePct?: Prisma.IntWithAggregatesFilter<"AssignmentBestScore"> | number
+  bestAttemptId?: Prisma.UuidWithAggregatesFilter<"AssignmentBestScore"> | string
   isPassed?: Prisma.BoolWithAggregatesFilter<"AssignmentBestScore"> | boolean
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AssignmentBestScore"> | Date | string
 }
@@ -287,6 +302,7 @@ export type AssignmentBestScoreCreateInput = {
   updatedAt?: Date | string
   assignment: Prisma.AssignmentCreateNestedOneWithoutBestScoresInput
   student: Prisma.UserCreateNestedOneWithoutAssignmentBestScoresInput
+  bestAttempt?: Prisma.AssignmentAttemptCreateNestedOneWithoutBestScoresInput
 }
 
 export type AssignmentBestScoreUncheckedCreateInput = {
@@ -294,6 +310,7 @@ export type AssignmentBestScoreUncheckedCreateInput = {
   studentUserId: string
   assignmentId: string
   bestScorePct: number
+  bestAttemptId: string
   isPassed: boolean
   updatedAt?: Date | string
 }
@@ -305,6 +322,7 @@ export type AssignmentBestScoreUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUpdateOneRequiredWithoutBestScoresNestedInput
   student?: Prisma.UserUpdateOneRequiredWithoutAssignmentBestScoresNestedInput
+  bestAttempt?: Prisma.AssignmentAttemptUpdateOneWithoutBestScoresNestedInput
 }
 
 export type AssignmentBestScoreUncheckedUpdateInput = {
@@ -312,6 +330,7 @@ export type AssignmentBestScoreUncheckedUpdateInput = {
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentId?: Prisma.StringFieldUpdateOperationsInput | string
   bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  bestAttemptId?: Prisma.StringFieldUpdateOperationsInput | string
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -321,6 +340,7 @@ export type AssignmentBestScoreCreateManyInput = {
   studentUserId: string
   assignmentId: string
   bestScorePct: number
+  bestAttemptId: string
   isPassed: boolean
   updatedAt?: Date | string
 }
@@ -337,6 +357,7 @@ export type AssignmentBestScoreUncheckedUpdateManyInput = {
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentId?: Prisma.StringFieldUpdateOperationsInput | string
   bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  bestAttemptId?: Prisma.StringFieldUpdateOperationsInput | string
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -361,6 +382,7 @@ export type AssignmentBestScoreCountOrderByAggregateInput = {
   studentUserId?: Prisma.SortOrder
   assignmentId?: Prisma.SortOrder
   bestScorePct?: Prisma.SortOrder
+  bestAttemptId?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -374,6 +396,7 @@ export type AssignmentBestScoreMaxOrderByAggregateInput = {
   studentUserId?: Prisma.SortOrder
   assignmentId?: Prisma.SortOrder
   bestScorePct?: Prisma.SortOrder
+  bestAttemptId?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -383,6 +406,7 @@ export type AssignmentBestScoreMinOrderByAggregateInput = {
   studentUserId?: Prisma.SortOrder
   assignmentId?: Prisma.SortOrder
   bestScorePct?: Prisma.SortOrder
+  bestAttemptId?: Prisma.SortOrder
   isPassed?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -475,18 +499,62 @@ export type AssignmentBestScoreUncheckedUpdateManyWithoutAssignmentNestedInput =
   deleteMany?: Prisma.AssignmentBestScoreScalarWhereInput | Prisma.AssignmentBestScoreScalarWhereInput[]
 }
 
+export type AssignmentBestScoreCreateNestedManyWithoutBestAttemptInput = {
+  create?: Prisma.XOR<Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput, Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput> | Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput[] | Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput[]
+  connectOrCreate?: Prisma.AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput | Prisma.AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput[]
+  createMany?: Prisma.AssignmentBestScoreCreateManyBestAttemptInputEnvelope
+  connect?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+}
+
+export type AssignmentBestScoreUncheckedCreateNestedManyWithoutBestAttemptInput = {
+  create?: Prisma.XOR<Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput, Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput> | Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput[] | Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput[]
+  connectOrCreate?: Prisma.AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput | Prisma.AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput[]
+  createMany?: Prisma.AssignmentBestScoreCreateManyBestAttemptInputEnvelope
+  connect?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+}
+
+export type AssignmentBestScoreUpdateManyWithoutBestAttemptNestedInput = {
+  create?: Prisma.XOR<Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput, Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput> | Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput[] | Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput[]
+  connectOrCreate?: Prisma.AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput | Prisma.AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput[]
+  upsert?: Prisma.AssignmentBestScoreUpsertWithWhereUniqueWithoutBestAttemptInput | Prisma.AssignmentBestScoreUpsertWithWhereUniqueWithoutBestAttemptInput[]
+  createMany?: Prisma.AssignmentBestScoreCreateManyBestAttemptInputEnvelope
+  set?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+  disconnect?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+  delete?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+  connect?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+  update?: Prisma.AssignmentBestScoreUpdateWithWhereUniqueWithoutBestAttemptInput | Prisma.AssignmentBestScoreUpdateWithWhereUniqueWithoutBestAttemptInput[]
+  updateMany?: Prisma.AssignmentBestScoreUpdateManyWithWhereWithoutBestAttemptInput | Prisma.AssignmentBestScoreUpdateManyWithWhereWithoutBestAttemptInput[]
+  deleteMany?: Prisma.AssignmentBestScoreScalarWhereInput | Prisma.AssignmentBestScoreScalarWhereInput[]
+}
+
+export type AssignmentBestScoreUncheckedUpdateManyWithoutBestAttemptNestedInput = {
+  create?: Prisma.XOR<Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput, Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput> | Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput[] | Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput[]
+  connectOrCreate?: Prisma.AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput | Prisma.AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput[]
+  upsert?: Prisma.AssignmentBestScoreUpsertWithWhereUniqueWithoutBestAttemptInput | Prisma.AssignmentBestScoreUpsertWithWhereUniqueWithoutBestAttemptInput[]
+  createMany?: Prisma.AssignmentBestScoreCreateManyBestAttemptInputEnvelope
+  set?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+  disconnect?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+  delete?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+  connect?: Prisma.AssignmentBestScoreWhereUniqueInput | Prisma.AssignmentBestScoreWhereUniqueInput[]
+  update?: Prisma.AssignmentBestScoreUpdateWithWhereUniqueWithoutBestAttemptInput | Prisma.AssignmentBestScoreUpdateWithWhereUniqueWithoutBestAttemptInput[]
+  updateMany?: Prisma.AssignmentBestScoreUpdateManyWithWhereWithoutBestAttemptInput | Prisma.AssignmentBestScoreUpdateManyWithWhereWithoutBestAttemptInput[]
+  deleteMany?: Prisma.AssignmentBestScoreScalarWhereInput | Prisma.AssignmentBestScoreScalarWhereInput[]
+}
+
 export type AssignmentBestScoreCreateWithoutStudentInput = {
   id?: string
   bestScorePct: number
   isPassed: boolean
   updatedAt?: Date | string
   assignment: Prisma.AssignmentCreateNestedOneWithoutBestScoresInput
+  bestAttempt?: Prisma.AssignmentAttemptCreateNestedOneWithoutBestScoresInput
 }
 
 export type AssignmentBestScoreUncheckedCreateWithoutStudentInput = {
   id?: string
   assignmentId: string
   bestScorePct: number
+  bestAttemptId: string
   isPassed: boolean
   updatedAt?: Date | string
 }
@@ -525,6 +593,7 @@ export type AssignmentBestScoreScalarWhereInput = {
   studentUserId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   assignmentId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   bestScorePct?: Prisma.IntFilter<"AssignmentBestScore"> | number
+  bestAttemptId?: Prisma.UuidFilter<"AssignmentBestScore"> | string
   isPassed?: Prisma.BoolFilter<"AssignmentBestScore"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"AssignmentBestScore"> | Date | string
 }
@@ -535,12 +604,14 @@ export type AssignmentBestScoreCreateWithoutAssignmentInput = {
   isPassed: boolean
   updatedAt?: Date | string
   student: Prisma.UserCreateNestedOneWithoutAssignmentBestScoresInput
+  bestAttempt?: Prisma.AssignmentAttemptCreateNestedOneWithoutBestScoresInput
 }
 
 export type AssignmentBestScoreUncheckedCreateWithoutAssignmentInput = {
   id?: string
   studentUserId: string
   bestScorePct: number
+  bestAttemptId: string
   isPassed: boolean
   updatedAt?: Date | string
 }
@@ -571,10 +642,55 @@ export type AssignmentBestScoreUpdateManyWithWhereWithoutAssignmentInput = {
   data: Prisma.XOR<Prisma.AssignmentBestScoreUpdateManyMutationInput, Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutAssignmentInput>
 }
 
+export type AssignmentBestScoreCreateWithoutBestAttemptInput = {
+  id?: string
+  bestScorePct: number
+  isPassed: boolean
+  updatedAt?: Date | string
+  assignment: Prisma.AssignmentCreateNestedOneWithoutBestScoresInput
+  student: Prisma.UserCreateNestedOneWithoutAssignmentBestScoresInput
+}
+
+export type AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput = {
+  id?: string
+  studentUserId: string
+  assignmentId: string
+  bestScorePct: number
+  isPassed: boolean
+  updatedAt?: Date | string
+}
+
+export type AssignmentBestScoreCreateOrConnectWithoutBestAttemptInput = {
+  where: Prisma.AssignmentBestScoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput, Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput>
+}
+
+export type AssignmentBestScoreCreateManyBestAttemptInputEnvelope = {
+  data: Prisma.AssignmentBestScoreCreateManyBestAttemptInput | Prisma.AssignmentBestScoreCreateManyBestAttemptInput[]
+  skipDuplicates?: boolean
+}
+
+export type AssignmentBestScoreUpsertWithWhereUniqueWithoutBestAttemptInput = {
+  where: Prisma.AssignmentBestScoreWhereUniqueInput
+  update: Prisma.XOR<Prisma.AssignmentBestScoreUpdateWithoutBestAttemptInput, Prisma.AssignmentBestScoreUncheckedUpdateWithoutBestAttemptInput>
+  create: Prisma.XOR<Prisma.AssignmentBestScoreCreateWithoutBestAttemptInput, Prisma.AssignmentBestScoreUncheckedCreateWithoutBestAttemptInput>
+}
+
+export type AssignmentBestScoreUpdateWithWhereUniqueWithoutBestAttemptInput = {
+  where: Prisma.AssignmentBestScoreWhereUniqueInput
+  data: Prisma.XOR<Prisma.AssignmentBestScoreUpdateWithoutBestAttemptInput, Prisma.AssignmentBestScoreUncheckedUpdateWithoutBestAttemptInput>
+}
+
+export type AssignmentBestScoreUpdateManyWithWhereWithoutBestAttemptInput = {
+  where: Prisma.AssignmentBestScoreScalarWhereInput
+  data: Prisma.XOR<Prisma.AssignmentBestScoreUpdateManyMutationInput, Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutBestAttemptInput>
+}
+
 export type AssignmentBestScoreCreateManyStudentInput = {
   id?: string
   assignmentId: string
   bestScorePct: number
+  bestAttemptId: string
   isPassed: boolean
   updatedAt?: Date | string
 }
@@ -585,12 +701,14 @@ export type AssignmentBestScoreUpdateWithoutStudentInput = {
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUpdateOneRequiredWithoutBestScoresNestedInput
+  bestAttempt?: Prisma.AssignmentAttemptUpdateOneWithoutBestScoresNestedInput
 }
 
 export type AssignmentBestScoreUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentId?: Prisma.StringFieldUpdateOperationsInput | string
   bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  bestAttemptId?: Prisma.StringFieldUpdateOperationsInput | string
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -599,6 +717,7 @@ export type AssignmentBestScoreUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignmentId?: Prisma.StringFieldUpdateOperationsInput | string
   bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  bestAttemptId?: Prisma.StringFieldUpdateOperationsInput | string
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -607,6 +726,7 @@ export type AssignmentBestScoreCreateManyAssignmentInput = {
   id?: string
   studentUserId: string
   bestScorePct: number
+  bestAttemptId: string
   isPassed: boolean
   updatedAt?: Date | string
 }
@@ -617,12 +737,14 @@ export type AssignmentBestScoreUpdateWithoutAssignmentInput = {
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   student?: Prisma.UserUpdateOneRequiredWithoutAssignmentBestScoresNestedInput
+  bestAttempt?: Prisma.AssignmentAttemptUpdateOneWithoutBestScoresNestedInput
 }
 
 export type AssignmentBestScoreUncheckedUpdateWithoutAssignmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  bestAttemptId?: Prisma.StringFieldUpdateOperationsInput | string
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -630,6 +752,43 @@ export type AssignmentBestScoreUncheckedUpdateWithoutAssignmentInput = {
 export type AssignmentBestScoreUncheckedUpdateManyWithoutAssignmentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  bestAttemptId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AssignmentBestScoreCreateManyBestAttemptInput = {
+  id?: string
+  studentUserId: string
+  assignmentId: string
+  bestScorePct: number
+  isPassed: boolean
+  updatedAt?: Date | string
+}
+
+export type AssignmentBestScoreUpdateWithoutBestAttemptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignment?: Prisma.AssignmentUpdateOneRequiredWithoutBestScoresNestedInput
+  student?: Prisma.UserUpdateOneRequiredWithoutAssignmentBestScoresNestedInput
+}
+
+export type AssignmentBestScoreUncheckedUpdateWithoutBestAttemptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AssignmentBestScoreUncheckedUpdateManyWithoutBestAttemptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignmentId?: Prisma.StringFieldUpdateOperationsInput | string
   bestScorePct?: Prisma.IntFieldUpdateOperationsInput | number
   isPassed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -642,10 +801,12 @@ export type AssignmentBestScoreSelect<ExtArgs extends runtime.Types.Extensions.I
   studentUserId?: boolean
   assignmentId?: boolean
   bestScorePct?: boolean
+  bestAttemptId?: boolean
   isPassed?: boolean
   updatedAt?: boolean
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bestAttempt?: boolean | Prisma.AssignmentBestScore$bestAttemptArgs<ExtArgs>
 }, ExtArgs["result"]["assignmentBestScore"]>
 
 export type AssignmentBestScoreSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -653,10 +814,12 @@ export type AssignmentBestScoreSelectCreateManyAndReturn<ExtArgs extends runtime
   studentUserId?: boolean
   assignmentId?: boolean
   bestScorePct?: boolean
+  bestAttemptId?: boolean
   isPassed?: boolean
   updatedAt?: boolean
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bestAttempt?: boolean | Prisma.AssignmentBestScore$bestAttemptArgs<ExtArgs>
 }, ExtArgs["result"]["assignmentBestScore"]>
 
 export type AssignmentBestScoreSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -664,10 +827,12 @@ export type AssignmentBestScoreSelectUpdateManyAndReturn<ExtArgs extends runtime
   studentUserId?: boolean
   assignmentId?: boolean
   bestScorePct?: boolean
+  bestAttemptId?: boolean
   isPassed?: boolean
   updatedAt?: boolean
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bestAttempt?: boolean | Prisma.AssignmentBestScore$bestAttemptArgs<ExtArgs>
 }, ExtArgs["result"]["assignmentBestScore"]>
 
 export type AssignmentBestScoreSelectScalar = {
@@ -675,22 +840,26 @@ export type AssignmentBestScoreSelectScalar = {
   studentUserId?: boolean
   assignmentId?: boolean
   bestScorePct?: boolean
+  bestAttemptId?: boolean
   isPassed?: boolean
   updatedAt?: boolean
 }
 
-export type AssignmentBestScoreOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentUserId" | "assignmentId" | "bestScorePct" | "isPassed" | "updatedAt", ExtArgs["result"]["assignmentBestScore"]>
+export type AssignmentBestScoreOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentUserId" | "assignmentId" | "bestScorePct" | "bestAttemptId" | "isPassed" | "updatedAt", ExtArgs["result"]["assignmentBestScore"]>
 export type AssignmentBestScoreInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bestAttempt?: boolean | Prisma.AssignmentBestScore$bestAttemptArgs<ExtArgs>
 }
 export type AssignmentBestScoreIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bestAttempt?: boolean | Prisma.AssignmentBestScore$bestAttemptArgs<ExtArgs>
 }
 export type AssignmentBestScoreIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignment?: boolean | Prisma.AssignmentDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bestAttempt?: boolean | Prisma.AssignmentBestScore$bestAttemptArgs<ExtArgs>
 }
 
 export type $AssignmentBestScorePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -698,12 +867,14 @@ export type $AssignmentBestScorePayload<ExtArgs extends runtime.Types.Extensions
   objects: {
     assignment: Prisma.$AssignmentPayload<ExtArgs>
     student: Prisma.$UserPayload<ExtArgs>
+    bestAttempt: Prisma.$AssignmentAttemptPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     studentUserId: string
     assignmentId: string
     bestScorePct: number
+    bestAttemptId: string
     isPassed: boolean
     updatedAt: Date
   }, ExtArgs["result"]["assignmentBestScore"]>
@@ -1102,6 +1273,7 @@ export interface Prisma__AssignmentBestScoreClient<T, Null = never, ExtArgs exte
   readonly [Symbol.toStringTag]: "PrismaPromise"
   assignment<T extends Prisma.AssignmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AssignmentDefaultArgs<ExtArgs>>): Prisma.Prisma__AssignmentClient<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  bestAttempt<T extends Prisma.AssignmentBestScore$bestAttemptArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AssignmentBestScore$bestAttemptArgs<ExtArgs>>): Prisma.Prisma__AssignmentAttemptClient<runtime.Types.Result.GetResult<Prisma.$AssignmentAttemptPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1135,6 +1307,7 @@ export interface AssignmentBestScoreFieldRefs {
   readonly studentUserId: Prisma.FieldRef<"AssignmentBestScore", 'String'>
   readonly assignmentId: Prisma.FieldRef<"AssignmentBestScore", 'String'>
   readonly bestScorePct: Prisma.FieldRef<"AssignmentBestScore", 'Int'>
+  readonly bestAttemptId: Prisma.FieldRef<"AssignmentBestScore", 'String'>
   readonly isPassed: Prisma.FieldRef<"AssignmentBestScore", 'Boolean'>
   readonly updatedAt: Prisma.FieldRef<"AssignmentBestScore", 'DateTime'>
 }
@@ -1535,6 +1708,25 @@ export type AssignmentBestScoreDeleteManyArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many AssignmentBestScores to delete.
    */
   limit?: number
+}
+
+/**
+ * AssignmentBestScore.bestAttempt
+ */
+export type AssignmentBestScore$bestAttemptArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssignmentAttempt
+   */
+  select?: Prisma.AssignmentAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssignmentAttempt
+   */
+  omit?: Prisma.AssignmentAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssignmentAttemptInclude<ExtArgs> | null
+  where?: Prisma.AssignmentAttemptWhereInput
 }
 
 /**

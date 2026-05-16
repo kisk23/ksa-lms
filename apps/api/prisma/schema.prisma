@@ -32,6 +32,7 @@ model User {
   courseAuditLogs      CourseAuditLog[]
   enrolledByMe         Enrollment[]          @relation("EnrolledByUser")
   enrollments          Enrollment[]          @relation("StudentEnrollments")
+  archivedAssignments  Assignment[]          @relation("AssignmentArchiver")
   lessonProgress       LessonProgress[]
   otpVerifications     OtpVerification[]
   parentLinks          ParentStudentLink[]   @relation("ParentSide")
@@ -224,10 +225,13 @@ model Assignment {
   maxAttempts     Int?                  @map("max_attempts")
   createdAt       DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  archivedAt      DateTime?             @map("archived_at") @db.Timestamptz(6)
+  archivedBy      String?               @map("archived_by") @db.Uuid
   attempts        AssignmentAttempt[]
   bestScores      AssignmentBestScore[]
   lesson          Lesson                @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   questions       Question[]
+  archivedByUser  User?                 @relation("AssignmentArchiver", fields: [archivedBy], references: [id])
 
   @@map("assignments")
 }
@@ -308,8 +312,10 @@ model AssignmentAttempt {
   scorePct      Int        @map("score_pct") @db.SmallInt
   isPassed      Boolean    @map("is_passed")
   submittedAt   DateTime   @default(now()) @map("submitted_at") @db.Timestamptz(6)
+  snapshot      Json?      // Frozen copy of questions/options at submission time
   assignment    Assignment @relation(fields: [assignmentId], references: [id])
   student       User       @relation(fields: [studentUserId], references: [id])
+  bestScores    AssignmentBestScore[] @relation("BestAttemptLink")
 
   // Unique per student+assignment+attempt — prevents race-condition duplicate attempt numbers
   @@unique([studentUserId, assignmentId, attemptNumber])
@@ -324,10 +330,12 @@ model AssignmentBestScore {
   studentUserId String     @map("student_user_id") @db.Uuid
   assignmentId  String     @map("assignment_id") @db.Uuid
   bestScorePct  Int        @map("best_score_pct") @db.SmallInt
+  bestAttemptId String     @map("best_attempt_id") @db.Uuid
   isPassed      Boolean    @map("is_passed")
   updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
   assignment    Assignment @relation(fields: [assignmentId], references: [id])
   student       User       @relation(fields: [studentUserId], references: [id])
+  bestAttempt   AssignmentAttempt? @relation("BestAttemptLink", fields: [bestAttemptId], references: [id])
 
   @@unique([studentUserId, assignmentId])
   @@index([assignmentId])
