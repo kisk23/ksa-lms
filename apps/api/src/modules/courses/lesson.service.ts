@@ -73,6 +73,11 @@ export class LessonsService {
   async findOne(id: string) {
     const lesson = await this.prisma.lesson.findUnique({
       where: { id },
+      include: {
+        assignment: {
+          select: { id: true, passingScorePct: true, maxAttempts: true },
+        },
+      },
     });
 
     if (!lesson || lesson.archivedAt) {
@@ -169,12 +174,14 @@ export class LessonsService {
     const chapter = await this.prisma.chapter.findUnique({
       where: { id: chapterId },
       select: {
+        archivedAt: true,
         courseId: true,
         course: { select: { teacherUserId: true } },
       },
     });
 
-    if (!chapter) throw new NotFoundException(`Chapter #${chapterId} not found`);
+    if (!chapter || chapter.archivedAt)
+      throw new NotFoundException(`Chapter #${chapterId} not found`);
     this.coursesService.validateOwnership(chapter.course, actor);
 
     const existing = await this.prisma.lesson.findMany({
