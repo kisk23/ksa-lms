@@ -173,7 +173,6 @@ export class AuthService {
       studentId: result.student.id,
       guardianId: result.guardian.id,
       user: session.user,
-      tokens: session.tokens,
     };
   }
 
@@ -272,7 +271,6 @@ export class AuthService {
     await this.updateRtHash(user.id, tokens.refreshToken);
     return {
       user: sanitizeUser(user),
-      tokens,
     };
   }
 
@@ -296,6 +294,10 @@ export class AuthService {
       accessToken: at,
       refreshToken: rt,
     };
+  }
+
+  async getTokensForCookies(userId: string, role: string, isVerified: boolean) {
+    return this.getTokens(userId, role, isVerified);
   }
 
   async updateRtHash(userId: string, rt: string) {
