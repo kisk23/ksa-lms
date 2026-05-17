@@ -1,7 +1,11 @@
 import { Button } from '@shared/components/ui/Button';
 import { Plus } from 'lucide-react';
 
-export function UsersHeader() {
+interface UsersHeaderProps {
+  onAddUser?: () => void;
+}
+
+export function UsersHeader({ onAddUser }: UsersHeaderProps) {
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-xl">
       <div>
@@ -11,7 +15,9 @@ export function UsersHeader() {
         </p>
       </div>
 
-      <Button icon={Plus}>إضافة مستخدم جديد</Button>
+      <Button icon={Plus} onClick={onAddUser}>
+        إضافة مستخدم جديد
+      </Button>
     </div>
   );
 }

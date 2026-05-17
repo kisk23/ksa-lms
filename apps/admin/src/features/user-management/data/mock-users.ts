@@ -10,6 +10,9 @@ export const MOCK_USERS: User[] = [
     status: 'active',
     avatarUrl:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCobpZ4Kj_Pxs2b5HWO2PmdRnQTe_MudQnCb4AAJgZyMyDevgcPehy5dirsdrmP0clTqghzAJfCWBN0TCzT3oF-cGSSVVbilVoIjhqNFl5lemrXC885mWZpN62t5tQj_uuCQmuKsDo1lN3GgG1p4CcBGI0_bSUzh3upouShYjYQ5jXkh397buCmWmiViUybgx84PKL1MSSnC0FW8n9RleQUczQUzJKYPsBmzlmx_MxC47pbV-7V0MlKhhArIasZIiTjqJ9WBfBKRxbF',
+    grade: 'first-secondary',
+    academicYear: '2024-2025',
+    country: 'saudi-arabia',
   },
   {
     id: '2',
@@ -18,6 +21,7 @@ export const MOCK_USERS: User[] = [
     role: 'teacher',
     registeredAt: '12 أكتوبر 2023',
     status: 'active',
+    country: 'saudi-arabia',
   },
   {
     id: '3',
@@ -28,6 +32,7 @@ export const MOCK_USERS: User[] = [
     status: 'pending',
     avatarUrl:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuA10MDMiC-Ff4A_TavvBLalV5_VYMyR9yrvxfmabywOmcYofOzrhFEfrF_g074TYuT7mnnNHD3a9fJAehhEe3uIxTJ1s-cdM7ET0UfND6b1u5E5TWaOMs3Vp6liow1iwDcm1RJzqrBo9rLVGHM10heDYYszR2SaWEtPLDl2FQGTmJSd9g09KmfX_XIkCG9TsEFzTZaNIxdeqnvRS-ET6oNycapcm5KVyiQBS3HEWbIa70im2yGgEEGiHONu7-VOVpKEnEof12dt8_ua',
+    country: 'saudi-arabia',
   },
   {
     id: '4',
@@ -38,6 +43,9 @@ export const MOCK_USERS: User[] = [
     status: 'blocked',
     avatarUrl:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCib9dFkLeVTXQdEE3ZRrLKf7ju_E161v4NVOUNtxEMXhQAXChIkJ4g0x2M6cn14-46Yw4tDaQQHcptOa1e3sOzJ17zIXhSVBC6z6y0GnjSKbjvYs92DBK-QvHGwsaku2jGooUZFjoFQbeazG50tP881oPwt4jftxg9DKugpdrS5_AeOOoFaLP9xXL4N2c_wvazZE8TnFpNWmWMKnd9vo33ie6UCuaJxz8RwsSAelX_IbJKgmL8bcON6AjP8daLpRMZRIRXdtKMIM6m',
+    grade: 'second-secondary',
+    academicYear: '2025-2026',
+    country: 'saudi-arabia',
   },
   {
     id: '5',
@@ -46,6 +54,7 @@ export const MOCK_USERS: User[] = [
     role: 'teacher',
     registeredAt: '20 أكتوبر 2023',
     status: 'active',
+    country: 'saudi-arabia',
   },
   {
     id: '6',
@@ -54,6 +63,9 @@ export const MOCK_USERS: User[] = [
     role: 'student',
     registeredAt: '18 أكتوبر 2023',
     status: 'active',
+    grade: 'third-secondary',
+    academicYear: '2024-2025',
+    country: 'saudi-arabia',
   },
   {
     id: '7',
@@ -62,6 +74,7 @@ export const MOCK_USERS: User[] = [
     role: 'parent',
     registeredAt: '22 أكتوبر 2023',
     status: 'active',
+    country: 'saudi-arabia',
   },
   {
     id: '8',

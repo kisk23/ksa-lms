@@ -1,21 +1,15 @@
 import { Avatar } from '@shared/components/ui/Avatar';
 import { Tag } from '@shared/components/ui/Tag';
-import {
-  CheckCircle2,
-  Clock,
-  Ban,
-  Eye,
-  Pencil,
-  Check,
-  Trash2,
-  type LucideIcon,
-} from 'lucide-react';
+import { CheckCircle2, Clock, Ban, Eye, Check, Trash2, type LucideIcon } from 'lucide-react';
 
 import type { User, UserRole, UserStatus } from '../types';
 
 type UserRowProps = {
   user: User;
   zebra?: boolean;
+  onBanUser?: (userId: string) => void;
+  onApproveUser?: (userId: string) => void;
+  onDeleteUser?: (userId: string) => void;
 };
 
 // Role → Tag config
@@ -26,6 +20,7 @@ const roleConfig: Record<
   student: { label: 'طالب', variant: 'secondary' },
   teacher: { label: 'مدرس', variant: 'primary' },
   parent: { label: 'ولي أمر', variant: 'default' },
+  admin: { label: 'مشرف', variant: 'primary' },
 };
 
 // Status → display config
@@ -47,7 +42,13 @@ const statusConfig: Record<UserStatus, { label: string; icon: LucideIcon; color:
   },
 };
 
-export function UserRow({ user, zebra = false }: UserRowProps) {
+export function UserRow({
+  user,
+  zebra = false,
+  onBanUser,
+  onApproveUser,
+  onDeleteUser,
+}: UserRowProps) {
   const role = roleConfig[user.role];
   const status = statusConfig[user.status];
   const StatusIcon = status.icon;
@@ -97,27 +98,42 @@ export function UserRow({ user, zebra = false }: UserRowProps) {
       <td className="py-3 px-6 text-left">
         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <ActionButton icon={Eye} title="عرض" />
-          <ActionButton icon={Pencil} title="تعديل" />
 
           {isPending && (
             <ActionButton
               icon={Check}
               title="موافقة"
               hoverColor="hover:text-secondary hover:bg-secondary/10"
+              onClick={() => onApproveUser?.(user.id)}
             />
           )}
 
           {!isPending && !isBlocked && (
-            <ActionButton icon={Ban} title="حظر" hoverColor="hover:text-error hover:bg-error/10" />
+            <ActionButton
+              icon={Ban}
+              title="حظر"
+              hoverColor="hover:text-error hover:bg-error/10"
+              onClick={() => onBanUser?.(user.id)}
+            />
           )}
 
           {isBlocked && (
-            <ActionButton
-              icon={Trash2}
-              title="حذف"
-              className="text-error"
-              hoverColor="hover:bg-error/10"
-            />
+            <>
+              <ActionButton
+                icon={CheckCircle2}
+                title="إلغاء الحظر"
+                className="text-secondary"
+                hoverColor="hover:bg-secondary/10"
+                onClick={() => onApproveUser?.(user.id)}
+              />
+              <ActionButton
+                icon={Trash2}
+                title="حذف"
+                className="text-error"
+                hoverColor="hover:bg-error/10"
+                onClick={() => onDeleteUser?.(user.id)}
+              />
+            </>
           )}
         </div>
       </td>
@@ -131,15 +147,18 @@ function ActionButton({
   title,
   hoverColor = 'hover:text-primary hover:bg-primary/10',
   className = 'text-on-surface-variant',
+  onClick,
 }: {
   icon: LucideIcon;
   title: string;
   hoverColor?: string;
   className?: string;
+  onClick?: () => void;
 }) {
   return (
     <button
       title={title}
+      onClick={onClick}
       className={`p-1.5 rounded-md transition-colors ${className} ${hoverColor}`}
     >
       <Icon size={18} />
