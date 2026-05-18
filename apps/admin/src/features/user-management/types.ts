@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 
-export type UserRole = 'student' | 'teacher' | 'parent';
+export type UserRole = 'student' | 'teacher' | 'parent' | 'admin';
 export type UserStatus = 'active' | 'blocked' | 'pending';
 
 export type User = {
@@ -11,6 +11,9 @@ export type User = {
   registeredAt: string;
   status: UserStatus;
   avatarUrl?: string;
+  grade?: string;
+  academicYear?: string;
+  country?: string;
 };
 
 export type RoleFilter = 'all' | UserRole;
