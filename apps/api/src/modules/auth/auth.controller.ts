@@ -21,12 +21,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Register a new student account' })
   async register(@Body() dto: RegisterStudentDto, @Res() res: Response) {
     const result = await this.authService.register(dto);
-    const tokens = await this.authService.getTokensForCookies(
-      result.user.id,
-      result.user.role,
-      result.user.isVerified,
-    );
-    setAuthCookies(res, tokens);
+    // const tokens = await this.authService.getTokensForCookies(
+    //   result.user.id,
+    //   result.user.role,
+    //   result.user.isVerified,
+    // );
+    setAuthCookies(res, result.tokens);
 
     return res.status(HttpStatus.CREATED).json({
       success: true,
@@ -43,12 +43,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Verify phone OTP (authenticated)' })
   async verifyOtp(@GetCurrentUser() user: User, @Body() dto: VerifyOtpDto, @Res() res: Response) {
     const session = await this.authService.verifyOtp(user.id, dto.code);
-    const tokens = await this.authService.getTokensForCookies(
-      session.user.id,
-      session.user.role,
-      session.user.isVerified,
-    );
-    setAuthCookies(res, tokens);
+    // const tokens = await this.authService.getTokensForCookies(
+    //   session.user.id,
+    //   session.user.role,
+    //   session.user.isVerified,
+    // );
+    setAuthCookies(res, session.tokens);
 
     return res.status(HttpStatus.OK).json({
       success: true,
@@ -60,12 +60,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Login and set HttpOnly auth cookies' })
   async login(@Body() dto: LoginDto, @Res() res: Response) {
     const session = await this.authService.login(dto);
-    const tokens = await this.authService.getTokensForCookies(
-      session.user.id,
-      session.user.role,
-      session.user.isVerified,
-    );
-    setAuthCookies(res, tokens);
+    // const tokens = await this.authService.getTokensForCookies(
+    //   session.user.id,
+    //   session.user.role,
+    //   session.user.isVerified,
+    // );
+    setAuthCookies(res, session.tokens);
 
     return res.status(HttpStatus.OK).json({
       success: true,
