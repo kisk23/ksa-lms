@@ -38,13 +38,14 @@ async function bootstrap() {
     }),
   );
 
-  // CORS
+  // CORS — credentials required for HttpOnly cookie auth
+  const webOrigin = config.get<string>('WEB_ORIGIN', 'http://localhost:3000');
+  const adminOrigin = config.get<string>('ADMIN_ORIGIN', 'http://localhost:3001');
   app.enableCors({
-    origin: [
-      'http://localhost:3000', // web
-      'http://localhost:3001', // admin
-    ],
+    origin: [webOrigin, adminOrigin],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Idempotency-Key'],
   });
 
   // Swagger
@@ -53,6 +54,7 @@ async function bootstrap() {
     .setDescription('Learning Management System API')
     .setVersion('1.0')
     .addBearerAuth()
+    .addCookieAuth('access_token')
     .addCookieAuth('refresh_token')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);

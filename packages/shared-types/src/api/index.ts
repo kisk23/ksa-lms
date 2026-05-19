@@ -27,30 +27,55 @@ export interface ApiResponse<T = unknown> {
 }
 
 // ─── Auth ────────────────────────────────────────────
+
+/** Matches backend LoginDto exactly */
 export interface LoginRequest {
-  email: string;
+  identity: string;
   password: string;
 }
 
+/** Matches ParentRelationship Prisma enum — avoids clashing name with enum in ./models */
+export type GuardianRelationship = 'FATHER' | 'MOTHER' | 'GUARDIAN';
+
+/** Matches backend GuardianDto */
+export interface GuardianRequest {
+  name: string;
+  email: string;
+  phone: string; // Saudi format: +966xxxxxxxxx
+  identity: string; // 3–20 chars
+  relationship: GuardianRelationship;
+}
+
+/** Matches backend RegisterStudentDto */
 export interface RegisterRequest {
+  name: string;
   email: string;
+  phone: string; // Saudi format: +966xxxxxxxxx
+  identity: string; // 3–20 chars
   password: string;
-  firstName: string;
-  lastName: string;
+  guardian: GuardianRequest;
 }
 
-export interface AuthTokens {
-  accessToken: string;
-  refreshToken: string;
+
+/** Session payload — tokens live in HttpOnly cookies, not the response body */
+export interface AuthSessionResponse {
+  user: AuthUser;
+  message?: string;
 }
 
-export interface AuthResponse {
-  user: {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-  };
-  tokens: AuthTokens;
+export type LoginResponse = AuthSessionResponse;
+export type RegisterResponse = AuthSessionResponse;
+
+/** Authenticated user profile */
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+
+  phone: string | null;
+  identity: string;
+  role: string;
+  isVerified: boolean;
+
 }
