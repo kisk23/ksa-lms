@@ -13,7 +13,6 @@ import {
   UpdateQuestionDto,
 } from './dto';
 import { AssignmentAccessGuard } from './guards/assignment-access.guard';
-import { StudentScoreAccessGuard } from './guards/student-score-access.guard';
 import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -92,17 +91,6 @@ export class AssignmentsController {
     @CourseContext() context: ICourseContext,
   ) {
     return this.assignmentsService.restore(assignmentId, user, context);
-  }
-
-  @Get('students/:studentId/assignments/:assignmentId/best-score')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, StudentScoreAccessGuard)
-  @ApiOperation({
-    summary:
-      'Get best score for a student on an assignment (student, their parent, course teacher, staff)',
-  })
-  getBestScore(@Param('studentId') studentId: string, @Param('assignmentId') assignmentId: string) {
-    return this.assignmentsService.getBestScore(studentId, assignmentId);
   }
 
   @Post('assignments/:assignmentId/questions')

@@ -1,12 +1,23 @@
+import { VideoProvider } from '@lms/shared-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, MinLength, IsNumber, IsOptional, Min, IsUUID, IsUrl, IsEnum, MaxLength } from 'class-validator';
-import { VideoProvider } from '@lms/shared-types';
-
-
+import {
+  IsString,
+  MinLength,
+  IsNumber,
+  IsOptional,
+  Min,
+  IsUUID,
+  IsUrl,
+  IsEnum,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateCourseDto {
-  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000', description: 'Teacher User ID. If omitted, the logged in user will be used.' })
+  @ApiPropertyOptional({
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Teacher User ID. If omitted, the logged in user will be used.',
+  })
   @IsOptional()
   @IsUUID()
   teacherUserId?: string;

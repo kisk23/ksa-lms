@@ -1,12 +1,21 @@
-import { UserRole,CourseStatus } from '@lms/shared-types';
+import { UserRole, CourseStatus } from '@lms/shared-types';
 import type { IUser } from '@lms/shared-types';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 import { CoursesService } from './courses.service';
 import { CreateCourseDto, UpdateCourseDto } from './dto';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
-
 import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -39,9 +48,9 @@ export class CoursesController {
   @ApiOperation({ summary: 'List courses for management (Dashboard)' })
   findForManagement(
     @GetCurrentUser() user: IUser,
-    @Query() query: PaginationQueryDto & { status?: CourseStatus; teacherUserId?: string }
+    @Query() query: PaginationQueryDto & { status?: CourseStatus; teacherUserId?: string },
   ) {
-    // Logic: Teachers can ONLY see their own courses. 
+    // Logic: Teachers can ONLY see their own courses.
     // Admins/Assistants can see all or filter by a specific teacher.
     const teacherUserId = user.role === UserRole.TEACHER ? user.id : query.teacherUserId;
 

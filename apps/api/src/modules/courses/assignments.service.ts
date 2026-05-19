@@ -308,44 +308,4 @@ export class AssignmentsService {
 
     return this.prisma.question.delete({ where: { id } });
   }
-
-  /**
-   * 9 — getBestScore(studentId, assignmentId)
-   * Returns the student's best score with the full attempt snapshot attached.
-   * Used by the student themselves, their parent, the course teacher, or staff.
-   * Authorization is enforced upstream by StudentScoreAccessGuard.
-   */
-  async getBestScore(studentId: string, assignmentId: string) {
-    const bestScore = await this.prisma.assignmentBestScore.findUnique({
-      where: {
-        studentUserId_assignmentId: {
-          studentUserId: studentId,
-          assignmentId,
-        },
-      },
-      include: {
-        // Snapshot on the attempt contains the frozen questions/options
-        // as they were at submission time — safe to return even if the
-        // assignment has been updated
-        bestAttempt: {
-          select: {
-            id: true,
-            attemptNumber: true,
-            scorePct: true,
-            isPassed: true,
-            submittedAt: true,
-            snapshot: true,
-          },
-        },
-      },
-    });
-
-    if (!bestScore) {
-      throw new NotFoundException(
-        `No score found for student #${studentId} on assignment #${assignmentId}`,
-      );
-    }
-
-    return bestScore;
-  }
 }
