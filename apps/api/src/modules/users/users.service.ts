@@ -99,7 +99,7 @@ export class UsersService {
     }
     return this.prisma.user.update({
       where: { id },
-      data: { isActive: false, deletedAt: new Date() },
+      data: { isActive: false },
     });
   }
 

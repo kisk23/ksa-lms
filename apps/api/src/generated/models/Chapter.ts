@@ -41,7 +41,7 @@ export type ChapterMinAggregateOutputType = {
   orderIndex: number | null
   createdAt: Date | null
   updatedAt: Date | null
-  deletedAt: Date | null
+  archivedAt: Date | null
 }
 
 export type ChapterMaxAggregateOutputType = {
@@ -51,7 +51,7 @@ export type ChapterMaxAggregateOutputType = {
   orderIndex: number | null
   createdAt: Date | null
   updatedAt: Date | null
-  deletedAt: Date | null
+  archivedAt: Date | null
 }
 
 export type ChapterCountAggregateOutputType = {
@@ -61,7 +61,7 @@ export type ChapterCountAggregateOutputType = {
   orderIndex: number
   createdAt: number
   updatedAt: number
-  deletedAt: number
+  archivedAt: number
   _all: number
 }
 
@@ -81,7 +81,7 @@ export type ChapterMinAggregateInputType = {
   orderIndex?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
+  archivedAt?: true
 }
 
 export type ChapterMaxAggregateInputType = {
@@ -91,7 +91,7 @@ export type ChapterMaxAggregateInputType = {
   orderIndex?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
+  archivedAt?: true
 }
 
 export type ChapterCountAggregateInputType = {
@@ -101,7 +101,7 @@ export type ChapterCountAggregateInputType = {
   orderIndex?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
+  archivedAt?: true
   _all?: true
 }
 
@@ -198,7 +198,7 @@ export type ChapterGroupByOutputType = {
   orderIndex: number
   createdAt: Date
   updatedAt: Date
-  deletedAt: Date | null
+  archivedAt: Date | null
   _count: ChapterCountAggregateOutputType | null
   _avg: ChapterAvgAggregateOutputType | null
   _sum: ChapterSumAggregateOutputType | null
@@ -231,7 +231,7 @@ export type ChapterWhereInput = {
   orderIndex?: Prisma.IntFilter<"Chapter"> | number
   createdAt?: Prisma.DateTimeFilter<"Chapter"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chapter"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableFilter<"Chapter"> | Date | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Chapter"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   lessons?: Prisma.LessonListRelationFilter
 }
@@ -243,7 +243,7 @@ export type ChapterOrderByWithRelationInput = {
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
 }
@@ -259,7 +259,7 @@ export type ChapterWhereUniqueInput = Prisma.AtLeast<{
   orderIndex?: Prisma.IntFilter<"Chapter"> | number
   createdAt?: Prisma.DateTimeFilter<"Chapter"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chapter"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableFilter<"Chapter"> | Date | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Chapter"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   lessons?: Prisma.LessonListRelationFilter
 }, "id" | "courseId_orderIndex">
@@ -271,7 +271,7 @@ export type ChapterOrderByWithAggregationInput = {
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ChapterCountOrderByAggregateInput
   _avg?: Prisma.ChapterAvgOrderByAggregateInput
   _max?: Prisma.ChapterMaxOrderByAggregateInput
@@ -289,7 +289,7 @@ export type ChapterScalarWhereWithAggregatesInput = {
   orderIndex?: Prisma.IntWithAggregatesFilter<"Chapter"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Chapter"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Chapter"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Chapter"> | Date | string | null
+  archivedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Chapter"> | Date | string | null
 }
 
 export type ChapterCreateInput = {
@@ -298,7 +298,7 @@ export type ChapterCreateInput = {
   orderIndex: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  archivedAt?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutChaptersInput
   lessons?: Prisma.LessonCreateNestedManyWithoutChapterInput
 }
@@ -310,7 +310,7 @@ export type ChapterUncheckedCreateInput = {
   orderIndex: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  archivedAt?: Date | string | null
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutChapterInput
 }
 
@@ -320,7 +320,7 @@ export type ChapterUpdateInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutChaptersNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutChapterNestedInput
 }
@@ -332,7 +332,7 @@ export type ChapterUncheckedUpdateInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutChapterNestedInput
 }
 
@@ -343,7 +343,7 @@ export type ChapterCreateManyInput = {
   orderIndex: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  archivedAt?: Date | string | null
 }
 
 export type ChapterUpdateManyMutationInput = {
@@ -352,7 +352,7 @@ export type ChapterUpdateManyMutationInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ChapterUncheckedUpdateManyInput = {
@@ -362,7 +362,7 @@ export type ChapterUncheckedUpdateManyInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ChapterListRelationFilter = {
@@ -387,7 +387,7 @@ export type ChapterCountOrderByAggregateInput = {
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
 }
 
 export type ChapterAvgOrderByAggregateInput = {
@@ -401,7 +401,7 @@ export type ChapterMaxOrderByAggregateInput = {
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
 }
 
 export type ChapterMinOrderByAggregateInput = {
@@ -411,7 +411,7 @@ export type ChapterMinOrderByAggregateInput = {
   orderIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
 }
 
 export type ChapterSumOrderByAggregateInput = {
@@ -485,7 +485,7 @@ export type ChapterCreateWithoutCourseInput = {
   orderIndex: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  archivedAt?: Date | string | null
   lessons?: Prisma.LessonCreateNestedManyWithoutChapterInput
 }
 
@@ -495,7 +495,7 @@ export type ChapterUncheckedCreateWithoutCourseInput = {
   orderIndex: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  archivedAt?: Date | string | null
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutChapterInput
 }
 
@@ -535,7 +535,7 @@ export type ChapterScalarWhereInput = {
   orderIndex?: Prisma.IntFilter<"Chapter"> | number
   createdAt?: Prisma.DateTimeFilter<"Chapter"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chapter"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableFilter<"Chapter"> | Date | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Chapter"> | Date | string | null
 }
 
 export type ChapterCreateWithoutLessonsInput = {
@@ -544,7 +544,7 @@ export type ChapterCreateWithoutLessonsInput = {
   orderIndex: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  archivedAt?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutChaptersInput
 }
 
@@ -555,7 +555,7 @@ export type ChapterUncheckedCreateWithoutLessonsInput = {
   orderIndex: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  archivedAt?: Date | string | null
 }
 
 export type ChapterCreateOrConnectWithoutLessonsInput = {
@@ -580,7 +580,7 @@ export type ChapterUpdateWithoutLessonsInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutChaptersNestedInput
 }
 
@@ -591,7 +591,7 @@ export type ChapterUncheckedUpdateWithoutLessonsInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ChapterCreateManyCourseInput = {
@@ -600,7 +600,7 @@ export type ChapterCreateManyCourseInput = {
   orderIndex: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  archivedAt?: Date | string | null
 }
 
 export type ChapterUpdateWithoutCourseInput = {
@@ -609,7 +609,7 @@ export type ChapterUpdateWithoutCourseInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lessons?: Prisma.LessonUpdateManyWithoutChapterNestedInput
 }
 
@@ -619,7 +619,7 @@ export type ChapterUncheckedUpdateWithoutCourseInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutChapterNestedInput
 }
 
@@ -629,7 +629,7 @@ export type ChapterUncheckedUpdateManyWithoutCourseInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -670,7 +670,7 @@ export type ChapterSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
+  archivedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   lessons?: boolean | Prisma.Chapter$lessonsArgs<ExtArgs>
   _count?: boolean | Prisma.ChapterCountOutputTypeDefaultArgs<ExtArgs>
@@ -683,7 +683,7 @@ export type ChapterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
+  archivedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["chapter"]>
 
@@ -694,7 +694,7 @@ export type ChapterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
+  archivedAt?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["chapter"]>
 
@@ -705,10 +705,10 @@ export type ChapterSelectScalar = {
   orderIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
+  archivedAt?: boolean
 }
 
-export type ChapterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "courseId" | "title" | "orderIndex" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["chapter"]>
+export type ChapterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "courseId" | "title" | "orderIndex" | "createdAt" | "updatedAt" | "archivedAt", ExtArgs["result"]["chapter"]>
 export type ChapterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   lessons?: boolean | Prisma.Chapter$lessonsArgs<ExtArgs>
@@ -734,7 +734,7 @@ export type $ChapterPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     orderIndex: number
     createdAt: Date
     updatedAt: Date
-    deletedAt: Date | null
+    archivedAt: Date | null
   }, ExtArgs["result"]["chapter"]>
   composites: {}
 }
@@ -1166,7 +1166,7 @@ export interface ChapterFieldRefs {
   readonly orderIndex: Prisma.FieldRef<"Chapter", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Chapter", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Chapter", 'DateTime'>
-  readonly deletedAt: Prisma.FieldRef<"Chapter", 'DateTime'>
+  readonly archivedAt: Prisma.FieldRef<"Chapter", 'DateTime'>
 }
     
 

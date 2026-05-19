@@ -27,12 +27,10 @@ export type AggregateLessonProgress = {
 }
 
 export type LessonProgressAvgAggregateOutputType = {
-  lessonVersion: number | null
   videoWatchedPct: number | null
 }
 
 export type LessonProgressSumAggregateOutputType = {
-  lessonVersion: number | null
   videoWatchedPct: number | null
 }
 
@@ -40,7 +38,6 @@ export type LessonProgressMinAggregateOutputType = {
   id: string | null
   studentUserId: string | null
   lessonId: string | null
-  lessonVersion: number | null
   videoWatchedPct: number | null
   videoCompletedAt: Date | null
   isCompleted: boolean | null
@@ -52,7 +49,6 @@ export type LessonProgressMaxAggregateOutputType = {
   id: string | null
   studentUserId: string | null
   lessonId: string | null
-  lessonVersion: number | null
   videoWatchedPct: number | null
   videoCompletedAt: Date | null
   isCompleted: boolean | null
@@ -64,7 +60,6 @@ export type LessonProgressCountAggregateOutputType = {
   id: number
   studentUserId: number
   lessonId: number
-  lessonVersion: number
   videoWatchedPct: number
   videoCompletedAt: number
   isCompleted: number
@@ -75,12 +70,10 @@ export type LessonProgressCountAggregateOutputType = {
 
 
 export type LessonProgressAvgAggregateInputType = {
-  lessonVersion?: true
   videoWatchedPct?: true
 }
 
 export type LessonProgressSumAggregateInputType = {
-  lessonVersion?: true
   videoWatchedPct?: true
 }
 
@@ -88,7 +81,6 @@ export type LessonProgressMinAggregateInputType = {
   id?: true
   studentUserId?: true
   lessonId?: true
-  lessonVersion?: true
   videoWatchedPct?: true
   videoCompletedAt?: true
   isCompleted?: true
@@ -100,7 +92,6 @@ export type LessonProgressMaxAggregateInputType = {
   id?: true
   studentUserId?: true
   lessonId?: true
-  lessonVersion?: true
   videoWatchedPct?: true
   videoCompletedAt?: true
   isCompleted?: true
@@ -112,7 +103,6 @@ export type LessonProgressCountAggregateInputType = {
   id?: true
   studentUserId?: true
   lessonId?: true
-  lessonVersion?: true
   videoWatchedPct?: true
   videoCompletedAt?: true
   isCompleted?: true
@@ -211,7 +201,6 @@ export type LessonProgressGroupByOutputType = {
   id: string
   studentUserId: string
   lessonId: string
-  lessonVersion: number
   videoWatchedPct: number
   videoCompletedAt: Date | null
   isCompleted: boolean
@@ -246,7 +235,6 @@ export type LessonProgressWhereInput = {
   id?: Prisma.UuidFilter<"LessonProgress"> | string
   studentUserId?: Prisma.UuidFilter<"LessonProgress"> | string
   lessonId?: Prisma.UuidFilter<"LessonProgress"> | string
-  lessonVersion?: Prisma.IntFilter<"LessonProgress"> | number
   videoWatchedPct?: Prisma.IntFilter<"LessonProgress"> | number
   videoCompletedAt?: Prisma.DateTimeNullableFilter<"LessonProgress"> | Date | string | null
   isCompleted?: Prisma.BoolFilter<"LessonProgress"> | boolean
@@ -260,7 +248,6 @@ export type LessonProgressOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
-  lessonVersion?: Prisma.SortOrder
   videoWatchedPct?: Prisma.SortOrder
   videoCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
@@ -278,7 +265,6 @@ export type LessonProgressWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LessonProgressWhereInput | Prisma.LessonProgressWhereInput[]
   studentUserId?: Prisma.UuidFilter<"LessonProgress"> | string
   lessonId?: Prisma.UuidFilter<"LessonProgress"> | string
-  lessonVersion?: Prisma.IntFilter<"LessonProgress"> | number
   videoWatchedPct?: Prisma.IntFilter<"LessonProgress"> | number
   videoCompletedAt?: Prisma.DateTimeNullableFilter<"LessonProgress"> | Date | string | null
   isCompleted?: Prisma.BoolFilter<"LessonProgress"> | boolean
@@ -292,7 +278,6 @@ export type LessonProgressOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
-  lessonVersion?: Prisma.SortOrder
   videoWatchedPct?: Prisma.SortOrder
   videoCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
@@ -312,7 +297,6 @@ export type LessonProgressScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"LessonProgress"> | string
   studentUserId?: Prisma.UuidWithAggregatesFilter<"LessonProgress"> | string
   lessonId?: Prisma.UuidWithAggregatesFilter<"LessonProgress"> | string
-  lessonVersion?: Prisma.IntWithAggregatesFilter<"LessonProgress"> | number
   videoWatchedPct?: Prisma.IntWithAggregatesFilter<"LessonProgress"> | number
   videoCompletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"LessonProgress"> | Date | string | null
   isCompleted?: Prisma.BoolWithAggregatesFilter<"LessonProgress"> | boolean
@@ -322,7 +306,6 @@ export type LessonProgressScalarWhereWithAggregatesInput = {
 
 export type LessonProgressCreateInput = {
   id?: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -336,7 +319,6 @@ export type LessonProgressUncheckedCreateInput = {
   id?: string
   studentUserId: string
   lessonId: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -346,7 +328,6 @@ export type LessonProgressUncheckedCreateInput = {
 
 export type LessonProgressUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -360,7 +341,6 @@ export type LessonProgressUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -372,7 +352,6 @@ export type LessonProgressCreateManyInput = {
   id?: string
   studentUserId: string
   lessonId: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -382,7 +361,6 @@ export type LessonProgressCreateManyInput = {
 
 export type LessonProgressUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -394,7 +372,6 @@ export type LessonProgressUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -421,7 +398,6 @@ export type LessonProgressCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
-  lessonVersion?: Prisma.SortOrder
   videoWatchedPct?: Prisma.SortOrder
   videoCompletedAt?: Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
@@ -430,7 +406,6 @@ export type LessonProgressCountOrderByAggregateInput = {
 }
 
 export type LessonProgressAvgOrderByAggregateInput = {
-  lessonVersion?: Prisma.SortOrder
   videoWatchedPct?: Prisma.SortOrder
 }
 
@@ -438,7 +413,6 @@ export type LessonProgressMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
-  lessonVersion?: Prisma.SortOrder
   videoWatchedPct?: Prisma.SortOrder
   videoCompletedAt?: Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
@@ -450,7 +424,6 @@ export type LessonProgressMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentUserId?: Prisma.SortOrder
   lessonId?: Prisma.SortOrder
-  lessonVersion?: Prisma.SortOrder
   videoWatchedPct?: Prisma.SortOrder
   videoCompletedAt?: Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
@@ -459,7 +432,6 @@ export type LessonProgressMinOrderByAggregateInput = {
 }
 
 export type LessonProgressSumOrderByAggregateInput = {
-  lessonVersion?: Prisma.SortOrder
   videoWatchedPct?: Prisma.SortOrder
 }
 
@@ -549,7 +521,6 @@ export type LessonProgressUncheckedUpdateManyWithoutLessonNestedInput = {
 
 export type LessonProgressCreateWithoutStudentInput = {
   id?: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -561,7 +532,6 @@ export type LessonProgressCreateWithoutStudentInput = {
 export type LessonProgressUncheckedCreateWithoutStudentInput = {
   id?: string
   lessonId: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -602,7 +572,6 @@ export type LessonProgressScalarWhereInput = {
   id?: Prisma.UuidFilter<"LessonProgress"> | string
   studentUserId?: Prisma.UuidFilter<"LessonProgress"> | string
   lessonId?: Prisma.UuidFilter<"LessonProgress"> | string
-  lessonVersion?: Prisma.IntFilter<"LessonProgress"> | number
   videoWatchedPct?: Prisma.IntFilter<"LessonProgress"> | number
   videoCompletedAt?: Prisma.DateTimeNullableFilter<"LessonProgress"> | Date | string | null
   isCompleted?: Prisma.BoolFilter<"LessonProgress"> | boolean
@@ -612,7 +581,6 @@ export type LessonProgressScalarWhereInput = {
 
 export type LessonProgressCreateWithoutLessonInput = {
   id?: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -624,7 +592,6 @@ export type LessonProgressCreateWithoutLessonInput = {
 export type LessonProgressUncheckedCreateWithoutLessonInput = {
   id?: string
   studentUserId: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -661,7 +628,6 @@ export type LessonProgressUpdateManyWithWhereWithoutLessonInput = {
 export type LessonProgressCreateManyStudentInput = {
   id?: string
   lessonId: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -671,7 +637,6 @@ export type LessonProgressCreateManyStudentInput = {
 
 export type LessonProgressUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -683,7 +648,6 @@ export type LessonProgressUpdateWithoutStudentInput = {
 export type LessonProgressUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -694,7 +658,6 @@ export type LessonProgressUncheckedUpdateWithoutStudentInput = {
 export type LessonProgressUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -705,7 +668,6 @@ export type LessonProgressUncheckedUpdateManyWithoutStudentInput = {
 export type LessonProgressCreateManyLessonInput = {
   id?: string
   studentUserId: string
-  lessonVersion: number
   videoWatchedPct?: number
   videoCompletedAt?: Date | string | null
   isCompleted?: boolean
@@ -715,7 +677,6 @@ export type LessonProgressCreateManyLessonInput = {
 
 export type LessonProgressUpdateWithoutLessonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -727,7 +688,6 @@ export type LessonProgressUpdateWithoutLessonInput = {
 export type LessonProgressUncheckedUpdateWithoutLessonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -738,7 +698,6 @@ export type LessonProgressUncheckedUpdateWithoutLessonInput = {
 export type LessonProgressUncheckedUpdateManyWithoutLessonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentUserId?: Prisma.StringFieldUpdateOperationsInput | string
-  lessonVersion?: Prisma.IntFieldUpdateOperationsInput | number
   videoWatchedPct?: Prisma.IntFieldUpdateOperationsInput | number
   videoCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -752,7 +711,6 @@ export type LessonProgressSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   studentUserId?: boolean
   lessonId?: boolean
-  lessonVersion?: boolean
   videoWatchedPct?: boolean
   videoCompletedAt?: boolean
   isCompleted?: boolean
@@ -766,7 +724,6 @@ export type LessonProgressSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   studentUserId?: boolean
   lessonId?: boolean
-  lessonVersion?: boolean
   videoWatchedPct?: boolean
   videoCompletedAt?: boolean
   isCompleted?: boolean
@@ -780,7 +737,6 @@ export type LessonProgressSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   studentUserId?: boolean
   lessonId?: boolean
-  lessonVersion?: boolean
   videoWatchedPct?: boolean
   videoCompletedAt?: boolean
   isCompleted?: boolean
@@ -794,7 +750,6 @@ export type LessonProgressSelectScalar = {
   id?: boolean
   studentUserId?: boolean
   lessonId?: boolean
-  lessonVersion?: boolean
   videoWatchedPct?: boolean
   videoCompletedAt?: boolean
   isCompleted?: boolean
@@ -802,7 +757,7 @@ export type LessonProgressSelectScalar = {
   updatedAt?: boolean
 }
 
-export type LessonProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentUserId" | "lessonId" | "lessonVersion" | "videoWatchedPct" | "videoCompletedAt" | "isCompleted" | "completedAt" | "updatedAt", ExtArgs["result"]["lessonProgress"]>
+export type LessonProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentUserId" | "lessonId" | "videoWatchedPct" | "videoCompletedAt" | "isCompleted" | "completedAt" | "updatedAt", ExtArgs["result"]["lessonProgress"]>
 export type LessonProgressInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -826,7 +781,6 @@ export type $LessonProgressPayload<ExtArgs extends runtime.Types.Extensions.Inte
     id: string
     studentUserId: string
     lessonId: string
-    lessonVersion: number
     videoWatchedPct: number
     videoCompletedAt: Date | null
     isCompleted: boolean
@@ -1260,7 +1214,6 @@ export interface LessonProgressFieldRefs {
   readonly id: Prisma.FieldRef<"LessonProgress", 'String'>
   readonly studentUserId: Prisma.FieldRef<"LessonProgress", 'String'>
   readonly lessonId: Prisma.FieldRef<"LessonProgress", 'String'>
-  readonly lessonVersion: Prisma.FieldRef<"LessonProgress", 'Int'>
   readonly videoWatchedPct: Prisma.FieldRef<"LessonProgress", 'Int'>
   readonly videoCompletedAt: Prisma.FieldRef<"LessonProgress", 'DateTime'>
   readonly isCompleted: Prisma.FieldRef<"LessonProgress", 'Boolean'>

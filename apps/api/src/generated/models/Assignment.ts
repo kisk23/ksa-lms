@@ -43,6 +43,8 @@ export type AssignmentMinAggregateOutputType = {
   maxAttempts: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  archivedAt: Date | null
+  archivedBy: string | null
 }
 
 export type AssignmentMaxAggregateOutputType = {
@@ -52,6 +54,8 @@ export type AssignmentMaxAggregateOutputType = {
   maxAttempts: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  archivedAt: Date | null
+  archivedBy: string | null
 }
 
 export type AssignmentCountAggregateOutputType = {
@@ -61,6 +65,8 @@ export type AssignmentCountAggregateOutputType = {
   maxAttempts: number
   createdAt: number
   updatedAt: number
+  archivedAt: number
+  archivedBy: number
   _all: number
 }
 
@@ -82,6 +88,8 @@ export type AssignmentMinAggregateInputType = {
   maxAttempts?: true
   createdAt?: true
   updatedAt?: true
+  archivedAt?: true
+  archivedBy?: true
 }
 
 export type AssignmentMaxAggregateInputType = {
@@ -91,6 +99,8 @@ export type AssignmentMaxAggregateInputType = {
   maxAttempts?: true
   createdAt?: true
   updatedAt?: true
+  archivedAt?: true
+  archivedBy?: true
 }
 
 export type AssignmentCountAggregateInputType = {
@@ -100,6 +110,8 @@ export type AssignmentCountAggregateInputType = {
   maxAttempts?: true
   createdAt?: true
   updatedAt?: true
+  archivedAt?: true
+  archivedBy?: true
   _all?: true
 }
 
@@ -196,6 +208,8 @@ export type AssignmentGroupByOutputType = {
   maxAttempts: number | null
   createdAt: Date
   updatedAt: Date
+  archivedAt: Date | null
+  archivedBy: string | null
   _count: AssignmentCountAggregateOutputType | null
   _avg: AssignmentAvgAggregateOutputType | null
   _sum: AssignmentSumAggregateOutputType | null
@@ -228,10 +242,13 @@ export type AssignmentWhereInput = {
   maxAttempts?: Prisma.IntNullableFilter<"Assignment"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
+  archivedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
+  archivedBy?: Prisma.UuidNullableFilter<"Assignment"> | string | null
   attempts?: Prisma.AssignmentAttemptListRelationFilter
   bestScores?: Prisma.AssignmentBestScoreListRelationFilter
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
   questions?: Prisma.QuestionListRelationFilter
+  archivedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type AssignmentOrderByWithRelationInput = {
@@ -241,10 +258,13 @@ export type AssignmentOrderByWithRelationInput = {
   maxAttempts?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   attempts?: Prisma.AssignmentAttemptOrderByRelationAggregateInput
   bestScores?: Prisma.AssignmentBestScoreOrderByRelationAggregateInput
   lesson?: Prisma.LessonOrderByWithRelationInput
   questions?: Prisma.QuestionOrderByRelationAggregateInput
+  archivedByUser?: Prisma.UserOrderByWithRelationInput
 }
 
 export type AssignmentWhereUniqueInput = Prisma.AtLeast<{
@@ -257,10 +277,13 @@ export type AssignmentWhereUniqueInput = Prisma.AtLeast<{
   maxAttempts?: Prisma.IntNullableFilter<"Assignment"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
+  archivedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
+  archivedBy?: Prisma.UuidNullableFilter<"Assignment"> | string | null
   attempts?: Prisma.AssignmentAttemptListRelationFilter
   bestScores?: Prisma.AssignmentBestScoreListRelationFilter
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
   questions?: Prisma.QuestionListRelationFilter
+  archivedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "lessonId">
 
 export type AssignmentOrderByWithAggregationInput = {
@@ -270,6 +293,8 @@ export type AssignmentOrderByWithAggregationInput = {
   maxAttempts?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AssignmentCountOrderByAggregateInput
   _avg?: Prisma.AssignmentAvgOrderByAggregateInput
   _max?: Prisma.AssignmentMaxOrderByAggregateInput
@@ -287,6 +312,8 @@ export type AssignmentScalarWhereWithAggregatesInput = {
   maxAttempts?: Prisma.IntNullableWithAggregatesFilter<"Assignment"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Assignment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Assignment"> | Date | string
+  archivedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Assignment"> | Date | string | null
+  archivedBy?: Prisma.UuidNullableWithAggregatesFilter<"Assignment"> | string | null
 }
 
 export type AssignmentCreateInput = {
@@ -295,10 +322,12 @@ export type AssignmentCreateInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
   attempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutAssignmentInput
   bestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutAssignmentInput
   lesson: Prisma.LessonCreateNestedOneWithoutAssignmentInput
   questions?: Prisma.QuestionCreateNestedManyWithoutAssignmentInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedAssignmentsInput
 }
 
 export type AssignmentUncheckedCreateInput = {
@@ -308,6 +337,8 @@ export type AssignmentUncheckedCreateInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   attempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutAssignmentInput
   bestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutAssignmentInput
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutAssignmentInput
@@ -319,10 +350,12 @@ export type AssignmentUpdateInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attempts?: Prisma.AssignmentAttemptUpdateManyWithoutAssignmentNestedInput
   bestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutAssignmentNestedInput
   lesson?: Prisma.LessonUpdateOneRequiredWithoutAssignmentNestedInput
   questions?: Prisma.QuestionUpdateManyWithoutAssignmentNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedAssignmentsNestedInput
 }
 
 export type AssignmentUncheckedUpdateInput = {
@@ -332,6 +365,8 @@ export type AssignmentUncheckedUpdateInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutAssignmentNestedInput
   bestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutAssignmentNestedInput
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutAssignmentNestedInput
@@ -344,6 +379,8 @@ export type AssignmentCreateManyInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
 }
 
 export type AssignmentUpdateManyMutationInput = {
@@ -352,6 +389,7 @@ export type AssignmentUpdateManyMutationInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AssignmentUncheckedUpdateManyInput = {
@@ -361,6 +399,18 @@ export type AssignmentUncheckedUpdateManyInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type AssignmentListRelationFilter = {
+  every?: Prisma.AssignmentWhereInput
+  some?: Prisma.AssignmentWhereInput
+  none?: Prisma.AssignmentWhereInput
+}
+
+export type AssignmentOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type AssignmentNullableScalarRelationFilter = {
@@ -375,6 +425,8 @@ export type AssignmentCountOrderByAggregateInput = {
   maxAttempts?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
+  archivedBy?: Prisma.SortOrder
 }
 
 export type AssignmentAvgOrderByAggregateInput = {
@@ -389,6 +441,8 @@ export type AssignmentMaxOrderByAggregateInput = {
   maxAttempts?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
+  archivedBy?: Prisma.SortOrder
 }
 
 export type AssignmentMinOrderByAggregateInput = {
@@ -398,6 +452,8 @@ export type AssignmentMinOrderByAggregateInput = {
   maxAttempts?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
+  archivedBy?: Prisma.SortOrder
 }
 
 export type AssignmentSumOrderByAggregateInput = {
@@ -408,6 +464,48 @@ export type AssignmentSumOrderByAggregateInput = {
 export type AssignmentScalarRelationFilter = {
   is?: Prisma.AssignmentWhereInput
   isNot?: Prisma.AssignmentWhereInput
+}
+
+export type AssignmentCreateNestedManyWithoutArchivedByUserInput = {
+  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutArchivedByUserInput, Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput> | Prisma.AssignmentCreateWithoutArchivedByUserInput[] | Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput[]
+  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutArchivedByUserInput | Prisma.AssignmentCreateOrConnectWithoutArchivedByUserInput[]
+  createMany?: Prisma.AssignmentCreateManyArchivedByUserInputEnvelope
+  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+}
+
+export type AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput = {
+  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutArchivedByUserInput, Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput> | Prisma.AssignmentCreateWithoutArchivedByUserInput[] | Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput[]
+  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutArchivedByUserInput | Prisma.AssignmentCreateOrConnectWithoutArchivedByUserInput[]
+  createMany?: Prisma.AssignmentCreateManyArchivedByUserInputEnvelope
+  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+}
+
+export type AssignmentUpdateManyWithoutArchivedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutArchivedByUserInput, Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput> | Prisma.AssignmentCreateWithoutArchivedByUserInput[] | Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput[]
+  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutArchivedByUserInput | Prisma.AssignmentCreateOrConnectWithoutArchivedByUserInput[]
+  upsert?: Prisma.AssignmentUpsertWithWhereUniqueWithoutArchivedByUserInput | Prisma.AssignmentUpsertWithWhereUniqueWithoutArchivedByUserInput[]
+  createMany?: Prisma.AssignmentCreateManyArchivedByUserInputEnvelope
+  set?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  disconnect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  delete?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  update?: Prisma.AssignmentUpdateWithWhereUniqueWithoutArchivedByUserInput | Prisma.AssignmentUpdateWithWhereUniqueWithoutArchivedByUserInput[]
+  updateMany?: Prisma.AssignmentUpdateManyWithWhereWithoutArchivedByUserInput | Prisma.AssignmentUpdateManyWithWhereWithoutArchivedByUserInput[]
+  deleteMany?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
+}
+
+export type AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AssignmentCreateWithoutArchivedByUserInput, Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput> | Prisma.AssignmentCreateWithoutArchivedByUserInput[] | Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput[]
+  connectOrCreate?: Prisma.AssignmentCreateOrConnectWithoutArchivedByUserInput | Prisma.AssignmentCreateOrConnectWithoutArchivedByUserInput[]
+  upsert?: Prisma.AssignmentUpsertWithWhereUniqueWithoutArchivedByUserInput | Prisma.AssignmentUpsertWithWhereUniqueWithoutArchivedByUserInput[]
+  createMany?: Prisma.AssignmentCreateManyArchivedByUserInputEnvelope
+  set?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  disconnect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  delete?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  connect?: Prisma.AssignmentWhereUniqueInput | Prisma.AssignmentWhereUniqueInput[]
+  update?: Prisma.AssignmentUpdateWithWhereUniqueWithoutArchivedByUserInput | Prisma.AssignmentUpdateWithWhereUniqueWithoutArchivedByUserInput[]
+  updateMany?: Prisma.AssignmentUpdateManyWithWhereWithoutArchivedByUserInput | Prisma.AssignmentUpdateManyWithWhereWithoutArchivedByUserInput[]
+  deleteMany?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
 }
 
 export type AssignmentCreateNestedOneWithoutLessonInput = {
@@ -492,15 +590,83 @@ export type AssignmentUpdateOneRequiredWithoutBestScoresNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AssignmentUpdateToOneWithWhereWithoutBestScoresInput, Prisma.AssignmentUpdateWithoutBestScoresInput>, Prisma.AssignmentUncheckedUpdateWithoutBestScoresInput>
 }
 
+export type AssignmentCreateWithoutArchivedByUserInput = {
+  id?: string
+  passingScorePct: number
+  maxAttempts?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  attempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutAssignmentInput
+  bestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutAssignmentInput
+  lesson: Prisma.LessonCreateNestedOneWithoutAssignmentInput
+  questions?: Prisma.QuestionCreateNestedManyWithoutAssignmentInput
+}
+
+export type AssignmentUncheckedCreateWithoutArchivedByUserInput = {
+  id?: string
+  lessonId: string
+  passingScorePct: number
+  maxAttempts?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  attempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutAssignmentInput
+  bestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutAssignmentInput
+  questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutAssignmentInput
+}
+
+export type AssignmentCreateOrConnectWithoutArchivedByUserInput = {
+  where: Prisma.AssignmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.AssignmentCreateWithoutArchivedByUserInput, Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput>
+}
+
+export type AssignmentCreateManyArchivedByUserInputEnvelope = {
+  data: Prisma.AssignmentCreateManyArchivedByUserInput | Prisma.AssignmentCreateManyArchivedByUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type AssignmentUpsertWithWhereUniqueWithoutArchivedByUserInput = {
+  where: Prisma.AssignmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.AssignmentUpdateWithoutArchivedByUserInput, Prisma.AssignmentUncheckedUpdateWithoutArchivedByUserInput>
+  create: Prisma.XOR<Prisma.AssignmentCreateWithoutArchivedByUserInput, Prisma.AssignmentUncheckedCreateWithoutArchivedByUserInput>
+}
+
+export type AssignmentUpdateWithWhereUniqueWithoutArchivedByUserInput = {
+  where: Prisma.AssignmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.AssignmentUpdateWithoutArchivedByUserInput, Prisma.AssignmentUncheckedUpdateWithoutArchivedByUserInput>
+}
+
+export type AssignmentUpdateManyWithWhereWithoutArchivedByUserInput = {
+  where: Prisma.AssignmentScalarWhereInput
+  data: Prisma.XOR<Prisma.AssignmentUpdateManyMutationInput, Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserInput>
+}
+
+export type AssignmentScalarWhereInput = {
+  AND?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
+  OR?: Prisma.AssignmentScalarWhereInput[]
+  NOT?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Assignment"> | string
+  lessonId?: Prisma.UuidFilter<"Assignment"> | string
+  passingScorePct?: Prisma.IntFilter<"Assignment"> | number
+  maxAttempts?: Prisma.IntNullableFilter<"Assignment"> | number | null
+  createdAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Assignment"> | Date | string
+  archivedAt?: Prisma.DateTimeNullableFilter<"Assignment"> | Date | string | null
+  archivedBy?: Prisma.UuidNullableFilter<"Assignment"> | string | null
+}
+
 export type AssignmentCreateWithoutLessonInput = {
   id?: string
   passingScorePct: number
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
   attempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutAssignmentInput
   bestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutAssignmentInput
   questions?: Prisma.QuestionCreateNestedManyWithoutAssignmentInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedAssignmentsInput
 }
 
 export type AssignmentUncheckedCreateWithoutLessonInput = {
@@ -509,6 +675,8 @@ export type AssignmentUncheckedCreateWithoutLessonInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   attempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutAssignmentInput
   bestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutAssignmentInput
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutAssignmentInput
@@ -536,9 +704,11 @@ export type AssignmentUpdateWithoutLessonInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attempts?: Prisma.AssignmentAttemptUpdateManyWithoutAssignmentNestedInput
   bestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutAssignmentNestedInput
   questions?: Prisma.QuestionUpdateManyWithoutAssignmentNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedAssignmentsNestedInput
 }
 
 export type AssignmentUncheckedUpdateWithoutLessonInput = {
@@ -547,6 +717,8 @@ export type AssignmentUncheckedUpdateWithoutLessonInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutAssignmentNestedInput
   bestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutAssignmentNestedInput
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutAssignmentNestedInput
@@ -558,9 +730,11 @@ export type AssignmentCreateWithoutQuestionsInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
   attempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutAssignmentInput
   bestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutAssignmentInput
   lesson: Prisma.LessonCreateNestedOneWithoutAssignmentInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedAssignmentsInput
 }
 
 export type AssignmentUncheckedCreateWithoutQuestionsInput = {
@@ -570,6 +744,8 @@ export type AssignmentUncheckedCreateWithoutQuestionsInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   attempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutAssignmentInput
   bestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutAssignmentInput
 }
@@ -596,9 +772,11 @@ export type AssignmentUpdateWithoutQuestionsInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attempts?: Prisma.AssignmentAttemptUpdateManyWithoutAssignmentNestedInput
   bestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutAssignmentNestedInput
   lesson?: Prisma.LessonUpdateOneRequiredWithoutAssignmentNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedAssignmentsNestedInput
 }
 
 export type AssignmentUncheckedUpdateWithoutQuestionsInput = {
@@ -608,6 +786,8 @@ export type AssignmentUncheckedUpdateWithoutQuestionsInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutAssignmentNestedInput
   bestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutAssignmentNestedInput
 }
@@ -618,9 +798,11 @@ export type AssignmentCreateWithoutAttemptsInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
   bestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutAssignmentInput
   lesson: Prisma.LessonCreateNestedOneWithoutAssignmentInput
   questions?: Prisma.QuestionCreateNestedManyWithoutAssignmentInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedAssignmentsInput
 }
 
 export type AssignmentUncheckedCreateWithoutAttemptsInput = {
@@ -630,6 +812,8 @@ export type AssignmentUncheckedCreateWithoutAttemptsInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   bestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutAssignmentInput
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutAssignmentInput
 }
@@ -656,9 +840,11 @@ export type AssignmentUpdateWithoutAttemptsInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutAssignmentNestedInput
   lesson?: Prisma.LessonUpdateOneRequiredWithoutAssignmentNestedInput
   questions?: Prisma.QuestionUpdateManyWithoutAssignmentNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedAssignmentsNestedInput
 }
 
 export type AssignmentUncheckedUpdateWithoutAttemptsInput = {
@@ -668,6 +854,8 @@ export type AssignmentUncheckedUpdateWithoutAttemptsInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutAssignmentNestedInput
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutAssignmentNestedInput
 }
@@ -678,9 +866,11 @@ export type AssignmentCreateWithoutBestScoresInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
   attempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutAssignmentInput
   lesson: Prisma.LessonCreateNestedOneWithoutAssignmentInput
   questions?: Prisma.QuestionCreateNestedManyWithoutAssignmentInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedAssignmentsInput
 }
 
 export type AssignmentUncheckedCreateWithoutBestScoresInput = {
@@ -690,6 +880,8 @@ export type AssignmentUncheckedCreateWithoutBestScoresInput = {
   maxAttempts?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   attempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutAssignmentInput
   questions?: Prisma.QuestionUncheckedCreateNestedManyWithoutAssignmentInput
 }
@@ -716,9 +908,11 @@ export type AssignmentUpdateWithoutBestScoresInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attempts?: Prisma.AssignmentAttemptUpdateManyWithoutAssignmentNestedInput
   lesson?: Prisma.LessonUpdateOneRequiredWithoutAssignmentNestedInput
   questions?: Prisma.QuestionUpdateManyWithoutAssignmentNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedAssignmentsNestedInput
 }
 
 export type AssignmentUncheckedUpdateWithoutBestScoresInput = {
@@ -728,8 +922,56 @@ export type AssignmentUncheckedUpdateWithoutBestScoresInput = {
   maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutAssignmentNestedInput
   questions?: Prisma.QuestionUncheckedUpdateManyWithoutAssignmentNestedInput
+}
+
+export type AssignmentCreateManyArchivedByUserInput = {
+  id?: string
+  lessonId: string
+  passingScorePct: number
+  maxAttempts?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  archivedAt?: Date | string | null
+}
+
+export type AssignmentUpdateWithoutArchivedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  passingScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attempts?: Prisma.AssignmentAttemptUpdateManyWithoutAssignmentNestedInput
+  bestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutAssignmentNestedInput
+  lesson?: Prisma.LessonUpdateOneRequiredWithoutAssignmentNestedInput
+  questions?: Prisma.QuestionUpdateManyWithoutAssignmentNestedInput
+}
+
+export type AssignmentUncheckedUpdateWithoutArchivedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  passingScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutAssignmentNestedInput
+  bestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutAssignmentNestedInput
+  questions?: Prisma.QuestionUncheckedUpdateManyWithoutAssignmentNestedInput
+}
+
+export type AssignmentUncheckedUpdateManyWithoutArchivedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  passingScorePct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -788,10 +1030,13 @@ export type AssignmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   maxAttempts?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  archivedAt?: boolean
+  archivedBy?: boolean
   attempts?: boolean | Prisma.Assignment$attemptsArgs<ExtArgs>
   bestScores?: boolean | Prisma.Assignment$bestScoresArgs<ExtArgs>
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
   questions?: boolean | Prisma.Assignment$questionsArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Assignment$archivedByUserArgs<ExtArgs>
   _count?: boolean | Prisma.AssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["assignment"]>
 
@@ -802,7 +1047,10 @@ export type AssignmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   maxAttempts?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  archivedAt?: boolean
+  archivedBy?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Assignment$archivedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["assignment"]>
 
 export type AssignmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -812,7 +1060,10 @@ export type AssignmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   maxAttempts?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  archivedAt?: boolean
+  archivedBy?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Assignment$archivedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["assignment"]>
 
 export type AssignmentSelectScalar = {
@@ -822,21 +1073,26 @@ export type AssignmentSelectScalar = {
   maxAttempts?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  archivedAt?: boolean
+  archivedBy?: boolean
 }
 
-export type AssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "passingScorePct" | "maxAttempts" | "createdAt" | "updatedAt", ExtArgs["result"]["assignment"]>
+export type AssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "passingScorePct" | "maxAttempts" | "createdAt" | "updatedAt" | "archivedAt" | "archivedBy", ExtArgs["result"]["assignment"]>
 export type AssignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attempts?: boolean | Prisma.Assignment$attemptsArgs<ExtArgs>
   bestScores?: boolean | Prisma.Assignment$bestScoresArgs<ExtArgs>
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
   questions?: boolean | Prisma.Assignment$questionsArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Assignment$archivedByUserArgs<ExtArgs>
   _count?: boolean | Prisma.AssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AssignmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Assignment$archivedByUserArgs<ExtArgs>
 }
 export type AssignmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Assignment$archivedByUserArgs<ExtArgs>
 }
 
 export type $AssignmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -846,6 +1102,7 @@ export type $AssignmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     bestScores: Prisma.$AssignmentBestScorePayload<ExtArgs>[]
     lesson: Prisma.$LessonPayload<ExtArgs>
     questions: Prisma.$QuestionPayload<ExtArgs>[]
+    archivedByUser: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -854,6 +1111,8 @@ export type $AssignmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     maxAttempts: number | null
     createdAt: Date
     updatedAt: Date
+    archivedAt: Date | null
+    archivedBy: string | null
   }, ExtArgs["result"]["assignment"]>
   composites: {}
 }
@@ -1252,6 +1511,7 @@ export interface Prisma__AssignmentClient<T, Null = never, ExtArgs extends runti
   bestScores<T extends Prisma.Assignment$bestScoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Assignment$bestScoresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignmentBestScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lesson<T extends Prisma.LessonDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LessonDefaultArgs<ExtArgs>>): Prisma.Prisma__LessonClient<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   questions<T extends Prisma.Assignment$questionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Assignment$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  archivedByUser<T extends Prisma.Assignment$archivedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Assignment$archivedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1287,6 +1547,8 @@ export interface AssignmentFieldRefs {
   readonly maxAttempts: Prisma.FieldRef<"Assignment", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Assignment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Assignment", 'DateTime'>
+  readonly archivedAt: Prisma.FieldRef<"Assignment", 'DateTime'>
+  readonly archivedBy: Prisma.FieldRef<"Assignment", 'String'>
 }
     
 
@@ -1757,6 +2019,25 @@ export type Assignment$questionsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.QuestionScalarFieldEnum | Prisma.QuestionScalarFieldEnum[]
+}
+
+/**
+ * Assignment.archivedByUser
+ */
+export type Assignment$archivedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

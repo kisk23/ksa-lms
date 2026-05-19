@@ -48,6 +48,11 @@ export type ParentStudentLink = Prisma.ParentStudentLinkModel
  */
 export type Course = Prisma.CourseModel
 /**
+ * Model CourseAuditLog
+ * 
+ */
+export type CourseAuditLog = Prisma.CourseAuditLogModel
+/**
  * Model CourseProgress
  * 
  */

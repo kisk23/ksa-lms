@@ -381,6 +381,10 @@ export type OtpVerificationUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.OtpVerificationScalarWhereInput | Prisma.OtpVerificationScalarWhereInput[]
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type OtpVerificationCreateWithoutUserInput = {
   id?: string
   code: string

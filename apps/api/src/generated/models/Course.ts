@@ -40,13 +40,18 @@ export type CourseMinAggregateOutputType = {
   teacherUserId: string | null
   title: string | null
   description: string | null
+  thumbnailUrl: string | null
+  promoVideoUrl: string | null
+  promoVideoProvider: $Enums.VideoProvider | null
   price: runtime.Decimal | null
   currency: string | null
   status: $Enums.CourseStatus | null
   publishedAt: Date | null
+  publishedBy: string | null
+  archivedAt: Date | null
+  archivedBy: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  deletedAt: Date | null
 }
 
 export type CourseMaxAggregateOutputType = {
@@ -55,13 +60,18 @@ export type CourseMaxAggregateOutputType = {
   teacherUserId: string | null
   title: string | null
   description: string | null
+  thumbnailUrl: string | null
+  promoVideoUrl: string | null
+  promoVideoProvider: $Enums.VideoProvider | null
   price: runtime.Decimal | null
   currency: string | null
   status: $Enums.CourseStatus | null
   publishedAt: Date | null
+  publishedBy: string | null
+  archivedAt: Date | null
+  archivedBy: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  deletedAt: Date | null
 }
 
 export type CourseCountAggregateOutputType = {
@@ -70,13 +80,18 @@ export type CourseCountAggregateOutputType = {
   teacherUserId: number
   title: number
   description: number
+  thumbnailUrl: number
+  promoVideoUrl: number
+  promoVideoProvider: number
   price: number
   currency: number
   status: number
   publishedAt: number
+  publishedBy: number
+  archivedAt: number
+  archivedBy: number
   createdAt: number
   updatedAt: number
-  deletedAt: number
   _all: number
 }
 
@@ -95,13 +110,18 @@ export type CourseMinAggregateInputType = {
   teacherUserId?: true
   title?: true
   description?: true
+  thumbnailUrl?: true
+  promoVideoUrl?: true
+  promoVideoProvider?: true
   price?: true
   currency?: true
   status?: true
   publishedAt?: true
+  publishedBy?: true
+  archivedAt?: true
+  archivedBy?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
 }
 
 export type CourseMaxAggregateInputType = {
@@ -110,13 +130,18 @@ export type CourseMaxAggregateInputType = {
   teacherUserId?: true
   title?: true
   description?: true
+  thumbnailUrl?: true
+  promoVideoUrl?: true
+  promoVideoProvider?: true
   price?: true
   currency?: true
   status?: true
   publishedAt?: true
+  publishedBy?: true
+  archivedAt?: true
+  archivedBy?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
 }
 
 export type CourseCountAggregateInputType = {
@@ -125,13 +150,18 @@ export type CourseCountAggregateInputType = {
   teacherUserId?: true
   title?: true
   description?: true
+  thumbnailUrl?: true
+  promoVideoUrl?: true
+  promoVideoProvider?: true
   price?: true
   currency?: true
   status?: true
   publishedAt?: true
+  publishedBy?: true
+  archivedAt?: true
+  archivedBy?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
   _all?: true
 }
 
@@ -227,13 +257,18 @@ export type CourseGroupByOutputType = {
   teacherUserId: string
   title: string
   description: string | null
+  thumbnailUrl: string | null
+  promoVideoUrl: string | null
+  promoVideoProvider: $Enums.VideoProvider | null
   price: runtime.Decimal
   currency: string
   status: $Enums.CourseStatus
   publishedAt: Date | null
+  publishedBy: string | null
+  archivedAt: Date | null
+  archivedBy: string | null
   createdAt: Date
   updatedAt: Date
-  deletedAt: Date | null
   _count: CourseCountAggregateOutputType | null
   _avg: CourseAvgAggregateOutputType | null
   _sum: CourseSumAggregateOutputType | null
@@ -265,16 +300,24 @@ export type CourseWhereInput = {
   teacherUserId?: Prisma.UuidFilter<"Course"> | string
   title?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
+  thumbnailUrl?: Prisma.StringNullableFilter<"Course"> | string | null
+  promoVideoUrl?: Prisma.StringNullableFilter<"Course"> | string | null
+  promoVideoProvider?: Prisma.EnumVideoProviderNullableFilter<"Course"> | $Enums.VideoProvider | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+  publishedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+  archivedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+  teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  publishedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  archivedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   courseProgresses?: Prisma.CourseProgressListRelationFilter
   chapters?: Prisma.ChapterListRelationFilter
-  teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  auditLogs?: Prisma.CourseAuditLogListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   liveSessions?: Prisma.LiveSessionListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
@@ -287,16 +330,24 @@ export type CourseOrderByWithRelationInput = {
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  promoVideoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  promoVideoProvider?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  publishedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  teacher?: Prisma.UserOrderByWithRelationInput
+  publishedByUser?: Prisma.UserOrderByWithRelationInput
+  archivedByUser?: Prisma.UserOrderByWithRelationInput
   courseProgresses?: Prisma.CourseProgressOrderByRelationAggregateInput
   chapters?: Prisma.ChapterOrderByRelationAggregateInput
-  teacher?: Prisma.UserOrderByWithRelationInput
+  auditLogs?: Prisma.CourseAuditLogOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   liveSessions?: Prisma.LiveSessionOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
@@ -312,16 +363,24 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   teacherUserId?: Prisma.UuidFilter<"Course"> | string
   title?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
+  thumbnailUrl?: Prisma.StringNullableFilter<"Course"> | string | null
+  promoVideoUrl?: Prisma.StringNullableFilter<"Course"> | string | null
+  promoVideoProvider?: Prisma.EnumVideoProviderNullableFilter<"Course"> | $Enums.VideoProvider | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+  publishedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+  archivedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+  teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  publishedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  archivedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   courseProgresses?: Prisma.CourseProgressListRelationFilter
   chapters?: Prisma.ChapterListRelationFilter
-  teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  auditLogs?: Prisma.CourseAuditLogListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   liveSessions?: Prisma.LiveSessionListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
@@ -334,13 +393,18 @@ export type CourseOrderByWithAggregationInput = {
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  promoVideoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  promoVideoProvider?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  publishedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CourseCountOrderByAggregateInput
   _avg?: Prisma.CourseAvgOrderByAggregateInput
   _max?: Prisma.CourseMaxOrderByAggregateInput
@@ -357,13 +421,18 @@ export type CourseScalarWhereWithAggregatesInput = {
   teacherUserId?: Prisma.UuidWithAggregatesFilter<"Course"> | string
   title?: Prisma.StringWithAggregatesFilter<"Course"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  thumbnailUrl?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  promoVideoUrl?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  promoVideoProvider?: Prisma.EnumVideoProviderNullableWithAggregatesFilter<"Course"> | $Enums.VideoProvider | null
   price?: Prisma.DecimalWithAggregatesFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
+  publishedBy?: Prisma.UuidNullableWithAggregatesFilter<"Course"> | string | null
+  archivedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
+  archivedBy?: Prisma.UuidNullableWithAggregatesFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
 }
 
 export type CourseCreateInput = {
@@ -371,16 +440,22 @@ export type CourseCreateInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
-  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
@@ -393,15 +468,21 @@ export type CourseUncheckedCreateInput = {
   teacherUserId: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
@@ -413,16 +494,22 @@ export type CourseUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
@@ -435,15 +522,21 @@ export type CourseUncheckedUpdateInput = {
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
@@ -456,13 +549,18 @@ export type CourseCreateManyInput = {
   teacherUserId: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
 }
 
 export type CourseUpdateManyMutationInput = {
@@ -470,13 +568,16 @@ export type CourseUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CourseUncheckedUpdateManyInput = {
@@ -485,13 +586,18 @@ export type CourseUncheckedUpdateManyInput = {
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CourseListRelationFilter = {
@@ -510,13 +616,18 @@ export type CourseCountOrderByAggregateInput = {
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  thumbnailUrl?: Prisma.SortOrder
+  promoVideoUrl?: Prisma.SortOrder
+  promoVideoProvider?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  publishedBy?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
+  archivedBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type CourseAvgOrderByAggregateInput = {
@@ -529,13 +640,18 @@ export type CourseMaxOrderByAggregateInput = {
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  thumbnailUrl?: Prisma.SortOrder
+  promoVideoUrl?: Prisma.SortOrder
+  promoVideoProvider?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  publishedBy?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
+  archivedBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type CourseMinOrderByAggregateInput = {
@@ -544,13 +660,18 @@ export type CourseMinOrderByAggregateInput = {
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  thumbnailUrl?: Prisma.SortOrder
+  promoVideoUrl?: Prisma.SortOrder
+  promoVideoProvider?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  publishedBy?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
+  archivedBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type CourseSumOrderByAggregateInput = {
@@ -574,10 +695,38 @@ export type CourseCreateNestedManyWithoutTeacherInput = {
   connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
 }
 
+export type CourseCreateNestedManyWithoutPublishedByUserInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutPublishedByUserInput, Prisma.CourseUncheckedCreateWithoutPublishedByUserInput> | Prisma.CourseCreateWithoutPublishedByUserInput[] | Prisma.CourseUncheckedCreateWithoutPublishedByUserInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutPublishedByUserInput | Prisma.CourseCreateOrConnectWithoutPublishedByUserInput[]
+  createMany?: Prisma.CourseCreateManyPublishedByUserInputEnvelope
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+}
+
+export type CourseCreateNestedManyWithoutArchivedByUserInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutArchivedByUserInput, Prisma.CourseUncheckedCreateWithoutArchivedByUserInput> | Prisma.CourseCreateWithoutArchivedByUserInput[] | Prisma.CourseUncheckedCreateWithoutArchivedByUserInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutArchivedByUserInput | Prisma.CourseCreateOrConnectWithoutArchivedByUserInput[]
+  createMany?: Prisma.CourseCreateManyArchivedByUserInputEnvelope
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+}
+
 export type CourseUncheckedCreateNestedManyWithoutTeacherInput = {
   create?: Prisma.XOR<Prisma.CourseCreateWithoutTeacherInput, Prisma.CourseUncheckedCreateWithoutTeacherInput> | Prisma.CourseCreateWithoutTeacherInput[] | Prisma.CourseUncheckedCreateWithoutTeacherInput[]
   connectOrCreate?: Prisma.CourseCreateOrConnectWithoutTeacherInput | Prisma.CourseCreateOrConnectWithoutTeacherInput[]
   createMany?: Prisma.CourseCreateManyTeacherInputEnvelope
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+}
+
+export type CourseUncheckedCreateNestedManyWithoutPublishedByUserInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutPublishedByUserInput, Prisma.CourseUncheckedCreateWithoutPublishedByUserInput> | Prisma.CourseCreateWithoutPublishedByUserInput[] | Prisma.CourseUncheckedCreateWithoutPublishedByUserInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutPublishedByUserInput | Prisma.CourseCreateOrConnectWithoutPublishedByUserInput[]
+  createMany?: Prisma.CourseCreateManyPublishedByUserInputEnvelope
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+}
+
+export type CourseUncheckedCreateNestedManyWithoutArchivedByUserInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutArchivedByUserInput, Prisma.CourseUncheckedCreateWithoutArchivedByUserInput> | Prisma.CourseCreateWithoutArchivedByUserInput[] | Prisma.CourseUncheckedCreateWithoutArchivedByUserInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutArchivedByUserInput | Prisma.CourseCreateOrConnectWithoutArchivedByUserInput[]
+  createMany?: Prisma.CourseCreateManyArchivedByUserInputEnvelope
   connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
 }
 
@@ -595,6 +744,34 @@ export type CourseUpdateManyWithoutTeacherNestedInput = {
   deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
 }
 
+export type CourseUpdateManyWithoutPublishedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutPublishedByUserInput, Prisma.CourseUncheckedCreateWithoutPublishedByUserInput> | Prisma.CourseCreateWithoutPublishedByUserInput[] | Prisma.CourseUncheckedCreateWithoutPublishedByUserInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutPublishedByUserInput | Prisma.CourseCreateOrConnectWithoutPublishedByUserInput[]
+  upsert?: Prisma.CourseUpsertWithWhereUniqueWithoutPublishedByUserInput | Prisma.CourseUpsertWithWhereUniqueWithoutPublishedByUserInput[]
+  createMany?: Prisma.CourseCreateManyPublishedByUserInputEnvelope
+  set?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  disconnect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  delete?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  update?: Prisma.CourseUpdateWithWhereUniqueWithoutPublishedByUserInput | Prisma.CourseUpdateWithWhereUniqueWithoutPublishedByUserInput[]
+  updateMany?: Prisma.CourseUpdateManyWithWhereWithoutPublishedByUserInput | Prisma.CourseUpdateManyWithWhereWithoutPublishedByUserInput[]
+  deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+}
+
+export type CourseUpdateManyWithoutArchivedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutArchivedByUserInput, Prisma.CourseUncheckedCreateWithoutArchivedByUserInput> | Prisma.CourseCreateWithoutArchivedByUserInput[] | Prisma.CourseUncheckedCreateWithoutArchivedByUserInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutArchivedByUserInput | Prisma.CourseCreateOrConnectWithoutArchivedByUserInput[]
+  upsert?: Prisma.CourseUpsertWithWhereUniqueWithoutArchivedByUserInput | Prisma.CourseUpsertWithWhereUniqueWithoutArchivedByUserInput[]
+  createMany?: Prisma.CourseCreateManyArchivedByUserInputEnvelope
+  set?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  disconnect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  delete?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  update?: Prisma.CourseUpdateWithWhereUniqueWithoutArchivedByUserInput | Prisma.CourseUpdateWithWhereUniqueWithoutArchivedByUserInput[]
+  updateMany?: Prisma.CourseUpdateManyWithWhereWithoutArchivedByUserInput | Prisma.CourseUpdateManyWithWhereWithoutArchivedByUserInput[]
+  deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+}
+
 export type CourseUncheckedUpdateManyWithoutTeacherNestedInput = {
   create?: Prisma.XOR<Prisma.CourseCreateWithoutTeacherInput, Prisma.CourseUncheckedCreateWithoutTeacherInput> | Prisma.CourseCreateWithoutTeacherInput[] | Prisma.CourseUncheckedCreateWithoutTeacherInput[]
   connectOrCreate?: Prisma.CourseCreateOrConnectWithoutTeacherInput | Prisma.CourseCreateOrConnectWithoutTeacherInput[]
@@ -609,6 +786,38 @@ export type CourseUncheckedUpdateManyWithoutTeacherNestedInput = {
   deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
 }
 
+export type CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutPublishedByUserInput, Prisma.CourseUncheckedCreateWithoutPublishedByUserInput> | Prisma.CourseCreateWithoutPublishedByUserInput[] | Prisma.CourseUncheckedCreateWithoutPublishedByUserInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutPublishedByUserInput | Prisma.CourseCreateOrConnectWithoutPublishedByUserInput[]
+  upsert?: Prisma.CourseUpsertWithWhereUniqueWithoutPublishedByUserInput | Prisma.CourseUpsertWithWhereUniqueWithoutPublishedByUserInput[]
+  createMany?: Prisma.CourseCreateManyPublishedByUserInputEnvelope
+  set?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  disconnect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  delete?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  update?: Prisma.CourseUpdateWithWhereUniqueWithoutPublishedByUserInput | Prisma.CourseUpdateWithWhereUniqueWithoutPublishedByUserInput[]
+  updateMany?: Prisma.CourseUpdateManyWithWhereWithoutPublishedByUserInput | Prisma.CourseUpdateManyWithWhereWithoutPublishedByUserInput[]
+  deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+}
+
+export type CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutArchivedByUserInput, Prisma.CourseUncheckedCreateWithoutArchivedByUserInput> | Prisma.CourseCreateWithoutArchivedByUserInput[] | Prisma.CourseUncheckedCreateWithoutArchivedByUserInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutArchivedByUserInput | Prisma.CourseCreateOrConnectWithoutArchivedByUserInput[]
+  upsert?: Prisma.CourseUpsertWithWhereUniqueWithoutArchivedByUserInput | Prisma.CourseUpsertWithWhereUniqueWithoutArchivedByUserInput[]
+  createMany?: Prisma.CourseCreateManyArchivedByUserInputEnvelope
+  set?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  disconnect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  delete?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  update?: Prisma.CourseUpdateWithWhereUniqueWithoutArchivedByUserInput | Prisma.CourseUpdateWithWhereUniqueWithoutArchivedByUserInput[]
+  updateMany?: Prisma.CourseUpdateManyWithWhereWithoutArchivedByUserInput | Prisma.CourseUpdateManyWithWhereWithoutArchivedByUserInput[]
+  deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+}
+
+export type NullableEnumVideoProviderFieldUpdateOperationsInput = {
+  set?: $Enums.VideoProvider | null
+}
+
 export type DecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -619,6 +828,20 @@ export type DecimalFieldUpdateOperationsInput = {
 
 export type EnumCourseStatusFieldUpdateOperationsInput = {
   set?: $Enums.CourseStatus
+}
+
+export type CourseCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutAuditLogsInput, Prisma.CourseUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutAuditLogsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutAuditLogsInput, Prisma.CourseUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutAuditLogsInput
+  upsert?: Prisma.CourseUpsertWithoutAuditLogsInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.CourseUpdateWithoutAuditLogsInput>, Prisma.CourseUncheckedUpdateWithoutAuditLogsInput>
 }
 
 export type CourseCreateNestedOneWithoutCourseProgressesInput = {
@@ -712,15 +935,21 @@ export type CourseCreateWithoutTeacherInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
@@ -732,15 +961,21 @@ export type CourseUncheckedCreateWithoutTeacherInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
@@ -754,6 +989,130 @@ export type CourseCreateOrConnectWithoutTeacherInput = {
 
 export type CourseCreateManyTeacherInputEnvelope = {
   data: Prisma.CourseCreateManyTeacherInput | Prisma.CourseCreateManyTeacherInput[]
+  skipDuplicates?: boolean
+}
+
+export type CourseCreateWithoutPublishedByUserInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
+  chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+  promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutPublishedByUserInput = {
+  id?: string
+  slug: string
+  teacherUserId: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
+  chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+  promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutPublishedByUserInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutPublishedByUserInput, Prisma.CourseUncheckedCreateWithoutPublishedByUserInput>
+}
+
+export type CourseCreateManyPublishedByUserInputEnvelope = {
+  data: Prisma.CourseCreateManyPublishedByUserInput | Prisma.CourseCreateManyPublishedByUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type CourseCreateWithoutArchivedByUserInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
+  chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+  promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutArchivedByUserInput = {
+  id?: string
+  slug: string
+  teacherUserId: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
+  chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+  promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutArchivedByUserInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutArchivedByUserInput, Prisma.CourseUncheckedCreateWithoutArchivedByUserInput>
+}
+
+export type CourseCreateManyArchivedByUserInputEnvelope = {
+  data: Prisma.CourseCreateManyArchivedByUserInput | Prisma.CourseCreateManyArchivedByUserInput[]
   skipDuplicates?: boolean
 }
 
@@ -782,13 +1141,170 @@ export type CourseScalarWhereInput = {
   teacherUserId?: Prisma.UuidFilter<"Course"> | string
   title?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
+  thumbnailUrl?: Prisma.StringNullableFilter<"Course"> | string | null
+  promoVideoUrl?: Prisma.StringNullableFilter<"Course"> | string | null
+  promoVideoProvider?: Prisma.EnumVideoProviderNullableFilter<"Course"> | $Enums.VideoProvider | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+  publishedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+  archivedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
-  deletedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
+}
+
+export type CourseUpsertWithWhereUniqueWithoutPublishedByUserInput = {
+  where: Prisma.CourseWhereUniqueInput
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutPublishedByUserInput, Prisma.CourseUncheckedUpdateWithoutPublishedByUserInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutPublishedByUserInput, Prisma.CourseUncheckedCreateWithoutPublishedByUserInput>
+}
+
+export type CourseUpdateWithWhereUniqueWithoutPublishedByUserInput = {
+  where: Prisma.CourseWhereUniqueInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutPublishedByUserInput, Prisma.CourseUncheckedUpdateWithoutPublishedByUserInput>
+}
+
+export type CourseUpdateManyWithWhereWithoutPublishedByUserInput = {
+  where: Prisma.CourseScalarWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateManyMutationInput, Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserInput>
+}
+
+export type CourseUpsertWithWhereUniqueWithoutArchivedByUserInput = {
+  where: Prisma.CourseWhereUniqueInput
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutArchivedByUserInput, Prisma.CourseUncheckedUpdateWithoutArchivedByUserInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutArchivedByUserInput, Prisma.CourseUncheckedCreateWithoutArchivedByUserInput>
+}
+
+export type CourseUpdateWithWhereUniqueWithoutArchivedByUserInput = {
+  where: Prisma.CourseWhereUniqueInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutArchivedByUserInput, Prisma.CourseUncheckedUpdateWithoutArchivedByUserInput>
+}
+
+export type CourseUpdateManyWithWhereWithoutArchivedByUserInput = {
+  where: Prisma.CourseScalarWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateManyMutationInput, Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserInput>
+}
+
+export type CourseCreateWithoutAuditLogsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
+  chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+  promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutAuditLogsInput = {
+  id?: string
+  slug: string
+  teacherUserId: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
+  chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+  promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutAuditLogsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutAuditLogsInput, Prisma.CourseUncheckedCreateWithoutAuditLogsInput>
+}
+
+export type CourseUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutAuditLogsInput, Prisma.CourseUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutAuditLogsInput, Prisma.CourseUncheckedCreateWithoutAuditLogsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutAuditLogsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutAuditLogsInput, Prisma.CourseUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type CourseUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
+  chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+  promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
+  chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+  promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutCourseProgressesInput = {
@@ -796,15 +1312,21 @@ export type CourseCreateWithoutCourseProgressesInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
-  chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
   teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
+  chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
@@ -817,14 +1339,20 @@ export type CourseUncheckedCreateWithoutCourseProgressesInput = {
   teacherUserId: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
@@ -852,15 +1380,21 @@ export type CourseUpdateWithoutCourseProgressesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
   teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
+  chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
@@ -873,14 +1407,20 @@ export type CourseUncheckedUpdateWithoutCourseProgressesInput = {
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
@@ -892,15 +1432,21 @@ export type CourseCreateWithoutChaptersInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
-  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
   teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
@@ -913,14 +1459,20 @@ export type CourseUncheckedCreateWithoutChaptersInput = {
   teacherUserId: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
@@ -948,15 +1500,21 @@ export type CourseUpdateWithoutChaptersInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
   teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
@@ -969,14 +1527,20 @@ export type CourseUncheckedUpdateWithoutChaptersInput = {
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
@@ -988,16 +1552,22 @@ export type CourseCreateWithoutEnrollmentsInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
-  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
@@ -1009,15 +1579,21 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   teacherUserId: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
@@ -1044,16 +1620,22 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
@@ -1065,15 +1647,21 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
@@ -1084,16 +1672,22 @@ export type CourseCreateWithoutLiveSessionsInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
-  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
@@ -1105,15 +1699,21 @@ export type CourseUncheckedCreateWithoutLiveSessionsInput = {
   teacherUserId: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
@@ -1140,16 +1740,22 @@ export type CourseUpdateWithoutLiveSessionsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
@@ -1161,15 +1767,21 @@ export type CourseUncheckedUpdateWithoutLiveSessionsInput = {
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
@@ -1180,16 +1792,22 @@ export type CourseCreateWithoutPromoCodesInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
-  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
@@ -1201,15 +1819,21 @@ export type CourseUncheckedCreateWithoutPromoCodesInput = {
   teacherUserId: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
@@ -1236,16 +1860,22 @@ export type CourseUpdateWithoutPromoCodesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
@@ -1257,15 +1887,21 @@ export type CourseUncheckedUpdateWithoutPromoCodesInput = {
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
@@ -1276,16 +1912,22 @@ export type CourseCreateWithoutPaymentsInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
   courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
-  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
@@ -1297,15 +1939,21 @@ export type CourseUncheckedCreateWithoutPaymentsInput = {
   teacherUserId: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
@@ -1332,16 +1980,22 @@ export type CourseUpdateWithoutPaymentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
-  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
@@ -1353,15 +2007,21 @@ export type CourseUncheckedUpdateWithoutPaymentsInput = {
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
@@ -1372,13 +2032,56 @@ export type CourseCreateManyTeacherInput = {
   slug: string
   title: string
   description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  deletedAt?: Date | string | null
+}
+
+export type CourseCreateManyPublishedByUserInput = {
+  id?: string
+  slug: string
+  teacherUserId: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CourseCreateManyArchivedByUserInput = {
+  id?: string
+  slug: string
+  teacherUserId: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CourseUpdateWithoutTeacherInput = {
@@ -1386,15 +2089,21 @@ export type CourseUpdateWithoutTeacherInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
   courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
@@ -1406,15 +2115,21 @@ export type CourseUncheckedUpdateWithoutTeacherInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
@@ -1426,13 +2141,160 @@ export type CourseUncheckedUpdateManyWithoutTeacherInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type CourseUpdateWithoutPublishedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
+  chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+  promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutPublishedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
+  chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+  promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateManyWithoutPublishedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CourseUpdateWithoutArchivedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
+  chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+  promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutArchivedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
+  chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+  promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateManyWithoutArchivedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1443,6 +2305,7 @@ export type CourseUncheckedUpdateManyWithoutTeacherInput = {
 export type CourseCountOutputType = {
   courseProgresses: number
   chapters: number
+  auditLogs: number
   enrollments: number
   liveSessions: number
   payments: number
@@ -1452,6 +2315,7 @@ export type CourseCountOutputType = {
 export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   courseProgresses?: boolean | CourseCountOutputTypeCountCourseProgressesArgs
   chapters?: boolean | CourseCountOutputTypeCountChaptersArgs
+  auditLogs?: boolean | CourseCountOutputTypeCountAuditLogsArgs
   enrollments?: boolean | CourseCountOutputTypeCountEnrollmentsArgs
   liveSessions?: boolean | CourseCountOutputTypeCountLiveSessionsArgs
   payments?: boolean | CourseCountOutputTypeCountPaymentsArgs
@@ -1480,6 +2344,13 @@ export type CourseCountOutputTypeCountCourseProgressesArgs<ExtArgs extends runti
  */
 export type CourseCountOutputTypeCountChaptersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ChapterWhereInput
+}
+
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CourseAuditLogWhereInput
 }
 
 /**
@@ -1517,16 +2388,24 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   teacherUserId?: boolean
   title?: boolean
   description?: boolean
+  thumbnailUrl?: boolean
+  promoVideoUrl?: boolean
+  promoVideoProvider?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
   publishedAt?: boolean
+  publishedBy?: boolean
+  archivedAt?: boolean
+  archivedBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
+  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  publishedByUser?: boolean | Prisma.Course$publishedByUserArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Course$archivedByUserArgs<ExtArgs>
   courseProgresses?: boolean | Prisma.Course$courseProgressesArgs<ExtArgs>
   chapters?: boolean | Prisma.Course$chaptersArgs<ExtArgs>
-  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.Course$auditLogsArgs<ExtArgs>
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   liveSessions?: boolean | Prisma.Course$liveSessionsArgs<ExtArgs>
   payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
@@ -1540,14 +2419,21 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   teacherUserId?: boolean
   title?: boolean
   description?: boolean
+  thumbnailUrl?: boolean
+  promoVideoUrl?: boolean
+  promoVideoProvider?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
   publishedAt?: boolean
+  publishedBy?: boolean
+  archivedAt?: boolean
+  archivedBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  publishedByUser?: boolean | Prisma.Course$publishedByUserArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Course$archivedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
 export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1556,14 +2442,21 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   teacherUserId?: boolean
   title?: boolean
   description?: boolean
+  thumbnailUrl?: boolean
+  promoVideoUrl?: boolean
+  promoVideoProvider?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
   publishedAt?: boolean
+  publishedBy?: boolean
+  archivedAt?: boolean
+  archivedBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  publishedByUser?: boolean | Prisma.Course$publishedByUserArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Course$archivedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
 export type CourseSelectScalar = {
@@ -1572,20 +2465,28 @@ export type CourseSelectScalar = {
   teacherUserId?: boolean
   title?: boolean
   description?: boolean
+  thumbnailUrl?: boolean
+  promoVideoUrl?: boolean
+  promoVideoProvider?: boolean
   price?: boolean
   currency?: boolean
   status?: boolean
   publishedAt?: boolean
+  publishedBy?: boolean
+  archivedAt?: boolean
+  archivedBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "teacherUserId" | "title" | "description" | "price" | "currency" | "status" | "publishedAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "teacherUserId" | "title" | "description" | "thumbnailUrl" | "promoVideoUrl" | "promoVideoProvider" | "price" | "currency" | "status" | "publishedAt" | "publishedBy" | "archivedAt" | "archivedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  publishedByUser?: boolean | Prisma.Course$publishedByUserArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Course$archivedByUserArgs<ExtArgs>
   courseProgresses?: boolean | Prisma.Course$courseProgressesArgs<ExtArgs>
   chapters?: boolean | Prisma.Course$chaptersArgs<ExtArgs>
-  teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.Course$auditLogsArgs<ExtArgs>
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   liveSessions?: boolean | Prisma.Course$liveSessionsArgs<ExtArgs>
   payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
@@ -1594,17 +2495,24 @@ export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 }
 export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  publishedByUser?: boolean | Prisma.Course$publishedByUserArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Course$archivedByUserArgs<ExtArgs>
 }
 export type CourseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  publishedByUser?: boolean | Prisma.Course$publishedByUserArgs<ExtArgs>
+  archivedByUser?: boolean | Prisma.Course$archivedByUserArgs<ExtArgs>
 }
 
 export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Course"
   objects: {
+    teacher: Prisma.$UserPayload<ExtArgs>
+    publishedByUser: Prisma.$UserPayload<ExtArgs> | null
+    archivedByUser: Prisma.$UserPayload<ExtArgs> | null
     courseProgresses: Prisma.$CourseProgressPayload<ExtArgs>[]
     chapters: Prisma.$ChapterPayload<ExtArgs>[]
-    teacher: Prisma.$UserPayload<ExtArgs>
+    auditLogs: Prisma.$CourseAuditLogPayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     liveSessions: Prisma.$LiveSessionPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
@@ -1616,13 +2524,18 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     teacherUserId: string
     title: string
     description: string | null
+    thumbnailUrl: string | null
+    promoVideoUrl: string | null
+    promoVideoProvider: $Enums.VideoProvider | null
     price: runtime.Decimal
     currency: string
     status: $Enums.CourseStatus
     publishedAt: Date | null
+    publishedBy: string | null
+    archivedAt: Date | null
+    archivedBy: string | null
     createdAt: Date
     updatedAt: Date
-    deletedAt: Date | null
   }, ExtArgs["result"]["course"]>
   composites: {}
 }
@@ -2017,9 +2930,12 @@ readonly fields: CourseFieldRefs;
  */
 export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  teacher<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  publishedByUser<T extends Prisma.Course$publishedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$publishedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  archivedByUser<T extends Prisma.Course$archivedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$archivedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   courseProgresses<T extends Prisma.Course$courseProgressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$courseProgressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   chapters<T extends Prisma.Course$chaptersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$chaptersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  teacher<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  auditLogs<T extends Prisma.Course$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.Course$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   liveSessions<T extends Prisma.Course$liveSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$liveSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LiveSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.Course$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2058,13 +2974,18 @@ export interface CourseFieldRefs {
   readonly teacherUserId: Prisma.FieldRef<"Course", 'String'>
   readonly title: Prisma.FieldRef<"Course", 'String'>
   readonly description: Prisma.FieldRef<"Course", 'String'>
+  readonly thumbnailUrl: Prisma.FieldRef<"Course", 'String'>
+  readonly promoVideoUrl: Prisma.FieldRef<"Course", 'String'>
+  readonly promoVideoProvider: Prisma.FieldRef<"Course", 'VideoProvider'>
   readonly price: Prisma.FieldRef<"Course", 'Decimal'>
   readonly currency: Prisma.FieldRef<"Course", 'String'>
   readonly status: Prisma.FieldRef<"Course", 'CourseStatus'>
   readonly publishedAt: Prisma.FieldRef<"Course", 'DateTime'>
+  readonly publishedBy: Prisma.FieldRef<"Course", 'String'>
+  readonly archivedAt: Prisma.FieldRef<"Course", 'DateTime'>
+  readonly archivedBy: Prisma.FieldRef<"Course", 'String'>
   readonly createdAt: Prisma.FieldRef<"Course", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Course", 'DateTime'>
-  readonly deletedAt: Prisma.FieldRef<"Course", 'DateTime'>
 }
     
 
@@ -2466,6 +3387,44 @@ export type CourseDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * Course.publishedByUser
+ */
+export type Course$publishedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * Course.archivedByUser
+ */
+export type Course$archivedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
  * Course.courseProgresses
  */
 export type Course$courseProgressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2511,6 +3470,30 @@ export type Course$chaptersArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ChapterScalarFieldEnum | Prisma.ChapterScalarFieldEnum[]
+}
+
+/**
+ * Course.auditLogs
+ */
+export type Course$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CourseAuditLog
+   */
+  select?: Prisma.CourseAuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CourseAuditLog
+   */
+  omit?: Prisma.CourseAuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseAuditLogInclude<ExtArgs> | null
+  where?: Prisma.CourseAuditLogWhereInput
+  orderBy?: Prisma.CourseAuditLogOrderByWithRelationInput | Prisma.CourseAuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.CourseAuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CourseAuditLogScalarFieldEnum | Prisma.CourseAuditLogScalarFieldEnum[]
 }
 
 /**

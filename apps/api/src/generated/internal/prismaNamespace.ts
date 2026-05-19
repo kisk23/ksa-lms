@@ -390,6 +390,7 @@ export const ModelName = {
   AssistantPermission: 'AssistantPermission',
   ParentStudentLink: 'ParentStudentLink',
   Course: 'Course',
+  CourseAuditLog: 'CourseAuditLog',
   CourseProgress: 'CourseProgress',
   Chapter: 'Chapter',
   Lesson: 'Lesson',
@@ -423,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "otpVerification" | "refreshToken" | "assistantPermission" | "parentStudentLink" | "course" | "courseProgress" | "chapter" | "lesson" | "assignment" | "question" | "questionOption" | "enrollment" | "lessonProgress" | "assignmentAttempt" | "assignmentBestScore" | "liveSession" | "liveSessionNotification" | "notification" | "promoCode" | "promoCodeUsage" | "payment" | "paymentWebhookEvent" | "refund"
+    modelProps: "user" | "otpVerification" | "refreshToken" | "assistantPermission" | "parentStudentLink" | "course" | "courseAuditLog" | "courseProgress" | "chapter" | "lesson" | "assignment" | "question" | "questionOption" | "enrollment" | "lessonProgress" | "assignmentAttempt" | "assignmentBestScore" | "liveSession" | "liveSessionNotification" | "notification" | "promoCode" | "promoCodeUsage" | "payment" | "paymentWebhookEvent" | "refund"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -868,6 +869,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CourseCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CourseCountAggregateOutputType> | number
+        }
+      }
+    }
+    CourseAuditLog: {
+      payload: Prisma.$CourseAuditLogPayload<ExtArgs>
+      fields: Prisma.CourseAuditLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CourseAuditLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CourseAuditLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>
+        }
+        findFirst: {
+          args: Prisma.CourseAuditLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CourseAuditLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>
+        }
+        findMany: {
+          args: Prisma.CourseAuditLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>[]
+        }
+        create: {
+          args: Prisma.CourseAuditLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>
+        }
+        createMany: {
+          args: Prisma.CourseAuditLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CourseAuditLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>[]
+        }
+        delete: {
+          args: Prisma.CourseAuditLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>
+        }
+        update: {
+          args: Prisma.CourseAuditLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.CourseAuditLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CourseAuditLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CourseAuditLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.CourseAuditLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseAuditLogPayload>
+        }
+        aggregate: {
+          args: Prisma.CourseAuditLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCourseAuditLog>
+        }
+        groupBy: {
+          args: Prisma.CourseAuditLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseAuditLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CourseAuditLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseAuditLogCountAggregateOutputType> | number
         }
       }
     }
@@ -2255,8 +2330,7 @@ export const UserScalarFieldEnum = {
   guardianPhone: 'guardianPhone',
   guardianIdentity: 'guardianIdentity',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -2314,22 +2388,40 @@ export const CourseScalarFieldEnum = {
   teacherUserId: 'teacherUserId',
   title: 'title',
   description: 'description',
+  thumbnailUrl: 'thumbnailUrl',
+  promoVideoUrl: 'promoVideoUrl',
+  promoVideoProvider: 'promoVideoProvider',
   price: 'price',
   currency: 'currency',
   status: 'status',
   publishedAt: 'publishedAt',
+  publishedBy: 'publishedBy',
+  archivedAt: 'archivedAt',
+  archivedBy: 'archivedBy',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  updatedAt: 'updatedAt'
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
+
+
+export const CourseAuditLogScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  action: 'action',
+  performedBy: 'performedBy',
+  performedAt: 'performedAt',
+  metadata: 'metadata'
+} as const
+
+export type CourseAuditLogScalarFieldEnum = (typeof CourseAuditLogScalarFieldEnum)[keyof typeof CourseAuditLogScalarFieldEnum]
 
 
 export const CourseProgressScalarFieldEnum = {
   id: 'id',
   studentUserId: 'studentUserId',
   courseId: 'courseId',
+  lastLessonId: 'lastLessonId',
   completedLessons: 'completedLessons',
   totalLessons: 'totalLessons',
   progressPct: 'progressPct',
@@ -2346,7 +2438,7 @@ export const ChapterScalarFieldEnum = {
   orderIndex: 'orderIndex',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  archivedAt: 'archivedAt'
 } as const
 
 export type ChapterScalarFieldEnum = (typeof ChapterScalarFieldEnum)[keyof typeof ChapterScalarFieldEnum]
@@ -2357,9 +2449,10 @@ export const LessonScalarFieldEnum = {
   chapterId: 'chapterId',
   title: 'title',
   orderIndex: 'orderIndex',
-  youtubeVideoId: 'youtubeVideoId',
+  videoUrl: 'videoUrl',
+  videoProvider: 'videoProvider',
   version: 'version',
-  isArchived: 'isArchived',
+  archivedAt: 'archivedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2373,7 +2466,9 @@ export const AssignmentScalarFieldEnum = {
   passingScorePct: 'passingScorePct',
   maxAttempts: 'maxAttempts',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  archivedAt: 'archivedAt',
+  archivedBy: 'archivedBy'
 } as const
 
 export type AssignmentScalarFieldEnum = (typeof AssignmentScalarFieldEnum)[keyof typeof AssignmentScalarFieldEnum]
@@ -2420,7 +2515,6 @@ export const LessonProgressScalarFieldEnum = {
   id: 'id',
   studentUserId: 'studentUserId',
   lessonId: 'lessonId',
-  lessonVersion: 'lessonVersion',
   videoWatchedPct: 'videoWatchedPct',
   videoCompletedAt: 'videoCompletedAt',
   isCompleted: 'isCompleted',
@@ -2438,7 +2532,8 @@ export const AssignmentAttemptScalarFieldEnum = {
   attemptNumber: 'attemptNumber',
   scorePct: 'scorePct',
   isPassed: 'isPassed',
-  submittedAt: 'submittedAt'
+  submittedAt: 'submittedAt',
+  snapshot: 'snapshot'
 } as const
 
 export type AssignmentAttemptScalarFieldEnum = (typeof AssignmentAttemptScalarFieldEnum)[keyof typeof AssignmentAttemptScalarFieldEnum]
@@ -2449,6 +2544,7 @@ export const AssignmentBestScoreScalarFieldEnum = {
   studentUserId: 'studentUserId',
   assignmentId: 'assignmentId',
   bestScorePct: 'bestScorePct',
+  bestAttemptId: 'bestAttemptId',
   isPassed: 'isPassed',
   updatedAt: 'updatedAt'
 } as const
@@ -2716,6 +2812,20 @@ export type ListEnumParentRelationshipFieldRefInput<$PrismaModel> = FieldRefInpu
 
 
 /**
+ * Reference to a field of type 'VideoProvider'
+ */
+export type EnumVideoProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VideoProvider'>
+    
+
+
+/**
+ * Reference to a field of type 'VideoProvider[]'
+ */
+export type ListEnumVideoProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VideoProvider[]'>
+    
+
+
+/**
  * Reference to a field of type 'Decimal'
  */
 export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -2740,6 +2850,34 @@ export type EnumCourseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'CourseStatus[]'
  */
 export type ListEnumCourseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CourseStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CourseAuditAction'
+ */
+export type EnumCourseAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CourseAuditAction'>
+    
+
+
+/**
+ * Reference to a field of type 'CourseAuditAction[]'
+ */
+export type ListEnumCourseAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CourseAuditAction[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -2866,20 +3004,6 @@ export type EnumReferenceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'ReferenceType[]'
  */
 export type ListEnumReferenceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReferenceType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -3096,6 +3220,7 @@ export type GlobalOmitConfig = {
   assistantPermission?: Prisma.AssistantPermissionOmit
   parentStudentLink?: Prisma.ParentStudentLinkOmit
   course?: Prisma.CourseOmit
+  courseAuditLog?: Prisma.CourseAuditLogOmit
   courseProgress?: Prisma.CourseProgressOmit
   chapter?: Prisma.ChapterOmit
   lesson?: Prisma.LessonOmit

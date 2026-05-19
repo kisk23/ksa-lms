@@ -21,15 +21,18 @@ model User {
   guardianIdentity      String?               @map("guardian_identity") @db.VarChar(20)
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt            DateTime?             @map("deleted_at") @db.Timestamptz(6)
   courseProgresses     CourseProgress[]
   assignmentAttempts   AssignmentAttempt[]
   assignmentBestScores AssignmentBestScore[]
   assistantPermissions AssistantPermission[] @relation("AssistantPerms")
   grantedPermissions   AssistantPermission[] @relation("GrantedByPerms")
   taughtCourses        Course[]              @relation("TeacherCourses")
+  publishedCourses     Course[]              @relation("CoursePublisher")
+  archivedCourses      Course[]              @relation("CourseArchiver")
+  courseAuditLogs      CourseAuditLog[]
   enrolledByMe         Enrollment[]          @relation("EnrolledByUser")
   enrollments          Enrollment[]          @relation("StudentEnrollments")
+  archivedAssignments  Assignment[]          @relation("AssignmentArchiver")
   lessonProgress       LessonProgress[]
   otpVerifications     OtpVerification[]
   parentLinks          ParentStudentLink[]   @relation("ParentSide")
@@ -114,19 +117,27 @@ model Course {
   teacherUserId    String           @map("teacher_user_id") @db.Uuid
   title            String           @db.VarChar(255)
   description      String?
+  thumbnailUrl     String?          @map("thumbnail_url")
+  promoVideoUrl    String?          @map("promo_video_url")
+  promoVideoProvider VideoProvider? @map("promo_video_provider")
   price            Decimal          @db.Decimal(10, 2)
   // SAR is the actual charge currency (Moyasar only supports SAR).
   // To show international users an equivalent in their currency, use a live
   // exchange rate API at display time.
   currency         String           @default("SAR") @db.VarChar(3)
-  status           CourseStatus     @default(DRAFT)
+  status           CourseStatus     @default(DRAFT)        
   publishedAt      DateTime?        @map("published_at") @db.Timestamptz(6)
+  publishedBy      String?          @map("published_by") @db.Uuid        
+  archivedAt       DateTime?        @map("archived_at") @db.Timestamptz(6) 
+  archivedBy       String?          @map("archived_by") @db.Uuid          
   createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt        DateTime?        @map("deleted_at") @db.Timestamptz(6)
+  teacher          User             @relation("TeacherCourses", fields: [teacherUserId], references: [id])
+  publishedByUser  User?            @relation("CoursePublisher", fields: [publishedBy], references: [id])
+  archivedByUser   User?            @relation("CourseArchiver", fields: [archivedBy], references: [id])
   courseProgresses CourseProgress[]
   chapters         Chapter[]
-  teacher          User             @relation("TeacherCourses", fields: [teacherUserId], references: [id])
+  auditLogs        CourseAuditLog[]
   enrollments      Enrollment[]
   liveSessions     LiveSession[]
   payments         Payment[]
@@ -137,16 +148,35 @@ model Course {
   @@map("courses")
 }
 
+model CourseAuditLog {
+  id              String             @id @default(uuid()) @db.Uuid
+  courseId        String             @map("course_id") @db.Uuid
+  action          CourseAuditAction  @map("action")
+  performedBy     String             @map("performed_by") @db.Uuid
+  performedAt     DateTime           @default(now()) @map("performed_at") @db.Timestamptz(6)
+  metadata        Json?              // snapshot of what changed
+
+  course     Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  actor      User   @relation(fields: [performedBy], references: [id])
+
+  @@index([courseId])
+  @@index([performedBy])
+  @@index([metadata], type: Gin)
+  @@map("course_audit_logs")
+}
+
 model CourseProgress {
   id               String    @id @default(uuid()) @db.Uuid
   studentUserId    String    @map("student_user_id") @db.Uuid
   courseId         String    @map("course_id") @db.Uuid
+  lastLessonId     String?   @map("last_lesson_id") @db.Uuid
   completedLessons Int       @default(0) @map("completed_lessons")
   totalLessons     Int       @map("total_lessons")
   progressPct      Int       @default(0) @map("progress_pct")
   completedAt      DateTime? @map("completed_at") @db.Timestamptz(6)
   course           Course    @relation(fields: [courseId], references: [id])
   student          User      @relation(fields: [studentUserId], references: [id])
+  lastLesson       Lesson?   @relation("LastLessonBookmark", fields: [lastLessonId], references: [id])
 
   @@unique([studentUserId, courseId])
   @@map("course_progress")
@@ -159,8 +189,8 @@ model Chapter {
   orderIndex Int       @map("order_index")
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt  DateTime? @map("deleted_at") @db.Timestamptz(6)
-  course     Course    @relation(fields: [courseId], references: [id])
+  archivedAt  DateTime? @map("archived_at") @db.Timestamptz(6)
+  course     Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons    Lesson[]
 
   @@unique([courseId, orderIndex])
@@ -172,17 +202,19 @@ model Lesson {
   chapterId      String           @map("chapter_id") @db.Uuid
   title          String           @db.VarChar(255)
   orderIndex     Int              @map("order_index")
-  youtubeVideoId String           @map("youtube_video_id") @db.VarChar(20)
+  videoUrl       String           @default("") @map("video_url")
+  videoProvider  VideoProvider    @default(YOUTUBE) @map("video_provider")
   version        Int              @default(1)
-  isArchived     Boolean          @default(false) @map("is_archived")
+  archivedAt     DateTime?        @map("archived_at") @db.Timestamptz(6)
   createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
   assignment     Assignment?
   lessonProgress LessonProgress[]
-  chapter        Chapter          @relation(fields: [chapterId], references: [id])
+  progressBookmarks CourseProgress[] @relation("LastLessonBookmark")
+  chapter        Chapter          @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   @@unique([chapterId, orderIndex])
-  @@index([isArchived])
+  @@index([archivedAt])
   @@map("lessons")
 }
 
@@ -193,10 +225,13 @@ model Assignment {
   maxAttempts     Int?                  @map("max_attempts")
   createdAt       DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  archivedAt      DateTime?             @map("archived_at") @db.Timestamptz(6)
+  archivedBy      String?               @map("archived_by") @db.Uuid
   attempts        AssignmentAttempt[]
   bestScores      AssignmentBestScore[]
-  lesson          Lesson                @relation(fields: [lessonId], references: [id])
+  lesson          Lesson                @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   questions       Question[]
+  archivedByUser  User?                 @relation("AssignmentArchiver", fields: [archivedBy], references: [id])
 
   @@map("assignments")
 }
@@ -208,7 +243,7 @@ model Question {
   orderIndex   Int              @map("order_index")
   createdAt    DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   options      QuestionOption[]
-  assignment   Assignment       @relation(fields: [assignmentId], references: [id])
+  assignment   Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
 
   @@index([assignmentId])
   @@map("questions")
@@ -220,7 +255,7 @@ model QuestionOption {
   text       String
   isCorrect  Boolean  @default(false) @map("is_correct")
   orderIndex Int      @map("order_index")
-  question   Question @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([questionId])
   @@map("question_options")
@@ -242,7 +277,7 @@ model Enrollment {
   enrolledAt     DateTime         @default(now()) @map("enrolled_at") @db.Timestamptz(6)
   status         EnrollmentStatus @default(PENDING) @map("status")
   expiryDate     DateTime?        @map("expiry_date") @db.Timestamptz(6)
-  course         Course           @relation(fields: [courseId], references: [id])
+  course         Course           @relation(fields: [courseId], references: [id], onDelete: Restrict)
   enrolledByUser User?            @relation("EnrolledByUser", fields: [enrolledBy], references: [id], onDelete: Restrict)
   student        User             @relation("StudentEnrollments", fields: [studentUserId], references: [id])
   payment        Payment?         @relation(fields: [paymentId], references: [id])
@@ -257,7 +292,6 @@ model LessonProgress {
   id               String    @id @default(uuid()) @db.Uuid
   studentUserId    String    @map("student_user_id") @db.Uuid
   lessonId         String    @map("lesson_id") @db.Uuid
-  lessonVersion    Int       @map("lesson_version")
   videoWatchedPct  Int       @default(0) @map("video_watched_pct") @db.SmallInt
   videoCompletedAt DateTime? @map("video_completed_at") @db.Timestamptz(6)
   isCompleted      Boolean   @default(false) @map("is_completed")
@@ -278,8 +312,10 @@ model AssignmentAttempt {
   scorePct      Int        @map("score_pct") @db.SmallInt
   isPassed      Boolean    @map("is_passed")
   submittedAt   DateTime   @default(now()) @map("submitted_at") @db.Timestamptz(6)
+  snapshot      Json?      // Frozen copy of questions/options at submission time
   assignment    Assignment @relation(fields: [assignmentId], references: [id])
   student       User       @relation(fields: [studentUserId], references: [id])
+  bestScores    AssignmentBestScore[] @relation("BestAttemptLink")
 
   // Unique per student+assignment+attempt — prevents race-condition duplicate attempt numbers
   @@unique([studentUserId, assignmentId, attemptNumber])
@@ -294,10 +330,12 @@ model AssignmentBestScore {
   studentUserId String     @map("student_user_id") @db.Uuid
   assignmentId  String     @map("assignment_id") @db.Uuid
   bestScorePct  Int        @map("best_score_pct") @db.SmallInt
+  bestAttemptId String     @map("best_attempt_id") @db.Uuid
   isPassed      Boolean    @map("is_passed")
   updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
   assignment    Assignment @relation(fields: [assignmentId], references: [id])
   student       User       @relation(fields: [studentUserId], references: [id])
+  bestAttempt   AssignmentAttempt? @relation("BestAttemptLink", fields: [bestAttemptId], references: [id])
 
   @@unique([studentUserId, assignmentId])
   @@index([assignmentId])
@@ -472,7 +510,7 @@ model Payment {
   // Relations
   payer            User                 @relation("PaymentPayer", fields: [payerUserId], references: [id])
   student          User                 @relation("PaymentStudent", fields: [studentUserId], references: [id])
-  course           Course               @relation(fields: [courseId], references: [id])
+  course           Course               @relation(fields: [courseId], references: [id], onDelete: Restrict)
   promoCode        PromoCode?           @relation(fields: [promoCodeId], references: [id])
   enrollment       Enrollment?
   refunds          Refund[]
@@ -539,10 +577,24 @@ enum ParentRelationship {
   GUARDIAN
 }
 
+enum VideoProvider {
+  YOUTUBE
+  BUNNY
+}
+
 enum CourseStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+enum CourseAuditAction {
+  CREATED
+  UPDATED
+  PUBLISHED
+  ARCHIVED
+  RESTORED
+  DELETED
 }
 
 enum EnrollmentStatus {
