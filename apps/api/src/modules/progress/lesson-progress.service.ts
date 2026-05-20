@@ -101,9 +101,12 @@ export class LessonProgressService {
    * Delegates progress counter update to CourseProgressService.increment(),
    * which also recalculates progressPct and sets completedAt if at 100%.
    */
-  async complete(studentUserId: string, lessonId: string) {
+  async complete(studentUserId: string, lessonId: string, override = false) {
     const courseId = await this.resolveCourseId(lessonId);
-    await this.assertEnrolled(studentUserId, courseId);
+    if (!override) {
+      // Only check enrollment for self-service student calls
+      await this.assertEnrolled(studentUserId, courseId);
+    }
 
     // Check for existing completion — upsert can't express conditional logic
     const existing = await this.prisma.lessonProgress.findUnique({

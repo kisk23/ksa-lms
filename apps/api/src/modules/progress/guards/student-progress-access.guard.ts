@@ -121,7 +121,6 @@ export class StudentProgressAccessGuard implements CanActivate {
       const assignment = await this.prisma.assignment.findUnique({
         where: { id: assignmentId },
         select: {
-          archivedAt: true,
           lesson: {
             select: {
               chapter: {
@@ -144,7 +143,6 @@ export class StudentProgressAccessGuard implements CanActivate {
       const lesson = await this.prisma.lesson.findUnique({
         where: { id: lessonId },
         select: {
-          archivedAt: true,
           chapter: {
             select: {
               courseId: true,
@@ -155,7 +153,7 @@ export class StudentProgressAccessGuard implements CanActivate {
       });
 
       if (!lesson) {
-        throw new NotFoundException(`Lesson #${lessonId} not found or archived`);
+        throw new NotFoundException(`Lesson #${lessonId} not found`);
       }
       resolvedCourseId = lesson.chapter.courseId;
       teacherUserId = lesson.chapter.course.teacherUserId;
@@ -199,6 +197,7 @@ export class StudentProgressAccessGuard implements CanActivate {
       });
 
       if (link) return true;
+      throw new ForbiddenException('You do not have a verified relationship with this student.');
     }
 
     throw new ForbiddenException(

@@ -50,7 +50,6 @@ export class AssignmentAccessGuard implements CanActivate {
     const assignment = await this.prisma.assignment.findUnique({
       where: { id: assignmentId },
       select: {
-        archivedAt: true,
         lesson: {
           select: {
             chapter: {

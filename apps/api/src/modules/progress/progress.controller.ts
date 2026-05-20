@@ -282,7 +282,7 @@ export class ProgressController {
     @Param('studentId') studentId: string,
     @Param('lessonId') lessonId: string,
   ) {
-    return this.lessonProgressService.complete(studentId, lessonId);
+    return this.lessonProgressService.complete(studentId, lessonId, true);
   }
 
   /**
