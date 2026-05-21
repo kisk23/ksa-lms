@@ -10,5 +10,5 @@
       "@prisma/*": ["src/prisma/*"]
     }
   },
-  "include": ["src", "prisma.config.ts", "prisma/seed.ts"]
+  "include": ["src", "prisma.config.ts", "prisma/**/*.ts"]
 }
