@@ -1,6 +1,7 @@
 'use client';
 
-import { LockKeyhole, LogIn, ShieldCheck, User } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
@@ -16,6 +17,8 @@ export function AdminLoginForm() {
   const redirectTo = getPostLoginRedirect(searchParams.get('redirect'));
   const [identity, setIdentity] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
@@ -57,13 +60,13 @@ export function AdminLoginForm() {
 
       if (!isAdminUser(session.user)) {
         await adminAuthService.logout().catch(() => undefined);
-        setError('This account is not allowed to access the admin dashboard.');
+        setError('هذا الحساب غير مصرح له بالوصول إلى لوحة الإدارة.');
         return;
       }
 
       router.replace(redirectTo || ADMIN_HOME_PATH);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed.');
+      setError(err instanceof Error ? err.message : 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.');
     } finally {
       setIsSubmitting(false);
     }
@@ -71,99 +74,253 @@ export function AdminLoginForm() {
 
   if (isCheckingSession) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface px-6">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary/20 border-t-primary" />
+      <div
+        className="min-h-screen w-full flex items-center justify-center"
+        style={{ background: '#F7F8FA' }}
+      >
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#2446B8]/20 border-t-[#2446B8]" />
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-surface px-6 py-10">
-      <div className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-5xl items-center">
-        <section className="grid w-full grid-cols-1 overflow-hidden rounded-lg border border-outline-variant bg-white shadow-card-soft md:grid-cols-[1fr_420px]">
-          <div className="flex flex-col justify-between bg-primary px-8 py-10 text-on-primary md:px-10">
-            <div>
-              <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-lg bg-white/10">
-                <ShieldCheck size={26} />
-              </div>
-              <h1 className="text-3xl font-bold leading-tight">Sulam Admin</h1>
-              <p className="mt-4 max-w-md text-sm leading-6 text-white/80">
-                Sign in with an administrator account to manage users, courses, approvals, reports,
-                payments, and refunds.
-              </p>
-            </div>
+    <div
+      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden"
+      style={{
+        background: '#F7F8FA',
+        fontFamily: "'Cairo', sans-serif",
+      }}
+      dir="rtl"
+    >
+      {/* Grid background pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, rgba(203, 213, 225, 0.15) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(203, 213, 225, 0.15) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+        }}
+      />
 
-            <div className="mt-10 border-t border-white/15 pt-6 text-sm text-white/70">
-              Secure cookie session with automatic refresh.
+      {/* Diagonal line pattern overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 80px,
+              rgba(203, 213, 225, 0.08) 80px,
+              rgba(203, 213, 225, 0.08) 81px
+            )
+          `,
+        }}
+      />
+
+      {/* Glassmorphism Card */}
+      <div
+        className="relative z-10 w-full max-w-[480px] mx-4"
+        style={{
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.5)',
+          borderRadius: '20px',
+          padding: '48px',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.05)',
+        }}
+      >
+        {/* Logo & Branding */}
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Image src="/Sullam.svg" alt="Sulam Logo" width={120} height={60} className="mb-4" />
+          <h2
+            className="mb-2"
+            style={{
+              fontSize: '1.5rem',
+              fontWeight: '700',
+              color: '#16213E',
+            }}
+          >
+            بوابة التحكم والتحقق أمنياً
+          </h2>
+          <p
+            style={{
+              fontSize: '0.95rem',
+              color: '#64748B',
+            }}
+          >
+            يرجى تسجيل الدخول للوصول الآمن
+          </p>
+        </div>
+
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+          {/* Email / Identity Field */}
+          <div>
+            <label
+              htmlFor="admin-identity"
+              className="block mb-2"
+              style={{
+                fontSize: '0.95rem',
+                fontWeight: '600',
+                color: '#1E293B',
+              }}
+            >
+              البريد الإلكتروني الوظيفي
+            </label>
+            <div className="relative">
+              <input
+                id="admin-identity"
+                type="text"
+                value={identity}
+                onChange={(e) => setIdentity(e.target.value)}
+                autoComplete="username"
+                required
+                minLength={3}
+                placeholder="admin@sullam.com"
+                className="w-full pr-4 pl-12 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#2446B8]/30 placeholder:text-[#CBD5E1]"
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #E2E8F0',
+                  fontSize: '0.95rem',
+                  color: '#1E293B',
+                }}
+              />
+              <Mail
+                className="absolute left-4 top-1/2 -translate-y-1/2"
+                size={20}
+                style={{ color: '#94A3B8' }}
+              />
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-8 py-10" noValidate>
-            <div>
-              <p className="text-sm font-semibold text-primary">Admin login</p>
-              <h2 className="mt-2 text-2xl font-bold text-on-surface">Welcome back</h2>
-            </div>
-
-            <label className="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-              Identity or phone
-              <span className="relative">
-                <User
-                  size={18}
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-outline"
-                />
-                <input
-                  value={identity}
-                  onChange={(event) => setIdentity(event.target.value)}
-                  autoComplete="username"
-                  required
-                  minLength={3}
-                  className="h-11 w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-10 text-left outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
-                />
-              </span>
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-              Password
-              <span className="relative">
-                <LockKeyhole
-                  size={18}
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-outline"
-                />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  autoComplete="current-password"
-                  required
-                  minLength={8}
-                  className="h-11 w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-10 text-left outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
-                />
-              </span>
-            </label>
-
-            {error && (
-              <p className="rounded-lg border border-error/30 bg-error-container px-3 py-2 text-sm text-on-error-container">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="mt-2 flex h-11 items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-on-primary transition hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-60"
+          {/* Password Field */}
+          <div>
+            <label
+              htmlFor="admin-password"
+              className="block mb-2"
+              style={{
+                fontSize: '0.95rem',
+                fontWeight: '600',
+                color: '#1E293B',
+              }}
             >
-              {isSubmitting ? (
-                <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-              ) : (
-                <>
-                  <LogIn size={18} />
-                  Sign in
-                </>
-              )}
-            </button>
-          </form>
-        </section>
+              كلمة المرور الأمنية
+            </label>
+            <div className="relative">
+              <input
+                id="admin-password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+                minLength={8}
+                placeholder="••••••••"
+                className="w-full pr-12 pl-12 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#2446B8]/30 placeholder:text-[#CBD5E1]"
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #E2E8F0',
+                  fontSize: '0.95rem',
+                  color: '#1E293B',
+                }}
+              />
+              <Lock
+                className="absolute left-4 top-1/2 -translate-y-1/2"
+                size={20}
+                style={{ color: '#94A3B8' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 focus:outline-none"
+              >
+                {showPassword ? (
+                  <EyeOff size={20} style={{ color: '#94A3B8' }} />
+                ) : (
+                  <Eye size={20} style={{ color: '#94A3B8' }} />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Remember Me & Forgot Password */}
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 rounded cursor-pointer"
+                style={{
+                  accentColor: '#2446B8',
+                }}
+              />
+              <span
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#475569',
+                  fontWeight: '500',
+                }}
+              >
+                تذكرني
+              </span>
+            </label>
+            <a
+              href="#"
+              style={{
+                fontSize: '0.9rem',
+                color: '#64748B',
+                fontWeight: '500',
+                textDecoration: 'none',
+              }}
+              className="hover:underline transition-all"
+            >
+              نسيت كلمة المرور؟
+            </a>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div
+              className="rounded-lg px-4 py-3 text-sm"
+              style={{
+                background: '#FEF2F2',
+                border: '1px solid #FECACA',
+                color: '#DC2626',
+                fontWeight: '500',
+              }}
+            >
+              {error}
+            </div>
+          )}
+
+          {/* Login Button */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full py-3.5 rounded-lg transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            style={{
+              background: '#2446B8',
+              color: '#FFFFFF',
+              fontSize: '1rem',
+              fontWeight: '600',
+              border: 'none',
+              cursor: isSubmitting ? 'not-allowed' : 'pointer',
+              boxShadow: '0 4px 12px rgba(36, 70, 184, 0.25)',
+            }}
+          >
+            {isSubmitting ? (
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            ) : (
+              'تسجيل الدخول إلى لوحة التحكم'
+            )}
+          </button>
+        </form>
       </div>
-    </main>
+    </div>
   );
 }
