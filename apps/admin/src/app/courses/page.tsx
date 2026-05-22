@@ -7,6 +7,7 @@ import {
   MOCK_COURSES,
 } from '@features/course-management';
 import type {
+  Course,
   CourseStatusFilter,
   PriceRangeFilter,
   SubjectFilter,
@@ -50,20 +51,22 @@ function matchesPriceRange(price: number | null, range: PriceRangeFilter): boole
 }
 
 export default function CoursesPage() {
+  const [courses] = useState<Course[]>(MOCK_COURSES);
   const [subject, setSubject] = useState<SubjectFilter>('all');
   const [teacher, setTeacher] = useState<TeacherFilter>('all');
   const [status, setStatus] = useState<CourseStatusFilter>('all');
   const [priceRange, setPriceRange] = useState<PriceRangeFilter>('all');
 
   const filteredCourses = useMemo(() => {
-    return MOCK_COURSES.filter((course) => {
+    return courses.filter((course) => {
+      if (course.status === 'deleted') return false;
       if (!matchesSubject(course.name, subject)) return false;
       if (!matchesTeacher(course.teacher, teacher)) return false;
       if (status !== 'all' && course.status !== status) return false;
       if (!matchesPriceRange(course.price, priceRange)) return false;
       return true;
     });
-  }, [subject, teacher, status, priceRange]);
+  }, [courses, subject, teacher, status, priceRange]);
 
   const handleReset = () => {
     setSubject('all');

@@ -24,7 +24,6 @@ const statusOptions = [
   { value: 'active', label: 'نشط' },
   { value: 'suspended', label: 'معلق' },
   { value: 'pending', label: 'قيد الانتظار' },
-  { value: 'deleted', label: 'محذوف' },
 ];
 
 const priceOptions = [
@@ -74,8 +73,13 @@ export function CoursesFilters({
         onChange={(v) => onPriceRangeChange(v as PriceRangeFilter)}
       />
 
-      <Button variant="secondary" icon={ListFilter} className="h-[42px]" onClick={onReset}>
-        إعادة تعيين
+      <Button
+        variant="secondary"
+        icon={ListFilter}
+        className="h-[42px] font-bold border border-outline-variant"
+        onClick={onReset}
+      >
+        إعادة تعيين الفلاتر
       </Button>
     </div>
   );
