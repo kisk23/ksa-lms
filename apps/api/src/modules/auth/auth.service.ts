@@ -9,12 +9,12 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
-import type { User } from '../../generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterStudentDto } from './dto/register.dto';
 import { sanitizeUser, type SafeUser } from './utils/sanitize-user';
+import type { User } from '../../generated/client';
 
 @Injectable()
 export class AuthService {
@@ -245,7 +245,7 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.usersService.findByIdentityOrPhone(dto.identity);
+    const user = await this.usersService.findByIdentityOrPhoneOrEmail(dto.identity);
     if (!user) throw new UnauthorizedException('INVALID_CREDENTIALS');
 
     const isPasswordValid = await bcrypt.compare(dto.password, user.passwordHash);

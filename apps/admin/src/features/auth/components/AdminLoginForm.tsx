@@ -169,7 +169,7 @@ export function AdminLoginForm() {
                 color: '#1E293B',
               }}
             >
-              البريد الإلكتروني الوظيفي
+              (رقم الهوية او رقم الجوال) البريد الإلكتروني الوظيفي
             </label>
             <div className="relative">
               <input

@@ -84,7 +84,7 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { identity } });
   }
 
-  async findByIdentityOrPhone(identifier: string) {
+  async findByIdentityOrPhoneOrEmail(identifier: string) {
     return this.prisma.user.findFirst({
       where: {
         OR: [{ identity: identifier }, { phone: identifier }, { email: identifier }],
