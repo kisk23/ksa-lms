@@ -28,30 +28,6 @@ interface AnswerSnapshot {
 export class AssignmentAttemptService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // ─── PRIVATE HELPERS ───────────────────────────────────────────────────────
-
-  /**
-   * Checks the student hasn't exceeded the attempt limit before grading.
-   * Returns the current attempt count so the caller can set attemptNumber.
-   */
-  private async checkAttemptLimit(
-    studentUserId: string,
-    assignmentId: string,
-    maxAttempts: number | null,
-  ): Promise<number> {
-    const count = await this.prisma.assignmentAttempt.count({
-      where: { studentUserId, assignmentId },
-    });
-
-    if (maxAttempts !== null && count >= maxAttempts) {
-      throw new ForbiddenException(
-        `You have reached the maximum number of attempts (${maxAttempts}) for this assignment.`,
-      );
-    }
-
-    return count;
-  }
-
   // ─── PUBLIC METHODS ─────────────────────────────────────────────────────────
 
   /**
@@ -63,11 +39,13 @@ export class AssignmentAttemptService {
    *  1. Load assignment with all questions + options (needed for evaluation and snapshot)
    *  2. Validate: each submitted questionId belongs to this assignment
    *  3. Validate: each selectedOptionId belongs to its question
-   *  4. Check attempt limit
-   *  5. Compute scorePct = (correctAnswers / totalQuestions) * 100
-   *  6. Build AnswerSnapshot per question — includes questionText, optionText, isCorrect
-   *  7. Write AssignmentAttempt (snapshot persisted to AssignmentAttempt.snapshot Json?)
-   *  8. Upsert AssignmentBestScore if this attempt beats the stored best
+   *  4. Grade — build snapshots to preserve question/option text at submission time
+   *  5. Open Transaction:
+   *     a. Acquire transaction-level advisory lock on (studentUserId, assignmentId)
+   *     b. Count existing attempts safely under the lock
+   *     c. Check attempt limit and throw clean ForbiddenException if exceeded
+   *     d. Write AssignmentAttempt (snapshot persisted to AssignmentAttempt.snapshot)
+   *     e. Upsert AssignmentBestScore if this attempt beats the stored best
    *
    * The snapshot is intentional — it preserves the exact question/option text at
    * submission time. If a teacher later edits the question, the historical
@@ -123,14 +101,7 @@ export class AssignmentAttemptService {
       }
     }
 
-    // 3. Check attempt limit (returns current count for setting attemptNumber)
-    const currentCount = await this.checkAttemptLimit(
-      studentUserId,
-      assignmentId,
-      assignment.maxAttempts,
-    );
-
-    // 4. Validate selectedOptionIds and build answer index
+    // 3. Validate selectedOptionIds and build answer index
     for (const answer of answers) {
       const question = questionMap.get(answer.questionId)!;
       const optionExists = question.options.some((o) => o.id === answer.selectedOptionId);
@@ -141,7 +112,7 @@ export class AssignmentAttemptService {
       }
     }
 
-    // 5. Grade — build snapshots in the same pass to avoid a second iteration
+    // 4. Grade — build snapshots in the same pass to avoid a second iteration
     let correctCount = 0;
     const snapshots: AnswerSnapshot[] = [];
 
@@ -168,7 +139,7 @@ export class AssignmentAttemptService {
       const isCorrect = selectedOption.isCorrect;
       if (isCorrect) correctCount++;
 
-      // 6. Build snapshot — includes isCorrect alongside the text fields
+      // Build snapshot — includes isCorrect alongside the text fields
       snapshots.push({
         questionId: question.id,
         questionText: question.text,
@@ -181,11 +152,35 @@ export class AssignmentAttemptService {
     const totalQuestions = assignment.questions.length;
     const scorePct = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
     const isPassed = scorePct >= assignment.passingScorePct;
-    const attemptNumber = currentCount + 1;
 
-    // 7 + 8. Persist attempt (with snapshot) and upsert best score in one transaction
+    // 5. Persist attempt and upsert best score in one transaction with strict concurrency controls
     return this.prisma.$transaction(async (tx) => {
-      // 7. Create attempt — snapshot is frozen at submission time so historical
+      // a. Acquire a transaction-level advisory lock on (studentUserId, assignmentId).
+      //    We hash both UUIDs into 32-bit integers to form a highly specific memory lock key.
+      //    This prevents concurrent attempts by the same student from racing, while
+      //    other students submitting concurrently run completely in parallel without blocking.
+      await tx.$executeRaw`
+        SELECT pg_advisory_xact_lock(
+          hashtext(${studentUserId}::text), 
+          hashtext(${assignmentId}::text)
+        )
+      `;
+
+      // b. Safely count attempts now that we have serialized access for this student + assignment
+      const currentCount = await tx.assignmentAttempt.count({
+        where: { studentUserId, assignmentId },
+      });
+
+      // c. Enforce attempt limit check under the safety of our advisory lock
+      if (assignment.maxAttempts !== null && currentCount >= assignment.maxAttempts) {
+        throw new ForbiddenException(
+          `You have reached the maximum number of attempts (${assignment.maxAttempts}) for this assignment.`,
+        );
+      }
+
+      const attemptNumber = currentCount + 1;
+
+      // d. Create attempt — snapshot is frozen at submission time so historical
       //    records stay accurate even if the teacher later edits question/option text.
       const attempt = await tx.assignmentAttempt.create({
         data: {
@@ -194,11 +189,11 @@ export class AssignmentAttemptService {
           attemptNumber,
           scorePct,
           isPassed,
-          snapshot: snapshots as unknown as Prisma.InputJsonValue, // AssignmentAttempt.snapshot Json?
+          snapshot: snapshots as unknown as Prisma.InputJsonValue,
         },
       });
 
-      // 8. Fetch current best to decide whether this attempt beats it
+      // e. Fetch current best to decide whether this attempt beats it
       const existing = await tx.assignmentBestScore.findUnique({
         where: { studentUserId_assignmentId: { studentUserId, assignmentId } },
         select: { bestScorePct: true },
