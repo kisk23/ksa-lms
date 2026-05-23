@@ -14,6 +14,10 @@ interface PaymentsTableProps {
   onPageChange: (page: number) => void;
   onViewPayment: (id: string) => void;
   onRefund?: (id: string) => void;
+  onCapture?: (id: string) => void;
+  onVoid?: (id: string) => void;
+  onUpdate?: (id: string) => void;
+  busyPaymentId?: string | null;
 }
 
 export function PaymentsTable({
@@ -25,6 +29,10 @@ export function PaymentsTable({
   onPageChange,
   onViewPayment,
   onRefund,
+  onCapture,
+  onVoid,
+  onUpdate,
+  busyPaymentId,
 }: PaymentsTableProps) {
   return (
     <>
@@ -56,6 +64,10 @@ export function PaymentsTable({
                   payment={payment}
                   onView={onViewPayment}
                   onRefund={onRefund}
+                  onCapture={onCapture}
+                  onVoid={onVoid}
+                  onUpdate={onUpdate}
+                  isBusy={busyPaymentId === payment.id}
                 />
               ))
             )}
