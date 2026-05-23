@@ -3,11 +3,16 @@
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "./",
+    "rootDir": "../../",
+    "ignoreDeprecations": "5.0",
     "paths": {
       "@modules/*": ["src/modules/*"],
       "@common/*": ["src/common/*"],
       "@config/*": ["src/config/*"],
-      "@prisma/*": ["src/prisma/*"]
+      "@prisma/*": ["src/prisma/*"],
+      "@lms/shared-types": ["../../packages/shared-types/src/index.ts"],
+      "@lms/utils": ["../../packages/utils/src/index.ts"],
+      "@lms/logger": ["../../packages/logger/src/index.ts"]
     }
   },
   "include": ["src", "prisma.config.ts", "prisma/**/*.ts"]

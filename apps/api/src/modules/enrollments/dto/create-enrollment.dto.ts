@@ -1,24 +1,29 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsUUID, IsNumber, Min, IsOptional } from 'class-validator';
+import { IsUUID, IsOptional, IsNumber, Min, IsDateString } from 'class-validator';
 
-export class CreateEnrollmentDto {
-  @ApiProperty({ example: 'student-uuid-here' })
+export class CreateManualEnrollmentDto {
+  @ApiProperty({ description: 'UUID of the student to enroll' })
   @IsUUID()
   studentUserId!: string;
 
-  @ApiProperty({ example: 'course-uuid-here' })
+  @ApiProperty({ description: 'UUID of the course to enroll the student into' })
   @IsUUID()
   courseId!: string;
 
-  @ApiPropertyOptional({ example: 'parent-uuid-here' })
+  @ApiPropertyOptional({
+    description: 'Amount paid (SAR). Defaults to 0 for fully-offline or free enrollments.',
+    default: 0,
+  })
   @IsOptional()
-  @IsUUID()
-  enrolledBy?: string;
-
-  @ApiProperty({ example: 199.0, description: 'Actual amount paid at enrollment' })
   @IsNumber()
   @Min(0)
-  @Type(() => Number)
-  amountPaid!: number;
+  amountPaid?: number;
+
+  @ApiPropertyOptional({
+    description: 'Optional expiry date for the enrollment (ISO 8601). Null means no expiry.',
+    example: '2026-12-31T23:59:59Z',
+  })
+  @IsOptional()
+  @IsDateString()
+  expiryDate?: string;
 }

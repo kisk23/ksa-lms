@@ -101,7 +101,7 @@ export enum CourseAuditAction {
   PUBLISHED = 'PUBLISHED',
   ARCHIVED = 'ARCHIVED',
   RESTORED = 'RESTORED',
-  DELETED = 'DELETED'
+  DELETED = 'DELETED',
 }
 
 export interface ICourse {
@@ -147,6 +147,7 @@ export enum EnrollmentStatus {
   ACTIVE = 'ACTIVE',
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
+  PENDING = 'PENDING',
 }
 
 export interface IEnrollment {
