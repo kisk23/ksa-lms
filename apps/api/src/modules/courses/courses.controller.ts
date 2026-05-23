@@ -1,12 +1,21 @@
-import { UserRole,CourseStatus } from '@lms/shared-types';
+import { UserRole, CourseStatus } from '@lms/shared-types';
 import type { IUser } from '@lms/shared-types';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 import { CoursesService } from './courses.service';
 import { CreateCourseDto, UpdateCourseDto } from './dto';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
-
 import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -21,13 +30,14 @@ export class CoursesController {
 
   @Get()
   @ApiOperation({ summary: 'List all published courses (Public)' })
-  findAll(@Query() query: PaginationQueryDto & { teacherUserId?: string }) {
+  findAll(@Query() query: PaginationQueryDto & { teacherUserId?: string; category?: string }) {
     return this.coursesService.findAll({
       page: query.page ?? 1,
       limit: query.limit ?? 10,
       search: query.search,
       status: CourseStatus.PUBLISHED, // Security: Public can only see published
       teacherUserId: query.teacherUserId,
+      category: query.category,
     });
   }
 
@@ -39,9 +49,14 @@ export class CoursesController {
   @ApiOperation({ summary: 'List courses for management (Dashboard)' })
   findForManagement(
     @GetCurrentUser() user: IUser,
-    @Query() query: PaginationQueryDto & { status?: CourseStatus; teacherUserId?: string }
+    @Query()
+    query: PaginationQueryDto & {
+      status?: CourseStatus;
+      teacherUserId?: string;
+      category?: string;
+    },
   ) {
-    // Logic: Teachers can ONLY see their own courses. 
+    // Logic: Teachers can ONLY see their own courses.
     // Admins/Assistants can see all or filter by a specific teacher.
     const teacherUserId = user.role === UserRole.TEACHER ? user.id : query.teacherUserId;
 
@@ -51,6 +66,7 @@ export class CoursesController {
       search: query.search,
       status: query.status,
       teacherUserId,
+      category: query.category,
     });
   }
 

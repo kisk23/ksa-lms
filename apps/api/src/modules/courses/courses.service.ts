@@ -52,14 +52,16 @@ export class CoursesService {
     search?: string;
     status?: CourseStatus;
     teacherUserId?: string;
+    category?: string;
   }) {
-    const { page, limit, search, status, teacherUserId } = params;
+    const { page, limit, search, status, teacherUserId, category } = params;
     const skip = (page - 1) * limit;
 
     // Build the 'where' object once so it's reusable for both query and count
     const where: Prisma.CourseWhereInput = {
       ...(status && { status }),
       ...(teacherUserId && { teacherUserId }),
+      ...(category && { category }),
       ...(search && {
         OR: [
           { title: { contains: search, mode: 'insensitive' } },
