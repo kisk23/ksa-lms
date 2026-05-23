@@ -1,18 +1,25 @@
 'use client';
 
 import { getPendingApprovalsCount } from '@features/approval-management';
+import { adminAuthService } from '@features/auth';
 import { SIDEBAR_NAV } from '@shared/constants/navigation';
 import { LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   // In a real app, this would come from a hook/context/server
   const badges = {
     pendingApprovals: getPendingApprovalsCount(),
   };
+
+  async function handleLogout() {
+    await adminAuthService.logout().catch(() => undefined);
+    router.replace('/login');
+  }
 
   return (
     <aside className="hidden md:flex bg-white dark:bg-slate-900 shadow-xl h-screen w-64 border-l border-slate-200 dark:border-slate-800 fixed right-0 top-0 z-40 pt-16 flex-col">
@@ -52,13 +59,14 @@ export function Sidebar() {
       </nav>
 
       <div className="p-base border-t border-outline-variant/30 mt-auto text-right">
-        <a
-          href="#"
+        <button
+          type="button"
+          onClick={handleLogout}
           className="flex items-center gap-sm px-sm py-sm rounded-lg text-error hover:bg-error-container hover:text-on-error-container transition-colors"
         >
           <LogOut size={20} />
           <span>تسجيل الخروج</span>
-        </a>
+        </button>
       </div>
     </aside>
   );

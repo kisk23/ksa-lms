@@ -1,11 +1,7 @@
-
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 // This file re-exports the axiosClient and ApiClient instance provided by the project.
 // Place the original api-client.ts content here or import from your shared package.
 // The content below mirrors the provided api-client.ts exactly.
-
-
-
 
 /** Same-origin proxy via next.config rewrites — cookies are sent automatically */
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
@@ -15,9 +11,6 @@ type ApiErrorPayload = {
   message?: string | string[];
   errors?: Record<string, string[]>;
 };
-
-
-
 
 function messageFromApiPayload(data: ApiErrorPayload | undefined): string | undefined {
   if (!data) return undefined;
@@ -68,6 +61,7 @@ axiosClient.interceptors.response.use(
       status === 401 &&
       original &&
       !original._retry &&
+      !original.url?.includes('/auth/me') &&
       !original.url?.includes('/auth/login') &&
       !original.url?.includes('/auth/register') &&
       !original.url?.includes('/auth/refresh')
@@ -80,9 +74,6 @@ axiosClient.interceptors.response.use(
         // fall through to normalized error
       }
     }
-
-
-
 
     const fromBody = messageFromApiPayload(error.response?.data);
     const text = fromBody ?? error.message ?? 'Request failed';

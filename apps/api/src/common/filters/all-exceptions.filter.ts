@@ -86,11 +86,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     // ✅ Always log the full exception (stack + cause)
-    this.logger.error(
-      `Unhandled exception on ${request.method} ${request.url}`,
-      exception instanceof Error ? exception.stack : JSON.stringify(exception),
-    );
-
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message: string | object = 'Internal server error';
     let cause: string | undefined; // ✅ capture root cause separately
@@ -140,6 +135,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     const isDev = process.env.NODE_ENV !== 'production';
+
+    // 4xx auth/validation failures are expected control flow for guards and clients.
+    // Keep full stacks for server failures only, otherwise anonymous auth checks spam dev logs.
+    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error(
+        `Unhandled exception on ${request.method} ${request.url}`,
+        exception instanceof Error ? exception.stack : JSON.stringify(exception),
+      );
+    } else if (status !== HttpStatus.UNAUTHORIZED) {
+      this.logger.warn(`${request.method} ${request.url} failed with HTTP ${status}`);
+    }
 
     const errorResponse = {
       success: false,
