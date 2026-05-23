@@ -1,6 +1,7 @@
 'use client';
 
 import type {
+  MonthlyRevenue,
   Payment,
   PaymentFilters,
   PaymentGatewayStatus,
@@ -13,19 +14,47 @@ import {
   PaymentsFilters,
   PaymentsTable,
   RevenueChart,
-  MONTHLY_REVENUE,
 } from '@features/payments';
 import type { FormEvent } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { apiClient } from '@/shared/lib/api-client';
 
 const ITEMS_PER_PAGE = 10;
 
+const EMPTY_SUMMARY: PaymentSummary = {
+  totalRevenue: 0,
+  revenueChange: 0,
+  successfulTransactions: 0,
+  transactionsChange: 0,
+  refunds: 0,
+  refundsChange: 0,
+  netProfit: 0,
+  netProfitChange: 0,
+};
+
+type ApiPaymentMethod = 'CREDIT_CARD' | 'MADA' | 'APPLE_PAY' | 'OFFLINE';
+
+type ApiUser = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+type ApiCourse = {
+  id: string;
+  title: string;
+  price?: number | string;
+  currency?: string;
+  teacherUserId?: string;
+  teacher?: ApiUser;
+};
+
 type ApiPayment = {
   id: string;
   orderId: string;
   moyasarPaymentId: string | null;
+  paymentMethod?: ApiPaymentMethod | null;
   amount: number;
   currency: string;
   status: PaymentGatewayStatus;
@@ -33,6 +62,10 @@ type ApiPayment = {
   capturedAmount: number;
   metadata: unknown;
   rawGatewayResponse: unknown;
+  webhookEvents?: WebhookEvent[];
+  payer?: ApiUser;
+  student?: ApiUser;
+  course?: ApiCourse;
   createdAt: string;
   updatedAt: string;
 };
@@ -44,12 +77,42 @@ type ApiPaymentsList = {
   items: ApiPayment[];
 };
 
+type WebhookEvent = {
+  id: string;
+  eventId: string | null;
+  paymentId: string | null;
+  moyasarPaymentId: string | null;
+  eventType: string;
+  processedAt: string;
+};
+
 type LoadState = 'idle' | 'loading' | 'success' | 'error';
 
 type UpdateForm = {
   status: PaymentGatewayStatus;
   description: string;
   metadata: string;
+};
+
+type PaymentActionForm = {
+  paymentId: string;
+  type: 'refund' | 'capture';
+  amount: string;
+  reason: string;
+};
+
+type CreatePaymentForm = {
+  orderId: string;
+  amount: string;
+  currency: string;
+  studentUserId: string;
+  courseId: string;
+  description: string;
+  cardName: string;
+  cardNumber: string;
+  cardMonth: string;
+  cardYear: string;
+  cardCvc: string;
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -63,6 +126,11 @@ function stringFromRecord(record: Record<string, unknown>, keys: string[]) {
   }
 
   return undefined;
+}
+
+function arrayFromResponse<T>(response: T[] | { items?: T[]; data?: T[] }) {
+  if (Array.isArray(response)) return response;
+  return response.items ?? response.data ?? [];
 }
 
 function initialsFromName(name: string) {
@@ -93,18 +161,18 @@ function mapApiStatus(status: PaymentGatewayStatus): Payment['status'] {
 }
 
 function mapPaymentMethod(payment: ApiPayment): PaymentMethod {
-  const metadata = isRecord(payment.metadata) ? payment.metadata : {};
+  if (payment.paymentMethod === 'MADA' || payment.paymentMethod === 'OFFLINE') return 'bank';
+  if (payment.paymentMethod === 'APPLE_PAY') return 'wallet';
+  if (payment.paymentMethod === 'CREDIT_CARD') return 'visa';
+
   const rawGatewayResponse = isRecord(payment.rawGatewayResponse) ? payment.rawGatewayResponse : {};
   const source = isRecord(rawGatewayResponse.source) ? rawGatewayResponse.source : {};
-  const method =
-    stringFromRecord(metadata, ['paymentMethod', 'payment_method', 'method']) ??
-    stringFromRecord(source, ['company', 'type']) ??
-    '';
+  const method = stringFromRecord(source, ['company', 'type']) ?? '';
   const normalized = method.toLowerCase();
 
   if (normalized.includes('master')) return 'mastercard';
-  if (normalized.includes('bank') || normalized.includes('mada')) return 'bank';
-  if (normalized.includes('wallet') || normalized.includes('apple')) return 'wallet';
+  if (normalized.includes('mada')) return 'bank';
+  if (normalized.includes('apple')) return 'wallet';
 
   return 'visa';
 }
@@ -113,9 +181,11 @@ function mapApiPayment(payment: ApiPayment): Payment {
   const metadata = isRecord(payment.metadata) ? payment.metadata : {};
   const { date, time } = formatApiDate(payment.createdAt);
   const studentName =
+    payment.student?.name ??
     stringFromRecord(metadata, ['studentName', 'student_name', 'student']) ??
     `Student ${payment.orderId}`;
   const courseName =
+    payment.course?.title ??
     stringFromRecord(metadata, ['courseName', 'course_name', 'course', 'description']) ??
     `Order ${payment.orderId}`;
 
@@ -136,34 +206,50 @@ function mapApiPayment(payment: ApiPayment): Payment {
   };
 }
 
-function buildPaymentsEndpoint(filters: PaymentFilters, page: number) {
-  const params = new URLSearchParams({
-    limit: String(ITEMS_PER_PAGE),
-    offset: String((page - 1) * ITEMS_PER_PAGE),
-  });
+function dateRangeParams(filters: PaymentFilters) {
+  const now = new Date();
+  let start: Date | undefined;
+  let end: Date | undefined;
 
-  if (filters.status !== 'all') params.set('status', filters.status);
-  if (filters.search.trim()) params.set('orderId', filters.search.trim());
+  if (filters.dateRange === 'this_month') {
+    start = new Date(now.getFullYear(), now.getMonth(), 1);
+    end = now;
+  }
 
-  return `/payments?${params.toString()}`;
+  if (filters.dateRange === 'last_month') {
+    start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    end = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+  }
+
+  if (filters.dateRange === 'last_3_months') {
+    start = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+    end = now;
+  }
+
+  if (filters.dateRange === 'custom') {
+    start = filters.customDateFrom ? new Date(`${filters.customDateFrom}T00:00:00`) : undefined;
+    end = filters.customDateTo ? new Date(`${filters.customDateTo}T23:59:59.999`) : undefined;
+  }
+
+  return { start, end };
 }
 
-function buildSummary(payments: Payment[]): PaymentSummary {
-  const successfulPayments = payments.filter((payment) => payment.status === 'success');
-  const refundedPayments = payments.filter((payment) => payment.status === 'refunded');
-  const totalRevenue = successfulPayments.reduce((sum, payment) => sum + payment.amount, 0);
-  const refundedAmount = refundedPayments.reduce((sum, payment) => sum + payment.amount, 0);
+function buildPaymentsParams(filters: PaymentFilters, page?: number) {
+  const params = new URLSearchParams();
+  const { start, end } = dateRangeParams(filters);
 
-  return {
-    totalRevenue,
-    revenueChange: 0,
-    successfulTransactions: successfulPayments.length,
-    transactionsChange: 0,
-    refunds: refundedPayments.length,
-    refundsChange: 0,
-    netProfit: totalRevenue - refundedAmount,
-    netProfitChange: 0,
-  };
+  if (page) {
+    params.set('limit', String(ITEMS_PER_PAGE));
+    params.set('offset', String((page - 1) * ITEMS_PER_PAGE));
+  }
+
+  if (filters.status !== 'all') params.set('status', filters.status);
+  if (filters.instructor !== 'all') params.set('instructorId', filters.instructor);
+  if (filters.search.trim()) params.set('search', filters.search.trim());
+  if (start) params.set('dateFrom', start.toISOString());
+  if (end) params.set('dateTo', end.toISOString());
+
+  return params;
 }
 
 function updateFormFromPayment(payment: ApiPayment): UpdateForm {
@@ -172,6 +258,10 @@ function updateFormFromPayment(payment: ApiPayment): UpdateForm {
     description: '',
     metadata: isRecord(payment.metadata) ? JSON.stringify(payment.metadata, null, 2) : '{}',
   };
+}
+
+function amountToHalalas(amount: string) {
+  return Math.round(Number(amount) * 100);
 }
 
 export default function PaymentsPage() {
@@ -184,25 +274,55 @@ export default function PaymentsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [summary, setSummary] = useState<PaymentSummary>(EMPTY_SUMMARY);
+  const [revenue, setRevenue] = useState<MonthlyRevenue[]>([]);
+  const [revenueYear, setRevenueYear] = useState(new Date().getFullYear());
+  const [webhookEvents, setWebhookEvents] = useState<WebhookEvent[]>([]);
+  const [students, setStudents] = useState<ApiUser[]>([]);
+  const [instructors, setInstructors] = useState<ApiUser[]>([]);
+  const [courses, setCourses] = useState<ApiCourse[]>([]);
   const [loadState, setLoadState] = useState<LoadState>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedPayment, setSelectedPayment] = useState<ApiPayment | null>(null);
   const [editingPayment, setEditingPayment] = useState<ApiPayment | null>(null);
   const [updateForm, setUpdateForm] = useState<UpdateForm | null>(null);
+  const [actionForm, setActionForm] = useState<PaymentActionForm | null>(null);
   const [busyPaymentId, setBusyPaymentId] = useState<string | null>(null);
+  const [createForm, setCreateForm] = useState<CreatePaymentForm>({
+    orderId: '',
+    amount: '',
+    currency: 'SAR',
+    studentUserId: '',
+    courseId: '',
+    description: '',
+    cardName: 'Test User',
+    cardNumber: '4111111111111111',
+    cardMonth: '12',
+    cardYear: '2028',
+    cardCvc: '123',
+  });
 
   const loadPayments = useCallback(async () => {
     setLoadState('loading');
     setErrorMessage(null);
 
     try {
-      // Added API wiring: GET /payments with limit/offset/status/orderId from PaymentsController.listPayments.
-      const response = await apiClient.get<ApiPaymentsList>(
-        buildPaymentsEndpoint(filters, currentPage),
-      );
+      const listParams = buildPaymentsParams(filters, currentPage);
+      const reportParams = buildPaymentsParams(filters);
+      const revenueParams = new URLSearchParams(reportParams);
+      revenueParams.set('year', String(revenueYear));
 
-      setPayments(response.items.map(mapApiPayment));
-      setTotalItems(response.total);
+      // Added API wiring: GET /payments now supports server pagination and real search/date/instructor filters.
+      const [list, nextSummary, nextRevenue] = await Promise.all([
+        apiClient.get<ApiPaymentsList>(`/payments?${listParams.toString()}`),
+        apiClient.get<PaymentSummary>(`/payments/summary?${reportParams.toString()}`),
+        apiClient.get<MonthlyRevenue[]>(`/payments/revenue?${revenueParams.toString()}`),
+      ]);
+
+      setPayments(list.items.map(mapApiPayment));
+      setTotalItems(list.total);
+      setSummary(nextSummary);
+      setRevenue(nextRevenue);
       setLoadState('success');
     } catch (error) {
       setPayments([]);
@@ -210,14 +330,60 @@ export default function PaymentsPage() {
       setLoadState('error');
       setErrorMessage(error instanceof Error ? error.message : 'Failed to load payments');
     }
-  }, [currentPage, filters]);
+  }, [currentPage, filters, revenueYear]);
+
+  const loadWebhookEvents = useCallback(async () => {
+    try {
+      // Added API wiring: GET /payments/webhook-events powers the admin webhook log.
+      setWebhookEvents(await apiClient.get<WebhookEvent[]>('/payments/webhook-events?limit=25'));
+    } catch {
+      setWebhookEvents([]);
+    }
+  }, []);
 
   useEffect(() => {
     void loadPayments();
   }, [loadPayments]);
 
+  useEffect(() => {
+    async function loadReferenceData() {
+      try {
+        const [studentResponse, teacherResponse, courseResponse] = await Promise.all([
+          apiClient.get<ApiUser[] | { items?: ApiUser[]; data?: ApiUser[] }>(
+            '/admin/users?role=STUDENT&limit=100',
+          ),
+          apiClient.get<ApiUser[] | { items?: ApiUser[]; data?: ApiUser[] }>(
+            '/admin/users?role=TEACHER&limit=100',
+          ),
+          apiClient.get<ApiCourse[] | { items?: ApiCourse[]; data?: ApiCourse[] }>(
+            '/courses/manage?limit=100',
+          ),
+        ]);
+
+        const nextStudents = arrayFromResponse(studentResponse);
+        const nextInstructors = arrayFromResponse(teacherResponse);
+        const nextCourses = arrayFromResponse(courseResponse);
+
+        setStudents(nextStudents);
+        setInstructors(nextInstructors);
+        setCourses(nextCourses);
+        setCreateForm((prev) => ({
+          ...prev,
+          studentUserId: prev.studentUserId || nextStudents[0]?.id || '',
+          courseId: prev.courseId || nextCourses[0]?.id || '',
+        }));
+      } catch {
+        setStudents([]);
+        setInstructors([]);
+        setCourses([]);
+      }
+    }
+
+    void loadReferenceData();
+    void loadWebhookEvents();
+  }, [loadWebhookEvents]);
+
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-  const summary = useMemo(() => buildSummary(payments), [payments]);
 
   const handleFiltersChange = (newFilters: Partial<PaymentFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
@@ -255,33 +421,38 @@ export default function PaymentsPage() {
     }
   };
 
-  const handleRefund = async (id: string) => {
-    if (!confirm('Refund this payment?')) return;
-
-    setBusyPaymentId(id);
-
-    try {
-      // Added API wiring: POST /payments/:id/refund calls PaymentsController.refundPayment.
-      await apiClient.post<ApiPayment>(`/payments/${id}/refund`, {});
-      await loadPayments();
-    } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to refund payment');
-    } finally {
-      setBusyPaymentId(null);
-    }
+  const handleOpenAction = (paymentId: string, type: PaymentActionForm['type']) => {
+    setActionForm({ paymentId, type, amount: '', reason: '' });
   };
 
-  const handleCapture = async (id: string) => {
-    if (!confirm('Capture this authorized payment?')) return;
+  const handleSubmitAction = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!actionForm) return;
 
-    setBusyPaymentId(id);
+    const amount = actionForm.amount ? amountToHalalas(actionForm.amount) : undefined;
+    if (amount !== undefined && (!Number.isFinite(amount) || amount < 1)) {
+      alert('Amount must be greater than 0');
+      return;
+    }
+
+    setBusyPaymentId(actionForm.paymentId);
 
     try {
-      // Added API wiring: POST /payments/:id/capture calls PaymentsController.capturePayment.
-      await apiClient.post<ApiPayment>(`/payments/${id}/capture`, {});
+      const payload = {
+        ...(amount && { amount }),
+        ...(actionForm.reason.trim() && { reason: actionForm.reason.trim() }),
+      };
+      const endpoint =
+        actionForm.type === 'refund'
+          ? `/payments/${actionForm.paymentId}/refund`
+          : `/payments/${actionForm.paymentId}/capture`;
+
+      // Added API wiring: POST refund/capture sends optional amount and reason from PaymentActionDto.
+      await apiClient.post<ApiPayment>(endpoint, payload);
+      setActionForm(null);
       await loadPayments();
     } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to capture payment');
+      alert(error instanceof Error ? error.message : `Failed to ${actionForm.type} payment`);
     } finally {
       setBusyPaymentId(null);
     }
@@ -339,14 +510,199 @@ export default function PaymentsPage() {
     }
   };
 
+  const handleCreatePayment = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const amount = amountToHalalas(createForm.amount);
+
+    if (
+      !createForm.orderId ||
+      !createForm.studentUserId ||
+      !createForm.courseId ||
+      !createForm.cardName ||
+      !createForm.cardNumber ||
+      !createForm.cardMonth ||
+      !createForm.cardYear ||
+      !createForm.cardCvc ||
+      amount < 100
+    ) {
+      alert('Order, student, course, card details, and amount are required.');
+      return;
+    }
+
+    try {
+      // Added API wiring: POST /payments lets admins create a payment from this page.
+      await apiClient.post<ApiPayment>('/payments', {
+        orderId: createForm.orderId,
+        amount,
+        currency: createForm.currency,
+        studentUserId: createForm.studentUserId,
+        courseId: createForm.courseId,
+        description: createForm.description || undefined,
+        callbackUrl:
+          typeof window !== 'undefined' ? `${window.location.origin}/payments` : undefined,
+        source: {
+          type: 'creditcard',
+          name: createForm.cardName,
+          number: createForm.cardNumber.replace(/\s/g, ''),
+          month: Number(createForm.cardMonth),
+          year: Number(createForm.cardYear),
+          cvc: createForm.cardCvc,
+          manual: true,
+        },
+        metadata: { channel: 'admin' },
+      });
+
+      setCreateForm((prev) => ({
+        ...prev,
+        orderId: '',
+        amount: '',
+        description: '',
+        cardCvc: '',
+      }));
+      await loadPayments();
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Failed to create payment');
+    }
+  };
+
   return (
     <main className="flex-1 p-margin pt-24 space-y-md">
       <PaymentsHeader />
 
       <PaymentsSummaryCards summary={summary} />
 
+      <section className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-md">
+        <h2 className="font-h2-ar text-h2-ar text-on-surface mb-4">Create payment</h2>
+        <form onSubmit={handleCreatePayment} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input
+            type="text"
+            value={createForm.orderId}
+            onChange={(event) =>
+              setCreateForm((prev) => ({ ...prev, orderId: event.target.value }))
+            }
+            className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+            placeholder="Order ID"
+          />
+          <select
+            value={createForm.studentUserId}
+            onChange={(event) =>
+              setCreateForm((prev) => ({ ...prev, studentUserId: event.target.value }))
+            }
+            className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+          >
+            <option value="">Select student</option>
+            {students.map((student) => (
+              <option key={student.id} value={student.id}>
+                {student.name}
+              </option>
+            ))}
+          </select>
+          <select
+            value={createForm.courseId}
+            onChange={(event) =>
+              setCreateForm((prev) => ({ ...prev, courseId: event.target.value }))
+            }
+            className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+          >
+            <option value="">Select course</option>
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {course.title}
+              </option>
+            ))}
+          </select>
+          <input
+            type="number"
+            min="1"
+            step="0.01"
+            value={createForm.amount}
+            onChange={(event) => setCreateForm((prev) => ({ ...prev, amount: event.target.value }))}
+            className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+            placeholder="Amount in SAR"
+          />
+          <input
+            type="text"
+            value={createForm.currency}
+            onChange={(event) =>
+              setCreateForm((prev) => ({ ...prev, currency: event.target.value.toUpperCase() }))
+            }
+            className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+            maxLength={3}
+            placeholder="SAR"
+          />
+          <input
+            type="text"
+            value={createForm.description}
+            onChange={(event) =>
+              setCreateForm((prev) => ({ ...prev, description: event.target.value }))
+            }
+            className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+            placeholder="Description"
+          />
+          <input
+            type="text"
+            value={createForm.cardName}
+            onChange={(event) =>
+              setCreateForm((prev) => ({ ...prev, cardName: event.target.value }))
+            }
+            className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+            placeholder="Cardholder"
+          />
+          <input
+            type="text"
+            value={createForm.cardNumber}
+            onChange={(event) =>
+              setCreateForm((prev) => ({ ...prev, cardNumber: event.target.value }))
+            }
+            className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+            placeholder="Card number"
+          />
+          <div className="grid grid-cols-3 gap-3">
+            <input
+              type="text"
+              value={createForm.cardMonth}
+              onChange={(event) =>
+                setCreateForm((prev) => ({ ...prev, cardMonth: event.target.value }))
+              }
+              className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+              placeholder="MM"
+            />
+            <input
+              type="text"
+              value={createForm.cardYear}
+              onChange={(event) =>
+                setCreateForm((prev) => ({ ...prev, cardYear: event.target.value }))
+              }
+              className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+              placeholder="YYYY"
+            />
+            <input
+              type="text"
+              value={createForm.cardCvc}
+              onChange={(event) =>
+                setCreateForm((prev) => ({ ...prev, cardCvc: event.target.value }))
+              }
+              className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+              placeholder="CVC"
+            />
+          </div>
+          <div className="md:col-span-3 flex justify-end">
+            <button
+              type="submit"
+              className="bg-primary-container text-on-primary px-4 py-2 rounded-lg text-sm font-medium"
+            >
+              Create payment
+            </button>
+          </div>
+        </form>
+      </section>
+
       <div className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
-        <PaymentsFilters filters={filters} onFiltersChange={handleFiltersChange} />
+        <PaymentsFilters
+          filters={filters}
+          instructors={instructors}
+          onFiltersChange={handleFiltersChange}
+        />
 
         {loadState === 'loading' && (
           <div className="px-4 py-3 text-sm text-on-surface-variant border-b border-outline-variant">
@@ -368,13 +724,61 @@ export default function PaymentsPage() {
           pageSize={ITEMS_PER_PAGE}
           onPageChange={setCurrentPage}
           onViewPayment={handleViewPayment}
-          onRefund={handleRefund}
-          onCapture={handleCapture}
+          onRefund={(id) => handleOpenAction(id, 'refund')}
+          onCapture={(id) => handleOpenAction(id, 'capture')}
           onVoid={handleVoid}
           onUpdate={handleUpdatePayment}
           busyPaymentId={busyPaymentId}
         />
       </div>
+
+      {actionForm && (
+        <section className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-md">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <h2 className="font-h2-ar text-h2-ar text-on-surface">
+              {actionForm.type === 'refund' ? 'Refund payment' : 'Capture payment'}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setActionForm(null)}
+              className="text-sm text-primary-container hover:underline"
+            >
+              Cancel
+            </button>
+          </div>
+          <form onSubmit={handleSubmitAction} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              value={actionForm.amount}
+              onChange={(event) =>
+                setActionForm((prev) => (prev ? { ...prev, amount: event.target.value } : prev))
+              }
+              className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm"
+              placeholder="Optional amount in SAR"
+            />
+            <input
+              type="text"
+              value={actionForm.reason}
+              onChange={(event) =>
+                setActionForm((prev) => (prev ? { ...prev, reason: event.target.value } : prev))
+              }
+              className="bg-white border border-outline-variant rounded-lg py-2 px-3 text-sm md:col-span-2"
+              placeholder="Optional reason"
+            />
+            <div className="md:col-span-3 flex justify-end">
+              <button
+                type="submit"
+                disabled={busyPaymentId === actionForm.paymentId}
+                className="bg-primary-container text-on-primary px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </section>
+      )}
 
       {selectedPayment && (
         <section className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-md">
@@ -391,6 +795,24 @@ export default function PaymentsPage() {
 
           <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
             <div>
+              <dt className="text-outline">Student</dt>
+              <dd className="text-on-surface font-medium">
+                {selectedPayment.student?.name ?? '-'}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-outline">Course</dt>
+              <dd className="text-on-surface font-medium">
+                {selectedPayment.course?.title ?? '-'}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-outline">Instructor</dt>
+              <dd className="text-on-surface font-medium">
+                {selectedPayment.course?.teacher?.name ?? '-'}
+              </dd>
+            </div>
+            <div>
               <dt className="text-outline">Order ID</dt>
               <dd className="text-on-surface font-medium">{selectedPayment.orderId}</dd>
             </div>
@@ -403,6 +825,12 @@ export default function PaymentsPage() {
             <div>
               <dt className="text-outline">Status</dt>
               <dd className="text-on-surface font-medium">{selectedPayment.status}</dd>
+            </div>
+            <div>
+              <dt className="text-outline">Method</dt>
+              <dd className="text-on-surface font-medium">
+                {selectedPayment.paymentMethod ?? '-'}
+              </dd>
             </div>
             <div>
               <dt className="text-outline">Amount</dt>
@@ -492,7 +920,50 @@ export default function PaymentsPage() {
         </section>
       )}
 
-      <RevenueChart data={MONTHLY_REVENUE} />
+      <RevenueChart data={revenue} selectedYear={revenueYear} onYearChange={setRevenueYear} />
+
+      <section className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-md">
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <h2 className="font-h2-ar text-h2-ar text-on-surface">Webhook events</h2>
+          <button
+            type="button"
+            onClick={() => void loadWebhookEvents()}
+            className="text-sm text-primary-container hover:underline"
+          >
+            Refresh
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="text-outline border-b border-outline-variant">
+              <tr>
+                <th className="py-2 px-3">Type</th>
+                <th className="py-2 px-3">Moyasar ID</th>
+                <th className="py-2 px-3">Payment ID</th>
+                <th className="py-2 px-3">Processed</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-outline-variant">
+              {webhookEvents.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-6 px-3 text-center text-on-surface-variant">
+                    No webhook events.
+                  </td>
+                </tr>
+              ) : (
+                webhookEvents.map((event) => (
+                  <tr key={event.id}>
+                    <td className="py-2 px-3">{event.eventType}</td>
+                    <td className="py-2 px-3">{event.moyasarPaymentId ?? '-'}</td>
+                    <td className="py-2 px-3">{event.paymentId ?? '-'}</td>
+                    <td className="py-2 px-3">{formatApiDate(event.processedAt).date}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
   );
 }

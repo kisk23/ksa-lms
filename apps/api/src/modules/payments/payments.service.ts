@@ -12,10 +12,17 @@ import { ConfigService } from '@nestjs/config';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { ListPaymentsDto } from './dto/list-payments.dto';
 import { PaymentActionDto } from './dto/payment-action.dto';
+import { PaymentRevenueDto } from './dto/payment-revenue.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { MoyasarClient } from './moyasar.client';
 import { PaymentsRepository } from './payments.repository';
-import { PaymentInitiatorRole, PaymentStatus, User, UserRole } from '../../generated/client';
+import {
+  PaymentInitiatorRole,
+  PaymentMethod,
+  PaymentStatus,
+  User,
+  UserRole,
+} from '../../generated/client';
 
 @Injectable()
 export class PaymentsService {
@@ -68,6 +75,7 @@ export class PaymentsService {
       moyasarPaymentId: this.stringValue(response.id),
       moyasarStatus: this.stringValue(response.status),
       status: this.mapStatus(this.stringValue(response.status)),
+      paymentMethod: this.mapPaymentMethod(response),
       amount: this.numberValue(response.amount, dto.amount),
       currency: this.stringValue(response.currency) ?? dto.currency.toUpperCase(),
       refundedAmount: this.numberValue(response.refunded, 0),
@@ -89,6 +97,7 @@ export class PaymentsService {
       moyasarPaymentId: this.stringValue(response.id),
       moyasarStatus: this.stringValue(response.status),
       status: this.mapStatus(this.stringValue(response.status)),
+      paymentMethod: this.mapPaymentMethod(response),
       amount: this.numberValue(response.amount, local.amount),
       currency: this.stringValue(response.currency) ?? local.currency,
       refundedAmount: this.numberValue(response.refunded, local.refundedAmount),
@@ -114,6 +123,51 @@ export class PaymentsService {
     };
   }
 
+  async paymentsSummary(query: ListPaymentsDto) {
+    const payments = await this.paymentsRepository.listForSummary(query);
+    const successfulStatuses = new Set<PaymentStatus>([PaymentStatus.paid, PaymentStatus.captured]);
+    const successful = payments.filter((payment) => successfulStatuses.has(payment.status));
+    const refunded = payments.filter((payment) => payment.status === PaymentStatus.refunded);
+    const totalRevenue = successful.reduce((sum, payment) => sum + payment.amount, 0);
+    const refundedAmount = payments.reduce((sum, payment) => sum + payment.refundedAmount, 0);
+
+    return {
+      totalRevenue: this.centsToCurrency(totalRevenue),
+      revenueChange: 0,
+      successfulTransactions: successful.length,
+      transactionsChange: 0,
+      refunds: refunded.length,
+      refundsChange: 0,
+      netProfit: this.centsToCurrency(totalRevenue - refundedAmount),
+      netProfitChange: 0,
+    };
+  }
+
+  async monthlyRevenue(query: PaymentRevenueDto) {
+    const year = query.year ?? new Date().getFullYear();
+    const payments = await this.paymentsRepository.listMonthlyRevenue(query, year);
+    const months = Array.from({ length: 12 }, (_, index) => ({
+      month: new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(year, index, 1)),
+      amount: 0,
+      percentage: 0,
+    }));
+
+    for (const payment of payments) {
+      if (payment.status !== PaymentStatus.paid && payment.status !== PaymentStatus.captured) {
+        continue;
+      }
+
+      const month = payment.createdAt.getUTCMonth();
+      months[month].amount += this.centsToCurrency(payment.amount - payment.refundedAmount);
+    }
+
+    const maxAmount = Math.max(...months.map((month) => month.amount), 0);
+    return months.map((month) => ({
+      ...month,
+      percentage: maxAmount > 0 ? Math.round((month.amount / maxAmount) * 100) : 0,
+    }));
+  }
+
   async updatePayment(id: string, dto: UpdatePaymentDto) {
     const local = await this.getLocalPayment(id);
 
@@ -128,6 +182,7 @@ export class PaymentsService {
     const updated = await this.paymentsRepository.updateGatewayState(local.id, {
       status: dto.status ?? this.mapStatus(this.stringValue(gatewayResponse?.status)),
       moyasarStatus: this.stringValue(gatewayResponse?.status) ?? local.moyasarStatus ?? undefined,
+      paymentMethod: gatewayResponse ? this.mapPaymentMethod(gatewayResponse) : undefined,
       metadata: gatewayResponse?.metadata ?? dto.metadata ?? local.metadata,
       rawGatewayResponse: gatewayResponse ?? local.rawGatewayResponse,
     });
@@ -208,6 +263,7 @@ export class PaymentsService {
       moyasarPaymentId,
       moyasarStatus: this.stringValue(paymentPayload.status),
       status: this.mapStatus(this.stringValue(paymentPayload.status)),
+      paymentMethod: this.mapPaymentMethod(paymentPayload),
       amount: this.numberValue(paymentPayload.amount, local.amount),
       currency: this.stringValue(paymentPayload.currency) ?? local.currency,
       refundedAmount: this.numberValue(paymentPayload.refunded, local.refundedAmount),
@@ -236,6 +292,7 @@ export class PaymentsService {
       moyasarPaymentId: this.stringValue(response.id),
       moyasarStatus: this.stringValue(response.status),
       status: this.mapStatus(this.stringValue(response.status)),
+      paymentMethod: this.mapPaymentMethod(response),
       amount: this.numberValue(response.amount, undefined),
       currency: this.stringValue(response.currency),
       refundedAmount: this.numberValue(response.refunded, undefined),
@@ -313,6 +370,21 @@ export class PaymentsService {
     }
   }
 
+  private mapPaymentMethod(response: Record<string, unknown>): PaymentMethod | undefined {
+    const source = this.asRecord(response.source);
+    const rawMethod = this.stringValue(response.payment_method) ?? this.stringValue(source.type);
+    const company = this.stringValue(source.company);
+    const method = `${rawMethod ?? ''} ${company ?? ''}`.toLowerCase();
+
+    if (method.includes('mada')) return PaymentMethod.MADA;
+    if (method.includes('apple')) return PaymentMethod.APPLE_PAY;
+    if (method.includes('credit') || method.includes('visa') || method.includes('master')) {
+      return PaymentMethod.CREDIT_CARD;
+    }
+
+    return undefined;
+  }
+
   private mapInitiatorRole(role: UserRole): PaymentInitiatorRole {
     if (role === UserRole.PARENT) return PaymentInitiatorRole.PARENT;
     if (role === UserRole.SUPER_ADMIN) return PaymentInitiatorRole.ADMIN;
@@ -324,6 +396,7 @@ export class PaymentsService {
     id: string;
     orderId: string;
     moyasarPaymentId: string | null;
+    paymentMethod?: PaymentMethod | null;
     amount: number;
     currency: string;
     status: PaymentStatus;
@@ -334,11 +407,20 @@ export class PaymentsService {
     createdAt: Date;
     updatedAt: Date;
     webhookEvents?: unknown;
+    payer?: { id: string; name: string; email: string };
+    student?: { id: string; name: string; email: string };
+    course?: {
+      id: string;
+      title: string;
+      teacherUserId: string;
+      teacher: { id: string; name: string; email: string };
+    };
   }) {
     return {
       id: payment.id,
       orderId: payment.orderId,
       moyasarPaymentId: payment.moyasarPaymentId,
+      paymentMethod: payment.paymentMethod,
       amount: payment.amount,
       currency: payment.currency,
       status: payment.status,
@@ -347,9 +429,16 @@ export class PaymentsService {
       metadata: payment.metadata,
       rawGatewayResponse: payment.rawGatewayResponse,
       webhookEvents: payment.webhookEvents,
+      payer: payment.payer,
+      student: payment.student,
+      course: payment.course,
       createdAt: payment.createdAt,
       updatedAt: payment.updatedAt,
     };
+  }
+
+  private centsToCurrency(amount: number) {
+    return Math.round(amount) / 100;
   }
 
   private numberValue(value: unknown, fallback: number | undefined): number | undefined {

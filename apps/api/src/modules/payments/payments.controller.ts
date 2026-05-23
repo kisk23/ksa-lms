@@ -16,6 +16,7 @@ import type { Request } from 'express';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { ListPaymentsDto } from './dto/list-payments.dto';
 import { PaymentActionDto } from './dto/payment-action.dto';
+import { PaymentRevenueDto } from './dto/payment-revenue.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { PaymentsService } from './payments.service';
 import type { User } from '../../generated/client';
@@ -52,6 +53,20 @@ export class PaymentsController {
   @ApiBearerAuth()
   listWebhookEvents(@Query('limit') limit?: string) {
     return this.paymentsService.listWebhookEvents(limit ? Number(limit) : undefined);
+  }
+
+  @Get('summary')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  paymentsSummary(@Query() query: ListPaymentsDto) {
+    return this.paymentsService.paymentsSummary(query);
+  }
+
+  @Get('revenue')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  monthlyRevenue(@Query() query: PaymentRevenueDto) {
+    return this.paymentsService.monthlyRevenue(query);
   }
 
   @Get(':id')

@@ -41,6 +41,8 @@ export interface PaymentFilters {
   dateRange: 'this_month' | 'last_month' | 'last_3_months' | 'custom';
   status: PaymentGatewayStatus | 'all';
   instructor: string | 'all';
+  customDateFrom?: string;
+  customDateTo?: string;
 }
 
 export interface MonthlyRevenue {
