@@ -48,7 +48,15 @@ const config = {
     'no-var': 'error',
     eqeqeq: ['error', 'always'],
   },
-  ignorePatterns: ['node_modules/', 'dist/', '.next/', '.turbo/', 'coverage/'],
+  ignorePatterns: [
+    'node_modules/',
+    'dist/',
+    '.next/',
+    '.turbo/',
+    'coverage/',
+    '.eslintrc.js',
+    '.eslintrc.cjs',
+  ],
 };
 
 module.exports = config;
