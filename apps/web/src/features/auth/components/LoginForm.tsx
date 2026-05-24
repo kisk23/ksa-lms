@@ -72,7 +72,7 @@ export function LoginForm() {
         <FormInput
           {...register('identity')}
           id="identity"
-          label="الهوية أو رقم الهاتف"
+          label=" البريد الالكترونى او الهوية أو رقم الهاتف"
           placeholder="أدخل رقم الهوية أو الهاتف"
           autoComplete="username"
           icon={<User className="w-5 h-5" />}

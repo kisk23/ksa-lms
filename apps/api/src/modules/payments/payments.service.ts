@@ -89,7 +89,60 @@ export class PaymentsService {
   }
 
   async fetchPayment(id: string) {
-    const local = await this.getLocalPayment(id);
+    let local;
+    if (id.startsWith('pay_')) {
+      local = await this.paymentsRepository.findByMoyasarPaymentId(id);
+      if (!local) {
+        // Payment doesn't exist locally yet! Fetch it from Moyasar to register it.
+        const response = await this.moyasar.fetchPayment(id);
+        const metadata = this.asRecord(response.metadata);
+        const studentUserId =
+          this.stringValue(metadata.studentUserId) ?? this.stringValue(metadata.student_user_id);
+        const courseId =
+          this.stringValue(metadata.courseId) ?? this.stringValue(metadata.course_id);
+
+        if (!studentUserId || !courseId) {
+          throw new BadRequestException('PAYMENT_METADATA_MISSING_COURSE_OR_STUDENT');
+        }
+
+        const cleanMetadata: Record<string, string> = {};
+        for (const [k, v] of Object.entries(metadata)) {
+          if (v !== null && v !== undefined) {
+            cleanMetadata[k] = String(v);
+          }
+        }
+
+        local = await this.paymentsRepository.create({
+          payerUserId: studentUserId,
+          initiatorRole: PaymentInitiatorRole.STUDENT,
+          studentUserId,
+          courseId,
+          orderId: this.stringValue(response.description) ?? `ORDER-${Date.now()}`,
+          amount: this.numberValue(response.amount, 0) ?? 0,
+          currency: this.stringValue(response.currency) ?? 'SAR',
+          idempotencyKey: `moyasar-${id}`,
+          metadata: cleanMetadata,
+        });
+
+        const synced = await this.paymentsRepository.updateGatewayState(local.id, {
+          moyasarPaymentId: id,
+          moyasarStatus: this.stringValue(response.status),
+          status: this.mapStatus(this.stringValue(response.status)),
+          paymentMethod: this.mapPaymentMethod(response),
+          amount: this.numberValue(response.amount, local.amount),
+          currency: this.stringValue(response.currency) ?? local.currency,
+          refundedAmount: this.numberValue(response.refunded, local.refundedAmount),
+          capturedAmount: this.numberValue(response.captured, local.capturedAmount),
+          metadata: response.metadata,
+          rawGatewayResponse: response,
+        });
+
+        return this.clean(synced);
+      }
+    } else {
+      local = await this.getLocalPayment(id);
+    }
+
     if (!local.moyasarPaymentId) return this.clean(local);
 
     const response = await this.moyasar.fetchPayment(local.moyasarPaymentId);
@@ -240,9 +293,45 @@ export class PaymentsService {
       this.stringValue(body.event) ??
       `payment.${this.stringValue(paymentPayload.status) ?? 'updated'}`;
 
-    const local = moyasarPaymentId
+    let local = moyasarPaymentId
       ? await this.paymentsRepository.findByMoyasarPaymentId(moyasarPaymentId)
       : null;
+
+    if (!local && moyasarPaymentId) {
+      this.logger.log(`Webhook received for unregistered Moyasar payment ${moyasarPaymentId}`);
+      try {
+        const metadata = this.asRecord(paymentPayload.metadata);
+        const studentUserId =
+          this.stringValue(metadata.studentUserId) ?? this.stringValue(metadata.student_user_id);
+        const courseId =
+          this.stringValue(metadata.courseId) ?? this.stringValue(metadata.course_id);
+
+        if (studentUserId && courseId) {
+          const cleanMetadata: Record<string, string> = {};
+          for (const [k, v] of Object.entries(metadata)) {
+            if (v !== null && v !== undefined) {
+              cleanMetadata[k] = String(v);
+            }
+          }
+
+          local = await this.paymentsRepository.create({
+            payerUserId: studentUserId,
+            initiatorRole: PaymentInitiatorRole.STUDENT,
+            studentUserId,
+            courseId,
+            orderId: this.stringValue(paymentPayload.description) ?? `ORDER-${Date.now()}`,
+            amount: this.numberValue(paymentPayload.amount, 0) ?? 0,
+            currency: this.stringValue(paymentPayload.currency) ?? 'SAR',
+            idempotencyKey: `moyasar-${moyasarPaymentId}`,
+            metadata: cleanMetadata,
+          });
+
+          this.logger.log(`Auto-registered payment ${moyasarPaymentId} from webhook metadata`);
+        }
+      } catch (e) {
+        this.logger.error(`Failed to register payment from webhook for ${moyasarPaymentId}`, e);
+      }
+    }
 
     await this.paymentsRepository.recordWebhookEvent({
       eventId,

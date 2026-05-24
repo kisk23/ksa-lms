@@ -5,7 +5,7 @@ import { sessionFromAccessCookie } from '@/features/auth/lib/session';
 
 const AUTH_ROUTES = ['/login', '/register'];
 const OTP_ROUTES = ['/verify-otp'];
-const PROTECTED_ROUTES = ['/dashboard', '/payments'];
+const PROTECTED_ROUTES = ['/dashboard', '/checkout'];
 
 function matches(pathname: string, routes: string[]) {
   return routes.some((route) => pathname === route || pathname.startsWith(`${route}/`));
@@ -42,5 +42,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/login', '/register', '/verify-otp', '/dashboard/:path*', '/payments/:path*'],
+  matcher: ['/login', '/register', '/verify-otp', '/dashboard/:path*', '/checkout/:path*'],
 };

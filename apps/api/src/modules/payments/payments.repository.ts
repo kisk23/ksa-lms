@@ -7,6 +7,7 @@ import {
   Prisma,
   RefundMethod,
   RefundStatus,
+  EnrollmentStatus,
 } from '../../generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -127,34 +128,81 @@ export class PaymentsRepository {
     });
   }
 
-  create(data: CreatePaymentRecord) {
+  async create(data: CreatePaymentRecord) {
     const decimalAmount = new Prisma.Decimal(data.amount).div(100);
 
-    return this.prisma.payment.create({
-      data: {
-        payerUserId: data.payerUserId,
-        initiatorRole: data.initiatorRole,
-        studentUserId: data.studentUserId,
-        courseId: data.courseId,
-        orderId: data.orderId,
-        amount: data.amount,
-        originalAmount: decimalAmount,
-        finalAmount: decimalAmount,
-        discountAmount: new Prisma.Decimal(0),
-        currency: data.currency,
-        status: PaymentStatus.initiated,
-        idempotencyKey: data.idempotencyKey,
-        metadata: data.metadata ?? Prisma.JsonNull,
-      },
-      include: paymentInclude,
+    return this.prisma.$transaction(async (tx) => {
+      const payment = await tx.payment.create({
+        data: {
+          payerUserId: data.payerUserId,
+          initiatorRole: data.initiatorRole,
+          studentUserId: data.studentUserId,
+          courseId: data.courseId,
+          orderId: data.orderId,
+          amount: data.amount,
+          originalAmount: decimalAmount,
+          finalAmount: decimalAmount,
+          discountAmount: new Prisma.Decimal(0),
+          currency: data.currency,
+          status: PaymentStatus.initiated,
+          idempotencyKey: data.idempotencyKey,
+          metadata: data.metadata ?? Prisma.JsonNull,
+        },
+      });
+
+      await tx.enrollment.upsert({
+        where: {
+          studentUserId_courseId: {
+            studentUserId: data.studentUserId,
+            courseId: data.courseId,
+          },
+        },
+        update: {
+          paymentId: payment.id,
+          amountPaid: decimalAmount,
+          status: EnrollmentStatus.PENDING,
+        },
+        create: {
+          studentUserId: data.studentUserId,
+          courseId: data.courseId,
+          paymentId: payment.id,
+          amountPaid: decimalAmount,
+          status: EnrollmentStatus.PENDING,
+        },
+      });
+
+      return tx.payment.findUniqueOrThrow({
+        where: { id: payment.id },
+        include: paymentInclude,
+      });
     });
   }
 
-  updateGatewayState(paymentId: string, gateway: GatewaySync) {
-    return this.prisma.payment.update({
-      where: { id: paymentId },
-      data: this.gatewayUpdateData(gateway),
-      include: paymentInclude,
+  async updateGatewayState(paymentId: string, gateway: GatewaySync) {
+    return this.prisma.$transaction(async (tx) => {
+      const payment = await tx.payment.update({
+        where: { id: paymentId },
+        data: this.gatewayUpdateData(gateway),
+        include: paymentInclude,
+      });
+
+      if (payment.status === PaymentStatus.paid || payment.status === PaymentStatus.captured) {
+        await tx.enrollment.updateMany({
+          where: { paymentId: payment.id },
+          data: { status: EnrollmentStatus.ACTIVE },
+        });
+      } else if (
+        payment.status === PaymentStatus.failed ||
+        payment.status === PaymentStatus.voided ||
+        payment.status === PaymentStatus.refunded
+      ) {
+        await tx.enrollment.updateMany({
+          where: { paymentId: payment.id },
+          data: { status: EnrollmentStatus.CANCELLED },
+        });
+      }
+
+      return payment;
     });
   }
 
