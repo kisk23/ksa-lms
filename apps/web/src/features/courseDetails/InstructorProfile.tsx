@@ -1,5 +1,7 @@
 import { GraduationCap } from 'lucide-react';
 
+import type { Instructor } from '@/features/courses/types';
+
 function StarIcon() {
   return (
     <svg
@@ -13,36 +15,51 @@ function StarIcon() {
   );
 }
 
-export default function InstructorProfile() {
+interface InstructorProfileProps {
+  teacher: Instructor;
+  /** Total courses taught by this teacher — pass course._count if available */
+  courseCount?: number;
+}
+
+export default function InstructorProfile({ teacher, courseCount }: InstructorProfileProps) {
+  // Initials avatar — backend doesn't store a profile photo yet
+  const initials = teacher.name
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w.charAt(0))
+    .join('');
+
   return (
     <div dir="rtl">
-      <h2 className="text-2xl font-bold text-black/80 mb-3">المحاضر</h2>
-      <div className="flex flex-col sm:flex-row gap-6 p-6 shadow border-2 rounded-xl">
-        <img
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzkrLWtdb6zoQ2Y3j0fTR7Obo6mq3_1xKnTSiukqMvc1DSgauX5stk22UmWaFS-N5chi9GHB1bSiQXB3IyF_RqnaSYLSv83gna-QkbMp6fqAJg6aGOGe8P1K1Fkd4k93Hjf-E3lp0xqD6BKaDKwMEQGeANkcGmmeB10DwuWxm2d-HcoppLjmL1gMxzkoXKUuuqKLltNsR77ysMs6RBlDar4nQFy2OSA4tDiCeMXWcY_gSbeygHzDlH2UuslbpNCcih2_kUlfsOFTAf"
-          alt="Instructor"
-          className="w-24 h-24 rounded-full object-cover border-4 border-[#334155] shrink-0"
-        />
+      <h2 className="text-2xl font-bold text-text mb-3">المحاضر</h2>
+      <div className="flex flex-col sm:flex-row gap-6 p-6 shadow-sm border-2 border-border rounded-xl bg-surface">
+        {/* Avatar */}
+        <div className="w-24 h-24 rounded-full bg-primary /20 border-4 border-border shrink-0 flex items-center justify-center text-2xl font-bold text-primary  select-none">
+          {initials}
+        </div>
+
         <div className="flex flex-col gap-2">
-          <h3 className="text-lg font-bold text-black/80">أ. أحمد عبدالله</h3>
-          <p className="text-sm text-primary/70 font-semibold">
-            أستاذ الفيزياء المتقدمة - جامعة الملك سعود
-          </p>
+          <h3 className="text-lg font-bold text-text">{teacher.name}</h3>
+          <p className="text-sm text-primary  font-semibold">محاضر معتمد في منصة سُلَّم</p>
+
           <div className="flex items-center gap-5 mt-1">
-            <div className="flex items-center gap-1 text-gray-500">
+            <div className="flex items-center gap-1 text-text-muted">
               <span className="text-amber-400">
                 <StarIcon />
               </span>
-              <span className="text-xs">4.9 تقييم المعلم</span>
+              <span className="text-xs">محاضر معتمد</span>
             </div>
-            <div className="flex items-center gap-1 text-gray-500">
-              <GraduationCap size={16} strokeWidth={2} />
-              <span className="text-xs">12 دورة</span>
-            </div>
+            {courseCount !== undefined && (
+              <div className="flex items-center gap-1 text-text-muted">
+                <GraduationCap size={16} strokeWidth={2} />
+                <span className="text-xs">{courseCount + " Static"} دورة</span>
+              </div>
+            )}
           </div>
-          <p className="text-sm text-gray-500 leading-relaxed mt-1">
-            خبرة تزيد عن 15 عاماً في تدريس الفيزياء للطلاب في مختلف المراحل. شغوف بتبسيط العلوم
-            وربطها بالواقع لإنشاء جيل مفكر ومبتكر.
+
+          <p className="text-sm text-text-muted leading-relaxed mt-1">
+            معلم متخصص يقدم محتوى تعليمياً عالي الجودة عبر منصة سُلَّم. يركز على تبسيط المفاهيم
+            وربطها بالتطبيق العملي لضمان أفضل تجربة تعلم للطلاب.
           </p>
         </div>
       </div>

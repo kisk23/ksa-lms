@@ -4,4 +4,4 @@
 export { CourseCard } from './components/CourseCard';
 export { CourseList } from './components/CourseList';
 export { useCourses } from './hooks/useCourses';
-export { coursesService } from './services/courses.service';
+export { coursesService } from './services/course.service';

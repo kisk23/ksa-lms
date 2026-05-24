@@ -1,63 +1,89 @@
-import { Award, BookOpenCheck, Infinity, Newspaper, Share2, TvMinimalPlay } from 'lucide-react';
+import { Award, BookOpenCheck, GraduationCap, Infinity, Share2, TvMinimalPlay } from 'lucide-react';
 
-const features = [
-  {
-    icon: <TvMinimalPlay />,
-    label: '12 ساعة من الفيديو القابل للتنزيل',
-  },
-  {
-    icon: <Newspaper />,
-    label: '24 مقالاً للقراءة المعمقة',
-  },
-  {
-    icon: <BookOpenCheck />,
-    label: 'اختبارات نهاية كل وحدة لتقييم الفهم',
-  },
-  {
-    icon: <Award />,
-    label: 'شهادة إتمام معتمدة من سُلَّم',
-  },
-  {
-    icon: <Infinity />,
-    label: 'وصول مدى الحياة للمحتوى',
-  },
+import type { CourseDetails } from '@/features/courses/types';
+
+interface PricingCardProps {
+  course: CourseDetails;
+}
+
+const COURSE_FEATURES = [
+  { icon: <TvMinimalPlay size={18} />, label: 'فيديوهات يوتيوب داخل المنصة' },
+  { icon: <BookOpenCheck size={18} />, label: 'اختبارات نهاية كل وحدة' },
+  { icon: <Award size={18} />,         label: 'شهادة إتمام معتمدة من سُلَّم' },
+  { icon: <Infinity size={18} />,      label: 'وصول مدى الحياة للمحتوى' },
+  { icon: <GraduationCap size={18} />, label: `${0} جلسة مباشرة` },
 ];
 
-export default function PricingCard() {
+export default function PricingCard({ course }: PricingCardProps) {
+  const numericPrice = Number(course.price);
+  const isFree = numericPrice === 0;
+
+  const formattedPrice = isFree
+    ? 'مجاني'
+    : `${numericPrice.toLocaleString('ar-SA')} ${course.currency}`;
+
+  const handleShare = () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      navigator.share({ title: course.title, url: window.location.href }).catch(() => null);
+    } else {
+      navigator.clipboard?.writeText(window.location.href).catch(() => null);
+    }
+  };
+
   return (
-    <div className="sticky top-28 rounded-xl border p-6 flex flex-col gap-6 shadow-2xl " dir="rtl">
+    <div
+      className="sticky top-28 rounded-xl border-2 border-border p-6 flex flex-col gap-6 shadow-2xl bg-surface"
+      dir="rtl"
+    >
       {/* Price */}
       <div className="text-center">
-        <div className="text-4xl font-black text-primary mb-1">199 ر.س</div>
-        <div className="text-gray-400 line-through text-base">299 ر.س</div>
-        <div className="mt-2 text-xs text-[#1FC58E] font-semibold bg-[#1FC58E]/10 px-3 py-1 rounded-full inline-block border border-[#1FC58E]/20">
-          خصم 33%
-        </div>
+        <div className="text-4xl font-black text-primary  mb-1">{formattedPrice}</div>
+        {!isFree && (
+          <div className="mt-2 text-xs text-success font-semibold bg-success/10 px-3 py-1 rounded-full inline-block border border-success/20">
+            سعر المنصة الرسمي
+          </div>
+        )}
       </div>
 
       {/* CTA */}
-      <button className="w-full bg-primary font-bold text-lg py-3 shadow rounded-lg hover:bg-primary-hover transition-colors duration-200 active:scale-95 cursor-pointer">
-        اشترك الآن
+      <button className="w-full bg-primary  text-white font-bold text-lg py-3 shadow rounded-lg hover:bg-primary-hover transition-colors duration-200 active:scale-95 cursor-pointer">
+        {isFree ? 'سجّل مجاناً' : 'اشترك الآن'}
       </button>
 
       {/* Features */}
       <div className="flex flex-col gap-4">
-        <h4 className="font-semibold text-black">تتضمن هذه الدورة:</h4>
-        {features.map((f, i) => (
-          <div key={i} className="flex items-center gap-3 text-gray-500">
-            <span className="shrink-0">{f.icon}</span>
+        <h4 className="font-semibold text-text">تتضمن هذه الدورة:</h4>
+        {COURSE_FEATURES.map((f, i) => (
+          <div key={i} className="flex items-center gap-3 text-text-muted">
+            <span className="shrink-0 text-primary ">{f.icon}</span>
             <span className="text-sm">{f.label}</span>
           </div>
         ))}
+        <div className="flex items-center gap-3 text-text-muted">
+          <span className="shrink-0 text-primary ">
+            <BookOpenCheck size={18} />
+          </span>
+          <span className="text-sm">
+            {course.chapters.length} فصل •{' '}
+            {course.chapters.reduce(
+              (acc, ch) => acc + ch.lessons.filter((l) => !l.isArchived).length,
+              0,
+            )}{' '}
+            درس
+          </span>
+        </div>
       </div>
 
-      <hr className="border-[#334155]" />
+      <hr className="border-border" />
 
       {/* Share */}
       <div className="flex justify-center">
-        <button className="text-gray-600 hover:text-primary transition-colors flex items-center gap-2 cursor-pointer">
+        <button
+          onClick={handleShare}
+          className="text-text-muted hover:text-primary  transition-colors flex items-center gap-2 cursor-pointer text-sm"
+        >
           <Share2 size={16} />
-          <span className="text-sm">مشاركة</span>
+          <span>مشاركة الدورة</span>
         </button>
       </div>
     </div>

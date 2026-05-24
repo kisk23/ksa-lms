@@ -3,99 +3,101 @@
 import { ChevronDown, ChevronRight, CirclePlay } from 'lucide-react';
 import { useState } from 'react';
 
-interface Lesson {
-  title: string;
-  duration: string;
+import type { Chapter } from '@/features/courses/types';
+
+interface CurriculumProps {
+  chapters: Chapter[];
 }
 
-interface Module {
-  id: number;
-  title: string;
-  meta: string;
-  lessons: Lesson[];
-}
+export default function Curriculum({ chapters }: CurriculumProps) {
+  // Open the first chapter by default
+  const [openChapterId, setOpenChapterId] = useState<string>(chapters[0]?.id ?? '');
 
-const modules: Module[] = [
-  {
-    id: 1,
-    title: 'الوحدة الأولى: أساسيات الميكانيكا',
-    meta: '4 دروس • 45 دقيقة',
-    lessons: [
-      { title: 'مقدمة في علم الحركة', duration: '10:20' },
-      { title: 'قوانين نيوتن الثلاثة', duration: '15:45' },
-      { title: 'تطبيقات عملية على الحركة', duration: '12:00' },
-      { title: 'اختبار الوحدة الأولى', duration: '07:00' },
-    ],
-  },
-  {
-    id: 2,
-    title: 'الوحدة الثانية: الطاقة والشغل',
-    meta: '3 دروس • 35 دقيقة',
-    lessons: [
-      { title: 'مفهوم الشغل والطاقة', duration: '11:30' },
-      { title: 'قانون حفظ الطاقة', duration: '13:00' },
-      { title: 'اختبار الوحدة الثانية', duration: '10:30' },
-    ],
-  },
-  {
-    id: 3,
-    title: 'الوحدة الثالثة: الكهرومغناطيسية',
-    meta: '5 دروس • 60 دقيقة',
-    lessons: [
-      { title: 'المجال الكهربائي', duration: '14:00' },
-      { title: 'الدوائر الكهربائية البسيطة', duration: '12:00' },
-      { title: 'المجال المغناطيسي', duration: '11:00' },
-      { title: 'تطبيقات الكهرومغناطيسية', duration: '13:00' },
-      { title: 'اختبار الوحدة الثالثة', duration: '10:00' },
-    ],
-  },
-];
+  const totalLessons = chapters.reduce(
+    (acc, ch) => acc + ch.lessons.filter((l) => !l.isArchived).length,
+    0,
+  );
 
-export default function Curriculum() {
-  const [openModule, setOpenModule] = useState<number>(1);
+  if (chapters.length === 0) {
+    return (
+      <div dir="rtl">
+        <h2 className="text-2xl font-bold text-text mb-6">محتوى الدورة</h2>
+        <p className="text-text-muted text-sm">لم يتم إضافة محتوى لهذه الدورة بعد.</p>
+      </div>
+    );
+  }
 
   return (
     <div dir="rtl">
-      <h2 className="text-2xl font-bold text-black/80 mb-6">محتوى الدورة</h2>
-      <div className="flex flex-col gap-3">
-        {modules.map((mod) => {
-          const isOpen = openModule === mod.id;
-          return (
-            <div key={mod.id} className="border-2 rounded-lg overflow-hidden">
-              {/* Header */}
-              <button
-                onClick={() => setOpenModule(isOpen ? 0 : mod.id)}
-                className={`w-full flex justify-between items-center p-4 bg-surface/5 hover:bg-surface/10 transition-colors cursor-pointer text-right ${isOpen ? 'bg-surface/20' : ''}`}
-              >
-                <div className="flex items-center gap-3 text-black/80">
-                  <span className={`text-${isOpen ? 'primary' : 'gray-500'}`}>
-                    {isOpen ? <ChevronDown /> : <ChevronRight />}
-                  </span>
-                  <h3 className="font-semibold  text-base">{mod.title}</h3>
-                </div>
-                <span className="text-xs text-gray-700 shrink-0 mr-2">{mod.meta}</span>
-              </button>
+      <div className="flex items-baseline justify-between mb-6">
+        <h2 className="text-2xl font-bold text-text">محتوى الدورة</h2>
+        <span className="text-sm text-text-muted">
+          {chapters.length} فصل • {totalLessons} درس
+        </span>
+      </div>
 
-              {/* Lessons */}
-              {isOpen && (
-                <div className="border-t p-4 flex flex-col gap-1">
-                  {mod.lessons.map((lesson, i) => (
-                    <div
-                      key={i}
-                      className="flex justify-between items-center py-2 px-2 rounded-lg hover:bg-surface/10 transition-colors group"
-                    >
-                      <div className="flex items-center gap-3 text-gray-600 group-hover:text-primary transition-colors">
-                        <CirclePlay size={18} />
-                        <span className="text-sm">{lesson.title}</span>
-                      </div>
-                      <span className="text-xs text-gray-500 font-mono">{lesson.duration}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+      <div className="flex flex-col gap-3">
+        {chapters
+          .slice()
+          .sort((a, b) => a.orderIndex - b.orderIndex)
+          .map((chapter) => {
+            const isOpen = openChapterId === chapter.id;
+            const activeLessons = chapter.lessons
+              .filter((l) => !l.isArchived)
+              .sort((a, b) => a.orderIndex - b.orderIndex);
+
+            return (
+              <div
+                key={chapter.id}
+                className="border-2 border-border rounded-lg overflow-hidden"
+              >
+                {/* Chapter header */}
+                <button
+                  onClick={() => setOpenChapterId(isOpen ? '' : chapter.id)}
+                  className={`w-full flex justify-between items-center p-4 transition-colors cursor-pointer text-right hover:bg-surface-hover ${
+                    isOpen ? 'bg-surface-hover' : 'bg-surface'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 text-text">
+                    <span className={isOpen ? 'text-primary ' : 'text-text-muted'}>
+                      {isOpen ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                    </span>
+                    <h3 className="font-semibold text-base">{chapter.title}</h3>
+                  </div>
+                  <span className="text-xs text-text-muted shrink-0 mr-2">
+                    {activeLessons.length} {activeLessons.length === 1 ? 'درس' : 'دروس'}
+                  </span>
+                </button>
+
+                {/* Lessons list */}
+                {isOpen && (
+                  <div className="border-t border-border p-4 flex flex-col gap-1 bg-bg">
+                    {activeLessons.length === 0 ? (
+                      <p className="text-xs text-text-muted py-2 px-2">
+                        لا توجد دروس في هذا الفصل بعد.
+                      </p>
+                    ) : (
+                      activeLessons.map((lesson) => (
+                        <div
+                          key={lesson.id}
+                          className="flex justify-between items-center py-2 px-2 rounded-lg hover:bg-surface-hover transition-colors group"
+                        >
+                          <div className="flex items-center gap-3 text-text-muted group-hover:text-primary  transition-colors">
+                            <CirclePlay size={18} />
+                            <span className="text-sm">{lesson.title}</span>
+                          </div>
+                          {/* No duration in schema — show lesson order instead */}
+                          <span className="text-xs text-text-muted font-mono">
+                            {lesson.orderIndex.toString().padStart(2, '0')}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
       </div>
     </div>
   );
