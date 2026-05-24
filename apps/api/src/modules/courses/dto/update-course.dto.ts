@@ -1,6 +1,6 @@
+import { CourseStatus } from '@lms/shared-types';
 import { ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { IsOptional, IsEnum } from 'class-validator';
-import { CourseStatus } from '@lms/shared-types';
 
 import { CreateCourseDto } from './create-course.dto';
 

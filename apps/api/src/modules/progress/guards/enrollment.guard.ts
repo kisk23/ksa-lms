@@ -6,10 +6,26 @@ import {
   Injectable,
   ForbiddenException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { PrismaService } from '../../../prisma/prisma.service';
 
+/**
+ * EnrollmentGuard
+ *
+ * Asserts whether the requesting user is allowed to access course-level progress.
+ * Expects `courseId` as a route parameter (`:courseId`).
+ *
+ * Enforces:
+ *   STUDENT       → must have an ACTIVE enrollment in the course (status === 'ACTIVE')
+ *   TEACHER       → must be the course owner (course.teacherUserId === user.id)
+ *   SUPER_ADMIN / ASSISTANT_ADMIN → always allowed (staff bypass)
+ *
+ * Applied to:
+ *   GET  /progress/courses/:courseId            (course progress summary)
+ *   GET  /progress/courses/:courseId/lessons    (lesson progress statuses list)
+ */
 @Injectable()
 export class EnrollmentGuard implements CanActivate {
   constructor(private readonly prisma: PrismaService) {}
@@ -18,6 +34,8 @@ export class EnrollmentGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user: IUser = request.user;
     const courseId: string = request.params.courseId;
+
+    if (!user) throw new UnauthorizedException('Authentication required.');
 
     // Staff always pass — they can see everything
     if (user.role === UserRole.SUPER_ADMIN || user.role === UserRole.ASSISTANT_ADMIN) {
