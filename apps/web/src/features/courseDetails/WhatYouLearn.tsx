@@ -23,20 +23,20 @@ export default function WhatYouLearn({ chapters }: WhatYouLearnProps) {
   const points = chapters
     .slice()
     .sort((a, b) => a.orderIndex - b.orderIndex)
-    .map((ch) => `إتقان محتوى: ${ch.title}`);
+    .map((ch) => `${ch.title}`);
 
   if (points.length === 0) return null;
 
   return (
-    <div className="p-6 rounded-xl border border-border bg-surface" dir="rtl">
-      <h2 className="text-xl font-bold text-text mb-6">ماذا ستتعلم؟</h2>
+    <div className="p-6 rounded-xl border border-gray-300 bg-surface/5" dir="rtl">
+      <h2 className="text-xl font-bold text-black mb-6">ماذا ستتعلم؟</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {points.map((point, i) => (
           <div key={i} className="flex items-start gap-3">
-            <span className="text-success">
+            <span className="text-green-500">
               <CheckIcon />
             </span>
-            <span className="text-sm leading-relaxed text-text-muted">{point}</span>
+            <span className="text-sm leading-relaxed text-gray-600">{point}</span>
           </div>
         ))}
       </div>

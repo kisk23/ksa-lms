@@ -30,7 +30,7 @@ export default function CourseInfo({ course }: CourseInfoProps) {
       {/* Status badge */}
       <div className="flex items-center gap-2 flex-wrap">
         {course.status === 'PUBLISHED' && (
-          <span className="px-3 py-1 bg-[#1FC58E]/10 text-[#1FC58E] rounded-full text-sm font-semibold border border-[#1FC58E]/20">
+          <span className="px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-sm font-semibold border border-green-500/20">
             منشور
           </span>
         )}
@@ -39,19 +39,24 @@ export default function CourseInfo({ course }: CourseInfoProps) {
             مسودة
           </span>
         )}
-        <span className="px-3 py-1 bg-primary /10 text-primary  rounded-full text-sm font-semibold border border-primary /20">
-          {10 + " Static"} فصل • {totalLessons} درس
+        <span className="px-3 py-1 bg-primary/10 text-primary  rounded-full text-sm font-semibold border border-primary /20">
+          {course.chapters.length} فصل • {totalLessons} درس
         </span>
+        {course.category && (
+          <span className="px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-sm font-semibold border border-green-500/20">
+          {course.category}
+        </span>
+        )}
       </div>
 
       {/* Title */}
-      <h1 className="text-3xl font-semibold text-text leading-tight">
+      <h1 className="text-3xl font-semibold text-black leading-tight">
         {course.title}
       </h1>
 
       {/* Description */}
       {course.description && (
-        <p className="text-lg text-text-muted leading-relaxed">
+        <p className="text-lg text-gray-600 leading-relaxed">
           {course.description}
         </p>
       )}
@@ -63,7 +68,7 @@ export default function CourseInfo({ course }: CourseInfoProps) {
           <div className="w-9 h-9 rounded-full bg-surface-hover border-2 border-border flex items-center justify-center text-sm font-bold text-text">
             {course.teacher.name.charAt(0)}
           </div>
-          <span className="font-semibold text-text text-sm">
+          <span className="font-semibold text-black text-sm">
             {course.teacher.name}
           </span>
         </div>
@@ -73,24 +78,24 @@ export default function CourseInfo({ course }: CourseInfoProps) {
           <span className="text-amber-400">
             <StarIcon />
           </span>
-          <span className="font-semibold text-text text-sm">جديد</span>
+          <span className="font-semibold text-black text-sm">4.8</span><span className="text-gray-600 text-sm">(124 تقييم)</span>
         </div>
 
         {/* Students */}
-        <div className="flex items-center gap-1.5 text-text-muted">
-          <Users size={18} />
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <Users size={18} className="text-gray-700" />
           <span className="text-sm">
             {10 + " Static"} طالب مسجل
           </span>
         </div>
       </div>
 
-      <hr className="border-border" />
+      <hr className="border-gray-300" />
 
       {/* About */}
       <div>
-        <h2 className="text-2xl font-bold text-text mb-3">عن الدورة</h2>
-        <p className="text-text-muted leading-relaxed">
+        <h2 className="text-2xl font-bold text-black mb-3">عن الدورة</h2>
+        <p className="text-gray-600 leading-relaxed">
           {course.description ?? 'لا يوجد وصف متاح لهذه الدورة حتى الآن.'}
         </p>
       </div>

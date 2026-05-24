@@ -32,7 +32,7 @@ export function CoursesGrid({ courses, isLoading, isFetching }: CoursesGridProps
       </div>
     );
   }
-console.log(courses);
+
 
   if (courses.length === 0) {
     return (

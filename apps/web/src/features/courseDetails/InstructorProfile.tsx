@@ -31,33 +31,33 @@ export default function InstructorProfile({ teacher, courseCount }: InstructorPr
 
   return (
     <div dir="rtl">
-      <h2 className="text-2xl font-bold text-text mb-3">المحاضر</h2>
-      <div className="flex flex-col sm:flex-row gap-6 p-6 shadow-sm border-2 border-border rounded-xl bg-surface">
+      <h2 className="text-2xl font-bold text-black mb-3">المحاضر</h2>
+      <div className="flex flex-col sm:flex-row gap-6 p-6 shadow-sm border-2 border-gray-300 rounded-xl ">
         {/* Avatar */}
-        <div className="w-24 h-24 rounded-full bg-primary /20 border-4 border-border shrink-0 flex items-center justify-center text-2xl font-bold text-primary  select-none">
+        <div className="w-24 h-24 rounded-full bg-primary/20 border-4 border-gray-300 shrink-0 flex items-center justify-center text-2xl font-bold text-primary  select-none">
           {initials}
         </div>
 
         <div className="flex flex-col gap-2">
-          <h3 className="text-lg font-bold text-text">{teacher.name}</h3>
+          <h3 className="text-lg font-bold text-black">{teacher.name}</h3>
           <p className="text-sm text-primary  font-semibold">محاضر معتمد في منصة سُلَّم</p>
 
           <div className="flex items-center gap-5 mt-1">
-            <div className="flex items-center gap-1 text-text-muted">
+            <div className="flex items-center gap-1 text-gray-600">
               <span className="text-amber-400">
                 <StarIcon />
               </span>
               <span className="text-xs">محاضر معتمد</span>
             </div>
             {courseCount !== undefined && (
-              <div className="flex items-center gap-1 text-text-muted">
-                <GraduationCap size={16} strokeWidth={2} />
+              <div className="flex items-center gap-1 text-gray-600">
+                <GraduationCap size={16} strokeWidth={2} className='text-gray-700'/>
                 <span className="text-xs">{courseCount + " Static"} دورة</span>
               </div>
             )}
           </div>
 
-          <p className="text-sm text-text-muted leading-relaxed mt-1">
+          <p className="text-sm text-gray-600 leading-relaxed mt-1">
             معلم متخصص يقدم محتوى تعليمياً عالي الجودة عبر منصة سُلَّم. يركز على تبسيط المفاهيم
             وربطها بالتطبيق العملي لضمان أفضل تجربة تعلم للطلاب.
           </p>

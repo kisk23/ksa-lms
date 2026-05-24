@@ -44,6 +44,7 @@ export interface Course {
   price: string | number;
   currency: string;
   status: CourseStatus;
+  category?: string | null;
   publishedAt?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -84,4 +85,5 @@ export interface CoursesQueryParams {
   limit?: number;
   search?: string;
   status?: CourseStatus;
+  category?: string;
 }

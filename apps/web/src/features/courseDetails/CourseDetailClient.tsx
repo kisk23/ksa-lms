@@ -1,5 +1,6 @@
 'use client';
 
+import CourseDetailLoading from '@/app/courses/[id]/loading';
 import CourseHero         from '@/features/courseDetails/CourseHero';
 import CourseInfo         from '@/features/courseDetails/CourseInfo';
 import Curriculum         from '@/features/courseDetails/Curriculum';
@@ -11,62 +12,6 @@ import { useCourse }      from '@/features/courses/hooks/useCourse';
 interface CourseDetailClientProps {
   id: string;
 }
-
-// ─── Skeleton shown while data loads ─────────────────────────────────────────
-
-// function DetailSkeleton() {
-//   return (
-//     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-pulse" dir="rtl">
-//       {/* Pricing column */}
-//       <div className="lg:col-span-4">
-//         <div className="rounded-xl border-2 border-border p-6 flex flex-col gap-5 bg-surface">
-//           <div className="h-10 w-32 mx-auto bg-surface-hover rounded-lg" />
-//           <div className="h-12 w-full bg-surface-hover rounded-lg" />
-//           {[1, 2, 3, 4].map((i) => (
-//             <div key={i} className="flex gap-3 items-center">
-//               <div className="w-5 h-5 rounded bg-surface-hover shrink-0" />
-//               <div className="h-3 w-full bg-surface-hover rounded" />
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-
-//       {/* Main column */}
-//       <div className="lg:col-span-8 flex flex-col gap-8">
-//         {/* Hero */}
-//         <div className="aspect-video w-full rounded-xl bg-surface-hover" />
-//         {/* Title block */}
-//         <div className="flex flex-col gap-3">
-//           <div className="h-4 w-24 bg-surface-hover rounded-full" />
-//           <div className="h-8 w-3/4 bg-surface-hover rounded" />
-//           <div className="h-5 w-full bg-surface-hover rounded" />
-//           <div className="h-5 w-2/3 bg-surface-hover rounded" />
-//         </div>
-//         {/* What you'll learn */}
-//         <div className="p-6 rounded-xl border border-border bg-surface grid grid-cols-2 gap-4">
-//           {[1, 2, 3, 4].map((i) => (
-//             <div key={i} className="h-4 bg-surface-hover rounded" />
-//           ))}
-//         </div>
-//         {/* Curriculum */}
-//         <div className="flex flex-col gap-3">
-//           {[1, 2, 3].map((i) => (
-//             <div key={i} className="h-14 rounded-lg bg-surface-hover" />
-//           ))}
-//         </div>
-//         {/* Instructor */}
-//         <div className="p-6 rounded-xl border-2 border-border bg-surface flex gap-6">
-//           <div className="w-24 h-24 rounded-full bg-surface-hover shrink-0" />
-//           <div className="flex flex-col gap-3 flex-1">
-//             <div className="h-5 w-40 bg-surface-hover rounded" />
-//             <div className="h-4 w-56 bg-surface-hover rounded" />
-//             <div className="h-4 w-full bg-surface-hover rounded" />
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 
 // ─── Error state ──────────────────────────────────────────────────────────────
 
@@ -94,7 +39,7 @@ function DetailError({ message }: { message: string }) {
 export default function CourseDetailClient({ id }: CourseDetailClientProps) {
   const { data: { data: course } = {}, isLoading, isError, error } = useCourse(id);
 
-  // if (isLoading) return <DetailSkeleton />;
+  if (isLoading) return <CourseDetailLoading />;
 
   if (isError || !course) {
     return (
@@ -124,7 +69,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
       
 
       {/* ── RIGHT — Course content ── */}
-      <div className="lg:col-span-8 flex flex-col gap-8">
+      <div className="lg:col-span-8 flex flex-col gap-10">
         <CourseHero
           youtubeVideoId={firstLesson?.youtubeVideoId}
           title={course.title}

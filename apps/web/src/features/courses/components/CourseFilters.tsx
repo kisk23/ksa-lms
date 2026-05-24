@@ -1,49 +1,84 @@
 'use client';
 
-import type { CourseStatus } from '../types';
+import { SlidersHorizontal, X } from 'lucide-react';
 
-interface CourseFiltersProps {
-  status: CourseStatus | undefined;
-  onStatusChange: (status: CourseStatus | undefined) => void;
+// ─────────────────────────────────────────────────────────────────────────────
+// Props
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface CourseFiltersProps {
+  /** All available categories derived from backend data */
+  categories: string[];
+  /** Currently selected category (single-select) */
+  selectedCategory: string | undefined;
+  onCategoryChange: (category: string | undefined) => void;
+  onClear: () => void;
 }
 
-const STATUS_OPTIONS: { label: string; value: CourseStatus | '' }[] = [
-  { label: 'الكل', value: '' },
-  { label: 'منشور', value: 'PUBLISHED' },
-  { label: 'مسودة', value: 'DRAFT' },
-  { label: 'مؤرشف', value: 'ARCHIVED' },
-];
+// ─────────────────────────────────────────────────────────────────────────────
+// Component
+// ─────────────────────────────────────────────────────────────────────────────
 
-export function CourseFilters({ status, onStatusChange }: CourseFiltersProps) {
+export function CourseFilters({
+  categories,
+  selectedCategory,
+  onCategoryChange,
+  onClear,
+}: CourseFiltersProps) {
   return (
-    <aside className="w-full md:w-64 shrink-0" dir="rtl">
-      <div className="bg-surface border border-border rounded-[--radius-lg] p-5 shadow-sm sticky top-24">
-        <h3 className="text-text font-semibold text-base mb-5">تصفية الدورات</h3>
+    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-5 flex flex-col gap-4">
 
-        {/* Status */}
-        <div>
-          <label
-            htmlFor="course-status-filter"
-            className="block text-text-muted text-xs mb-2"
-          >
-            الحالة
-          </label>
-          <select
-            id="course-status-filter"
-            value={status ?? ''}
-            onChange={(e) =>
-              onStatusChange((e.target.value as CourseStatus) || undefined)
-            }
-            className="w-full bg-bg border border-border rounded-radius-sm px-3 py-2 text-text text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-          >
-            {STATUS_OPTIONS.map((opt) => (
-              <option key={opt.label} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+      {/* ── Header ── */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal size={16} className="text-primary" />
+          <h2 className="font-bold text-gray-800 text-sm">تصفية الدورات</h2>
         </div>
+
+        {selectedCategory && (
+          <button
+            onClick={onClear}
+            className="flex items-center gap-1 text-xs text-red-500 font-semibold hover:text-red-600 transition-colors"
+          >
+            <X size={13} />
+            مسح
+          </button>
+        )}
       </div>
-    </aside>
+
+      <hr className="border-gray-100" />
+
+      {/* ── Category pills ── */}
+      <div className="flex flex-col gap-2">
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
+          التصنيف
+        </p>
+
+        {categories.length === 0 ? (
+          <p className="text-xs text-gray-400 text-center py-3">
+            لا توجد تصنيفات متاحة
+          </p>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => {
+              const isActive = selectedCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => onCategoryChange(isActive ? undefined : cat)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                    isActive
+                      ? 'bg-primary text-white border-primary shadow-sm scale-105'
+                      : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-primary/50 hover:text-primary hover:bg-primary/5'
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

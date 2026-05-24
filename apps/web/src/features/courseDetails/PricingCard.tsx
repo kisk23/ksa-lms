@@ -1,4 +1,4 @@
-import { Award, BookOpenCheck, GraduationCap, Infinity, Share2, TvMinimalPlay } from 'lucide-react';
+import { Award, BookOpenCheck, Infinity, Share2, TvMinimalPlay } from 'lucide-react';
 
 import type { CourseDetails } from '@/features/courses/types';
 
@@ -11,7 +11,6 @@ const COURSE_FEATURES = [
   { icon: <BookOpenCheck size={18} />, label: 'اختبارات نهاية كل وحدة' },
   { icon: <Award size={18} />,         label: 'شهادة إتمام معتمدة من سُلَّم' },
   { icon: <Infinity size={18} />,      label: 'وصول مدى الحياة للمحتوى' },
-  { icon: <GraduationCap size={18} />, label: `${0} جلسة مباشرة` },
 ];
 
 export default function PricingCard({ course }: PricingCardProps) {
@@ -32,7 +31,7 @@ export default function PricingCard({ course }: PricingCardProps) {
 
   return (
     <div
-      className="sticky top-28 rounded-xl border-2 border-border p-6 flex flex-col gap-6 shadow-2xl bg-surface"
+      className="sticky top-28 rounded-xl border-2 border-gray-200 p-6 flex flex-col gap-6 shadow-2xl bg-white"
       dir="rtl"
     >
       {/* Price */}
@@ -52,14 +51,14 @@ export default function PricingCard({ course }: PricingCardProps) {
 
       {/* Features */}
       <div className="flex flex-col gap-4">
-        <h4 className="font-semibold text-text">تتضمن هذه الدورة:</h4>
+        <h4 className="font-semibold text-black">تتضمن هذه الدورة:</h4>
         {COURSE_FEATURES.map((f, i) => (
-          <div key={i} className="flex items-center gap-3 text-text-muted">
+          <div key={i} className="flex items-center gap-3 text-gray-600">
             <span className="shrink-0 text-primary ">{f.icon}</span>
             <span className="text-sm">{f.label}</span>
           </div>
         ))}
-        <div className="flex items-center gap-3 text-text-muted">
+        <div className="flex items-center gap-3 text-gray-600">
           <span className="shrink-0 text-primary ">
             <BookOpenCheck size={18} />
           </span>
@@ -74,13 +73,13 @@ export default function PricingCard({ course }: PricingCardProps) {
         </div>
       </div>
 
-      <hr className="border-border" />
+      <hr className="border-gray-200" />
 
       {/* Share */}
       <div className="flex justify-center">
         <button
           onClick={handleShare}
-          className="text-text-muted hover:text-primary  transition-colors flex items-center gap-2 cursor-pointer text-sm"
+          className="text-gray-600 hover:text-primary  transition-colors flex items-center gap-2 cursor-pointer text-sm"
         >
           <Share2 size={16} />
           <span>مشاركة الدورة</span>

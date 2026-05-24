@@ -26,6 +26,7 @@ export const courseService = {
         limit: params.limit ?? 9,
         ...(params.search ? { search: params.search } : {}),
         ...(params.status ? { status: params.status } : {}),
+        ...(params.category ? { category: params.category } : {}),
       },
     });
     return data;

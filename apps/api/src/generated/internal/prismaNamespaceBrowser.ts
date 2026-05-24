@@ -170,6 +170,7 @@ export const CourseScalarFieldEnum = {
   promoVideoProvider: 'promoVideoProvider',
   price: 'price',
   currency: 'currency',
+  category: 'category',
   status: 'status',
   publishedAt: 'publishedAt',
   publishedBy: 'publishedBy',

@@ -3,145 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
-import { useCourses }          from '../hooks/useCourses';
-import { CoursesGrid }         from './CoursesGrid';
-import { Pagination }          from './Pagination';
-import type { CourseStatus }   from '../types';
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Constants
-// ─────────────────────────────────────────────────────────────────────────────
-
-/**
- * Why status, not slug?
- * ---
- * course.slug is a unique URL identifier per course (e.g. "python-basics").
- * Filtering by slug would produce one checkbox per course — selecting it
- * returns only that one course, which is identical to just searching by name.
- *
- * course.status is the only real categorical field in your schema and is
- * already wired into CoursesQueryParams + CoursesService.findAll().
- * It gives users genuinely useful filter options.
- *
- * When your backend gains category/subject/level fields, swap STATUS_OPTIONS
- * for those values and add the corresponding query param.
- */
-const STATUS_OPTIONS: { value: CourseStatus; label: string; emoji: string }[] = [
-  { value: 'PUBLISHED', label: 'منشور',  emoji: '✅' },
-  { value: 'DRAFT',     label: 'مسودة',  emoji: '📝' },
-  { value: 'ARCHIVED',  label: 'مؤرشف', emoji: '📦' },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CourseFilters — pure presentational sidebar card
-// ─────────────────────────────────────────────────────────────────────────────
-
-interface CourseFiltersProps {
-  selected:      Set<CourseStatus>;
-  onToggle:      (status: CourseStatus) => void;
-  onClear:       () => void;
-  /** Counts per status derived from the current page — kept in sync by parent */
-  counts:        Record<CourseStatus, number>;
-}
-
-function CourseFilters({ selected, onToggle, onClear, counts }: CourseFiltersProps) {
-  return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-5 flex flex-col gap-5">
-
-      {/* ── Header ── */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <SlidersHorizontal size={16} className="text-primary" />
-          <h2 className="font-bold text-gray-800 text-sm">تصفية الدورات</h2>
-        </div>
-
-        {/* "مسح الفلاتر" — only visible when something is checked */}
-        {selected.size > 0 && (
-          <button
-            onClick={onClear}
-            className="flex items-center gap-1 text-xs text-red-500 font-semibold hover:text-red-600 transition-colors"
-          >
-            <X size={13} />
-            مسح الفلاتر
-          </button>
-        )}
-      </div>
-
-      {/* ── Divider ── */}
-      <hr className="border-gray-100" />
-
-      {/* ── Filter group: Status ── */}
-      <div className="flex flex-col gap-1">
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
-          الحالة
-        </p>
-
-        {STATUS_OPTIONS.map(({ value, label, emoji }) => {
-          const isChecked = selected.has(value);
-          const count     = counts[value] ?? 0;
-
-          return (
-            <label
-              key={value}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer select-none transition-colors ${
-                isChecked
-                  ? 'bg-primary/5 border border-primary/20'
-                  : 'hover:bg-gray-50 border border-transparent'
-              }`}
-            >
-              {/* Visually hidden native checkbox — keyboard + screen-reader accessible */}
-              <input
-                type="checkbox"
-                className="sr-only"
-                checked={isChecked}
-                onChange={() => onToggle(value)}
-              />
-
-              {/* Custom checkbox indicator */}
-              <span
-                aria-hidden="true"
-                className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-all ${
-                  isChecked
-                    ? 'bg-primary border-primary'
-                    : 'border-gray-300 hover:border-primary'
-                }`}
-              >
-                {isChecked && (
-                  <svg viewBox="0 0 10 8" className="w-2.5 h-2" fill="none">
-                    <path
-                      d="M1 4l2.5 2.5L9 1"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
-              </span>
-
-              {/* Label */}
-              <span className="flex items-center gap-1.5 flex-1 text-sm text-gray-700">
-                <span>{emoji}</span>
-                <span>{label}</span>
-              </span>
-
-              {/* Count badge — shows how many courses match on the current page */}
-              {count > 0 && (
-                <span className={`text-xs font-medium tabular-nums px-1.5 py-0.5 rounded-full ${
-                  isChecked
-                    ? 'bg-primary/10 text-primary'
-                    : 'bg-gray-100 text-gray-500'
-                }`}>
-                  {count}
-                </span>
-              )}
-            </label>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+import { useCourses }      from '../hooks/useCourses';
+import { CoursesGrid }     from './CoursesGrid';
+import { Pagination }      from './Pagination';
+import { CourseFilters }   from './CourseFilters';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CoursesPageClient — main component
@@ -152,10 +17,8 @@ export function CoursesPageClient() {
   const [search,          setSearch]          = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
-  // ── Filter state: set of selected statuses ────────────────────────────────
-  // Using a Set makes O(1) toggle/lookup; we store it as React state so every
-  // change triggers a re-render and a new query.
-  const [selectedStatuses, setSelectedStatuses] = useState<Set<CourseStatus>>(new Set());
+  // ── Filter state: single selected category ────────────────────────────────
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
 
   // ── Pagination state ──────────────────────────────────────────────────────
   const [page, setPage] = useState(1);
@@ -171,7 +34,7 @@ export function CoursesPageClient() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setDebouncedSearch(value);
-      setPage(1); // reset to page 1 on new search
+      setPage(1);
     }, 400);
   }, []);
 
@@ -181,62 +44,50 @@ export function CoursesPageClient() {
     };
   }, []);
 
-  // ── Toggle a single status checkbox ──────────────────────────────────────
-  // Creates a *new* Set on every toggle (immutable update — React needs a new
-  // reference to detect the change and re-render).
-  const handleToggleStatus = useCallback((status: CourseStatus) => {
-    setSelectedStatuses((prev) => {
-      const next = new Set(prev);
-      if (next.has(status)) next.delete(status);
-      else next.add(status);
-      return next;
-    });
-    setPage(1); // reset to page 1 whenever filters change
+  // ── Handle category change ────────────────────────────────────────────────
+  const handleCategoryChange = useCallback((category: string | undefined) => {
+    setSelectedCategory(category);
+    setPage(1);
   }, []);
 
   // ── Clear all filters ─────────────────────────────────────────────────────
   const handleClearFilters = useCallback(() => {
-    setSelectedStatuses(new Set());
+    setSelectedCategory(undefined);
     setPage(1);
   }, []);
 
-  // ── Build the query params ────────────────────────────────────────────────
-  //
-  // Your backend accepts a single `status` string, not an array.
-  // Strategy: if exactly one status is selected, pass it; if zero or multiple
-  // are selected, omit the param (= show all / backend handles it naturally).
-  //
-  // When your backend gains multi-value status filtering, change this to
-  // pass an array and update CoursesQueryParams accordingly.
-  const statusParam: CourseStatus | undefined = useMemo(() => {
-    if (selectedStatuses.size === 1) {
-      return [...selectedStatuses][0];
-    }
-    return undefined;
-  }, [selectedStatuses]);
-
+  // ── Paginated query — respects search + category filter ──────────────────
   const { data, isLoading, isFetching, error } = useCourses({
     page,
     limit: 9,
-    search: debouncedSearch || undefined,
-    status: statusParam,
+    search:   debouncedSearch || undefined,
+    category: selectedCategory,
   });
 
   const courses = data?.data?.data ?? data?.data ?? [];
   const meta    = data?.meta;
 
-  // ── Derive per-status counts from the current page for the filter badges ──
-  // This is a *client-side* count of what's visible on the current page.
-  // It gives users immediate feedback without a separate API call.
-  const statusCounts = useMemo<Record<CourseStatus, number>>(() => {
-    const base: Record<CourseStatus, number> = { PUBLISHED: 0, DRAFT: 0, ARCHIVED: 0 };
-    for (const course of courses) {
-      if (course.status in base) base[course.status]++;
-    }
-    return base;
-  }, [courses]);
+  // ── Separate query to collect ALL distinct categories from the backend ────
+  // Uses a high limit with no category filter so the pill list stays stable
+  // even while a category is selected. Only the search term is forwarded so
+  // the category options reflect what's actually searchable right now.
+  const { data: allData } = useCourses({
+    page:   1,
+    limit:  200,
+    search: debouncedSearch || undefined,
+  });
 
-  const hasActiveFilters = selectedStatuses.size > 0;
+  const allCourses = allData?.data?.data ?? allData?.data ?? [];
+
+  const availableCategories = useMemo<string[]>(() => {
+    const seen = new Set<string>();
+    for (const course of allCourses) {
+      if (course.category) seen.add(course.category);
+    }
+    return [...seen].sort((a, b) => a.localeCompare(b, 'ar'));
+  }, [allCourses]);
+
+  const hasActiveFilters = !!selectedCategory;
 
   // ─────────────────────────────────────────────────────────────────────────
   // Render
@@ -260,7 +111,7 @@ export function CoursesPageClient() {
             ════════════════════════════════════════════════ */}
         <aside className="w-full lg:w-64 shrink-0 lg:sticky lg:top-24">
 
-          {/* ── Mobile: "فلترة" toggle button ── */}
+          {/* ── Mobile: toggle button ── */}
           <button
             onClick={() => setMobileSidebarOpen((v) => !v)}
             className="lg:hidden w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm text-sm font-semibold text-gray-700 mb-3"
@@ -270,22 +121,20 @@ export function CoursesPageClient() {
               تصفية الدورات
               {hasActiveFilters && (
                 <span className="bg-primary text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                  {selectedStatuses.size}
+                  1
                 </span>
               )}
             </span>
             <span className="text-gray-400">{mobileSidebarOpen ? '▲' : '▼'}</span>
           </button>
 
-          {/* ── Filter card:
-                desktop → always visible  (hidden on mobile unless toggled)
-                mobile  → shown only when mobileSidebarOpen = true           ── */}
+          {/* ── Filter card ── */}
           <div className={`${mobileSidebarOpen ? 'block' : 'hidden'} lg:block`}>
             <CourseFilters
-              selected={selectedStatuses}
-              onToggle={handleToggleStatus}
+              categories={availableCategories}
+              selectedCategory={selectedCategory}
+              onCategoryChange={handleCategoryChange}
               onClear={handleClearFilters}
-              counts={statusCounts}
             />
           </div>
         </aside>
@@ -309,34 +158,20 @@ export function CoursesPageClient() {
             />
           </div>
 
-          {/* ── Active filter chips (visible feedback strip) ── */}
+          {/* ── Active filter chip ── */}
           {hasActiveFilters && (
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs text-gray-500">الفلاتر النشطة:</span>
-              {[...selectedStatuses].map((s) => {
-                const opt = STATUS_OPTIONS.find((o) => o.value === s)!;
-                return (
-                  <span
-                    key={s}
-                    className="flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full border border-primary/20"
-                  >
-                    {opt.emoji} {opt.label}
-                    <button
-                      onClick={() => handleToggleStatus(s)}
-                      aria-label={`إزالة فلتر ${opt.label}`}
-                      className="mr-0.5 hover:text-primary/70 transition-colors"
-                    >
-                      <X size={12} />
-                    </button>
-                  </span>
-                );
-              })}
-              <button
-                onClick={handleClearFilters}
-                className="text-xs text-red-500 hover:text-red-600 font-semibold transition-colors"
-              >
-                مسح الكل
-              </button>
+              <span className="flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full border border-primary/20">
+                {selectedCategory}
+                <button
+                  onClick={handleClearFilters}
+                  aria-label="إزالة فلتر التصنيف"
+                  className="mr-0.5 hover:text-primary/70 transition-colors"
+                >
+                  <X size={12} />
+                </button>
+              </span>
             </div>
           )}
 
@@ -353,7 +188,7 @@ export function CoursesPageClient() {
             </div>
           )}
 
-          {/* ── Grid / error state / pagination (unchanged logic) ── */}
+          {/* ── Grid / loading / error / pagination ── */}
           {isLoading ? (
             <CoursesGrid courses={[]} isLoading={true} isFetching={false} />
           ) : error ? (
