@@ -76,7 +76,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         />
         <CourseInfo course={course} />
         <WhatYouLearn chapters={course.chapters} />
-        <Curriculum chapters={course.chapters} />
+        <Curriculum chapters={course.chapters} courseId={course.id} />
         <InstructorProfile
           teacher={course.teacher}
           courseCount={10}

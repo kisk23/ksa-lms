@@ -4,12 +4,14 @@ import { ChevronDown, ChevronRight, CirclePlay } from 'lucide-react';
 import { useState } from 'react';
 
 import type { Chapter } from '@/features/courses/types';
+import Link from 'next/link';
 
 interface CurriculumProps {
   chapters: Chapter[];
+  courseId: string;
 }
 
-export default function Curriculum({ chapters }: CurriculumProps) {
+export default function Curriculum({ chapters, courseId }: CurriculumProps) {
   // Open the first chapter by default
   const [openChapterId, setOpenChapterId] = useState<string>(chapters[0]?.id ?? '');
 
@@ -78,8 +80,9 @@ export default function Curriculum({ chapters }: CurriculumProps) {
                       </p>
                     ) : (
                       activeLessons.map((lesson) => (
-                        <div
+                        <Link
                           key={lesson.id}
+                          href={`/courses/${courseId}/lessons/${lesson.id}`}
                           className="flex justify-between items-center py-2 px-2 rounded-lg hover:bg-surface-hover/5 transition-colors group"
                         >
                           <div className="flex items-center gap-3 text-black group-hover:text-primary  transition-colors">
@@ -90,7 +93,7 @@ export default function Curriculum({ chapters }: CurriculumProps) {
                           <span className="text-xs text-text-muted font-mono">
                             {lesson.orderIndex.toString().padStart(2, '0')}
                           </span>
-                        </div>
+                        </Link>
                       ))
                     )}
                   </div>

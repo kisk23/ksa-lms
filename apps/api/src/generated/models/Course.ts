@@ -45,7 +45,6 @@ export type CourseMinAggregateOutputType = {
   promoVideoProvider: $Enums.VideoProvider | null
   price: runtime.Decimal | null
   currency: string | null
-  category: string | null
   status: $Enums.CourseStatus | null
   publishedAt: Date | null
   publishedBy: string | null
@@ -66,7 +65,6 @@ export type CourseMaxAggregateOutputType = {
   promoVideoProvider: $Enums.VideoProvider | null
   price: runtime.Decimal | null
   currency: string | null
-  category: string | null
   status: $Enums.CourseStatus | null
   publishedAt: Date | null
   publishedBy: string | null
@@ -87,7 +85,6 @@ export type CourseCountAggregateOutputType = {
   promoVideoProvider: number
   price: number
   currency: number
-  category: number
   status: number
   publishedAt: number
   publishedBy: number
@@ -118,7 +115,6 @@ export type CourseMinAggregateInputType = {
   promoVideoProvider?: true
   price?: true
   currency?: true
-  category?: true
   status?: true
   publishedAt?: true
   publishedBy?: true
@@ -139,7 +135,6 @@ export type CourseMaxAggregateInputType = {
   promoVideoProvider?: true
   price?: true
   currency?: true
-  category?: true
   status?: true
   publishedAt?: true
   publishedBy?: true
@@ -160,7 +155,6 @@ export type CourseCountAggregateInputType = {
   promoVideoProvider?: true
   price?: true
   currency?: true
-  category?: true
   status?: true
   publishedAt?: true
   publishedBy?: true
@@ -268,7 +262,6 @@ export type CourseGroupByOutputType = {
   promoVideoProvider: $Enums.VideoProvider | null
   price: runtime.Decimal
   currency: string
-  category: string | null
   status: $Enums.CourseStatus
   publishedAt: Date | null
   publishedBy: string | null
@@ -312,7 +305,6 @@ export type CourseWhereInput = {
   promoVideoProvider?: Prisma.EnumVideoProviderNullableFilter<"Course"> | $Enums.VideoProvider | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
-  category?: Prisma.StringNullableFilter<"Course"> | string | null
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
   publishedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
@@ -343,7 +335,6 @@ export type CourseOrderByWithRelationInput = {
   promoVideoProvider?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  category?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedBy?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -377,7 +368,6 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   promoVideoProvider?: Prisma.EnumVideoProviderNullableFilter<"Course"> | $Enums.VideoProvider | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
-  category?: Prisma.StringNullableFilter<"Course"> | string | null
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
   publishedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
@@ -408,7 +398,6 @@ export type CourseOrderByWithAggregationInput = {
   promoVideoProvider?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  category?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedBy?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -437,7 +426,6 @@ export type CourseScalarWhereWithAggregatesInput = {
   promoVideoProvider?: Prisma.EnumVideoProviderNullableWithAggregatesFilter<"Course"> | $Enums.VideoProvider | null
   price?: Prisma.DecimalWithAggregatesFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"Course"> | string
-  category?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   status?: Prisma.EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
   publishedBy?: Prisma.UuidNullableWithAggregatesFilter<"Course"> | string | null
@@ -457,7 +445,6 @@ export type CourseCreateInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -486,7 +473,6 @@ export type CourseUncheckedCreateInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -513,7 +499,6 @@ export type CourseUpdateInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -542,7 +527,6 @@ export type CourseUncheckedUpdateInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -570,7 +554,6 @@ export type CourseCreateManyInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -590,7 +573,6 @@ export type CourseUpdateManyMutationInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609,7 +591,6 @@ export type CourseUncheckedUpdateManyInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -640,7 +621,6 @@ export type CourseCountOrderByAggregateInput = {
   promoVideoProvider?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  category?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   publishedBy?: Prisma.SortOrder
@@ -665,7 +645,6 @@ export type CourseMaxOrderByAggregateInput = {
   promoVideoProvider?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  category?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   publishedBy?: Prisma.SortOrder
@@ -686,7 +665,6 @@ export type CourseMinOrderByAggregateInput = {
   promoVideoProvider?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  category?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   publishedBy?: Prisma.SortOrder
@@ -962,7 +940,6 @@ export type CourseCreateWithoutTeacherInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -989,7 +966,6 @@ export type CourseUncheckedCreateWithoutTeacherInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -1026,7 +1002,6 @@ export type CourseCreateWithoutPublishedByUserInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1054,7 +1029,6 @@ export type CourseUncheckedCreateWithoutPublishedByUserInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1090,7 +1064,6 @@ export type CourseCreateWithoutArchivedByUserInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1118,7 +1091,6 @@ export type CourseUncheckedCreateWithoutArchivedByUserInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -1174,7 +1146,6 @@ export type CourseScalarWhereInput = {
   promoVideoProvider?: Prisma.EnumVideoProviderNullableFilter<"Course"> | $Enums.VideoProvider | null
   price?: Prisma.DecimalFilter<"Course"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Course"> | string
-  category?: Prisma.StringNullableFilter<"Course"> | string | null
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   publishedAt?: Prisma.DateTimeNullableFilter<"Course"> | Date | string | null
   publishedBy?: Prisma.UuidNullableFilter<"Course"> | string | null
@@ -1226,7 +1197,6 @@ export type CourseCreateWithoutAuditLogsInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1254,7 +1224,6 @@ export type CourseUncheckedCreateWithoutAuditLogsInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -1296,7 +1265,6 @@ export type CourseUpdateWithoutAuditLogsInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1324,7 +1292,6 @@ export type CourseUncheckedUpdateWithoutAuditLogsInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1350,7 +1317,6 @@ export type CourseCreateWithoutCourseProgressesInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1378,7 +1344,6 @@ export type CourseUncheckedCreateWithoutCourseProgressesInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -1420,7 +1385,6 @@ export type CourseUpdateWithoutCourseProgressesInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1448,7 +1412,6 @@ export type CourseUncheckedUpdateWithoutCourseProgressesInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1474,7 +1437,6 @@ export type CourseCreateWithoutChaptersInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1502,7 +1464,6 @@ export type CourseUncheckedCreateWithoutChaptersInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -1544,7 +1505,6 @@ export type CourseUpdateWithoutChaptersInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1572,7 +1532,6 @@ export type CourseUncheckedUpdateWithoutChaptersInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1598,7 +1557,6 @@ export type CourseCreateWithoutEnrollmentsInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1626,7 +1584,6 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -1668,7 +1625,6 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1696,7 +1652,6 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1722,7 +1677,6 @@ export type CourseCreateWithoutLiveSessionsInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1750,7 +1704,6 @@ export type CourseUncheckedCreateWithoutLiveSessionsInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -1792,7 +1745,6 @@ export type CourseUpdateWithoutLiveSessionsInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1820,7 +1772,6 @@ export type CourseUncheckedUpdateWithoutLiveSessionsInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1846,7 +1797,6 @@ export type CourseCreateWithoutPromoCodesInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1874,7 +1824,6 @@ export type CourseUncheckedCreateWithoutPromoCodesInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -1916,7 +1865,6 @@ export type CourseUpdateWithoutPromoCodesInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1944,7 +1892,6 @@ export type CourseUncheckedUpdateWithoutPromoCodesInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1970,7 +1917,6 @@ export type CourseCreateWithoutPaymentsInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -1998,7 +1944,6 @@ export type CourseUncheckedCreateWithoutPaymentsInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -2040,7 +1985,6 @@ export type CourseUpdateWithoutPaymentsInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2068,7 +2012,6 @@ export type CourseUncheckedUpdateWithoutPaymentsInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2094,7 +2037,6 @@ export type CourseCreateManyTeacherInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -2115,7 +2057,6 @@ export type CourseCreateManyPublishedByUserInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   archivedAt?: Date | string | null
@@ -2135,7 +2076,6 @@ export type CourseCreateManyArchivedByUserInput = {
   promoVideoProvider?: $Enums.VideoProvider | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
-  category?: string | null
   status?: $Enums.CourseStatus
   publishedAt?: Date | string | null
   publishedBy?: string | null
@@ -2154,7 +2094,6 @@ export type CourseUpdateWithoutTeacherInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2181,7 +2120,6 @@ export type CourseUncheckedUpdateWithoutTeacherInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2208,7 +2146,6 @@ export type CourseUncheckedUpdateManyWithoutTeacherInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2228,7 +2165,6 @@ export type CourseUpdateWithoutPublishedByUserInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2256,7 +2192,6 @@ export type CourseUncheckedUpdateWithoutPublishedByUserInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2283,7 +2218,6 @@ export type CourseUncheckedUpdateManyWithoutPublishedByUserInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2302,7 +2236,6 @@ export type CourseUpdateWithoutArchivedByUserInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2330,7 +2263,6 @@ export type CourseUncheckedUpdateWithoutArchivedByUserInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2357,7 +2289,6 @@ export type CourseUncheckedUpdateManyWithoutArchivedByUserInput = {
   promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2462,7 +2393,6 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   promoVideoProvider?: boolean
   price?: boolean
   currency?: boolean
-  category?: boolean
   status?: boolean
   publishedAt?: boolean
   publishedBy?: boolean
@@ -2494,7 +2424,6 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   promoVideoProvider?: boolean
   price?: boolean
   currency?: boolean
-  category?: boolean
   status?: boolean
   publishedAt?: boolean
   publishedBy?: boolean
@@ -2518,7 +2447,6 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   promoVideoProvider?: boolean
   price?: boolean
   currency?: boolean
-  category?: boolean
   status?: boolean
   publishedAt?: boolean
   publishedBy?: boolean
@@ -2542,7 +2470,6 @@ export type CourseSelectScalar = {
   promoVideoProvider?: boolean
   price?: boolean
   currency?: boolean
-  category?: boolean
   status?: boolean
   publishedAt?: boolean
   publishedBy?: boolean
@@ -2552,7 +2479,7 @@ export type CourseSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "teacherUserId" | "title" | "description" | "thumbnailUrl" | "promoVideoUrl" | "promoVideoProvider" | "price" | "currency" | "category" | "status" | "publishedAt" | "publishedBy" | "archivedAt" | "archivedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "teacherUserId" | "title" | "description" | "thumbnailUrl" | "promoVideoUrl" | "promoVideoProvider" | "price" | "currency" | "status" | "publishedAt" | "publishedBy" | "archivedAt" | "archivedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   publishedByUser?: boolean | Prisma.Course$publishedByUserArgs<ExtArgs>
@@ -2602,7 +2529,6 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     promoVideoProvider: $Enums.VideoProvider | null
     price: runtime.Decimal
     currency: string
-    category: string | null
     status: $Enums.CourseStatus
     publishedAt: Date | null
     publishedBy: string | null
@@ -3053,7 +2979,6 @@ export interface CourseFieldRefs {
   readonly promoVideoProvider: Prisma.FieldRef<"Course", 'VideoProvider'>
   readonly price: Prisma.FieldRef<"Course", 'Decimal'>
   readonly currency: Prisma.FieldRef<"Course", 'String'>
-  readonly category: Prisma.FieldRef<"Course", 'String'>
   readonly status: Prisma.FieldRef<"Course", 'CourseStatus'>
   readonly publishedAt: Prisma.FieldRef<"Course", 'DateTime'>
   readonly publishedBy: Prisma.FieldRef<"Course", 'String'>

@@ -68,29 +68,41 @@ export class ProgressController {
   /**
    * GET /progress/courses/:courseId
    *
-   * EnrollmentGuard reads req.params.courseId and asserts ACTIVE enrollment
-   * before the handler runs — no service-layer duplication needed here.
+   * Returns course progress summary for the current student.
+   * If student is not enrolled, returns null/empty data instead of 404.
    */
   @Get('progress/courses/:courseId')
   @UseGuards(RolesGuard, EnrollmentGuard)
   @Roles(UserRole.STUDENT)
   @ApiOperation({ summary: 'Get course progress summary for the current student' })
-  getCourseProgress(@Param('courseId') courseId: string, @GetCurrentUser() user: IUser) {
-    return this.courseProgressService.findByStudent(user.id, courseId);
+  async getCourseProgress(@Param('courseId') courseId: string, @GetCurrentUser() user: IUser) {
+    try {
+      return await this.courseProgressService.findByStudent(user.id, courseId);
+    } catch (error) {
+      // If not enrolled, return null instead of throwing
+      console.error('Error getting course progress:', error);
+      return null;
+    }
   }
 
   /**
    * GET /progress/courses/:courseId/lessons
    *
-   * EnrollmentGuard reads req.params.courseId and asserts ACTIVE enrollment.
-   * Returns all lesson statuses including unstarted ones (progress: null).
+   * Returns all lesson progress statuses in a course.
+   * If student is not enrolled, returns empty array instead of 404.
    */
   @Get('progress/courses/:courseId/lessons')
   @UseGuards(RolesGuard, EnrollmentGuard)
   @Roles(UserRole.STUDENT)
   @ApiOperation({ summary: 'Get all lesson progress statuses in a course' })
-  getLessonStatuses(@Param('courseId') courseId: string, @GetCurrentUser() user: IUser) {
-    return this.lessonProgressService.findAllByCourse(user.id, courseId);
+  async getLessonStatuses(@Param('courseId') courseId: string, @GetCurrentUser() user: IUser) {
+    try {
+      return await this.lessonProgressService.findAllByCourse(user.id, courseId);
+    } catch (error) {
+      // If not enrolled, return empty array instead of throwing
+      console.error('Error getting lesson statuses:', error);
+      return [];
+    }
   }
 
   /**

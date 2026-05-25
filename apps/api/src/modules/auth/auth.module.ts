@@ -19,7 +19,7 @@ import { RtStrategy } from './strategies/rt.strategy';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET', 'jwt-secret'), //remove before deploy
-        signOptions: { expiresIn: '15m' },
+        signOptions: { expiresIn: '24h' },
       }),
     }),
     NotificationsModule,
