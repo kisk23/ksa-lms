@@ -13,7 +13,6 @@ export function CourseCard({ course }: CourseCardProps) {
     numericPrice === 0
       ? 'مجاني'
       : `${numericPrice.toLocaleString('ar-SA')} ${course.currency}`;
-console.log(course);
 
   return (
     <Link

@@ -52,7 +52,6 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
       />
     );
   }
-  console.log(course);
 
   // Pick the YouTube ID of the first non-archived lesson across all chapters
   const firstLesson = course.chapters

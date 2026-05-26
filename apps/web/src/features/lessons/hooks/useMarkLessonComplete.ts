@@ -34,17 +34,12 @@ export function useMarkLessonComplete({
   return useMutation({
     mutationFn: () => markLessonComplete(lessonId),
 
-    // ── Step 1: optimistic update ──────────────────────────────────────────
     onMutate: async () => {
-      // Cancel any in-flight refetches so they don't overwrite our optimistic data
       await qc.cancelQueries({ queryKey: lessonKeys.statuses(courseId) });
-      await qc.cancelQueries({ queryKey: lessonKeys.detail(courseId, chapterId, lessonId) });
+      // Remove: detail cancellation/snapshot — lesson endpoint doesn't own progress
 
-      // Snapshot current data for rollback
       const previousStatuses = qc.getQueryData(lessonKeys.statuses(courseId));
-      const previousDetail = qc.getQueryData(lessonKeys.detail(courseId, chapterId, lessonId));
 
-      // Optimistically mark completed in the statuses list
       qc.setQueryData(lessonKeys.statuses(courseId), (old: any) => {
         if (!Array.isArray(old)) return old;
         return old.map((item: any) =>
@@ -52,7 +47,7 @@ export function useMarkLessonComplete({
             ? {
                 ...item,
                 progress: {
-                  ...item.progress,
+                  ...(item.progress ?? {}), // <-- handle null progress
                   isCompleted: true,
                   completedAt: new Date().toISOString(),
                 },
@@ -61,32 +56,18 @@ export function useMarkLessonComplete({
         );
       });
 
-      // Optimistically mark completed in the lesson detail
-      qc.setQueryData(lessonKeys.detail(courseId, chapterId, lessonId), (old: any) => {
-        if (!old) return old;
-        return {
-          ...old,
-          progress: { ...old.progress, isCompleted: true, completedAt: new Date().toISOString() },
-        };
-      });
-
-      return { previousStatuses, previousDetail };
+      return { previousStatuses };
     },
 
-    // ── Step 2: invalidate on success ──────────────────────────────────────
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: lessonKeys.detail(courseId, chapterId, lessonId) });
       qc.invalidateQueries({ queryKey: lessonKeys.progress(courseId) });
       qc.invalidateQueries({ queryKey: lessonKeys.statuses(courseId) });
+      // Remove: detail invalidation — it's not needed and causes a stale read
     },
 
-    // ── Step 3: rollback on error ──────────────────────────────────────────
     onError: (_err, _vars, context) => {
       if (context?.previousStatuses !== undefined) {
         qc.setQueryData(lessonKeys.statuses(courseId), context.previousStatuses);
-      }
-      if (context?.previousDetail !== undefined) {
-        qc.setQueryData(lessonKeys.detail(courseId, chapterId, lessonId), context.previousDetail);
       }
     },
   });
