@@ -116,6 +116,7 @@ model Course {
   slug             String           @unique @db.VarChar(255)
   teacherUserId    String           @map("teacher_user_id") @db.Uuid
   title            String           @db.VarChar(255)
+  category         String?
   description      String?
   thumbnailUrl     String?          @map("thumbnail_url")
   promoVideoUrl    String?          @map("promo_video_url")
@@ -144,6 +145,7 @@ model Course {
   promoCodes       PromoCode[]
 
   @@index([teacherUserId])
+  @@index([category])
   @@index([status])
   @@map("courses")
 }

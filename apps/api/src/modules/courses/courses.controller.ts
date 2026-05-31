@@ -30,13 +30,14 @@ export class CoursesController {
 
   @Get()
   @ApiOperation({ summary: 'List all published courses (Public)' })
-  findAll(@Query() query: PaginationQueryDto & { teacherUserId?: string }) {
+  findAll(@Query() query: PaginationQueryDto & { teacherUserId?: string; category?: string }) {
     return this.coursesService.findAll({
       page: query.page ?? 1,
       limit: query.limit ?? 10,
       search: query.search,
       status: CourseStatus.PUBLISHED, // Security: Public can only see published
       teacherUserId: query.teacherUserId,
+      category: query.category,
     });
   }
 
@@ -48,7 +49,14 @@ export class CoursesController {
   @ApiOperation({ summary: 'List courses for management (Dashboard)' })
   findForManagement(
     @GetCurrentUser() user: IUser,
-    @Query() query: PaginationQueryDto & { status?: CourseStatus; teacherUserId?: string },
+
+    @Query()
+    query: PaginationQueryDto & {
+      status?: CourseStatus;
+      teacherUserId?: string;
+      category?: string;
+    },
+
   ) {
     // Logic: Teachers can ONLY see their own courses.
     // Admins/Assistants can see all or filter by a specific teacher.
@@ -60,6 +68,7 @@ export class CoursesController {
       search: query.search,
       status: query.status,
       teacherUserId,
+      category: query.category,
     });
   }
 
