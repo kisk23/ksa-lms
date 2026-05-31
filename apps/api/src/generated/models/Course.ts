@@ -39,6 +39,7 @@ export type CourseMinAggregateOutputType = {
   slug: string | null
   teacherUserId: string | null
   title: string | null
+  category: string | null
   description: string | null
   thumbnailUrl: string | null
   promoVideoUrl: string | null
@@ -59,6 +60,7 @@ export type CourseMaxAggregateOutputType = {
   slug: string | null
   teacherUserId: string | null
   title: string | null
+  category: string | null
   description: string | null
   thumbnailUrl: string | null
   promoVideoUrl: string | null
@@ -79,6 +81,7 @@ export type CourseCountAggregateOutputType = {
   slug: number
   teacherUserId: number
   title: number
+  category: number
   description: number
   thumbnailUrl: number
   promoVideoUrl: number
@@ -109,6 +112,7 @@ export type CourseMinAggregateInputType = {
   slug?: true
   teacherUserId?: true
   title?: true
+  category?: true
   description?: true
   thumbnailUrl?: true
   promoVideoUrl?: true
@@ -129,6 +133,7 @@ export type CourseMaxAggregateInputType = {
   slug?: true
   teacherUserId?: true
   title?: true
+  category?: true
   description?: true
   thumbnailUrl?: true
   promoVideoUrl?: true
@@ -149,6 +154,7 @@ export type CourseCountAggregateInputType = {
   slug?: true
   teacherUserId?: true
   title?: true
+  category?: true
   description?: true
   thumbnailUrl?: true
   promoVideoUrl?: true
@@ -256,6 +262,7 @@ export type CourseGroupByOutputType = {
   slug: string
   teacherUserId: string
   title: string
+  category: string | null
   description: string | null
   thumbnailUrl: string | null
   promoVideoUrl: string | null
@@ -299,6 +306,7 @@ export type CourseWhereInput = {
   slug?: Prisma.StringFilter<"Course"> | string
   teacherUserId?: Prisma.UuidFilter<"Course"> | string
   title?: Prisma.StringFilter<"Course"> | string
+  category?: Prisma.StringNullableFilter<"Course"> | string | null
   description?: Prisma.StringNullableFilter<"Course"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Course"> | string | null
   promoVideoUrl?: Prisma.StringNullableFilter<"Course"> | string | null
@@ -329,6 +337,7 @@ export type CourseOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -362,6 +371,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CourseWhereInput | Prisma.CourseWhereInput[]
   teacherUserId?: Prisma.UuidFilter<"Course"> | string
   title?: Prisma.StringFilter<"Course"> | string
+  category?: Prisma.StringNullableFilter<"Course"> | string | null
   description?: Prisma.StringNullableFilter<"Course"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Course"> | string | null
   promoVideoUrl?: Prisma.StringNullableFilter<"Course"> | string | null
@@ -392,6 +402,7 @@ export type CourseOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -420,6 +431,7 @@ export type CourseScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Course"> | string
   teacherUserId?: Prisma.UuidWithAggregatesFilter<"Course"> | string
   title?: Prisma.StringWithAggregatesFilter<"Course"> | string
+  category?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   thumbnailUrl?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   promoVideoUrl?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
@@ -439,6 +451,7 @@ export type CourseCreateInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -467,6 +480,7 @@ export type CourseUncheckedCreateInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -493,6 +507,7 @@ export type CourseUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -521,6 +536,7 @@ export type CourseUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -548,6 +564,7 @@ export type CourseCreateManyInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -567,6 +584,7 @@ export type CourseUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -585,6 +603,7 @@ export type CourseUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -615,6 +634,7 @@ export type CourseCountOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   description?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrder
@@ -639,6 +659,7 @@ export type CourseMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   description?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrder
@@ -659,6 +680,7 @@ export type CourseMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   teacherUserId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   description?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
   promoVideoUrl?: Prisma.SortOrder
@@ -934,6 +956,7 @@ export type CourseCreateWithoutTeacherInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -960,6 +983,7 @@ export type CourseUncheckedCreateWithoutTeacherInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -996,6 +1020,7 @@ export type CourseCreateWithoutPublishedByUserInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1023,6 +1048,7 @@ export type CourseUncheckedCreateWithoutPublishedByUserInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1058,6 +1084,7 @@ export type CourseCreateWithoutArchivedByUserInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1085,6 +1112,7 @@ export type CourseUncheckedCreateWithoutArchivedByUserInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1140,6 +1168,7 @@ export type CourseScalarWhereInput = {
   slug?: Prisma.StringFilter<"Course"> | string
   teacherUserId?: Prisma.UuidFilter<"Course"> | string
   title?: Prisma.StringFilter<"Course"> | string
+  category?: Prisma.StringNullableFilter<"Course"> | string | null
   description?: Prisma.StringNullableFilter<"Course"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Course"> | string | null
   promoVideoUrl?: Prisma.StringNullableFilter<"Course"> | string | null
@@ -1191,6 +1220,7 @@ export type CourseCreateWithoutAuditLogsInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1218,6 +1248,7 @@ export type CourseUncheckedCreateWithoutAuditLogsInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1259,6 +1290,7 @@ export type CourseUpdateWithoutAuditLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1286,6 +1318,7 @@ export type CourseUncheckedUpdateWithoutAuditLogsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1311,6 +1344,7 @@ export type CourseCreateWithoutCourseProgressesInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1338,6 +1372,7 @@ export type CourseUncheckedCreateWithoutCourseProgressesInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1379,6 +1414,7 @@ export type CourseUpdateWithoutCourseProgressesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1406,6 +1442,7 @@ export type CourseUncheckedUpdateWithoutCourseProgressesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1431,6 +1468,7 @@ export type CourseCreateWithoutChaptersInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1458,6 +1496,7 @@ export type CourseUncheckedCreateWithoutChaptersInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1499,6 +1538,7 @@ export type CourseUpdateWithoutChaptersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1526,6 +1566,7 @@ export type CourseUncheckedUpdateWithoutChaptersInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1551,6 +1592,7 @@ export type CourseCreateWithoutEnrollmentsInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1578,6 +1620,7 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1619,6 +1662,7 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1646,6 +1690,7 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1671,6 +1716,7 @@ export type CourseCreateWithoutLiveSessionsInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1698,6 +1744,7 @@ export type CourseUncheckedCreateWithoutLiveSessionsInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1739,6 +1786,7 @@ export type CourseUpdateWithoutLiveSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1766,6 +1814,7 @@ export type CourseUncheckedUpdateWithoutLiveSessionsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1791,6 +1840,7 @@ export type CourseCreateWithoutPromoCodesInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1818,6 +1868,7 @@ export type CourseUncheckedCreateWithoutPromoCodesInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1859,6 +1910,7 @@ export type CourseUpdateWithoutPromoCodesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1886,6 +1938,7 @@ export type CourseUncheckedUpdateWithoutPromoCodesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1911,6 +1964,7 @@ export type CourseCreateWithoutPaymentsInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1938,6 +1992,7 @@ export type CourseUncheckedCreateWithoutPaymentsInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -1979,6 +2034,7 @@ export type CourseUpdateWithoutPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2006,6 +2062,7 @@ export type CourseUncheckedUpdateWithoutPaymentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2031,6 +2088,7 @@ export type CourseCreateManyTeacherInput = {
   id?: string
   slug: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -2051,6 +2109,7 @@ export type CourseCreateManyPublishedByUserInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -2070,6 +2129,7 @@ export type CourseCreateManyArchivedByUserInput = {
   slug: string
   teacherUserId: string
   title: string
+  category?: string | null
   description?: string | null
   thumbnailUrl?: string | null
   promoVideoUrl?: string | null
@@ -2088,6 +2148,7 @@ export type CourseUpdateWithoutTeacherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2114,6 +2175,7 @@ export type CourseUncheckedUpdateWithoutTeacherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2140,6 +2202,7 @@ export type CourseUncheckedUpdateManyWithoutTeacherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2159,6 +2222,7 @@ export type CourseUpdateWithoutPublishedByUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2186,6 +2250,7 @@ export type CourseUncheckedUpdateWithoutPublishedByUserInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2212,6 +2277,7 @@ export type CourseUncheckedUpdateManyWithoutPublishedByUserInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2230,6 +2296,7 @@ export type CourseUpdateWithoutArchivedByUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2257,6 +2324,7 @@ export type CourseUncheckedUpdateWithoutArchivedByUserInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2283,6 +2351,7 @@ export type CourseUncheckedUpdateManyWithoutArchivedByUserInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2387,6 +2456,7 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   slug?: boolean
   teacherUserId?: boolean
   title?: boolean
+  category?: boolean
   description?: boolean
   thumbnailUrl?: boolean
   promoVideoUrl?: boolean
@@ -2418,6 +2488,7 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   teacherUserId?: boolean
   title?: boolean
+  category?: boolean
   description?: boolean
   thumbnailUrl?: boolean
   promoVideoUrl?: boolean
@@ -2441,6 +2512,7 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   teacherUserId?: boolean
   title?: boolean
+  category?: boolean
   description?: boolean
   thumbnailUrl?: boolean
   promoVideoUrl?: boolean
@@ -2464,6 +2536,7 @@ export type CourseSelectScalar = {
   slug?: boolean
   teacherUserId?: boolean
   title?: boolean
+  category?: boolean
   description?: boolean
   thumbnailUrl?: boolean
   promoVideoUrl?: boolean
@@ -2479,7 +2552,7 @@ export type CourseSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "teacherUserId" | "title" | "description" | "thumbnailUrl" | "promoVideoUrl" | "promoVideoProvider" | "price" | "currency" | "status" | "publishedAt" | "publishedBy" | "archivedAt" | "archivedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "teacherUserId" | "title" | "category" | "description" | "thumbnailUrl" | "promoVideoUrl" | "promoVideoProvider" | "price" | "currency" | "status" | "publishedAt" | "publishedBy" | "archivedAt" | "archivedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   publishedByUser?: boolean | Prisma.Course$publishedByUserArgs<ExtArgs>
@@ -2523,6 +2596,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     slug: string
     teacherUserId: string
     title: string
+    category: string | null
     description: string | null
     thumbnailUrl: string | null
     promoVideoUrl: string | null
@@ -2973,6 +3047,7 @@ export interface CourseFieldRefs {
   readonly slug: Prisma.FieldRef<"Course", 'String'>
   readonly teacherUserId: Prisma.FieldRef<"Course", 'String'>
   readonly title: Prisma.FieldRef<"Course", 'String'>
+  readonly category: Prisma.FieldRef<"Course", 'String'>
   readonly description: Prisma.FieldRef<"Course", 'String'>
   readonly thumbnailUrl: Prisma.FieldRef<"Course", 'String'>
   readonly promoVideoUrl: Prisma.FieldRef<"Course", 'String'>
