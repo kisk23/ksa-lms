@@ -59,4 +59,9 @@ export class CreateCourseDto {
   @IsString()
   @MaxLength(3)
   currency?: string;
+
+  @ApiPropertyOptional({ example: 'science', description: 'Course category for filtering' })
+  @IsOptional()
+  @IsString()
+  category?: string;
 }

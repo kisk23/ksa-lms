@@ -164,6 +164,7 @@ export const CourseScalarFieldEnum = {
   slug: 'slug',
   teacherUserId: 'teacherUserId',
   title: 'title',
+  category: 'category',
   description: 'description',
   thumbnailUrl: 'thumbnailUrl',
   promoVideoUrl: 'promoVideoUrl',

@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
 import { ListPaymentsDto } from './dto/list-payments.dto';
-import { PaymentStatus, Prisma, RefundMethod, RefundStatus } from '../../generated/client';
+import {
+  PaymentMethod,
+  PaymentStatus,
+  Prisma,
+  RefundMethod,
+  RefundStatus,
+  EnrollmentStatus,
+} from '../../generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 type CreatePaymentRecord = {
@@ -20,6 +27,7 @@ type GatewaySync = {
   moyasarPaymentId?: string;
   moyasarStatus?: string;
   status?: PaymentStatus;
+  paymentMethod?: PaymentMethod;
   amount?: number;
   currency?: string;
   refundedAmount?: number;
@@ -28,6 +36,25 @@ type GatewaySync = {
   rawGatewayResponse?: unknown;
 };
 
+type PaymentFilterQuery = Pick<
+  ListPaymentsDto,
+  'status' | 'orderId' | 'search' | 'instructorId' | 'dateFrom' | 'dateTo'
+>;
+
+const paymentInclude = {
+  payer: { select: { id: true, name: true, email: true } },
+  student: { select: { id: true, name: true, email: true } },
+  course: {
+    select: {
+      id: true,
+      title: true,
+      teacherUserId: true,
+      teacher: { select: { id: true, name: true, email: true } },
+    },
+  },
+  webhookEvents: { orderBy: { processedAt: 'desc' as const }, take: 20 },
+} satisfies Prisma.PaymentInclude;
+
 @Injectable()
 export class PaymentsRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -35,74 +62,147 @@ export class PaymentsRepository {
   findById(id: string) {
     return this.prisma.payment.findUnique({
       where: { id },
-      include: { webhookEvents: { orderBy: { processedAt: 'desc' }, take: 20 } },
+      include: paymentInclude,
     });
   }
 
   findByMoyasarPaymentId(moyasarPaymentId: string) {
     return this.prisma.payment.findUnique({
       where: { moyasarPaymentId },
-      include: { webhookEvents: { orderBy: { processedAt: 'desc' }, take: 20 } },
+      include: paymentInclude,
     });
   }
 
   findByIdempotencyKey(idempotencyKey: string) {
     return this.prisma.payment.findUnique({
       where: { idempotencyKey },
-      include: { webhookEvents: { orderBy: { processedAt: 'desc' }, take: 20 } },
+      include: paymentInclude,
     });
   }
 
   list(query: ListPaymentsDto) {
     return this.prisma.payment.findMany({
-      where: {
-        status: query.status,
-        orderId: query.orderId,
-      },
+      where: this.whereFromQuery(query),
       orderBy: { createdAt: 'desc' },
       skip: query.offset,
       take: query.limit,
-      include: { webhookEvents: { orderBy: { processedAt: 'desc' }, take: 5 } },
+      include: {
+        ...paymentInclude,
+        webhookEvents: { orderBy: { processedAt: 'desc' }, take: 5 },
+      },
     });
   }
 
   count(query: ListPaymentsDto) {
-    return this.prisma.payment.count({
-      where: {
-        status: query.status,
-        orderId: query.orderId,
+    return this.prisma.payment.count({ where: this.whereFromQuery(query) });
+  }
+
+  listForSummary(query: PaymentFilterQuery) {
+    return this.prisma.payment.findMany({
+      where: this.whereFromQuery(query),
+      select: {
+        amount: true,
+        refundedAmount: true,
+        status: true,
+        createdAt: true,
       },
     });
   }
 
-  create(data: CreatePaymentRecord) {
+  listMonthlyRevenue(query: PaymentFilterQuery, year: number) {
+    const start = new Date(Date.UTC(year, 0, 1));
+    const end = new Date(Date.UTC(year + 1, 0, 1));
+
+    return this.prisma.payment.findMany({
+      where: this.whereFromQuery({
+        ...query,
+        dateFrom: start.toISOString(),
+        dateTo: end.toISOString(),
+      }),
+      select: {
+        amount: true,
+        refundedAmount: true,
+        status: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  async create(data: CreatePaymentRecord) {
     const decimalAmount = new Prisma.Decimal(data.amount).div(100);
 
-    return this.prisma.payment.create({
-      data: {
-        payerUserId: data.payerUserId,
-        initiatorRole: data.initiatorRole,
-        studentUserId: data.studentUserId,
-        courseId: data.courseId,
-        orderId: data.orderId,
-        amount: data.amount,
-        originalAmount: decimalAmount,
-        finalAmount: decimalAmount,
-        discountAmount: new Prisma.Decimal(0),
-        currency: data.currency,
-        status: PaymentStatus.initiated,
-        idempotencyKey: data.idempotencyKey,
-        metadata: data.metadata ?? Prisma.JsonNull,
-      },
-      include: { webhookEvents: true },
+    return this.prisma.$transaction(async (tx) => {
+      const payment = await tx.payment.create({
+        data: {
+          payerUserId: data.payerUserId,
+          initiatorRole: data.initiatorRole,
+          studentUserId: data.studentUserId,
+          courseId: data.courseId,
+          orderId: data.orderId,
+          amount: data.amount,
+          originalAmount: decimalAmount,
+          finalAmount: decimalAmount,
+          discountAmount: new Prisma.Decimal(0),
+          currency: data.currency,
+          status: PaymentStatus.initiated,
+          idempotencyKey: data.idempotencyKey,
+          metadata: data.metadata ?? Prisma.JsonNull,
+        },
+      });
+
+      await tx.enrollment.upsert({
+        where: {
+          studentUserId_courseId: {
+            studentUserId: data.studentUserId,
+            courseId: data.courseId,
+          },
+        },
+        update: {
+          paymentId: payment.id,
+          amountPaid: decimalAmount,
+          status: EnrollmentStatus.PENDING,
+        },
+        create: {
+          studentUserId: data.studentUserId,
+          courseId: data.courseId,
+          paymentId: payment.id,
+          amountPaid: decimalAmount,
+          status: EnrollmentStatus.PENDING,
+        },
+      });
+
+      return tx.payment.findUniqueOrThrow({
+        where: { id: payment.id },
+        include: paymentInclude,
+      });
     });
   }
 
-  updateGatewayState(paymentId: string, gateway: GatewaySync) {
-    return this.prisma.payment.update({
-      where: { id: paymentId },
-      data: this.gatewayUpdateData(gateway),
-      include: { webhookEvents: { orderBy: { processedAt: 'desc' }, take: 20 } },
+  async updateGatewayState(paymentId: string, gateway: GatewaySync) {
+    return this.prisma.$transaction(async (tx) => {
+      const payment = await tx.payment.update({
+        where: { id: paymentId },
+        data: this.gatewayUpdateData(gateway),
+        include: paymentInclude,
+      });
+
+      if (payment.status === PaymentStatus.paid || payment.status === PaymentStatus.captured) {
+        await tx.enrollment.updateMany({
+          where: { paymentId: payment.id },
+          data: { status: EnrollmentStatus.ACTIVE },
+        });
+      } else if (
+        payment.status === PaymentStatus.failed ||
+        payment.status === PaymentStatus.voided ||
+        payment.status === PaymentStatus.refunded
+      ) {
+        await tx.enrollment.updateMany({
+          where: { paymentId: payment.id },
+          data: { status: EnrollmentStatus.CANCELLED },
+        });
+      }
+
+      return payment;
     });
   }
 
@@ -116,7 +216,7 @@ export class PaymentsRepository {
         status: data.status,
         metadata: data.metadata ?? undefined,
       },
-      include: { webhookEvents: { orderBy: { processedAt: 'desc' }, take: 20 } },
+      include: paymentInclude,
     });
   }
 
@@ -180,6 +280,7 @@ export class PaymentsRepository {
       moyasarPaymentId: gateway.moyasarPaymentId,
       moyasarStatus: gateway.moyasarStatus,
       status,
+      paymentMethod: gateway.paymentMethod,
       amount: gateway.amount,
       currency: gateway.currency,
       refundedAmount: gateway.refundedAmount,
@@ -193,6 +294,31 @@ export class PaymentsRepository {
       paidAt:
         status === PaymentStatus.paid || status === PaymentStatus.captured ? new Date() : undefined,
       failedAt: status === PaymentStatus.failed ? new Date() : undefined,
+    };
+  }
+
+  private whereFromQuery(query: PaymentFilterQuery): Prisma.PaymentWhereInput {
+    const search = query.search?.trim();
+    const createdAt: Prisma.DateTimeFilter = {};
+
+    if (query.dateFrom) createdAt.gte = new Date(query.dateFrom);
+    if (query.dateTo) createdAt.lte = new Date(query.dateTo);
+
+    return {
+      status: query.status,
+      orderId: query.orderId,
+      ...(Object.keys(createdAt).length > 0 && { createdAt }),
+      ...(query.instructorId && { course: { teacherUserId: query.instructorId } }),
+      ...(search && {
+        OR: [
+          { orderId: { contains: search, mode: 'insensitive' } },
+          { moyasarPaymentId: { contains: search, mode: 'insensitive' } },
+          { student: { name: { contains: search, mode: 'insensitive' } } },
+          { student: { email: { contains: search, mode: 'insensitive' } } },
+          { course: { title: { contains: search, mode: 'insensitive' } } },
+          { course: { teacher: { name: { contains: search, mode: 'insensitive' } } } },
+        ],
+      }),
     };
   }
 }

@@ -1,4 +1,6 @@
+
 import { Award, BookOpenCheck, Infinity, Share2, TvMinimalPlay } from 'lucide-react';
+
 
 import type { CourseDetails } from '@/features/courses/types';
 
@@ -12,6 +14,7 @@ const COURSE_FEATURES = [
   { icon: <Award size={18} />,         label: 'شهادة إتمام معتمدة من سُلَّم' },
   { icon: <Infinity size={18} />,      label: 'وصول مدى الحياة للمحتوى' },
 ];
+
 
 export default function PricingCard({ course }: PricingCardProps) {
   const numericPrice = Number(course.price);
@@ -41,12 +44,15 @@ export default function PricingCard({ course }: PricingCardProps) {
           <div className="mt-2 text-xs text-success font-semibold bg-success/10 px-3 py-1 rounded-full inline-block border border-success/20">
             سعر المنصة الرسمي
           </div>
+
         )}
       </div>
 
       {/* CTA */}
+
       <button className="w-full bg-primary  text-white font-bold text-lg py-3 shadow rounded-lg hover:bg-primary-hover transition-colors duration-200 active:scale-95 cursor-pointer">
         {isFree ? 'سجّل مجاناً' : 'اشترك الآن'}
+
       </button>
 
       {/* Features */}
@@ -74,6 +80,7 @@ export default function PricingCard({ course }: PricingCardProps) {
       </div>
 
       <hr className="border-gray-200" />
+
 
       {/* Share */}
       <div className="flex justify-center">

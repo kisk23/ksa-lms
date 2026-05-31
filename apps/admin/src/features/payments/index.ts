@@ -12,6 +12,7 @@ export { PAYMENT_SUMMARY, MOCK_PAYMENTS, MONTHLY_REVENUE } from './data/mock-pay
 export type {
   Payment,
   PaymentStatus,
+  PaymentGatewayStatus,
   PaymentMethod,
   PaymentSummary,
   PaymentFilters,

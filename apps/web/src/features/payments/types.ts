@@ -19,6 +19,17 @@ export type Payment = {
   metadata: unknown;
   rawGatewayResponse: unknown;
   webhookEvents?: WebhookEvent[];
+  courseId: string;
+  studentUserId: string;
+  payerUserId: string;
+  course?: {
+    id: string;
+    title: string;
+    teacherUserId: string;
+    teacher?: { id: string; name: string; email: string };
+  };
+  student?: { id: string; name: string; email: string };
+  payer?: { id: string; name: string; email: string };
   createdAt: string;
   updatedAt: string;
 };
