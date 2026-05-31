@@ -49,12 +49,14 @@ export class CoursesController {
   @ApiOperation({ summary: 'List courses for management (Dashboard)' })
   findForManagement(
     @GetCurrentUser() user: IUser,
+
     @Query()
     query: PaginationQueryDto & {
       status?: CourseStatus;
       teacherUserId?: string;
       category?: string;
     },
+
   ) {
     // Logic: Teachers can ONLY see their own courses.
     // Admins/Assistants can see all or filter by a specific teacher.

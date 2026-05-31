@@ -1,4 +1,8 @@
+'use client';
+
 import { Award, BookOpenCheck, Infinity, Newspaper, Share2, TvMinimalPlay } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import type { ICourse } from '@lms/shared-types';
 
 const features = [
   {
@@ -23,20 +27,39 @@ const features = [
   },
 ];
 
-export default function PricingCard() {
+export default function PricingCard({ course }: { course: ICourse }) {
+  const router = useRouter();
+
+  const handleEnroll = () => {
+    router.push(`/checkout?courseId=${course.id}`);
+  };
+
+  const isFree = Number(course.price) === 0;
+
   return (
-    <div className="sticky top-28 rounded-xl border p-6 flex flex-col gap-6 shadow-2xl " dir="rtl">
+    <div className="sticky top-28 rounded-xl border p-6 flex flex-col gap-6 shadow-2xl bg-white border-zinc-200" dir="rtl">
       {/* Price */}
       <div className="text-center">
-        <div className="text-4xl font-black text-primary mb-1">199 ر.س</div>
-        <div className="text-gray-400 line-through text-base">299 ر.س</div>
-        <div className="mt-2 text-xs text-[#1FC58E] font-semibold bg-[#1FC58E]/10 px-3 py-1 rounded-full inline-block border border-[#1FC58E]/20">
-          خصم 33%
+        <div className="text-4xl font-black text-zinc-950 mb-1">
+          {isFree ? 'مجانًا' : `${course.price} ر.س`}
         </div>
+        {!isFree && (
+          <>
+            <div className="text-gray-400 line-through text-base">
+              {Math.round(Number(course.price) * 1.5)} ر.س
+            </div>
+            <div className="mt-2 text-xs text-[#1FC58E] font-semibold bg-[#1FC58E]/10 px-3 py-1 rounded-full inline-block border border-[#1FC58E]/20">
+              خصم 33%
+            </div>
+          </>
+        )}
       </div>
 
       {/* CTA */}
-      <button className="w-full bg-primary font-bold text-lg py-3 shadow rounded-lg hover:bg-primary-hover transition-colors duration-200 active:scale-95 cursor-pointer">
+      <button
+        onClick={handleEnroll}
+        className="w-full bg-[#1a1a1a] hover:bg-black text-white font-bold text-lg py-3 shadow rounded-lg transition-colors duration-200 active:scale-95 cursor-pointer text-center"
+      >
         اشترك الآن
       </button>
 
@@ -51,7 +74,7 @@ export default function PricingCard() {
         ))}
       </div>
 
-      <hr className="border-[#334155]" />
+      <hr className="border-[#e2e8f0]" />
 
       {/* Share */}
       <div className="flex justify-center">
