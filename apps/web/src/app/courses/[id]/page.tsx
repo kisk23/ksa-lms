@@ -1,11 +1,29 @@
+import { notFound } from 'next/navigation';
+
 import CourseHero from '@/features/courseDetails/CourseHero';
 import CourseInfo from '@/features/courseDetails/CourseInfo';
 import Curriculum from '@/features/courseDetails/Curriculum';
 import InstructorProfile from '@/features/courseDetails/InstructorProfile';
 import PricingCard from '@/features/courseDetails/PricingCard';
 import WhatYouLearn from '@/features/courseDetails/WhatYouLearn';
+import { coursesService } from '@/features/courses/services/courses.service';
 
-export default function CourseDetailPage({ params }: { params: { id: string } }) {
+export default async function CourseDetailPage({ params }: { params: { id: string } }) {
+  let course;
+  try {
+    course = await coursesService.getById(params.id);
+  } catch {
+    try {
+      course = await coursesService.getBySlug(params.id);
+    } catch {
+      notFound();
+    }
+  }
+
+  if (!course) {
+    notFound();
+  }
+
   return (
     <main
       className="max-w-7xl mx-auto px-6 py-12"
@@ -14,7 +32,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Course Details */}
         <div className="lg:col-span-4">
-          <PricingCard />
+          <PricingCard course={course} />
         </div>
 
         {/* Right Column: Sticky Pricing */}
