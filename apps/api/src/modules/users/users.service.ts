@@ -2,7 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto, UpdateUserDto } from './dto';
-import { ParentRelationship, Prisma, UserRole } from '../../generated/client';
+import {
+  ParentRelationship,
+  Prisma,
+  UserRole,
+  CourseStatus,
+  PaymentStatus,
+} from '../../generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
@@ -172,18 +178,50 @@ export class UsersService {
   }
 
   async getDashboardStats() {
-    const [totalUsers, activeStudents, teachers, parents] = await Promise.all([
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    const [
+      totalUsers,
+      activeStudents,
+      teachers,
+      parents,
+      totalCourses,
+      activeCourses,
+      draftCourses,
+      monthlyPayments,
+    ] = await Promise.all([
       this.prisma.user.count({ where: { isActive: true } }),
       this.prisma.user.count({ where: { role: UserRole.STUDENT, isActive: true } }),
       this.prisma.user.count({ where: { role: UserRole.TEACHER, isActive: true } }),
       this.prisma.user.count({ where: { role: UserRole.PARENT, isActive: true } }),
+      this.prisma.course.count({ where: { status: { not: CourseStatus.ARCHIVED } } }),
+      this.prisma.course.count({ where: { status: CourseStatus.PUBLISHED } }),
+      this.prisma.course.count({ where: { status: CourseStatus.DRAFT } }),
+      this.prisma.payment.findMany({
+        where: {
+          status: { in: [PaymentStatus.paid, PaymentStatus.captured] },
+          createdAt: { gte: startOfMonth },
+        },
+        select: {
+          amount: true,
+          refundedAmount: true,
+        },
+      }),
     ]);
+
+    const monthlyRevenue =
+      monthlyPayments.reduce((sum, p) => sum + (p.amount - p.refundedAmount), 0) / 100;
 
     return {
       totalUsers,
       activeStudents,
       teachers,
       parents,
+      totalCourses,
+      activeCourses,
+      draftCourses,
+      monthlyRevenue,
     };
   }
 }
