@@ -100,4 +100,12 @@ export class AdminUsersController {
   unlinkParentStudent(@Query('parentId') parentId: string, @Query('studentId') studentId: string) {
     return this.usersService.unlinkChild(parentId, studentId);
   }
+
+  @Get('dashboard/stats')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('VIEW_USERS')
+  @ApiOperation({ summary: 'Get overview stats for admin dashboard' })
+  getDashboardStats() {
+    return this.usersService.getDashboardStats();
+  }
 }

@@ -170,4 +170,20 @@ export class UsersService {
       });
     });
   }
+
+  async getDashboardStats() {
+    const [totalUsers, activeStudents, teachers, parents] = await Promise.all([
+      this.prisma.user.count({ where: { isActive: true } }),
+      this.prisma.user.count({ where: { role: UserRole.STUDENT, isActive: true } }),
+      this.prisma.user.count({ where: { role: UserRole.TEACHER, isActive: true } }),
+      this.prisma.user.count({ where: { role: UserRole.PARENT, isActive: true } }),
+    ]);
+
+    return {
+      totalUsers,
+      activeStudents,
+      teachers,
+      parents,
+    };
+  }
 }
