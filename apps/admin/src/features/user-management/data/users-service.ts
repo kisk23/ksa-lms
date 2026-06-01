@@ -1,9 +1,33 @@
 import { apiClient } from '@shared/lib/api-client';
 
+import { UserRole } from '../types';
 import type { User } from '../types';
 
 export interface UsersResponse {
   data: User[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}
+
+interface ApiUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  isVerified: boolean;
+  createdAt: string;
+  avatarUrl?: string | null;
+}
+
+interface RawUsersResponse {
+  data: ApiUser[];
   meta: {
     total: number;
     page: number;
@@ -41,14 +65,15 @@ export async function fetchUsers(params?: {
   const queryString = queryParams.toString();
   const endpoint = queryString ? `${url}?${queryString}` : url;
 
-  const response = await apiClient.get<any>(endpoint);
+  const response = await apiClient.get<RawUsersResponse>(endpoint);
 
-  const mappedData = (response.data || []).map((u: any) => {
-    let role: 'student' | 'teacher' | 'parent' | 'admin' = 'student';
-    if (u.role === 'SUPER_ADMIN' || u.role === 'ASSISTANT_ADMIN') role = 'admin';
-    else if (u.role === 'TEACHER') role = 'teacher';
-    else if (u.role === 'PARENT') role = 'parent';
-    else if (u.role === 'STUDENT') role = 'student';
+  const mappedData = (response.data || []).map((u: ApiUser) => {
+    let role: UserRole = UserRole.STUDENT;
+    if (u.role === 'SUPER_ADMIN') role = UserRole.SUPER_ADMIN;
+    else if (u.role === 'ASSISTANT_ADMIN') role = UserRole.ASSISTANT_ADMIN;
+    else if (u.role === 'TEACHER') role = UserRole.TEACHER;
+    else if (u.role === 'PARENT') role = UserRole.PARENT;
+    else if (u.role === 'STUDENT') role = UserRole.STUDENT;
 
     let status: 'active' | 'blocked' | 'pending' = 'active';
     if (!u.isActive) status = 'blocked';
@@ -65,7 +90,7 @@ export async function fetchUsers(params?: {
     let grade: string | undefined = undefined;
     let academicYear: string | undefined = undefined;
 
-    if (role === 'student') {
+    if (role === UserRole.STUDENT) {
       const idCharCodeSum = u.id
         .split('')
         .reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
@@ -98,14 +123,14 @@ export async function fetchUsers(params?: {
   };
 }
 
-export async function createUser(data: any): Promise<User> {
+export async function createUser(data: Record<string, unknown>): Promise<User> {
   return apiClient.post<User>('/admin/users', data);
 }
 
-export async function updateUser(id: string, data: any): Promise<User> {
+export async function updateUser(id: string, data: Record<string, unknown>): Promise<User> {
   return apiClient.patch<User>(`/admin/users/${id}`, data);
 }
 
-export async function deleteUser(id: string): Promise<any> {
-  return apiClient.delete<any>(`/admin/users/${id}`);
+export async function deleteUser(id: string): Promise<unknown> {
+  return apiClient.delete<unknown>(`/admin/users/${id}`);
 }

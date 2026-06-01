@@ -47,10 +47,11 @@ export default function UsersPage() {
       setUsers(response.data || []);
       setTotalItems(response.meta.total || 0);
       setTotalPages(response.meta.totalPages || 1);
-    } catch (err: any) {
-      console.error('loadUsers API error:', err);
+    } catch (err) {
+      const error = err as Error;
+      console.error('loadUsers API error:', error);
       if (!silent) setUsers([]); // Clear previous user state on error only if not initial load
-      setError(err.message || 'حدث خطأ أثناء تحميل بيانات المستخدمين من الخادم.');
+      setError(error.message || 'حدث خطأ أثناء تحميل بيانات المستخدمين من الخادم.');
     } finally {
       setIsInitialLoading(false);
       setIsTableLoading(false);
@@ -94,10 +95,11 @@ export default function UsersPage() {
       await updateUser(userId, { isActive: false });
       // 2. Silent refresh in background
       await loadUsers(true, page);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as Error;
       // 3. Rollback on failure
       await loadUsers(true, page);
-      setError(err.message || 'حدث خطأ أثناء حظر المستخدم.');
+      setError(error.message || 'حدث خطأ أثناء حظر المستخدم.');
     }
   };
 
@@ -111,10 +113,11 @@ export default function UsersPage() {
       await updateUser(userId, { isActive: true, isVerified: true });
       // 2. Silent refresh in background
       await loadUsers(true, page);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as Error;
       // 3. Rollback on failure
       await loadUsers(true, page);
-      setError(err.message || 'حدث خطأ أثناء الموافقة على المستخدم.');
+      setError(error.message || 'حدث خطأ أثناء الموافقة على المستخدم.');
     }
   };
 

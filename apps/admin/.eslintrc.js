@@ -21,6 +21,5 @@ module.exports = {
   rules: {
     // Specific overrides for the admin dashboard
     'no-console': ['warn', { allow: ['warn', 'error'] }],
-    '@typescript-eslint/no-explicit-any': 'off',
   },
 };

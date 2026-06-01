@@ -21,6 +21,21 @@ import { useState, useRef } from 'react';
 
 import { FormField } from './FormField';
 
+interface CreateUserResponse {
+  id: string;
+  name: string;
+  email: string;
+  identity: string;
+}
+
+interface SearchUserResponse {
+  data: Array<{
+    id: string;
+    identity: string;
+    role: string;
+  }>;
+}
+
 interface AddUserModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -70,7 +85,17 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const roleInfo = {
+  const roleInfo: Record<
+    UserRole.STUDENT | UserRole.TEACHER | UserRole.PARENT | UserRole.ASSISTANT_ADMIN,
+    {
+      addedMsg: string;
+      nameLabel: string;
+      idLabel: string;
+      viewMsg: string;
+      addAnotherMsg: string;
+      saveBtnMsg: string;
+    }
+  > = {
     [UserRole.STUDENT]: {
       addedMsg: 'تمت إضافة الطالب بنجاح',
       nameLabel: 'اسم الطالب',
@@ -103,7 +128,9 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       addAnotherMsg: 'إضافة مساعد آخر',
       saveBtnMsg: 'حفظ وإضافة المساعد',
     },
-  } as Record<string, any>;
+  };
+
+  const activeRoleInfo = roleInfo[accountType as keyof typeof roleInfo];
 
   // Validators
   const isEmailValid = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
@@ -186,17 +213,17 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       setSubmitError(null);
 
       // Perform real NestJS API post call
-      const response = await apiClient.post<any>('/admin/users', payload);
+      const response = await apiClient.post<CreateUserResponse>('/admin/users', payload);
 
       if (accountType === UserRole.STUDENT && hasParentInfo) {
         // Search if parent already exists in database
         let parentId = '';
         try {
-          const searchResponse = await apiClient.get<any>(
+          const searchResponse = await apiClient.get<SearchUserResponse>(
             `/admin/users?search=${guardianIdentity}`,
           );
           const existingParent = searchResponse.data?.find(
-            (u: any) => u.identity === guardianIdentity && u.role === 'PARENT',
+            (u) => u.identity === guardianIdentity && u.role === 'PARENT',
           );
           if (existingParent) {
             parentId = existingParent.id;
@@ -218,13 +245,16 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
             password: guardianPhone, // raw guardian phone number as password
             role: 'PARENT',
           };
-          const parentResponse = await apiClient.post<any>('/admin/users', parentPayload);
+          const parentResponse = await apiClient.post<CreateUserResponse>(
+            '/admin/users',
+            parentPayload,
+          );
           parentId = parentResponse.id;
         }
 
         // Link parent and student
         if (parentId && response.id) {
-          await apiClient.post<any>('/admin/link-parent-student', {
+          await apiClient.post<unknown>('/admin/link-parent-student', {
             parent_id: parentId,
             student_id: response.id,
             relationship: 'FATHER',
@@ -236,7 +266,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
         name: response.name,
         email: response.email,
         loginId: response.identity,
-        roleLabel: roleInfo[accountType].nameLabel,
+        roleLabel: activeRoleInfo.nameLabel,
       });
 
       if (onAddUser) {
@@ -251,8 +281,9 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       }
 
       setIsSuccess(true);
-    } catch (err: any) {
-      setSubmitError(err.message || 'حدث خطأ أثناء إنشاء الحساب، يرجى المحاولة مرة أخرى.');
+    } catch (err) {
+      const error = err as Error;
+      setSubmitError(error.message || 'حدث خطأ أثناء إنشاء الحساب، يرجى المحاولة مرة أخرى.');
     } finally {
       setIsSubmitting(false);
     }
@@ -280,7 +311,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
     'w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface placeholder:text-outline/60';
 
   if (isSuccess && createdUser) {
-    const currentRoleInfo = roleInfo[accountType];
+    const currentRoleInfo = activeRoleInfo;
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -381,7 +412,21 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
     );
   }
 
-  const config = {
+  const config: Record<
+    UserRole.STUDENT | UserRole.TEACHER | UserRole.PARENT | UserRole.ASSISTANT_ADMIN,
+    {
+      title: string;
+      sec1Title: string;
+      nameLabel: string;
+      namePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      phoneLabel: string;
+      idLabel: string;
+      idPlaceholder: string;
+      btnSave: string;
+    }
+  > = {
     [UserRole.STUDENT]: {
       title: 'إنشاء حساب طالب جديد',
       sec1Title: 'البيانات الشخصية والتعليمية',
@@ -430,7 +475,9 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       idPlaceholder: 'رقم الهوية الوطنية',
       btnSave: 'حفظ وإضافة المشرف',
     },
-  } as Record<string, any>;
+  };
+
+  const activeConfig = config[accountType as keyof typeof config];
 
   return (
     <motion.div
@@ -447,7 +494,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       >
         {/* Header */}
         <div className="px-6 py-4 border-b border-outline-variant flex items-center justify-between bg-surface-container-lowest sticky top-0 z-10">
-          <h2 className="font-h2-ar text-h2-ar text-on-surface">{config[accountType].title}</h2>
+          <h2 className="font-h2-ar text-h2-ar text-on-surface">{activeConfig.title}</h2>
           <button
             type="button"
             onClick={onClose}
@@ -525,12 +572,12 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
             {/* Section 1: Personal Details */}
             <section className="space-y-6">
               <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
-                {config[accountType].sec1Title}
+                {activeConfig.sec1Title}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Full Name */}
                 <FormField
-                  label={config[accountType].nameLabel}
+                  label={activeConfig.nameLabel}
                   error={
                     touched.name && !isNameValid
                       ? accountType === UserRole.STUDENT
@@ -551,7 +598,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
                       onChange={(e) => setName(e.target.value)}
                       onBlur={() => handleBlur('name')}
                       className={inputStyles}
-                      placeholder={config[accountType].namePlaceholder}
+                      placeholder={activeConfig.namePlaceholder}
                       type="text"
                     />
                   </div>
@@ -559,7 +606,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
 
                 {/* Email Address */}
                 <FormField
-                  label={config[accountType].emailLabel}
+                  label={activeConfig.emailLabel}
                   error={
                     touched.email && !isEmailValid(email)
                       ? 'البريد الإلكتروني المدخل غير صالح'
@@ -579,7 +626,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
                       onBlur={() => handleBlur('email')}
                       className={`${inputStyles} text-left`}
                       dir="ltr"
-                      placeholder={config[accountType].emailPlaceholder}
+                      placeholder={activeConfig.emailPlaceholder}
                       type="email"
                     />
                   </div>
@@ -587,7 +634,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
 
                 {/* Phone Number */}
                 <FormField
-                  label={config[accountType].phoneLabel}
+                  label={activeConfig.phoneLabel}
                   error={
                     touched.phone && !isPhoneValid(phone)
                       ? 'رقم الجوال غير صالح. يجب أن يبدأ بـ 5 ويتكون من 9 أرقام'
@@ -789,7 +836,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Identity */}
                   <FormField
-                    label={config[accountType].idLabel}
+                    label={activeConfig.idLabel}
                     error={
                       touched.identity && !isIdentityValid(identity)
                         ? 'يجب أن يكون بين 3 و 20 حرفاً'
@@ -808,7 +855,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
                         onChange={(e) => setIdentity(e.target.value)}
                         onBlur={() => handleBlur('identity')}
                         className={inputStyles}
-                        placeholder={config[accountType].idPlaceholder}
+                        placeholder={activeConfig.idPlaceholder}
                         type="text"
                       />
                     </div>
@@ -922,7 +969,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
               }`}
               type="submit"
             >
-              {isSubmitting ? 'جاري الحفظ...' : config[accountType].btnSave}
+              {isSubmitting ? 'جاري الحفظ...' : activeConfig.btnSave}
               <Save size={20} className={isSubmitting ? 'animate-spin' : ''} />
             </button>
             <button
