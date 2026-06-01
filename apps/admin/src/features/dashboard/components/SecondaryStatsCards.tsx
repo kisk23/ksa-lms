@@ -10,11 +10,15 @@ interface DashboardStats {
   totalCourses: number;
   activeCourses: number;
   draftCourses: number;
-  monthlyRevenue: number;
+}
+
+interface PaymentSummary {
+  netProfit: number;
 }
 
 export function SecondaryStatsCards() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [monthlyRevenue, setMonthlyRevenue] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,8 +26,17 @@ export function SecondaryStatsCards() {
     async function fetchStats() {
       try {
         setLoading(true);
-        const data = await apiClient.get<DashboardStats>('/admin/dashboard/stats');
-        setStats(data);
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        const [dashboardStats, paymentSummary] = await Promise.all([
+          apiClient.get<DashboardStats>('/admin/dashboard/stats'),
+          apiClient.get<PaymentSummary>(`/payments/summary?dateFrom=${startOfMonth.toISOString()}`),
+        ]);
+
+        setStats(dashboardStats);
+        setMonthlyRevenue(paymentSummary.netProfit);
       } catch (err) {
         console.error('Failed to fetch dashboard stats', err);
         if (err instanceof Error) {
@@ -83,7 +96,7 @@ export function SecondaryStatsCards() {
       title: 'الإيرادات الشهرية',
       value: (
         <>
-          {stats ? stats.monthlyRevenue.toLocaleString('ar-EG') : '0'}{' '}
+          {monthlyRevenue !== null ? monthlyRevenue.toLocaleString('ar-EG') : '0'}{' '}
           <span className="text-sm text-outline">ر.س</span>
         </>
       ),
