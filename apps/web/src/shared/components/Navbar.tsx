@@ -37,10 +37,7 @@ export default function Navbar() {
   });
 
   return (
-
     <nav className="sticky top-0 z-50 w-full backdrop-blur-md border-b border-border/40 shadow-sm">
-
-  
       <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="md:w-1/6 w-1/2">
           <Link href="/" className="flex items-center">
@@ -95,7 +92,6 @@ export default function Navbar() {
           </div>
 
           <div className="w-full md:w-2/6 flex items-center md:justify-end lg:gap-4 gap-2 mt-4 md:mt-0">
-
             {isLoading ? (
               <div className="h-10 w-28 rounded-lg bg-surface animate-pulse ms-auto" />
             ) : isAuthenticated ? (
@@ -135,7 +131,6 @@ export default function Navbar() {
                 </Link>
               </div>
             )}
-
           </div>
         </div>
       </div>

@@ -13,10 +13,15 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 import { Permissions } from './decorators/permissions.decorator';
-import { CreateUserDto, UpdateUserDto, AssistantPermissionsDto, AdminLinkChildDto } from './dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  AssistantPermissionsDto,
+  AdminLinkChildDto,
+  AdminUsersQueryDto,
+} from './dto';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { UsersService } from './users.service';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -41,12 +46,13 @@ export class AdminUsersController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('VIEW_USERS')
   @ApiOperation({ summary: 'List all users' })
-  findAll(@Query() query: PaginationQueryDto & { role?: UserRole }) {
+  findAll(@Query() query: AdminUsersQueryDto) {
     return this.usersService.findAll({
       page: query.page ?? 1,
       limit: query.limit ?? 10,
       search: query.search,
       role: query.role,
+      status: query.status,
     });
   }
 

@@ -101,7 +101,7 @@ export enum CourseAuditAction {
   PUBLISHED = 'PUBLISHED',
   ARCHIVED = 'ARCHIVED',
   RESTORED = 'RESTORED',
-  DELETED = 'DELETED'
+  DELETED = 'DELETED',
 }
 
 export interface ICourse {

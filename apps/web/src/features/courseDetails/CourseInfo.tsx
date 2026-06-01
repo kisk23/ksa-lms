@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Users } from 'lucide-react';
 
 function StarIcon() {
@@ -41,10 +42,12 @@ export default function CourseInfo() {
       <div className="flex flex-wrap items-center gap-6 mt-3">
         {/* Instructor */}
         <div className="flex items-center gap-2">
-          <img
+          <Image
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ0ZQ4Uesc_Q19F2StqTmzu8QB1hL71hZ9N0hPQ0EEUI6PHEWg8Pq2Wrwt3IlOZuxW_JAzZW13JTZbygdwzaJwgBuh3LZOnKD3wFZhXu1qrdU0M0fCK8hGr7siYieFO0td42jy7soToJqzgU45Q1kOfM2Hva_ko9QzdPPMjxjYLUgiQ5o-SidZyY8_hk728nVuVGMnez6inHnL0Y_dnTGThkO8SGZ0U2jrGTlgsNQ4FXYJjAWN5Qq5Unu6oMx0aeFicOUGY6bP4cpW"
             alt="Instructor"
-            className="w-9 h-9 rounded-full object-cover border-2 border-[#334155]"
+            width={36}
+            height={36}
+            className="rounded-full object-cover border-2 border-[#334155]"
           />
           <span className="font-semibold text-black/80 text-sm">أ. أحمد عبدالله</span>
         </div>

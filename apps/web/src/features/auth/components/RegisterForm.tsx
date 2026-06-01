@@ -68,13 +68,10 @@ export function RegisterForm() {
       } else {
         router.push('/verify-otp');
       }
-
     },
     onError: (error: Error) => {
       const mapped = AUTH_ERROR_MESSAGES[error.message];
-      toast.error(
-        mapped ?? error.message ?? 'حدث خطأ غير متوقع. يرجى المحاولة مجدداً.',
-      );
+      toast.error(mapped ?? error.message ?? 'حدث خطأ غير متوقع. يرجى المحاولة مجدداً.');
     },
   });
 

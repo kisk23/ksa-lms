@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { GraduationCap } from 'lucide-react';
 
 function StarIcon() {
@@ -18,10 +19,12 @@ export default function InstructorProfile() {
     <div dir="rtl">
       <h2 className="text-2xl font-bold text-black/80 mb-3">المحاضر</h2>
       <div className="flex flex-col sm:flex-row gap-6 p-6 shadow border-2 rounded-xl">
-        <img
+        <Image
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzkrLWtdb6zoQ2Y3j0fTR7Obo6mq3_1xKnTSiukqMvc1DSgauX5stk22UmWaFS-N5chi9GHB1bSiQXB3IyF_RqnaSYLSv83gna-QkbMp6fqAJg6aGOGe8P1K1Fkd4k93Hjf-E3lp0xqD6BKaDKwMEQGeANkcGmmeB10DwuWxm2d-HcoppLjmL1gMxzkoXKUuuqKLltNsR77ysMs6RBlDar4nQFy2OSA4tDiCeMXWcY_gSbeygHzDlH2UuslbpNCcih2_kUlfsOFTAf"
           alt="Instructor"
-          className="w-24 h-24 rounded-full object-cover border-4 border-[#334155] shrink-0"
+          width={96}
+          height={96}
+          className="rounded-full object-cover border-4 border-[#334155] shrink-0"
         />
         <div className="flex flex-col gap-2">
           <h3 className="text-lg font-bold text-black/80">أ. أحمد عبدالله</h3>

@@ -1,6 +1,11 @@
+// apps/admin/src/features/dashboard/components/OverviewCards.tsx
 import { Users, GraduationCap, User, Users2 } from 'lucide-react';
 
 import { OverviewCard, type OverviewCardProps } from './OverviewCard';
+
+type OverviewCardsProps = {
+  userCount?: number;
+};
 
 const overviewData: OverviewCardProps[] = [
   {
@@ -41,10 +46,21 @@ const overviewData: OverviewCardProps[] = [
   },
 ];
 
-export function OverviewCards() {
+export function OverviewCards({ userCount }: OverviewCardsProps) {
+  // Create a copy of the data to avoid mutating the original
+  const data = [...overviewData];
+
+  // Update the first card with the actual user count
+  if (userCount !== undefined) {
+    data[0] = {
+      ...data[0],
+      value: userCount.toLocaleString('ar-SA'),
+    };
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-gutter">
-      {overviewData.map((item) => (
+      {data.map((item) => (
         <OverviewCard key={item.title} {...item} />
       ))}
     </div>

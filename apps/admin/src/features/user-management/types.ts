@@ -1,6 +1,7 @@
+import { UserRole } from '@lms/shared-types';
 import type { LucideIcon } from 'lucide-react';
 
-export type UserRole = 'student' | 'teacher' | 'parent' | 'admin';
+export { UserRole };
 export type UserStatus = 'active' | 'blocked' | 'pending';
 
 export type User = {

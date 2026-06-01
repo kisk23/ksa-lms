@@ -1,5 +1,6 @@
 import { UserRole } from '@lms/shared-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsString,
   MinLength,
@@ -58,8 +59,9 @@ export class CreateUserDto {
   })
   password!: string;
 
-  @ApiPropertyOptional({ enum: UserRole, default: UserRole.STUDENT })
+  @ApiPropertyOptional({ enum: UserRole })
   @IsOptional()
   @IsEnum(UserRole)
-  role?: UserRole = UserRole.STUDENT;
+  @Transform(({ value }) => value ?? UserRole.STUDENT)
+  role?: UserRole;
 }

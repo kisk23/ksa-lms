@@ -22,21 +22,40 @@ export class UsersService {
     });
   }
 
-  async findAll(params: { role?: UserRole; page: number; limit: number; search?: string }) {
-    const { role, page, limit, search } = params;
+  async findAll(params: {
+    role?: UserRole;
+    page: number;
+    limit: number;
+    search?: string;
+    status?: string;
+  }) {
+    const { role, page, limit, search, status } = params;
     const skip = (page - 1) * limit;
+
+    const searchWords = search ? search.trim().split(/\s+/).filter(Boolean) : [];
 
     const where: Prisma.UserWhereInput = {
       ...(role && { role }),
       ...(search && {
         OR: [
-          { name: { contains: search, mode: 'insensitive' as const } },
+          ...(searchWords.length > 0
+            ? [
+                {
+                  AND: searchWords.map((word) => ({
+                    name: { contains: word, mode: 'insensitive' as const },
+                  })),
+                },
+              ]
+            : []),
           { email: { contains: search, mode: 'insensitive' as const } },
           { identity: { contains: search, mode: 'insensitive' as const } },
           { phone: { contains: search, mode: 'insensitive' as const } },
           { guardianIdentity: { contains: search, mode: 'insensitive' as const } },
         ],
       }),
+      ...(status === 'blocked' && { isActive: false }),
+      ...(status === 'pending' && { isActive: true, isVerified: false }),
+      ...(status === 'active' && { isActive: true, isVerified: true }),
     };
 
     const [data, total] = await Promise.all([
