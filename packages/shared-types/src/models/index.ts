@@ -101,7 +101,7 @@ export enum CourseAuditAction {
   PUBLISHED = 'PUBLISHED',
   ARCHIVED = 'ARCHIVED',
   RESTORED = 'RESTORED',
-  DELETED = 'DELETED'
+  DELETED = 'DELETED',
 }
 
 export interface ICourse {
@@ -140,6 +140,97 @@ export interface ILesson {
   archivedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
+}
+
+// ─── Lesson Detail ───────────────────────────────────
+export interface LessonDetail {
+  id: string;
+  chapterId: string;
+  title: string;
+  orderIndex: number;
+  youtubeVideoId: string;
+  version: number;
+  isArchived: boolean;
+  createdAt: string;
+  updatedAt: string;
+  assignment?: Assignment | null;
+  progress?: LessonProgress | null;
+}
+
+// ─── Assignment ──────────────────────────────────────
+export interface QuestionOption {
+  id: string;
+  text: string;
+  isCorrect?: boolean;
+  orderIndex: number;
+}
+
+export interface Question {
+  id: string;
+  text: string;
+  orderIndex: number;
+  options: QuestionOption[];
+}
+
+export interface Assignment {
+  id: string;
+  lessonId: string;
+  passingScorePct: number;
+  maxAttempts: number | null;
+  questions: Question[];
+}
+
+// ─── Progress ────────────────────────────────────────
+export interface LessonProgress {
+  id: string;
+  studentUserId: string;
+  lessonId: string;
+  lessonVersion: number;
+  videoWatchedPct: number;
+  videoCompletedAt: string | null;
+  isCompleted: boolean;
+  completedAt: string | null;
+  updatedAt: string;
+}
+
+export interface CourseProgress {
+  id: string;
+  studentUserId: string;
+  courseId: string;
+  completedLessons: number;
+  totalLessons: number;
+  progressPct: number;
+  completedAt: string | null;
+  lastLesson?: { id: string; title: string; orderIndex: number } | null;
+}
+
+export interface LessonProgressStatus {
+  lessonId: string;
+  title: string;
+  orderIndex: number;
+  chapter: { id: string; title: string; orderIndex: number };
+  progress: LessonProgress | null;
+}
+
+// ─── Lesson Files ────────────────────────────────────
+export interface LessonFile {
+  id: string;
+  lessonId: string;
+  name: string;
+  url: string;
+  mimeType: string;
+  sizeBytes: number;
+}
+
+// ─── Navigation Helpers ───────────────────────────────
+export interface FlatLesson {
+  lessonId: string;
+  chapterId: string;
+  courseId: string;
+  title: string;
+  orderIndex: number;
+  chapterOrderIndex: number;
+  isCompleted: boolean;
 }
 
 // ─── Enrollment ──────────────────────────────────────
