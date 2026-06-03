@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsUUID, IsOptional, IsNumber, Min, IsDateString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsUUID, IsOptional, IsDateString, IsString, Matches } from 'class-validator';
 
 export class CreateManualEnrollmentDto {
   @ApiProperty({ description: 'UUID of the student to enroll' })
@@ -15,9 +16,12 @@ export class CreateManualEnrollmentDto {
     default: 0,
   })
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  amountPaid?: number;
+  @IsString()
+  @Matches(/^\d+(\.\d{1,2})?$/, {
+    message: 'amountPaid must be a valid decimal string (e.g. "150" or "150.00").',
+  })
+  @Transform(({ value }) => value ?? '0')
+  amountPaid?: string;
 
   @ApiPropertyOptional({
     description: 'Optional expiry date for the enrollment (ISO 8601). Null means no expiry.',
