@@ -148,6 +148,7 @@ export enum EnrollmentStatus {
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
   PENDING = 'PENDING',
+  EXPIRED = 'EXPIRED',
 }
 
 export interface IEnrollment {
