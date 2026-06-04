@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { GraduationCap } from 'lucide-react';
 
+import type { Instructor } from '@/features/courses/types';
+
 function StarIcon() {
   return (
     <svg
@@ -14,9 +16,23 @@ function StarIcon() {
   );
 }
 
-export default function InstructorProfile() {
+interface InstructorProfileProps {
+  teacher: Instructor;
+  /** Total courses taught by this teacher — pass course._count if available */
+  courseCount?: number;
+}
+
+export default function InstructorProfile({ teacher, courseCount }: InstructorProfileProps) {
+  // Initials avatar — backend doesn't store a profile photo yet
+  const initials = teacher.name
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w.charAt(0))
+    .join('');
+
   return (
     <div dir="rtl">
+
       <h2 className="text-2xl font-bold text-black/80 mb-3">المحاضر</h2>
       <div className="flex flex-col sm:flex-row gap-6 p-6 shadow border-2 rounded-xl">
         <Image
@@ -26,26 +42,29 @@ export default function InstructorProfile() {
           height={96}
           className="rounded-full object-cover border-4 border-[#334155] shrink-0"
         />
+
         <div className="flex flex-col gap-2">
-          <h3 className="text-lg font-bold text-black/80">أ. أحمد عبدالله</h3>
-          <p className="text-sm text-primary/70 font-semibold">
-            أستاذ الفيزياء المتقدمة - جامعة الملك سعود
-          </p>
+          <h3 className="text-lg font-bold text-black">{teacher.name}</h3>
+          <p className="text-sm text-primary  font-semibold">محاضر معتمد في منصة سُلَّم</p>
+
           <div className="flex items-center gap-5 mt-1">
-            <div className="flex items-center gap-1 text-gray-500">
+            <div className="flex items-center gap-1 text-gray-600">
               <span className="text-amber-400">
                 <StarIcon />
               </span>
-              <span className="text-xs">4.9 تقييم المعلم</span>
+              <span className="text-xs">محاضر معتمد</span>
             </div>
-            <div className="flex items-center gap-1 text-gray-500">
-              <GraduationCap size={16} strokeWidth={2} />
-              <span className="text-xs">12 دورة</span>
-            </div>
+            {courseCount !== undefined && (
+              <div className="flex items-center gap-1 text-gray-600">
+                <GraduationCap size={16} strokeWidth={2} className='text-gray-700'/>
+                <span className="text-xs">{courseCount + " Static"} دورة</span>
+              </div>
+            )}
           </div>
-          <p className="text-sm text-gray-500 leading-relaxed mt-1">
-            خبرة تزيد عن 15 عاماً في تدريس الفيزياء للطلاب في مختلف المراحل. شغوف بتبسيط العلوم
-            وربطها بالواقع لإنشاء جيل مفكر ومبتكر.
+
+          <p className="text-sm text-gray-600 leading-relaxed mt-1">
+            معلم متخصص يقدم محتوى تعليمياً عالي الجودة عبر منصة سُلَّم. يركز على تبسيط المفاهيم
+            وربطها بالتطبيق العملي لضمان أفضل تجربة تعلم للطلاب.
           </p>
         </div>
       </div>

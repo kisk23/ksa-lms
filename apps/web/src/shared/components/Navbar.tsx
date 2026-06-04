@@ -40,8 +40,8 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 w-full backdrop-blur-md border-b border-border/40 shadow-sm">
       <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="md:w-1/6 w-1/2">
-          <Link href="/" className="flex items-center">
-            <Image src="/Logo.svg" alt="Logo" width={140} height={40} priority />
+          <Link href="/" className="flex items-center cursor-pointer ps-2 lg:ps-0">
+            <Image src="/Logo.svg" alt="Logo" width={40} height={20} priority />
           </Link>
         </div>
 
@@ -68,15 +68,15 @@ export default function Navbar() {
             collapse ? 'block' : 'hidden'
           } w-full md:flex md:w-5/6 px-4 flex flex-col md:flex-row md:justify-between`}
         >
-          <div className="w-full md:w-4/6 flex lg:justify-center lg:ps-4">
-            <ul className="font-medium flex flex-col md:flex-row md:space-x-0 lg:space-x-4 mt-4 md:mt-0 gap-1 md:gap-0">
+          <div className="w-full md:w-4/6 flex md:justify-center ">
+            <ul className="font-medium flex flex-col md:flex-row space-x-0 md:space-x-4 mt-4 md:mt-0 gap-1 md:gap-0">
               {NAV_LINKS.map(({ href, label }) => {
                 const active = pathname === href;
                 return (
                   <li key={href}>
                     <Link
                       href={href}
-                      className={`block font-semibold text-lg py-2 md:py-0 ${
+                      className={`block font-semibold text-lg py-2 ${
                         active
                           ? 'text-primary border-b-2 border-primary'
                           : 'text-text-muted hover:text-primary/80'
