@@ -1,49 +1,55 @@
-import { notFound } from 'next/navigation';
 
-import CourseHero from '@/features/courseDetails/CourseHero';
-import CourseInfo from '@/features/courseDetails/CourseInfo';
-import Curriculum from '@/features/courseDetails/Curriculum';
-import InstructorProfile from '@/features/courseDetails/InstructorProfile';
-import PricingCard from '@/features/courseDetails/PricingCard';
-import WhatYouLearn from '@/features/courseDetails/WhatYouLearn';
-import { coursesService } from '@/features/courses/services/courses.service';
+import type { Metadata } from 'next';
 
-export default async function CourseDetailPage({ params }: { params: { id: string } }) {
-  let course;
+import CourseDetailClient from '@/features/courseDetails/CourseDetailClient';
+
+interface PageProps {
+  params: { id: string };
+}
+
+/**
+ * generateMetadata runs on the server and sets the <title> / description
+ * from the live API response before the page is sent to the browser.
+ */
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
-    course = await coursesService.getById(params.id);
-  } catch {
-    try {
-      course = await coursesService.getBySlug(params.id);
-    } catch {
-      notFound();
-    }
-  }
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/courses/${params.id}`,
+      { next: { revalidate: 60 } }, // ISR: re-fetch at most every 60 s
+    );
 
-  if (!course) {
-    notFound();
+    if (!res.ok) throw new Error('not found');
+
+    const course = await res.json();
+
+    return {
+      title:       `${course.title} | سُلَّم`,
+      description: course.description ?? `دورة ${course.title} على منصة سُلَّم التعليمية`,
+    };
+  } catch {
+    return {
+      title:       'تفاصيل الدورة | سُلَّم',
+      description: 'استعرض تفاصيل الدورة التعليمية على منصة سُلَّم',
+    };
   }
+}
+
+/**
+ * Page is a thin server component.
+ * All data-fetching and interactivity live inside CourseDetailClient ('use client').
+ */
+export default function CourseDetailPage({ params }: PageProps) {
+
 
   return (
     <main
-      className="max-w-7xl mx-auto px-6 py-12"
+      className="max-w-7xl mx-auto px-4 md:px-6 py-12"
       style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}
+      dir="rtl"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left Column: Course Details */}
-        <div className="lg:col-span-4">
-          <PricingCard course={course} />
-        </div>
 
-        {/* Right Column: Sticky Pricing */}
-        <div className="lg:col-span-8 flex flex-col gap-8">
-          <CourseHero />
-          <CourseInfo />
-          <WhatYouLearn />
-          <Curriculum />
-          <InstructorProfile />
-        </div>
-      </div>
+      <CourseDetailClient id={params.id} />
+
     </main>
   );
 }

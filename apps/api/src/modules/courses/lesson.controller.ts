@@ -35,6 +35,16 @@ export class LessonsController {
     return this.lessonsService.findOne(lessonId);
   }
 
+  @Get('lessons/:lessonId/files')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, LessonAccessGuard)
+  @ApiOperation({
+    summary: 'Get downloadable files for a lesson (enrolled students, owner teacher, staff)',
+  })
+  getFiles(@Param('lessonId') lessonId: string) {
+    return this.lessonsService.getFiles(lessonId);
+  }
+
   // ─── CREATE ──────────────────────────────────────────────────────────────────
 
   @Post('chapters/:chapterId/lessons')

@@ -38,7 +38,7 @@ export class LessonAccessGuard implements CanActivate {
       return true;
     }
 
-    const lessonId: string = request.params.lessonId;
+    const lessonId: string = request.params.id ?? request.params.lessonId;
 
     // Single DB hit: resolve the lesson and its parent course in one query
     const lesson = await this.prisma.lesson.findUnique({

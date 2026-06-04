@@ -32,8 +32,8 @@ export class CoursesController {
   @ApiOperation({ summary: 'List all published courses (Public)' })
   findAll(@Query() query: PaginationQueryDto & { teacherUserId?: string; category?: string }) {
     return this.coursesService.findAll({
-      page: query.page ?? 1,
-      limit: query.limit ?? 10,
+      page: Number(query.page) ?? 1,
+      limit: Number(query.limit) ?? 10,
       search: query.search,
       status: CourseStatus.PUBLISHED, // Security: Public can only see published
       teacherUserId: query.teacherUserId,
@@ -63,8 +63,8 @@ export class CoursesController {
     const teacherUserId = user.role === UserRole.TEACHER ? user.id : query.teacherUserId;
 
     return this.coursesService.findAll({
-      page: query.page ?? 1,
-      limit: query.limit ?? 10,
+      page: Number(query.page) ?? 1,
+      limit: Number(query.limit) ?? 10,
       search: query.search,
       status: query.status,
       teacherUserId,

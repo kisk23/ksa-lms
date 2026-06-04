@@ -1,31 +1,26 @@
-'use client';
+import { useQuery } from '@tanstack/react-query';
 
-import { useState, useEffect } from 'react';
-import type { ICourse, PaginatedResponse } from '@lms/shared-types';
-import { coursesService } from '../services/courses.service';
+import { courseService } from '../services/course.service';
+import type { CoursesQueryParams } from '../types';
 
-export function useCourses(params?: { page?: number; search?: string }) {
-  const page = params?.page;
-  const search = params?.search;
-  const [data, setData] = useState<PaginatedResponse<ICourse> | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+/** Centralised query-key factory — import wherever you need to invalidate. */
+export const courseKeys = {
+  all: ['courses'] as const,
+  lists: () => [...courseKeys.all, 'list'] as const,
+  list: (params: CoursesQueryParams) => [...courseKeys.lists(), params] as const,
+  details: () => [...courseKeys.all, 'detail'] as const,
+  detail: (id: string) => [...courseKeys.details(), id] as const,
+};
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        setIsLoading(true);
-        const result = await coursesService.getAll({ page, search });
-        setData(result);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch courses');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, [page, search]);
-
-  return { courses: data?.data ?? [], meta: data?.meta, isLoading, error };
+/**
+ * Paginated course list with optional search / status filter.
+ * Backed by GET /courses → CoursesService.findAll().
+ */
+export function useCourses(params: CoursesQueryParams = {}) {
+  return useQuery({
+    queryKey: courseKeys.list(params),
+    queryFn: () => courseService.getCourses(params),
+    staleTime: 1000 * 60 * 5, // 5 min
+    placeholderData: (prev) => prev, // keep previous data while fetching next page
+  });
 }

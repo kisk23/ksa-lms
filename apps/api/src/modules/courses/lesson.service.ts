@@ -88,6 +88,18 @@ export class LessonsService {
   }
 
   /**
+   * 1b — getFiles(lessonId)
+   * Returns downloadable files attached to a lesson.
+   * LessonFile model is not yet in the Prisma schema — returns an empty array
+   * until the model is added and this method is implemented.
+   * TODO: implement when LessonFile is added to the schema.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getFiles(_lessonId: string): Promise<[]> {
+    return [];
+  }
+
+  /**
    * 2 — create(chapterId, actor, dto)
    * Appends a new lesson to a chapter.
    * Validates ownership of the parent course before creating.

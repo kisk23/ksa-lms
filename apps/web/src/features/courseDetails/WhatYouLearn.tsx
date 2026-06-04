@@ -1,9 +1,4 @@
-const learningPoints = [
-  'فهم قوانين نيوتن للحركة وتطبيقاتها في الحياة اليومية.',
-  'تحليل الدوائر الكهربائية البسيطة والمعقدة.',
-  'استيعاب مبادئ الديناميكا الحرارية وحفظ الطاقة.',
-  'حل المسائل الفيزيائية المعقدة باستخدام منهجية علمية.',
-];
+import type { Chapter } from '@/features/courses/types';
 
 function CheckIcon() {
   return (
@@ -18,14 +13,27 @@ function CheckIcon() {
   );
 }
 
-export default function WhatYouLearn() {
+interface WhatYouLearnProps {
+  chapters: Chapter[];
+}
+
+export default function WhatYouLearn({ chapters }: WhatYouLearnProps) {
+  // Derive learning points from chapter titles — each chapter = one learning outcome.
+  // When the backend gains a dedicated "learningPoints" field, swap this array out.
+  const points = chapters
+    .slice()
+    .sort((a, b) => a.orderIndex - b.orderIndex)
+    .map((ch) => `${ch.title}`);
+
+  if (points.length === 0) return null;
+
   return (
-    <div className="p-6 rounded-xl bg-surface/10" dir="rtl">
-      <h2 className="text-xl font-bold text-black/80 mb-6">ماذا ستتعلم؟</h2>
+    <div className="p-6 rounded-xl border border-gray-300 bg-surface/5" dir="rtl">
+      <h2 className="text-xl font-bold text-black mb-6">ماذا ستتعلم؟</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {learningPoints.map((point, i) => (
+        {points.map((point, i) => (
           <div key={i} className="flex items-start gap-3">
-            <span className="text-[#056847]">
+            <span className="text-green-500">
               <CheckIcon />
             </span>
             <span className="text-sm leading-relaxed text-gray-600">{point}</span>
