@@ -1095,4 +1095,57 @@ export class EnrollmentService implements OnApplicationBootstrap {
       this.logger.error('Failed to run startup sweep of expired enrollments:', err);
     });
   }
+
+  // ─── DASHBOARD STATS ──────────────────────────────────────────────────────────
+
+  /**
+   * getRegistrationStats()
+   *
+   * Returns new user registrations (by role) and active enrollment count for
+   * the current ISO week (Monday 00:00 UTC → now). Used by the admin dashboard
+   * EnrollmentsChart donut chart.
+   *
+   * Runs 4 parallel count() queries — one DB round-trip batch.
+   * Access: SUPER_ADMIN, ASSISTANT_ADMIN only (enforced at the controller).
+   */
+  async getRegistrationStats() {
+    const now = new Date();
+
+    // Start of the current ISO week: Monday 00:00:00 UTC
+    const dayOfWeek = now.getUTCDay(); // 0 = Sunday
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    const startOfWeek = new Date(now);
+    startOfWeek.setUTCDate(now.getUTCDate() - daysFromMonday);
+    startOfWeek.setUTCHours(0, 0, 0, 0);
+
+    const [newStudents, newTeachers, newParents, activeEnrollmentsThisWeek] = await Promise.all([
+      this.prisma.user.count({
+        where: { role: UserRole.STUDENT, createdAt: { gte: startOfWeek } },
+      }),
+      this.prisma.user.count({
+        where: { role: UserRole.TEACHER, createdAt: { gte: startOfWeek } },
+      }),
+      this.prisma.user.count({
+        where: { role: UserRole.PARENT, createdAt: { gte: startOfWeek } },
+      }),
+      this.prisma.enrollment.count({
+        where: { status: EnrollmentStatus.ACTIVE, enrolledAt: { gte: startOfWeek } },
+      }),
+    ]);
+
+    const totalThisWeek = newStudents + newTeachers + newParents;
+
+    return {
+      newStudents,
+      newTeachers,
+      newParents,
+      totalThisWeek,
+      activeEnrollmentsThisWeek,
+      breakdown: {
+        students: totalThisWeek > 0 ? Math.round((newStudents / totalThisWeek) * 100) : 0,
+        teachers: totalThisWeek > 0 ? Math.round((newTeachers / totalThisWeek) * 100) : 0,
+        parents: totalThisWeek > 0 ? Math.round((newParents / totalThisWeek) * 100) : 0,
+      },
+    };
+  }
 }
