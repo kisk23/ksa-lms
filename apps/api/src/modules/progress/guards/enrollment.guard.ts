@@ -1,4 +1,4 @@
-import { UserRole, EnrollmentStatus } from '@lms/shared-types';
+import { UserRole } from '@lms/shared-types';
 import type { IUser } from '@lms/shared-types';
 import {
   CanActivate,
@@ -10,39 +10,53 @@ import {
 } from '@nestjs/common';
 
 import { PrismaService } from '../../../prisma/prisma.service';
+import { EnrollmentService } from '../../enrollments/enrollment.service';
 
 /**
  * EnrollmentGuard
  *
- * Asserts whether the requesting user is allowed to access course-level progress.
- * Expects `courseId` as a route parameter (`:courseId`).
+ * Asserts whether the requesting user is allowed to access course-level content.
+ *
+ * Reads courseId from:
+ *   req.params.courseId  — progress routes  (/progress/courses/:courseId/...)
+ *   req.params.id        — fallback for course routes (/courses/:id/chapters)
  *
  * Enforces:
- *   STUDENT       → must have an ACTIVE enrollment in the course (status === 'ACTIVE')
- *   TEACHER       → must be the course owner (course.teacherUserId === user.id)
- *   SUPER_ADMIN / ASSISTANT_ADMIN → always allowed (staff bypass)
+ *   STUDENT            → ACTIVE enrollment + expiry not passed
+ *   TEACHER            → must be the course owner
+ *   SUPER_ADMIN /
+ *   ASSISTANT_ADMIN    → always allowed
  *
- * Applied to:
- *   GET  /progress/courses/:courseId            (course progress summary)
- *   GET  /progress/courses/:courseId/lessons    (lesson progress statuses list)
+ * Currently applied to:
+ *   GET /progress/courses/:courseId
+ *   GET /progress/courses/:courseId/lessons
+ *   GET /progress/courses/:courseId/students  (teacher bypass)
  */
 @Injectable()
 export class EnrollmentGuard implements CanActivate {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly enrollmentService: EnrollmentService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const user: IUser = request.user;
-    const courseId: string = request.params.courseId;
 
     if (!user) throw new UnauthorizedException('Authentication required.');
 
-    // Staff always pass — they can see everything
+    // Works on both /progress/courses/:courseId and /courses/:id/...
+    const courseId: string = request.params.courseId ?? request.params.id;
+
+    if (!courseId) {
+      throw new NotFoundException('Course ID is required.');
+    }
+
+    // Staff always pass
     if (user.role === UserRole.SUPER_ADMIN || user.role === UserRole.ASSISTANT_ADMIN) {
       return true;
     }
 
-    // Verify the course exists before any ownership/enrollment check
     const course = await this.prisma.course.findUnique({
       where: { id: courseId },
       select: { id: true, teacherUserId: true },
@@ -50,26 +64,18 @@ export class EnrollmentGuard implements CanActivate {
 
     if (!course) throw new NotFoundException(`Course #${courseId} not found`);
 
-    // The course's own teacher passes
     if (user.role === UserRole.TEACHER && course.teacherUserId === user.id) {
       return true;
     }
 
-    // Student (or parent acting on behalf) must have an ACTIVE enrollment
-    const enrollment = await this.prisma.enrollment.findUnique({
-      where: {
-        studentUserId_courseId: {
-          studentUserId: user.id,
-          courseId,
-        },
-      },
-      select: { status: true },
-    });
+    // Delegates to EnrollmentService.isEnrolled() which checks both
+    // status === ACTIVE and expiryDate hasn't passed yet
+    const enrolled = await this.enrollmentService.isEnrolled(user.id, courseId);
 
-    if (enrollment?.status === EnrollmentStatus.ACTIVE) {
-      return true;
+    if (!enrolled) {
+      throw new ForbiddenException('You must be enrolled in this course to access its content.');
     }
 
-    throw new ForbiddenException('You must be enrolled in this course to access its content.');
+    return true;
   }
 }

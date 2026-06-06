@@ -1,14 +1,17 @@
 import { UserRole } from '@lms/shared-types';
 import type { IUser } from '@lms/shared-types';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 
-import { Prisma } from '../../generated/client';
+import { EnrollmentStatus, Prisma } from '../../generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class CourseProgressService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   // ─── PUBLIC READ ──────────────────────────────────────────────────────────────
 
@@ -273,9 +276,9 @@ export class CourseProgressService {
       existing.totalLessons > 0
         ? Math.min(100, Math.floor((completedLessons / existing.totalLessons) * 100))
         : 0;
-    const isNowComplete = progressPct === 100;
+    const isNowComplete = progressPct === 100 && existing.completedLessons < existing.totalLessons;
 
-    return this.prisma.courseProgress.update({
+    const updated = await this.prisma.courseProgress.update({
       where: { studentUserId_courseId: { studentUserId, courseId } },
       data: {
         completedLessons,
@@ -284,6 +287,14 @@ export class CourseProgressService {
         ...(isNowComplete && { completedAt: new Date() }),
       },
     });
+
+    if (isNowComplete) {
+      this.eventEmitter.emit('enrollment.completed', {
+        studentUserId,
+        courseId,
+      });
+      return updated;
+    }
   }
 
   // ─── EVENT LISTENERS ──────────────────────────────────────────────────────────
@@ -299,7 +310,17 @@ export class CourseProgressService {
 
     // Bulk fetch to recalculate — can't do arithmetic on Prisma updateMany
     const rows = await this.prisma.courseProgress.findMany({
-      where: { courseId },
+      where: {
+        courseId,
+        student: {
+          enrollments: {
+            some: {
+              courseId,
+              status: { in: [EnrollmentStatus.ACTIVE, EnrollmentStatus.COMPLETED] },
+            },
+          },
+        },
+      },
       select: { id: true, completedLessons: true, totalLessons: true },
     });
 
@@ -399,5 +420,60 @@ export class CourseProgressService {
     });
 
     await this.init(studentUserId, courseId, totalLessons);
+  }
+
+  /**
+   * Listens for 'enrollment.reactivated' emitted by EnrollmentModule.
+   * Runs a self-healing sync to recalculate progress in case lessons were
+   * added or deleted while the student was inactive.
+   */
+  @OnEvent('enrollment.reactivated')
+  async handleEnrollmentReactivated(payload: { studentUserId: string; courseId: string }) {
+    const { studentUserId, courseId } = payload;
+
+    // 1. Get the current count of active lessons in this course
+    const totalLessons = await this.prisma.lesson.count({
+      where: {
+        archivedAt: null,
+        chapter: { courseId, archivedAt: null },
+      },
+    });
+
+    // 2. Count how many of these active lessons the student has actually completed
+    const completedLessons = await this.prisma.lessonProgress.count({
+      where: {
+        studentUserId,
+        isCompleted: true,
+        lesson: {
+          archivedAt: null,
+          chapter: { courseId, archivedAt: null },
+        },
+      },
+    });
+
+    const progressPct =
+      totalLessons > 0 ? Math.min(100, Math.floor((completedLessons / totalLessons) * 100)) : 0;
+
+    const isNowComplete = progressPct === 100;
+
+    // 3. Upsert progress: heal existing progress, or create it if missing
+    await this.prisma.courseProgress.upsert({
+      where: { studentUserId_courseId: { studentUserId, courseId } },
+      create: {
+        studentUserId,
+        courseId,
+        totalLessons,
+        completedLessons,
+        progressPct,
+        ...(isNowComplete && { completedAt: new Date() }),
+      },
+      update: {
+        totalLessons,
+        completedLessons,
+        progressPct,
+        // Update completedAt depending on whether they finished the new syllabus
+        completedAt: isNowComplete ? new Date() : null,
+      },
+    });
   }
 }
