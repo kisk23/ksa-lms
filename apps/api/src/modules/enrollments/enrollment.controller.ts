@@ -58,6 +58,25 @@ export class EnrollmentController {
   }
 
   /**
+   * GET /enrollments/stats
+   *
+   * Returns weekly registration counts broken down by role (students, teachers,
+   * parents) plus active enrollment count for the current ISO week.
+   * Consumed by the admin dashboard EnrollmentsChart donut chart.
+   *
+   * Access: SUPER_ADMIN, ASSISTANT_ADMIN only.
+   */
+  @Get('enrollments/stats')
+  @UseGuards(RolesGuard, PermissionsGuard)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions(UserPermission.ENROLLMENT_READ)
+  @ApiOperation({ summary: 'Get weekly registration stats for the admin dashboard chart' })
+  @ApiOkResponse({ description: 'Registration stats returned successfully.' })
+  getRegistrationStats() {
+    return this.enrollmentService.getRegistrationStats();
+  }
+
+  /**
    * GET /enrollments/:id
    *
    * Returns a single enrollment record by ID with full course and student details.
@@ -312,23 +331,4 @@ export class EnrollmentController {
   }
 
   // ─── DASHBOARD ────────────────────────────────────────────────────────────────
-
-  /**
-   * GET /enrollments/stats
-   *
-   * Returns weekly registration counts broken down by role (students, teachers,
-   * parents) plus active enrollment count for the current ISO week.
-   * Consumed by the admin dashboard EnrollmentsChart donut chart.
-   *
-   * Access: SUPER_ADMIN, ASSISTANT_ADMIN only.
-   */
-  @Get('enrollments/stats')
-  @UseGuards(RolesGuard, PermissionsGuard)
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
-  @Permissions(UserPermission.ENROLLMENT_READ)
-  @ApiOperation({ summary: 'Get weekly registration stats for the admin dashboard chart' })
-  @ApiOkResponse({ description: 'Registration stats returned successfully.' })
-  getRegistrationStats() {
-    return this.enrollmentService.getRegistrationStats();
-  }
 }
