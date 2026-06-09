@@ -16,7 +16,7 @@ import type { Request } from 'express';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { ListPaymentsDto } from './dto/list-payments.dto';
 import { PaymentActionDto } from './dto/payment-action.dto';
-import { PaymentRevenueDto } from './dto/payment-revenue.dto';
+import { PaymentDailyRevenueDto, PaymentRevenueDto } from './dto/payment-revenue.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { PaymentsService } from './payments.service';
 import type { User } from '../../generated/client';
@@ -67,6 +67,13 @@ export class PaymentsController {
   @ApiBearerAuth()
   monthlyRevenue(@Query() query: PaymentRevenueDto) {
     return this.paymentsService.monthlyRevenue(query);
+  }
+
+  @Get('revenue/daily')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  dailyRevenue(@Query() query: PaymentDailyRevenueDto) {
+    return this.paymentsService.dailyRevenue(query);
   }
 
   @Get(':id')

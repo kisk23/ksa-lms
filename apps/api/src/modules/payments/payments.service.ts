@@ -12,7 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { ListPaymentsDto } from './dto/list-payments.dto';
 import { PaymentActionDto } from './dto/payment-action.dto';
-import { PaymentRevenueDto } from './dto/payment-revenue.dto';
+import { PaymentDailyRevenueDto, PaymentRevenueDto } from './dto/payment-revenue.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { MoyasarClient } from './moyasar.client';
 import { PaymentsRepository } from './payments.repository';
@@ -218,6 +218,65 @@ export class PaymentsService {
     return months.map((month) => ({
       ...month,
       percentage: maxAmount > 0 ? Math.round((month.amount / maxAmount) * 100) : 0,
+    }));
+  }
+
+  async dailyRevenue(query: PaymentDailyRevenueDto) {
+    const now = new Date();
+    const year = query.year ?? now.getFullYear();
+    const month = query.month ?? now.getMonth();
+
+    const startOfMonth = new Date(Date.UTC(year, month, 1));
+    const endOfMonth = new Date(Date.UTC(year, month + 1, 1) - 1);
+
+    // We can use listForSummary with date filters to fetch all payments for this month
+    const payments = await this.paymentsRepository.listForSummary({
+      ...query,
+      dateFrom: startOfMonth.toISOString(),
+      dateTo: endOfMonth.toISOString(),
+    });
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Arabic formatted dates for the frontend
+    const dateFormatter = new Intl.DateTimeFormat('ar-EG', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    const daily = Array.from({ length: daysInMonth }, (_, index) => {
+      const date = new Date(Date.UTC(year, month, index + 1));
+      return {
+        day: index + 1,
+        date: dateFormatter.format(date),
+        sales: 0,
+        revenue: 0,
+        netProfit: 0,
+        percentage: 0, // Daily profit margin
+      };
+    });
+
+    for (const payment of payments) {
+      if (payment.status !== PaymentStatus.paid && payment.status !== PaymentStatus.captured) {
+        continue;
+      }
+
+      // getUTCDate() returns 1-indexed day of the month
+      const dayIndex = payment.createdAt.getUTCDate() - 1;
+      const paymentRevenue = this.centsToCurrency(payment.amount);
+      const paymentProfit = this.centsToCurrency(payment.amount - payment.refundedAmount);
+
+      if (daily[dayIndex]) {
+        daily[dayIndex].sales += 1;
+        daily[dayIndex].revenue += paymentRevenue;
+        daily[dayIndex].netProfit += paymentProfit;
+      }
+    }
+
+    return daily.map((day) => ({
+      ...day,
+      percentage: day.revenue > 0 ? Math.round((day.netProfit / day.revenue) * 100) : 0,
     }));
   }
 
