@@ -330,6 +330,7 @@ export type CourseWhereInput = {
   liveSessions?: Prisma.LiveSessionListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   promoCodes?: Prisma.PromoCodeListRelationFilter
+  approvalRequests?: Prisma.ApprovalRequestListRelationFilter
 }
 
 export type CourseOrderByWithRelationInput = {
@@ -361,6 +362,7 @@ export type CourseOrderByWithRelationInput = {
   liveSessions?: Prisma.LiveSessionOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   promoCodes?: Prisma.PromoCodeOrderByRelationAggregateInput
+  approvalRequests?: Prisma.ApprovalRequestOrderByRelationAggregateInput
 }
 
 export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -395,6 +397,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   liveSessions?: Prisma.LiveSessionListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   promoCodes?: Prisma.PromoCodeListRelationFilter
+  approvalRequests?: Prisma.ApprovalRequestListRelationFilter
 }, "id" | "slug">
 
 export type CourseOrderByWithAggregationInput = {
@@ -473,6 +476,7 @@ export type CourseCreateInput = {
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateInput = {
@@ -501,6 +505,7 @@ export type CourseUncheckedCreateInput = {
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUpdateInput = {
@@ -529,6 +534,7 @@ export type CourseUpdateInput = {
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateInput = {
@@ -557,6 +563,7 @@ export type CourseUncheckedUpdateInput = {
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateManyInput = {
@@ -952,6 +959,20 @@ export type CourseUpdateOneRequiredWithoutPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutPaymentsInput, Prisma.CourseUpdateWithoutPaymentsInput>, Prisma.CourseUncheckedUpdateWithoutPaymentsInput>
 }
 
+export type CourseCreateNestedOneWithoutApprovalRequestsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutApprovalRequestsInput, Prisma.CourseUncheckedCreateWithoutApprovalRequestsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutApprovalRequestsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutApprovalRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutApprovalRequestsInput, Prisma.CourseUncheckedCreateWithoutApprovalRequestsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutApprovalRequestsInput
+  upsert?: Prisma.CourseUpsertWithoutApprovalRequestsInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutApprovalRequestsInput, Prisma.CourseUpdateWithoutApprovalRequestsInput>, Prisma.CourseUncheckedUpdateWithoutApprovalRequestsInput>
+}
+
 export type CourseCreateWithoutTeacherInput = {
   id?: string
   slug: string
@@ -977,6 +998,7 @@ export type CourseCreateWithoutTeacherInput = {
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutTeacherInput = {
@@ -1004,6 +1026,7 @@ export type CourseUncheckedCreateWithoutTeacherInput = {
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutTeacherInput = {
@@ -1041,6 +1064,7 @@ export type CourseCreateWithoutPublishedByUserInput = {
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutPublishedByUserInput = {
@@ -1068,6 +1092,7 @@ export type CourseUncheckedCreateWithoutPublishedByUserInput = {
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutPublishedByUserInput = {
@@ -1105,6 +1130,7 @@ export type CourseCreateWithoutArchivedByUserInput = {
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutArchivedByUserInput = {
@@ -1132,6 +1158,7 @@ export type CourseUncheckedCreateWithoutArchivedByUserInput = {
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutArchivedByUserInput = {
@@ -1241,6 +1268,7 @@ export type CourseCreateWithoutAuditLogsInput = {
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutAuditLogsInput = {
@@ -1268,6 +1296,7 @@ export type CourseUncheckedCreateWithoutAuditLogsInput = {
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutAuditLogsInput = {
@@ -1311,6 +1340,7 @@ export type CourseUpdateWithoutAuditLogsInput = {
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutAuditLogsInput = {
@@ -1338,6 +1368,7 @@ export type CourseUncheckedUpdateWithoutAuditLogsInput = {
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutCourseProgressesInput = {
@@ -1365,6 +1396,7 @@ export type CourseCreateWithoutCourseProgressesInput = {
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutCourseProgressesInput = {
@@ -1392,6 +1424,7 @@ export type CourseUncheckedCreateWithoutCourseProgressesInput = {
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutCourseProgressesInput = {
@@ -1435,6 +1468,7 @@ export type CourseUpdateWithoutCourseProgressesInput = {
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutCourseProgressesInput = {
@@ -1462,6 +1496,7 @@ export type CourseUncheckedUpdateWithoutCourseProgressesInput = {
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutChaptersInput = {
@@ -1489,6 +1524,7 @@ export type CourseCreateWithoutChaptersInput = {
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutChaptersInput = {
@@ -1516,6 +1552,7 @@ export type CourseUncheckedCreateWithoutChaptersInput = {
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutChaptersInput = {
@@ -1559,6 +1596,7 @@ export type CourseUpdateWithoutChaptersInput = {
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutChaptersInput = {
@@ -1586,6 +1624,7 @@ export type CourseUncheckedUpdateWithoutChaptersInput = {
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutEnrollmentsInput = {
@@ -1613,6 +1652,7 @@ export type CourseCreateWithoutEnrollmentsInput = {
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutEnrollmentsInput = {
@@ -1640,6 +1680,7 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutEnrollmentsInput = {
@@ -1683,6 +1724,7 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
@@ -1710,6 +1752,7 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutLiveSessionsInput = {
@@ -1737,6 +1780,7 @@ export type CourseCreateWithoutLiveSessionsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutLiveSessionsInput = {
@@ -1764,6 +1808,7 @@ export type CourseUncheckedCreateWithoutLiveSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutLiveSessionsInput = {
@@ -1807,6 +1852,7 @@ export type CourseUpdateWithoutLiveSessionsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutLiveSessionsInput = {
@@ -1834,6 +1880,7 @@ export type CourseUncheckedUpdateWithoutLiveSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutPromoCodesInput = {
@@ -1861,6 +1908,7 @@ export type CourseCreateWithoutPromoCodesInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutPromoCodesInput = {
@@ -1888,6 +1936,7 @@ export type CourseUncheckedCreateWithoutPromoCodesInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutPromoCodesInput = {
@@ -1931,6 +1980,7 @@ export type CourseUpdateWithoutPromoCodesInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutPromoCodesInput = {
@@ -1958,6 +2008,7 @@ export type CourseUncheckedUpdateWithoutPromoCodesInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutPaymentsInput = {
@@ -1985,6 +2036,7 @@ export type CourseCreateWithoutPaymentsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutPaymentsInput = {
@@ -2012,6 +2064,7 @@ export type CourseUncheckedCreateWithoutPaymentsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
   promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutPaymentsInput = {
@@ -2055,6 +2108,7 @@ export type CourseUpdateWithoutPaymentsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutPaymentsInput = {
@@ -2081,6 +2135,135 @@ export type CourseUncheckedUpdateWithoutPaymentsInput = {
   auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
+  promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutApprovalRequestsInput = {
+  id?: string
+  slug: string
+  title: string
+  category?: string | null
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutTaughtCoursesInput
+  publishedByUser?: Prisma.UserCreateNestedOneWithoutPublishedCoursesInput
+  archivedByUser?: Prisma.UserCreateNestedOneWithoutArchivedCoursesInput
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutCourseInput
+  chapters?: Prisma.ChapterCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  liveSessions?: Prisma.LiveSessionCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutCourseInput
+  promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutApprovalRequestsInput = {
+  id?: string
+  slug: string
+  teacherUserId: string
+  title: string
+  category?: string | null
+  description?: string | null
+  thumbnailUrl?: string | null
+  promoVideoUrl?: string | null
+  promoVideoProvider?: $Enums.VideoProvider | null
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  status?: $Enums.CourseStatus
+  publishedAt?: Date | string | null
+  publishedBy?: string | null
+  archivedAt?: Date | string | null
+  archivedBy?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutCourseInput
+  chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutCourseInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  liveSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCourseInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutCourseInput
+  promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutApprovalRequestsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutApprovalRequestsInput, Prisma.CourseUncheckedCreateWithoutApprovalRequestsInput>
+}
+
+export type CourseUpsertWithoutApprovalRequestsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutApprovalRequestsInput, Prisma.CourseUncheckedUpdateWithoutApprovalRequestsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutApprovalRequestsInput, Prisma.CourseUncheckedCreateWithoutApprovalRequestsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutApprovalRequestsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutApprovalRequestsInput, Prisma.CourseUncheckedUpdateWithoutApprovalRequestsInput>
+}
+
+export type CourseUpdateWithoutApprovalRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
+  publishedByUser?: Prisma.UserUpdateOneWithoutPublishedCoursesNestedInput
+  archivedByUser?: Prisma.UserUpdateOneWithoutArchivedCoursesNestedInput
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutCourseNestedInput
+  chapters?: Prisma.ChapterUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
+  promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutApprovalRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promoVideoProvider?: Prisma.NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutCourseNestedInput
+  chapters?: Prisma.ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  auditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -2169,6 +2352,7 @@ export type CourseUpdateWithoutTeacherInput = {
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutTeacherInput = {
@@ -2196,6 +2380,7 @@ export type CourseUncheckedUpdateWithoutTeacherInput = {
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateManyWithoutTeacherInput = {
@@ -2243,6 +2428,7 @@ export type CourseUpdateWithoutPublishedByUserInput = {
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutPublishedByUserInput = {
@@ -2270,6 +2456,7 @@ export type CourseUncheckedUpdateWithoutPublishedByUserInput = {
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateManyWithoutPublishedByUserInput = {
@@ -2317,6 +2504,7 @@ export type CourseUpdateWithoutArchivedByUserInput = {
   liveSessions?: Prisma.LiveSessionUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutArchivedByUserInput = {
@@ -2344,6 +2532,7 @@ export type CourseUncheckedUpdateWithoutArchivedByUserInput = {
   liveSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCourseNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutCourseNestedInput
   promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCourseNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateManyWithoutArchivedByUserInput = {
@@ -2379,6 +2568,7 @@ export type CourseCountOutputType = {
   liveSessions: number
   payments: number
   promoCodes: number
+  approvalRequests: number
 }
 
 export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2389,6 +2579,7 @@ export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   liveSessions?: boolean | CourseCountOutputTypeCountLiveSessionsArgs
   payments?: boolean | CourseCountOutputTypeCountPaymentsArgs
   promoCodes?: boolean | CourseCountOutputTypeCountPromoCodesArgs
+  approvalRequests?: boolean | CourseCountOutputTypeCountApprovalRequestsArgs
 }
 
 /**
@@ -2450,6 +2641,13 @@ export type CourseCountOutputTypeCountPromoCodesArgs<ExtArgs extends runtime.Typ
   where?: Prisma.PromoCodeWhereInput
 }
 
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountApprovalRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApprovalRequestWhereInput
+}
+
 
 export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2480,6 +2678,7 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   liveSessions?: boolean | Prisma.Course$liveSessionsArgs<ExtArgs>
   payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
   promoCodes?: boolean | Prisma.Course$promoCodesArgs<ExtArgs>
+  approvalRequests?: boolean | Prisma.Course$approvalRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
@@ -2564,6 +2763,7 @@ export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   liveSessions?: boolean | Prisma.Course$liveSessionsArgs<ExtArgs>
   payments?: boolean | Prisma.Course$paymentsArgs<ExtArgs>
   promoCodes?: boolean | Prisma.Course$promoCodesArgs<ExtArgs>
+  approvalRequests?: boolean | Prisma.Course$approvalRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2590,6 +2790,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     liveSessions: Prisma.$LiveSessionPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     promoCodes: Prisma.$PromoCodePayload<ExtArgs>[]
+    approvalRequests: Prisma.$ApprovalRequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3014,6 +3215,7 @@ export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.T
   liveSessions<T extends Prisma.Course$liveSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$liveSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LiveSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.Course$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   promoCodes<T extends Prisma.Course$promoCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$promoCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromoCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvalRequests<T extends Prisma.Course$approvalRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$approvalRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApprovalRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3665,6 +3867,30 @@ export type Course$promoCodesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.PromoCodeScalarFieldEnum | Prisma.PromoCodeScalarFieldEnum[]
+}
+
+/**
+ * Course.approvalRequests
+ */
+export type Course$approvalRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApprovalRequest
+   */
+  select?: Prisma.ApprovalRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApprovalRequest
+   */
+  omit?: Prisma.ApprovalRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApprovalRequestInclude<ExtArgs> | null
+  where?: Prisma.ApprovalRequestWhereInput
+  orderBy?: Prisma.ApprovalRequestOrderByWithRelationInput | Prisma.ApprovalRequestOrderByWithRelationInput[]
+  cursor?: Prisma.ApprovalRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApprovalRequestScalarFieldEnum | Prisma.ApprovalRequestScalarFieldEnum[]
 }
 
 /**

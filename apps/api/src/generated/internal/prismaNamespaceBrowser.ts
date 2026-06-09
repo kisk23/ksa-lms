@@ -75,7 +75,8 @@ export const ModelName = {
   PromoCodeUsage: 'PromoCodeUsage',
   Payment: 'Payment',
   PaymentWebhookEvent: 'PaymentWebhookEvent',
-  Refund: 'Refund'
+  Refund: 'Refund',
+  ApprovalRequest: 'ApprovalRequest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -470,6 +471,21 @@ export const RefundScalarFieldEnum = {
 } as const
 
 export type RefundScalarFieldEnum = (typeof RefundScalarFieldEnum)[keyof typeof RefundScalarFieldEnum]
+
+
+export const ApprovalRequestScalarFieldEnum = {
+  id: 'id',
+  requestType: 'requestType',
+  status: 'status',
+  courseId: 'courseId',
+  lessonId: 'lessonId',
+  requestedBy: 'requestedBy',
+  reviewedBy: 'reviewedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ApprovalRequestScalarFieldEnum = (typeof ApprovalRequestScalarFieldEnum)[keyof typeof ApprovalRequestScalarFieldEnum]
 
 
 export const SortOrder = {

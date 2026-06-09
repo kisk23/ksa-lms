@@ -166,3 +166,8 @@ export type PaymentWebhookEvent = Prisma.PaymentWebhookEventModel
  * 
  */
 export type Refund = Prisma.RefundModel
+/**
+ * Model ApprovalRequest
+ * 
+ */
+export type ApprovalRequest = Prisma.ApprovalRequestModel

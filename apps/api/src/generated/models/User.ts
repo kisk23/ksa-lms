@@ -272,6 +272,8 @@ export type UserWhereInput = {
   refundsRequested?: Prisma.RefundListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   createdPromoCodes?: Prisma.PromoCodeListRelationFilter
+  approvalRequestsInitiated?: Prisma.ApprovalRequestListRelationFilter
+  approvalRequestsReviewed?: Prisma.ApprovalRequestListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -314,6 +316,8 @@ export type UserOrderByWithRelationInput = {
   refundsRequested?: Prisma.RefundOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   createdPromoCodes?: Prisma.PromoCodeOrderByRelationAggregateInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestOrderByRelationAggregateInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -359,6 +363,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   refundsRequested?: Prisma.RefundListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   createdPromoCodes?: Prisma.PromoCodeListRelationFilter
+  approvalRequestsInitiated?: Prisma.ApprovalRequestListRelationFilter
+  approvalRequestsReviewed?: Prisma.ApprovalRequestListRelationFilter
 }, "id" | "identity" | "email" | "phone">
 
 export type UserOrderByWithAggregationInput = {
@@ -439,6 +445,8 @@ export type UserCreateInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -481,6 +489,8 @@ export type UserUncheckedCreateInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUpdateInput = {
@@ -523,6 +533,8 @@ export type UserUpdateInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -565,6 +577,8 @@ export type UserUncheckedUpdateInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -1067,6 +1081,36 @@ export type UserUpdateOneRequiredWithoutRefundsRequestedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefundsRequestedInput, Prisma.UserUpdateWithoutRefundsRequestedInput>, Prisma.UserUncheckedUpdateWithoutRefundsRequestedInput>
 }
 
+export type UserCreateNestedOneWithoutApprovalRequestsInitiatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsInitiatedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsInitiatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovalRequestsInitiatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutApprovalRequestsReviewedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsReviewedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsReviewedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovalRequestsReviewedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutApprovalRequestsInitiatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsInitiatedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsInitiatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovalRequestsInitiatedInput
+  upsert?: Prisma.UserUpsertWithoutApprovalRequestsInitiatedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovalRequestsInitiatedInput, Prisma.UserUpdateWithoutApprovalRequestsInitiatedInput>, Prisma.UserUncheckedUpdateWithoutApprovalRequestsInitiatedInput>
+}
+
+export type UserUpdateOneWithoutApprovalRequestsReviewedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsReviewedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsReviewedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovalRequestsReviewedInput
+  upsert?: Prisma.UserUpsertWithoutApprovalRequestsReviewedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovalRequestsReviewedInput, Prisma.UserUpdateWithoutApprovalRequestsReviewedInput>, Prisma.UserUncheckedUpdateWithoutApprovalRequestsReviewedInput>
+}
+
 export type UserCreateWithoutOtpVerificationsInput = {
   id?: string
   name: string
@@ -1106,6 +1150,8 @@ export type UserCreateWithoutOtpVerificationsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutOtpVerificationsInput = {
@@ -1147,6 +1193,8 @@ export type UserUncheckedCreateWithoutOtpVerificationsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutOtpVerificationsInput = {
@@ -1204,6 +1252,8 @@ export type UserUpdateWithoutOtpVerificationsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOtpVerificationsInput = {
@@ -1245,6 +1295,8 @@ export type UserUncheckedUpdateWithoutOtpVerificationsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutRefreshTokensInput = {
@@ -1286,6 +1338,8 @@ export type UserCreateWithoutRefreshTokensInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -1327,6 +1381,8 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -1384,6 +1440,8 @@ export type UserUpdateWithoutRefreshTokensInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -1425,6 +1483,8 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutAssistantPermissionsInput = {
@@ -1466,6 +1526,8 @@ export type UserCreateWithoutAssistantPermissionsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutAssistantPermissionsInput = {
@@ -1507,6 +1569,8 @@ export type UserUncheckedCreateWithoutAssistantPermissionsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutAssistantPermissionsInput = {
@@ -1553,6 +1617,8 @@ export type UserCreateWithoutGrantedPermissionsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutGrantedPermissionsInput = {
@@ -1594,6 +1660,8 @@ export type UserUncheckedCreateWithoutGrantedPermissionsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutGrantedPermissionsInput = {
@@ -1651,6 +1719,8 @@ export type UserUpdateWithoutAssistantPermissionsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssistantPermissionsInput = {
@@ -1692,6 +1762,8 @@ export type UserUncheckedUpdateWithoutAssistantPermissionsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUpsertWithoutGrantedPermissionsInput = {
@@ -1744,6 +1816,8 @@ export type UserUpdateWithoutGrantedPermissionsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGrantedPermissionsInput = {
@@ -1785,6 +1859,8 @@ export type UserUncheckedUpdateWithoutGrantedPermissionsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutParentLinksInput = {
@@ -1826,6 +1902,8 @@ export type UserCreateWithoutParentLinksInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutParentLinksInput = {
@@ -1867,6 +1945,8 @@ export type UserUncheckedCreateWithoutParentLinksInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutParentLinksInput = {
@@ -1913,6 +1993,8 @@ export type UserCreateWithoutChildLinksInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutChildLinksInput = {
@@ -1954,6 +2036,8 @@ export type UserUncheckedCreateWithoutChildLinksInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutChildLinksInput = {
@@ -2011,6 +2095,8 @@ export type UserUpdateWithoutParentLinksInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutParentLinksInput = {
@@ -2052,6 +2138,8 @@ export type UserUncheckedUpdateWithoutParentLinksInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUpsertWithoutChildLinksInput = {
@@ -2104,6 +2192,8 @@ export type UserUpdateWithoutChildLinksInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChildLinksInput = {
@@ -2145,6 +2235,8 @@ export type UserUncheckedUpdateWithoutChildLinksInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutTaughtCoursesInput = {
@@ -2186,6 +2278,8 @@ export type UserCreateWithoutTaughtCoursesInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutTaughtCoursesInput = {
@@ -2227,6 +2321,8 @@ export type UserUncheckedCreateWithoutTaughtCoursesInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutTaughtCoursesInput = {
@@ -2273,6 +2369,8 @@ export type UserCreateWithoutPublishedCoursesInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutPublishedCoursesInput = {
@@ -2314,6 +2412,8 @@ export type UserUncheckedCreateWithoutPublishedCoursesInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutPublishedCoursesInput = {
@@ -2360,6 +2460,8 @@ export type UserCreateWithoutArchivedCoursesInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutArchivedCoursesInput = {
@@ -2401,6 +2503,8 @@ export type UserUncheckedCreateWithoutArchivedCoursesInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutArchivedCoursesInput = {
@@ -2458,6 +2562,8 @@ export type UserUpdateWithoutTaughtCoursesInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTaughtCoursesInput = {
@@ -2499,6 +2605,8 @@ export type UserUncheckedUpdateWithoutTaughtCoursesInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUpsertWithoutPublishedCoursesInput = {
@@ -2551,6 +2659,8 @@ export type UserUpdateWithoutPublishedCoursesInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPublishedCoursesInput = {
@@ -2592,6 +2702,8 @@ export type UserUncheckedUpdateWithoutPublishedCoursesInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUpsertWithoutArchivedCoursesInput = {
@@ -2644,6 +2756,8 @@ export type UserUpdateWithoutArchivedCoursesInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutArchivedCoursesInput = {
@@ -2685,6 +2799,8 @@ export type UserUncheckedUpdateWithoutArchivedCoursesInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutCourseAuditLogsInput = {
@@ -2726,6 +2842,8 @@ export type UserCreateWithoutCourseAuditLogsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutCourseAuditLogsInput = {
@@ -2767,6 +2885,8 @@ export type UserUncheckedCreateWithoutCourseAuditLogsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutCourseAuditLogsInput = {
@@ -2824,6 +2944,8 @@ export type UserUpdateWithoutCourseAuditLogsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCourseAuditLogsInput = {
@@ -2865,6 +2987,8 @@ export type UserUncheckedUpdateWithoutCourseAuditLogsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutCourseProgressesInput = {
@@ -2906,6 +3030,8 @@ export type UserCreateWithoutCourseProgressesInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutCourseProgressesInput = {
@@ -2947,6 +3073,8 @@ export type UserUncheckedCreateWithoutCourseProgressesInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutCourseProgressesInput = {
@@ -3004,6 +3132,8 @@ export type UserUpdateWithoutCourseProgressesInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCourseProgressesInput = {
@@ -3045,6 +3175,8 @@ export type UserUncheckedUpdateWithoutCourseProgressesInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutArchivedAssignmentsInput = {
@@ -3086,6 +3218,8 @@ export type UserCreateWithoutArchivedAssignmentsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutArchivedAssignmentsInput = {
@@ -3127,6 +3261,8 @@ export type UserUncheckedCreateWithoutArchivedAssignmentsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutArchivedAssignmentsInput = {
@@ -3184,6 +3320,8 @@ export type UserUpdateWithoutArchivedAssignmentsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutArchivedAssignmentsInput = {
@@ -3225,6 +3363,8 @@ export type UserUncheckedUpdateWithoutArchivedAssignmentsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutEnrolledByMeInput = {
@@ -3266,6 +3406,8 @@ export type UserCreateWithoutEnrolledByMeInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutEnrolledByMeInput = {
@@ -3307,6 +3449,8 @@ export type UserUncheckedCreateWithoutEnrolledByMeInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutEnrolledByMeInput = {
@@ -3353,6 +3497,8 @@ export type UserCreateWithoutEnrollmentsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -3394,6 +3540,8 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -3451,6 +3599,8 @@ export type UserUpdateWithoutEnrolledByMeInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrolledByMeInput = {
@@ -3492,6 +3642,8 @@ export type UserUncheckedUpdateWithoutEnrolledByMeInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUpsertWithoutEnrollmentsInput = {
@@ -3544,6 +3696,8 @@ export type UserUpdateWithoutEnrollmentsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -3585,6 +3739,8 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutLessonProgressInput = {
@@ -3626,6 +3782,8 @@ export type UserCreateWithoutLessonProgressInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutLessonProgressInput = {
@@ -3667,6 +3825,8 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutLessonProgressInput = {
@@ -3724,6 +3884,8 @@ export type UserUpdateWithoutLessonProgressInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLessonProgressInput = {
@@ -3765,6 +3927,8 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutAssignmentAttemptsInput = {
@@ -3806,6 +3970,8 @@ export type UserCreateWithoutAssignmentAttemptsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutAssignmentAttemptsInput = {
@@ -3847,6 +4013,8 @@ export type UserUncheckedCreateWithoutAssignmentAttemptsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutAssignmentAttemptsInput = {
@@ -3904,6 +4072,8 @@ export type UserUpdateWithoutAssignmentAttemptsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignmentAttemptsInput = {
@@ -3945,6 +4115,8 @@ export type UserUncheckedUpdateWithoutAssignmentAttemptsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutAssignmentBestScoresInput = {
@@ -3986,6 +4158,8 @@ export type UserCreateWithoutAssignmentBestScoresInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutAssignmentBestScoresInput = {
@@ -4027,6 +4201,8 @@ export type UserUncheckedCreateWithoutAssignmentBestScoresInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutAssignmentBestScoresInput = {
@@ -4084,6 +4260,8 @@ export type UserUpdateWithoutAssignmentBestScoresInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignmentBestScoresInput = {
@@ -4125,6 +4303,8 @@ export type UserUncheckedUpdateWithoutAssignmentBestScoresInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutCreatedSessionsInput = {
@@ -4166,6 +4346,8 @@ export type UserCreateWithoutCreatedSessionsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -4207,6 +4389,8 @@ export type UserUncheckedCreateWithoutCreatedSessionsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -4253,6 +4437,8 @@ export type UserCreateWithoutCancelledSessionsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutCancelledSessionsInput = {
@@ -4294,6 +4480,8 @@ export type UserUncheckedCreateWithoutCancelledSessionsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutCancelledSessionsInput = {
@@ -4351,6 +4539,8 @@ export type UserUpdateWithoutCreatedSessionsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -4392,6 +4582,8 @@ export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUpsertWithoutCancelledSessionsInput = {
@@ -4444,6 +4636,8 @@ export type UserUpdateWithoutCancelledSessionsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCancelledSessionsInput = {
@@ -4485,6 +4679,8 @@ export type UserUncheckedUpdateWithoutCancelledSessionsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutSessionNotificationsInput = {
@@ -4526,6 +4722,8 @@ export type UserCreateWithoutSessionNotificationsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutSessionNotificationsInput = {
@@ -4567,6 +4765,8 @@ export type UserUncheckedCreateWithoutSessionNotificationsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutSessionNotificationsInput = {
@@ -4624,6 +4824,8 @@ export type UserUpdateWithoutSessionNotificationsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionNotificationsInput = {
@@ -4665,6 +4867,8 @@ export type UserUncheckedUpdateWithoutSessionNotificationsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -4706,6 +4910,8 @@ export type UserCreateWithoutNotificationsInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -4747,6 +4953,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -4804,6 +5012,8 @@ export type UserUpdateWithoutNotificationsInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -4845,6 +5055,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutCreatedPromoCodesInput = {
@@ -4886,6 +5098,8 @@ export type UserCreateWithoutCreatedPromoCodesInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutCreatedPromoCodesInput = {
@@ -4927,6 +5141,8 @@ export type UserUncheckedCreateWithoutCreatedPromoCodesInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutCreatedPromoCodesInput = {
@@ -4984,6 +5200,8 @@ export type UserUpdateWithoutCreatedPromoCodesInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedPromoCodesInput = {
@@ -5025,6 +5243,8 @@ export type UserUncheckedUpdateWithoutCreatedPromoCodesInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutPromoCodeUsagesInput = {
@@ -5066,6 +5286,8 @@ export type UserCreateWithoutPromoCodeUsagesInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutPromoCodeUsagesInput = {
@@ -5107,6 +5329,8 @@ export type UserUncheckedCreateWithoutPromoCodeUsagesInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutPromoCodeUsagesInput = {
@@ -5164,6 +5388,8 @@ export type UserUpdateWithoutPromoCodeUsagesInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPromoCodeUsagesInput = {
@@ -5205,6 +5431,8 @@ export type UserUncheckedUpdateWithoutPromoCodeUsagesInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutPaidPaymentsInput = {
@@ -5246,6 +5474,8 @@ export type UserCreateWithoutPaidPaymentsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutPaidPaymentsInput = {
@@ -5287,6 +5517,8 @@ export type UserUncheckedCreateWithoutPaidPaymentsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutPaidPaymentsInput = {
@@ -5333,6 +5565,8 @@ export type UserCreateWithoutStudentPaymentsInput = {
   refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutStudentPaymentsInput = {
@@ -5374,6 +5608,8 @@ export type UserUncheckedCreateWithoutStudentPaymentsInput = {
   refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutStudentPaymentsInput = {
@@ -5431,6 +5667,8 @@ export type UserUpdateWithoutPaidPaymentsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaidPaymentsInput = {
@@ -5472,6 +5710,8 @@ export type UserUncheckedUpdateWithoutPaidPaymentsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUpsertWithoutStudentPaymentsInput = {
@@ -5524,6 +5764,8 @@ export type UserUpdateWithoutStudentPaymentsInput = {
   refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudentPaymentsInput = {
@@ -5565,6 +5807,8 @@ export type UserUncheckedUpdateWithoutStudentPaymentsInput = {
   refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserCreateWithoutRefundsRequestedInput = {
@@ -5606,6 +5850,8 @@ export type UserCreateWithoutRefundsRequestedInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
 }
 
 export type UserUncheckedCreateWithoutRefundsRequestedInput = {
@@ -5647,6 +5893,8 @@ export type UserUncheckedCreateWithoutRefundsRequestedInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type UserCreateOrConnectWithoutRefundsRequestedInput = {
@@ -5704,6 +5952,8 @@ export type UserUpdateWithoutRefundsRequestedInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefundsRequestedInput = {
@@ -5745,6 +5995,384 @@ export type UserUncheckedUpdateWithoutRefundsRequestedInput = {
   promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
+}
+
+export type UserCreateWithoutApprovalRequestsInitiatedInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestCreateNestedManyWithoutReviewerInput
+}
+
+export type UserUncheckedCreateWithoutApprovalRequestsInitiatedInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutReviewerInput
+}
+
+export type UserCreateOrConnectWithoutApprovalRequestsInitiatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsInitiatedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsInitiatedInput>
+}
+
+export type UserCreateWithoutApprovalRequestsReviewedInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentCreateNestedManyWithoutArchivedByUserInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestCreateNestedManyWithoutRequesterInput
+}
+
+export type UserUncheckedCreateWithoutApprovalRequestsReviewedInput = {
+  id?: string
+  name: string
+  identity: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  role: $Enums.UserRole
+  isVerified?: boolean
+  isActive?: boolean
+  guardianPhone?: string | null
+  guardianIdentity?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutStudentInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedCreateNestedManyWithoutStudentInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedCreateNestedManyWithoutStudentInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutAssistantInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedCreateNestedManyWithoutGranterInput
+  taughtCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutTeacherInput
+  publishedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutPublishedByUserInput
+  archivedCourses?: Prisma.CourseUncheckedCreateNestedManyWithoutArchivedByUserInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedCreateNestedManyWithoutActorInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  archivedAssignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutArchivedByUserInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedCreateNestedManyWithoutUserInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutParentInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedCreateNestedManyWithoutStudentInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutTeacherInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedCreateNestedManyWithoutCancelledByUserInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedCreateNestedManyWithoutRecipientInput
+  paidPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPayerInput
+  studentPayments?: Prisma.PaymentUncheckedCreateNestedManyWithoutStudentInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedCreateNestedManyWithoutStudentInput
+  refundsRequested?: Prisma.RefundUncheckedCreateNestedManyWithoutRequestedByUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutCreatorInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequesterInput
+}
+
+export type UserCreateOrConnectWithoutApprovalRequestsReviewedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsReviewedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsReviewedInput>
+}
+
+export type UserUpsertWithoutApprovalRequestsInitiatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovalRequestsInitiatedInput, Prisma.UserUncheckedUpdateWithoutApprovalRequestsInitiatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsInitiatedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsInitiatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovalRequestsInitiatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovalRequestsInitiatedInput, Prisma.UserUncheckedUpdateWithoutApprovalRequestsInitiatedInput>
+}
+
+export type UserUpdateWithoutApprovalRequestsInitiatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUpdateManyWithoutReviewerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovalRequestsInitiatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUncheckedUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsReviewed?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutReviewerNestedInput
+}
+
+export type UserUpsertWithoutApprovalRequestsReviewedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovalRequestsReviewedInput, Prisma.UserUncheckedUpdateWithoutApprovalRequestsReviewedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsReviewedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsReviewedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovalRequestsReviewedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovalRequestsReviewedInput, Prisma.UserUncheckedUpdateWithoutApprovalRequestsReviewedInput>
+}
+
+export type UserUpdateWithoutApprovalRequestsReviewedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUpdateManyWithoutArchivedByUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUpdateManyWithoutRequesterNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovalRequestsReviewedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  identity?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guardianPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guardianIdentity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseProgresses?: Prisma.CourseProgressUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentAttempts?: Prisma.AssignmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
+  assignmentBestScores?: Prisma.AssignmentBestScoreUncheckedUpdateManyWithoutStudentNestedInput
+  assistantPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutAssistantNestedInput
+  grantedPermissions?: Prisma.AssistantPermissionUncheckedUpdateManyWithoutGranterNestedInput
+  taughtCourses?: Prisma.CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  publishedCourses?: Prisma.CourseUncheckedUpdateManyWithoutPublishedByUserNestedInput
+  archivedCourses?: Prisma.CourseUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  courseAuditLogs?: Prisma.CourseAuditLogUncheckedUpdateManyWithoutActorNestedInput
+  enrolledByMe?: Prisma.EnrollmentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  archivedAssignments?: Prisma.AssignmentUncheckedUpdateManyWithoutArchivedByUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+  otpVerifications?: Prisma.OtpVerificationUncheckedUpdateManyWithoutUserNestedInput
+  parentLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutParentNestedInput
+  childLinks?: Prisma.ParentStudentLinkUncheckedUpdateManyWithoutStudentNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutTeacherNestedInput
+  cancelledSessions?: Prisma.LiveSessionUncheckedUpdateManyWithoutCancelledByUserNestedInput
+  sessionNotifications?: Prisma.LiveSessionNotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  paidPayments?: Prisma.PaymentUncheckedUpdateManyWithoutPayerNestedInput
+  studentPayments?: Prisma.PaymentUncheckedUpdateManyWithoutStudentNestedInput
+  promoCodeUsages?: Prisma.PromoCodeUsageUncheckedUpdateManyWithoutStudentNestedInput
+  refundsRequested?: Prisma.RefundUncheckedUpdateManyWithoutRequestedByUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  createdPromoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutCreatorNestedInput
+  approvalRequestsInitiated?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequesterNestedInput
 }
 
 
@@ -5779,6 +6407,8 @@ export type UserCountOutputType = {
   refundsRequested: number
   notifications: number
   createdPromoCodes: number
+  approvalRequestsInitiated: number
+  approvalRequestsReviewed: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5808,6 +6438,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   refundsRequested?: boolean | UserCountOutputTypeCountRefundsRequestedArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   createdPromoCodes?: boolean | UserCountOutputTypeCountCreatedPromoCodesArgs
+  approvalRequestsInitiated?: boolean | UserCountOutputTypeCountApprovalRequestsInitiatedArgs
+  approvalRequestsReviewed?: boolean | UserCountOutputTypeCountApprovalRequestsReviewedArgs
 }
 
 /**
@@ -6002,6 +6634,20 @@ export type UserCountOutputTypeCountCreatedPromoCodesArgs<ExtArgs extends runtim
   where?: Prisma.PromoCodeWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovalRequestsInitiatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApprovalRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovalRequestsReviewedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApprovalRequestWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -6043,6 +6689,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   refundsRequested?: boolean | Prisma.User$refundsRequestedArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   createdPromoCodes?: boolean | Prisma.User$createdPromoCodesArgs<ExtArgs>
+  approvalRequestsInitiated?: boolean | Prisma.User$approvalRequestsInitiatedArgs<ExtArgs>
+  approvalRequestsReviewed?: boolean | Prisma.User$approvalRequestsReviewedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -6122,6 +6770,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   refundsRequested?: boolean | Prisma.User$refundsRequestedArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   createdPromoCodes?: boolean | Prisma.User$createdPromoCodesArgs<ExtArgs>
+  approvalRequestsInitiated?: boolean | Prisma.User$approvalRequestsInitiatedArgs<ExtArgs>
+  approvalRequestsReviewed?: boolean | Prisma.User$approvalRequestsReviewedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -6156,6 +6806,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     refundsRequested: Prisma.$RefundPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     createdPromoCodes: Prisma.$PromoCodePayload<ExtArgs>[]
+    approvalRequestsInitiated: Prisma.$ApprovalRequestPayload<ExtArgs>[]
+    approvalRequestsReviewed: Prisma.$ApprovalRequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -6591,6 +7243,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   refundsRequested<T extends Prisma.User$refundsRequestedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refundsRequestedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdPromoCodes<T extends Prisma.User$createdPromoCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdPromoCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromoCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvalRequestsInitiated<T extends Prisma.User$approvalRequestsInitiatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvalRequestsInitiatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApprovalRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvalRequestsReviewed<T extends Prisma.User$approvalRequestsReviewedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvalRequestsReviewedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApprovalRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7647,6 +8301,54 @@ export type User$createdPromoCodesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.PromoCodeScalarFieldEnum | Prisma.PromoCodeScalarFieldEnum[]
+}
+
+/**
+ * User.approvalRequestsInitiated
+ */
+export type User$approvalRequestsInitiatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApprovalRequest
+   */
+  select?: Prisma.ApprovalRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApprovalRequest
+   */
+  omit?: Prisma.ApprovalRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApprovalRequestInclude<ExtArgs> | null
+  where?: Prisma.ApprovalRequestWhereInput
+  orderBy?: Prisma.ApprovalRequestOrderByWithRelationInput | Prisma.ApprovalRequestOrderByWithRelationInput[]
+  cursor?: Prisma.ApprovalRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApprovalRequestScalarFieldEnum | Prisma.ApprovalRequestScalarFieldEnum[]
+}
+
+/**
+ * User.approvalRequestsReviewed
+ */
+export type User$approvalRequestsReviewedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApprovalRequest
+   */
+  select?: Prisma.ApprovalRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApprovalRequest
+   */
+  omit?: Prisma.ApprovalRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApprovalRequestInclude<ExtArgs> | null
+  where?: Prisma.ApprovalRequestWhereInput
+  orderBy?: Prisma.ApprovalRequestOrderByWithRelationInput | Prisma.ApprovalRequestOrderByWithRelationInput[]
+  cursor?: Prisma.ApprovalRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApprovalRequestScalarFieldEnum | Prisma.ApprovalRequestScalarFieldEnum[]
 }
 
 /**

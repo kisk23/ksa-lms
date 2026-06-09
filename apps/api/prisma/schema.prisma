@@ -8,49 +8,51 @@ datasource db {
 }
 
 model User {
-  id                   String                @id @default(uuid()) @db.Uuid
-  name                 String                @db.VarChar(255)
-  identity             String                @unique @db.VarChar(255)
-  email                String               @unique @db.VarChar(255)
-  phone                String?               @unique @db.VarChar(20)
-  passwordHash         String                @map("password_hash")
-  role                 UserRole
-  isVerified           Boolean               @default(false) @map("is_verified")
-  isActive             Boolean               @default(true) @map("is_active")
-  guardianPhone        String?               @map("guardian_phone") @db.VarChar(20)
-  guardianIdentity      String?               @map("guardian_identity") @db.VarChar(20)
-  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
-  courseProgresses     CourseProgress[]
-  assignmentAttempts   AssignmentAttempt[]
-  assignmentBestScores AssignmentBestScore[]
-  assistantPermissions AssistantPermission[] @relation("AssistantPerms")
-  grantedPermissions   AssistantPermission[] @relation("GrantedByPerms")
-  taughtCourses        Course[]              @relation("TeacherCourses")
-  publishedCourses     Course[]              @relation("CoursePublisher")
-  archivedCourses      Course[]              @relation("CourseArchiver")
-  courseAuditLogs      CourseAuditLog[]
-  enrolledByMe         Enrollment[]          @relation("EnrolledByUser")
-  enrollments          Enrollment[]          @relation("StudentEnrollments")
-  archivedAssignments  Assignment[]          @relation("AssignmentArchiver")
-  lessonProgress       LessonProgress[]
-  otpVerifications     OtpVerification[]
-  parentLinks          ParentStudentLink[]   @relation("ParentSide")
-  childLinks           ParentStudentLink[]   @relation("StudentSide")
-  refreshTokens        RefreshToken[]
-  createdSessions      LiveSession[]         @relation("CreatedSessions")
-  cancelledSessions    LiveSession[]         @relation("CancelledSessions")
-  sessionNotifications LiveSessionNotification[]
+  id                        String                    @id @default(uuid()) @db.Uuid
+  name                      String                    @db.VarChar(255)
+  identity                  String                    @unique @db.VarChar(255)
+  email                     String                    @unique @db.VarChar(255)
+  phone                     String?                   @unique @db.VarChar(20)
+  passwordHash              String                    @map("password_hash")
+  role                      UserRole
+  isVerified                Boolean                   @default(false) @map("is_verified")
+  isActive                  Boolean                   @default(true) @map("is_active")
+  guardianPhone             String?                   @map("guardian_phone") @db.VarChar(20)
+  guardianIdentity          String?                   @map("guardian_identity") @db.VarChar(20)
+  createdAt                 DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime                  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  courseProgresses          CourseProgress[]
+  assignmentAttempts        AssignmentAttempt[]
+  assignmentBestScores      AssignmentBestScore[]
+  assistantPermissions      AssistantPermission[]     @relation("AssistantPerms")
+  grantedPermissions        AssistantPermission[]     @relation("GrantedByPerms")
+  taughtCourses             Course[]                  @relation("TeacherCourses")
+  publishedCourses          Course[]                  @relation("CoursePublisher")
+  archivedCourses           Course[]                  @relation("CourseArchiver")
+  courseAuditLogs           CourseAuditLog[]
+  enrolledByMe              Enrollment[]              @relation("EnrolledByUser")
+  enrollments               Enrollment[]              @relation("StudentEnrollments")
+  archivedAssignments       Assignment[]              @relation("AssignmentArchiver")
+  lessonProgress            LessonProgress[]
+  otpVerifications          OtpVerification[]
+  parentLinks               ParentStudentLink[]       @relation("ParentSide")
+  childLinks                ParentStudentLink[]       @relation("StudentSide")
+  refreshTokens             RefreshToken[]
+  createdSessions           LiveSession[]             @relation("CreatedSessions")
+  cancelledSessions         LiveSession[]             @relation("CancelledSessions")
+  sessionNotifications      LiveSessionNotification[]
   // Payment relations
-  paidPayments         Payment[]             @relation("PaymentPayer")
-  studentPayments      Payment[]             @relation("PaymentStudent")
+  paidPayments              Payment[]                 @relation("PaymentPayer")
+  studentPayments           Payment[]                 @relation("PaymentStudent")
   // promoCodeUsages = codes this user benefited from (as student)
-  promoCodeUsages      PromoCodeUsage[]      @relation("PromoStudent")
-  refundsRequested     Refund[]              @relation("RefundRequester")
+  promoCodeUsages           PromoCodeUsage[]          @relation("PromoStudent")
+  refundsRequested          Refund[]                  @relation("RefundRequester")
   // Generic notification inbox (payment confirmations, refunds, etc.)
-  notifications        Notification[]
+  notifications             Notification[]
   // Promo codes this admin/assistant created — used for audit and accountability
-  createdPromoCodes    PromoCode[]           @relation("PromoCodeCreator")
+  createdPromoCodes         PromoCode[]               @relation("PromoCodeCreator")
+  approvalRequestsInitiated ApprovalRequest[]         @relation("RequestInitiator")
+  approvalRequestsReviewed  ApprovalRequest[]         @relation("RequestReviewer")
 
   @@index([role])
   @@map("users")
@@ -112,37 +114,38 @@ model ParentStudentLink {
 }
 
 model Course {
-  id               String           @id @default(uuid()) @db.Uuid
-  slug             String           @unique @db.VarChar(255)
-  teacherUserId    String           @map("teacher_user_id") @db.Uuid
-  title            String           @db.VarChar(255)
-  category         String?
-  description      String?
-  thumbnailUrl     String?          @map("thumbnail_url")
-  promoVideoUrl    String?          @map("promo_video_url")
-  promoVideoProvider VideoProvider? @map("promo_video_provider")
-  price            Decimal          @db.Decimal(10, 2)
+  id                 String            @id @default(uuid()) @db.Uuid
+  slug               String            @unique @db.VarChar(255)
+  teacherUserId      String            @map("teacher_user_id") @db.Uuid
+  title              String            @db.VarChar(255)
+  category           String?
+  description        String?
+  thumbnailUrl       String?           @map("thumbnail_url")
+  promoVideoUrl      String?           @map("promo_video_url")
+  promoVideoProvider VideoProvider?    @map("promo_video_provider")
+  price              Decimal           @db.Decimal(10, 2)
   // SAR is the actual charge currency (Moyasar only supports SAR).
   // To show international users an equivalent in their currency, use a live
   // exchange rate API at display time.
-  currency         String           @default("SAR") @db.VarChar(3)
-  status           CourseStatus     @default(DRAFT)        
-  publishedAt      DateTime?        @map("published_at") @db.Timestamptz(6)
-  publishedBy      String?          @map("published_by") @db.Uuid        
-  archivedAt       DateTime?        @map("archived_at") @db.Timestamptz(6) 
-  archivedBy       String?          @map("archived_by") @db.Uuid          
-  createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
-  teacher          User             @relation("TeacherCourses", fields: [teacherUserId], references: [id])
-  publishedByUser  User?            @relation("CoursePublisher", fields: [publishedBy], references: [id])
-  archivedByUser   User?            @relation("CourseArchiver", fields: [archivedBy], references: [id])
-  courseProgresses CourseProgress[]
-  chapters         Chapter[]
-  auditLogs        CourseAuditLog[]
-  enrollments      Enrollment[]
-  liveSessions     LiveSession[]
-  payments         Payment[]
-  promoCodes       PromoCode[]
+  currency           String            @default("SAR") @db.VarChar(3)
+  status             CourseStatus      @default(DRAFT)
+  publishedAt        DateTime?         @map("published_at") @db.Timestamptz(6)
+  publishedBy        String?           @map("published_by") @db.Uuid
+  archivedAt         DateTime?         @map("archived_at") @db.Timestamptz(6)
+  archivedBy         String?           @map("archived_by") @db.Uuid
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  teacher            User              @relation("TeacherCourses", fields: [teacherUserId], references: [id])
+  publishedByUser    User?             @relation("CoursePublisher", fields: [publishedBy], references: [id])
+  archivedByUser     User?             @relation("CourseArchiver", fields: [archivedBy], references: [id])
+  courseProgresses   CourseProgress[]
+  chapters           Chapter[]
+  auditLogs          CourseAuditLog[]
+  enrollments        Enrollment[]
+  liveSessions       LiveSession[]
+  payments           Payment[]
+  promoCodes         PromoCode[]
+  approvalRequests   ApprovalRequest[]
 
   @@index([teacherUserId])
   @@index([category])
@@ -151,15 +154,15 @@ model Course {
 }
 
 model CourseAuditLog {
-  id              String             @id @default(uuid()) @db.Uuid
-  courseId        String             @map("course_id") @db.Uuid
-  action          CourseAuditAction  @map("action")
-  performedBy     String             @map("performed_by") @db.Uuid
-  performedAt     DateTime           @default(now()) @map("performed_at") @db.Timestamptz(6)
-  metadata        Json?              // snapshot of what changed
+  id          String            @id @default(uuid()) @db.Uuid
+  courseId    String            @map("course_id") @db.Uuid
+  action      CourseAuditAction @map("action")
+  performedBy String            @map("performed_by") @db.Uuid
+  performedAt DateTime          @default(now()) @map("performed_at") @db.Timestamptz(6)
+  metadata    Json? // snapshot of what changed
 
-  course     Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  actor      User   @relation(fields: [performedBy], references: [id])
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  actor  User   @relation(fields: [performedBy], references: [id])
 
   @@index([courseId])
   @@index([performedBy])
@@ -191,7 +194,7 @@ model Chapter {
   orderIndex Int       @map("order_index")
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  archivedAt  DateTime? @map("archived_at") @db.Timestamptz(6)
+  archivedAt DateTime? @map("archived_at") @db.Timestamptz(6)
   course     Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons    Lesson[]
 
@@ -200,20 +203,21 @@ model Chapter {
 }
 
 model Lesson {
-  id             String           @id @default(uuid()) @db.Uuid
-  chapterId      String           @map("chapter_id") @db.Uuid
-  title          String           @db.VarChar(255)
-  orderIndex     Int              @map("order_index")
-  videoUrl       String           @default("") @map("video_url")
-  videoProvider  VideoProvider    @default(YOUTUBE) @map("video_provider")
-  version        Int              @default(1)
-  archivedAt     DateTime?        @map("archived_at") @db.Timestamptz(6)
-  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
-  assignment     Assignment?
-  lessonProgress LessonProgress[]
-  progressBookmarks CourseProgress[] @relation("LastLessonBookmark")
-  chapter        Chapter          @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  id                String            @id @default(uuid()) @db.Uuid
+  chapterId         String            @map("chapter_id") @db.Uuid
+  title             String            @db.VarChar(255)
+  orderIndex        Int               @map("order_index")
+  videoUrl          String            @default("") @map("video_url")
+  videoProvider     VideoProvider     @default(YOUTUBE) @map("video_provider")
+  version           Int               @default(1)
+  archivedAt        DateTime?         @map("archived_at") @db.Timestamptz(6)
+  createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  assignment        Assignment?
+  lessonProgress    LessonProgress[]
+  progressBookmarks CourseProgress[]  @relation("LastLessonBookmark")
+  chapter           Chapter           @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  approvalRequests  ApprovalRequest[]
 
   @@unique([chapterId, orderIndex])
   @@index([archivedAt])
@@ -307,16 +311,16 @@ model LessonProgress {
 }
 
 model AssignmentAttempt {
-  id            String     @id @default(uuid()) @db.Uuid
-  studentUserId String     @map("student_user_id") @db.Uuid
-  assignmentId  String     @map("assignment_id") @db.Uuid
-  attemptNumber Int        @map("attempt_number")
-  scorePct      Int        @map("score_pct") @db.SmallInt
-  isPassed      Boolean    @map("is_passed")
-  submittedAt   DateTime   @default(now()) @map("submitted_at") @db.Timestamptz(6)
-  snapshot      Json?      // Frozen copy of questions/options at submission time
-  assignment    Assignment @relation(fields: [assignmentId], references: [id])
-  student       User       @relation(fields: [studentUserId], references: [id])
+  id            String                @id @default(uuid()) @db.Uuid
+  studentUserId String                @map("student_user_id") @db.Uuid
+  assignmentId  String                @map("assignment_id") @db.Uuid
+  attemptNumber Int                   @map("attempt_number")
+  scorePct      Int                   @map("score_pct") @db.SmallInt
+  isPassed      Boolean               @map("is_passed")
+  submittedAt   DateTime              @default(now()) @map("submitted_at") @db.Timestamptz(6)
+  snapshot      Json? // Frozen copy of questions/options at submission time
+  assignment    Assignment            @relation(fields: [assignmentId], references: [id])
+  student       User                  @relation(fields: [studentUserId], references: [id])
   bestScores    AssignmentBestScore[] @relation("BestAttemptLink")
 
   // Unique per student+assignment+attempt — prevents race-condition duplicate attempt numbers
@@ -328,15 +332,15 @@ model AssignmentAttempt {
 }
 
 model AssignmentBestScore {
-  id            String     @id @default(uuid()) @db.Uuid
-  studentUserId String     @map("student_user_id") @db.Uuid
-  assignmentId  String     @map("assignment_id") @db.Uuid
-  bestScorePct  Int        @map("best_score_pct") @db.SmallInt
-  bestAttemptId String     @map("best_attempt_id") @db.Uuid
-  isPassed      Boolean    @map("is_passed")
-  updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
-  assignment    Assignment @relation(fields: [assignmentId], references: [id])
-  student       User       @relation(fields: [studentUserId], references: [id])
+  id            String             @id @default(uuid()) @db.Uuid
+  studentUserId String             @map("student_user_id") @db.Uuid
+  assignmentId  String             @map("assignment_id") @db.Uuid
+  bestScorePct  Int                @map("best_score_pct") @db.SmallInt
+  bestAttemptId String             @map("best_attempt_id") @db.Uuid
+  isPassed      Boolean            @map("is_passed")
+  updatedAt     DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  assignment    Assignment         @relation(fields: [assignmentId], references: [id])
+  student       User               @relation(fields: [studentUserId], references: [id])
   bestAttempt   AssignmentAttempt? @relation("BestAttemptLink", fields: [bestAttemptId], references: [id])
 
   @@unique([studentUserId, assignmentId])
@@ -359,10 +363,10 @@ model LiveSession {
   cancelReason    String?           @map("cancel_reason")
   createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
-  
-  course          Course            @relation(fields: [courseId], references: [id])
-  teacher         User              @relation("CreatedSessions", fields: [teacherUserId], references: [id])
-  cancelledByUser User?             @relation("CancelledSessions", fields: [cancelledBy], references: [id])
+
+  course          Course                    @relation(fields: [courseId], references: [id])
+  teacher         User                      @relation("CreatedSessions", fields: [teacherUserId], references: [id])
+  cancelledByUser User?                     @relation("CancelledSessions", fields: [cancelledBy], references: [id])
   notifications   LiveSessionNotification[]
 
   @@index([courseId, scheduledAt])
@@ -430,7 +434,7 @@ model PromoCode {
   discountType  DiscountType     @map("discount_type")
   // For PERCENTAGE: 0-100 (e.g. 20 = 20% off). For FIXED: amount in SAR
   discountValue Decimal          @map("discount_value") @db.Decimal(10, 2)
-  maxUses       Int?             @map("max_uses")   // null = unlimited
+  maxUses       Int?             @map("max_uses") // null = unlimited
   usedCount     Int              @default(0) @map("used_count")
   // null courseId = code applies to ALL courses
   courseId      String?          @map("course_id") @db.Uuid
@@ -475,48 +479,48 @@ model PromoCodeUsage {
 }
 
 model Payment {
-  id               String               @id @default(uuid()) @db.Uuid
-  orderId          String               @map("order_id") @db.VarChar(255)
+  id                 String                @id @default(uuid()) @db.Uuid
+  orderId            String                @map("order_id") @db.VarChar(255)
   // Who initiated the payment (student paying for themselves, or parent paying for their child)
-  payerUserId      String               @map("payer_user_id") @db.Uuid
-  initiatorRole    PaymentInitiatorRole @map("initiator_role")
+  payerUserId        String                @map("payer_user_id") @db.Uuid
+  initiatorRole      PaymentInitiatorRole  @map("initiator_role")
   // The student who will be enrolled
-  studentUserId    String               @map("student_user_id") @db.Uuid
-  courseId         String               @map("course_id") @db.Uuid
+  studentUserId      String                @map("student_user_id") @db.Uuid
+  courseId           String                @map("course_id") @db.Uuid
   // Amount breakdown for clear audit trail
-  originalAmount   Decimal              @map("original_amount") @db.Decimal(10, 2)
-  discountAmount   Decimal              @default(0) @map("discount_amount") @db.Decimal(10, 2)
-  finalAmount      Decimal              @map("final_amount") @db.Decimal(10, 2)
-  amount           Int
-  currency         String               @default("SAR") @db.VarChar(3)
-  refundedAmount   Int                  @default(0) @map("refunded_amount")
-  capturedAmount   Int                  @default(0) @map("captured_amount")
-  promoCodeId      String?              @map("promo_code_id") @db.Uuid
+  originalAmount     Decimal               @map("original_amount") @db.Decimal(10, 2)
+  discountAmount     Decimal               @default(0) @map("discount_amount") @db.Decimal(10, 2)
+  finalAmount        Decimal               @map("final_amount") @db.Decimal(10, 2)
+  amount             Int
+  currency           String                @default("SAR") @db.VarChar(3)
+  refundedAmount     Int                   @default(0) @map("refunded_amount")
+  capturedAmount     Int                   @default(0) @map("captured_amount")
+  promoCodeId        String?               @map("promo_code_id") @db.Uuid
   // Moyasar gateway data
-  moyasarPaymentId String?              @unique @map("moyasar_payment_id") @db.VarChar(255)
-  moyasarStatus    String?              @map("moyasar_status") @db.VarChar(50) // raw value from Moyasar webhook
+  moyasarPaymentId   String?               @unique @map("moyasar_payment_id") @db.VarChar(255)
+  moyasarStatus      String?               @map("moyasar_status") @db.VarChar(50) // raw value from Moyasar webhook
   // NULLABLE: with hosted redirect, the user picks their method on Moyasar's page.
   // This is populated by the webhook (MADA, CREDIT_CARD, APPLE_PAY).
   // OFFLINE is set directly by admin/assistant at enrollment time.
-  paymentMethod    PaymentMethod?       @map("payment_method")
+  paymentMethod      PaymentMethod?        @map("payment_method")
   // Internal lifecycle status
-  status           PaymentStatus        @default(initiated)
+  status             PaymentStatus         @default(initiated)
   // Prevents double-charge if user submits form twice — generated by backend before redirecting to Moyasar
-  idempotencyKey   String               @unique @map("idempotency_key") @db.VarChar(255)
-  paidAt           DateTime?            @map("paid_at") @db.Timestamptz(6)
-  failedAt         DateTime?            @map("failed_at") @db.Timestamptz(6)
-  createdAt        DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
-  metadata         Json?
-  rawGatewayResponse Json?              @map("raw_gateway_response")
+  idempotencyKey     String                @unique @map("idempotency_key") @db.VarChar(255)
+  paidAt             DateTime?             @map("paid_at") @db.Timestamptz(6)
+  failedAt           DateTime?             @map("failed_at") @db.Timestamptz(6)
+  createdAt          DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  metadata           Json?
+  rawGatewayResponse Json?                 @map("raw_gateway_response")
   // Relations
-  payer            User                 @relation("PaymentPayer", fields: [payerUserId], references: [id])
-  student          User                 @relation("PaymentStudent", fields: [studentUserId], references: [id])
-  course           Course               @relation(fields: [courseId], references: [id], onDelete: Restrict)
-  promoCode        PromoCode?           @relation(fields: [promoCodeId], references: [id])
-  enrollment       Enrollment?
-  refunds          Refund[]
-  webhookEvents    PaymentWebhookEvent[]
+  payer              User                  @relation("PaymentPayer", fields: [payerUserId], references: [id])
+  student            User                  @relation("PaymentStudent", fields: [studentUserId], references: [id])
+  course             Course                @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  promoCode          PromoCode?            @relation(fields: [promoCodeId], references: [id])
+  enrollment         Enrollment?
+  refunds            Refund[]
+  webhookEvents      PaymentWebhookEvent[]
 
   @@index([orderId])
   @@index([studentUserId])
@@ -527,14 +531,14 @@ model Payment {
 }
 
 model PaymentWebhookEvent {
-  id              String   @id @default(uuid()) @db.Uuid
-  eventId         String?  @unique @map("event_id") @db.VarChar(255)
-  paymentId       String?  @map("payment_id") @db.Uuid
-  moyasarPaymentId String? @map("moyasar_payment_id") @db.VarChar(255)
-  eventType       String   @map("event_type") @db.VarChar(100)
-  payload         Json
-  processedAt     DateTime @default(now()) @map("processed_at") @db.Timestamptz(6)
-  payment         Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+  id               String   @id @default(uuid()) @db.Uuid
+  eventId          String?  @unique @map("event_id") @db.VarChar(255)
+  paymentId        String?  @map("payment_id") @db.Uuid
+  moyasarPaymentId String?  @map("moyasar_payment_id") @db.VarChar(255)
+  eventType        String   @map("event_type") @db.VarChar(100)
+  payload          Json
+  processedAt      DateTime @default(now()) @map("processed_at") @db.Timestamptz(6)
+  payment          Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
 
   @@index([paymentId])
   @@index([moyasarPaymentId])
@@ -586,6 +590,8 @@ enum VideoProvider {
 
 enum CourseStatus {
   DRAFT
+  PENDING_REVIEW
+  CHANGES_REQUESTED
   PUBLISHED
   ARCHIVED
 }
@@ -600,11 +606,11 @@ enum CourseAuditAction {
 }
 
 enum EnrollmentStatus {
-  PENDING    // Awaiting payment webhook confirmation (online flow only)
-  ACTIVE     // Payment confirmed or offline enrollment granted
-  COMPLETED  // Student finished the course
-  EXPIRED    // Past expiry date
-  CANCELLED  // Enrollment deactivated (e.g. after refund)
+  PENDING // Awaiting payment webhook confirmation (online flow only)
+  ACTIVE // Payment confirmed or offline enrollment granted
+  COMPLETED // Student finished the course
+  EXPIRED // Past expiry date
+  CANCELLED // Enrollment deactivated (e.g. after refund)
 }
 
 enum SessionPlatform {
@@ -630,11 +636,11 @@ enum NotificationType {
 
 // Used by the generic Notification table (payment confirmations, refunds, etc.)
 enum NotificationEvent {
-  PAYMENT_SUCCESS   // Payer + student notified when payment is confirmed
-  PAYMENT_FAILED    // Payer notified when Moyasar reports a failed charge
-  REFUND_APPROVED   // Payer notified when admin approves a refund request
-  REFUND_PROCESSED  // Payer + parent notified when money is returned
-  REFUND_REJECTED   // Payer notified when refund request is denied
+  PAYMENT_SUCCESS // Payer + student notified when payment is confirmed
+  PAYMENT_FAILED // Payer notified when Moyasar reports a failed charge
+  REFUND_APPROVED // Payer notified when admin approves a refund request
+  REFUND_PROCESSED // Payer + parent notified when money is returned
+  REFUND_REJECTED // Payer notified when refund request is denied
 }
 
 enum NotificationChannel {
@@ -672,9 +678,9 @@ enum PaymentStatus {
 
 enum PaymentMethod {
   CREDIT_CARD
-  MADA               // Saudi debit card network
+  MADA // Saudi debit card network
   APPLE_PAY
-  OFFLINE            // Admin/assistant manual enrollment (no gateway involved)
+  OFFLINE // Admin/assistant manual enrollment (no gateway involved)
 }
 
 enum PaymentInitiatorRole {
@@ -685,18 +691,57 @@ enum PaymentInitiatorRole {
 }
 
 enum RefundStatus {
-  PENDING    // Refund request submitted, awaiting admin approval
-  APPROVED   // Approved, not yet processed
-  PROCESSED  // Money returned to payer
-  REJECTED   // Refund request denied
+  PENDING // Refund request submitted, awaiting admin approval
+  APPROVED // Approved, not yet processed
+  PROCESSED // Money returned to payer
+  REJECTED // Refund request denied
 }
 
 enum RefundMethod {
-  ONLINE   // Via Moyasar refund API
-  OFFLINE  // Handled outside the system (cash, bank transfer, etc.)
+  ONLINE // Via Moyasar refund API
+  OFFLINE // Handled outside the system (cash, bank transfer, etc.)
 }
 
 enum DiscountType {
   PERCENTAGE // discountValue = 0-100 (percent off)
-  FIXED      // discountValue = fixed SAR amount off
+  FIXED // discountValue = fixed SAR amount off
+}
+
+// ---------------------------------------------
+// APPROVALS SYSTEM
+// ---------------------------------------------
+
+model ApprovalRequest {
+  id          String         @id @default(uuid()) @db.Uuid
+  requestType RequestType    @map("request_type")
+  status      ApprovalStatus @default(PENDING_REVIEW)
+  courseId    String         @map("course_id") @db.Uuid
+  lessonId    String?        @map("lesson_id") @db.Uuid
+  requestedBy String         @map("requested_by") @db.Uuid
+  reviewedBy  String?        @map("reviewed_by") @db.Uuid
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  course    Course  @relation(fields: [courseId], references: [id])
+  lesson    Lesson? @relation(fields: [lessonId], references: [id])
+  requester User    @relation("RequestInitiator", fields: [requestedBy], references: [id])
+  reviewer  User?   @relation("RequestReviewer", fields: [reviewedBy], references: [id])
+
+  @@index([courseId])
+  @@index([requestedBy])
+  @@index([status])
+  @@map("approval_requests")
+}
+
+enum RequestType {
+  NEW_COURSE
+  EDIT_COURSE
+  NEW_LESSON
+}
+
+enum ApprovalStatus {
+  PENDING_REVIEW
+  APPROVED
+  CHANGES_REQUESTED
+  REJECTED
 }

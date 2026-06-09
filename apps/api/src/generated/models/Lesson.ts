@@ -264,6 +264,7 @@ export type LessonWhereInput = {
   lessonProgress?: Prisma.LessonProgressListRelationFilter
   progressBookmarks?: Prisma.CourseProgressListRelationFilter
   chapter?: Prisma.XOR<Prisma.ChapterScalarRelationFilter, Prisma.ChapterWhereInput>
+  approvalRequests?: Prisma.ApprovalRequestListRelationFilter
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -281,6 +282,7 @@ export type LessonOrderByWithRelationInput = {
   lessonProgress?: Prisma.LessonProgressOrderByRelationAggregateInput
   progressBookmarks?: Prisma.CourseProgressOrderByRelationAggregateInput
   chapter?: Prisma.ChapterOrderByWithRelationInput
+  approvalRequests?: Prisma.ApprovalRequestOrderByRelationAggregateInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -302,6 +304,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   lessonProgress?: Prisma.LessonProgressListRelationFilter
   progressBookmarks?: Prisma.CourseProgressListRelationFilter
   chapter?: Prisma.XOR<Prisma.ChapterScalarRelationFilter, Prisma.ChapterWhereInput>
+  approvalRequests?: Prisma.ApprovalRequestListRelationFilter
 }, "id" | "chapterId_orderIndex">
 
 export type LessonOrderByWithAggregationInput = {
@@ -352,6 +355,7 @@ export type LessonCreateInput = {
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
   progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
   chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -368,6 +372,7 @@ export type LessonUncheckedCreateInput = {
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
   progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUpdateInput = {
@@ -384,6 +389,7 @@ export type LessonUpdateInput = {
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
   progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
   chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -400,6 +406,7 @@ export type LessonUncheckedUpdateInput = {
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
   progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -604,6 +611,22 @@ export type LessonUpdateOneRequiredWithoutLessonProgressNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutLessonProgressInput, Prisma.LessonUpdateWithoutLessonProgressInput>, Prisma.LessonUncheckedUpdateWithoutLessonProgressInput>
 }
 
+export type LessonCreateNestedOneWithoutApprovalRequestsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutApprovalRequestsInput, Prisma.LessonUncheckedCreateWithoutApprovalRequestsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutApprovalRequestsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneWithoutApprovalRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutApprovalRequestsInput, Prisma.LessonUncheckedCreateWithoutApprovalRequestsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutApprovalRequestsInput
+  upsert?: Prisma.LessonUpsertWithoutApprovalRequestsInput
+  disconnect?: Prisma.LessonWhereInput | boolean
+  delete?: Prisma.LessonWhereInput | boolean
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutApprovalRequestsInput, Prisma.LessonUpdateWithoutApprovalRequestsInput>, Prisma.LessonUncheckedUpdateWithoutApprovalRequestsInput>
+}
+
 export type LessonCreateWithoutProgressBookmarksInput = {
   id?: string
   title: string
@@ -617,6 +640,7 @@ export type LessonCreateWithoutProgressBookmarksInput = {
   assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
   chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutProgressBookmarksInput = {
@@ -632,6 +656,7 @@ export type LessonUncheckedCreateWithoutProgressBookmarksInput = {
   updatedAt?: Date | string
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutProgressBookmarksInput = {
@@ -663,6 +688,7 @@ export type LessonUpdateWithoutProgressBookmarksInput = {
   assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
   chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutProgressBookmarksInput = {
@@ -678,6 +704,7 @@ export type LessonUncheckedUpdateWithoutProgressBookmarksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutChapterInput = {
@@ -693,6 +720,7 @@ export type LessonCreateWithoutChapterInput = {
   assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
   progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutChapterInput = {
@@ -708,6 +736,7 @@ export type LessonUncheckedCreateWithoutChapterInput = {
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
   progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutChapterInput = {
@@ -765,6 +794,7 @@ export type LessonCreateWithoutAssignmentInput = {
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
   progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
   chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutAssignmentInput = {
@@ -780,6 +810,7 @@ export type LessonUncheckedCreateWithoutAssignmentInput = {
   updatedAt?: Date | string
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
   progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutAssignmentInput = {
@@ -811,6 +842,7 @@ export type LessonUpdateWithoutAssignmentInput = {
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
   progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
   chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutAssignmentInput = {
@@ -826,6 +858,7 @@ export type LessonUncheckedUpdateWithoutAssignmentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
   progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutLessonProgressInput = {
@@ -841,6 +874,7 @@ export type LessonCreateWithoutLessonProgressInput = {
   assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
   progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
   chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+  approvalRequests?: Prisma.ApprovalRequestCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutLessonProgressInput = {
@@ -856,6 +890,7 @@ export type LessonUncheckedCreateWithoutLessonProgressInput = {
   updatedAt?: Date | string
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
   progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutLessonProgressInput = {
@@ -887,6 +922,7 @@ export type LessonUpdateWithoutLessonProgressInput = {
   assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
   progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
   chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutLessonProgressInput = {
@@ -901,6 +937,87 @@ export type LessonUncheckedUpdateWithoutLessonProgressInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutApprovalRequestsInput = {
+  id?: string
+  title: string
+  orderIndex: number
+  videoUrl?: string
+  videoProvider?: $Enums.VideoProvider
+  version?: number
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignment?: Prisma.AssignmentCreateNestedOneWithoutLessonInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressCreateNestedManyWithoutLastLessonInput
+  chapter: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+}
+
+export type LessonUncheckedCreateWithoutApprovalRequestsInput = {
+  id?: string
+  chapterId: string
+  title: string
+  orderIndex: number
+  videoUrl?: string
+  videoProvider?: $Enums.VideoProvider
+  version?: number
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutLessonInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  progressBookmarks?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutLastLessonInput
+}
+
+export type LessonCreateOrConnectWithoutApprovalRequestsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutApprovalRequestsInput, Prisma.LessonUncheckedCreateWithoutApprovalRequestsInput>
+}
+
+export type LessonUpsertWithoutApprovalRequestsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutApprovalRequestsInput, Prisma.LessonUncheckedUpdateWithoutApprovalRequestsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutApprovalRequestsInput, Prisma.LessonUncheckedCreateWithoutApprovalRequestsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutApprovalRequestsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutApprovalRequestsInput, Prisma.LessonUncheckedUpdateWithoutApprovalRequestsInput>
+}
+
+export type LessonUpdateWithoutApprovalRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
+  chapter?: Prisma.ChapterUpdateOneRequiredWithoutLessonsNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutApprovalRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  chapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  videoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  videoProvider?: Prisma.EnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
   progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
 }
 
@@ -929,6 +1046,7 @@ export type LessonUpdateWithoutChapterInput = {
   assignment?: Prisma.AssignmentUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
   progressBookmarks?: Prisma.CourseProgressUpdateManyWithoutLastLessonNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutChapterInput = {
@@ -944,6 +1062,7 @@ export type LessonUncheckedUpdateWithoutChapterInput = {
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutLessonNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
   progressBookmarks?: Prisma.CourseProgressUncheckedUpdateManyWithoutLastLessonNestedInput
+  approvalRequests?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutChapterInput = {
@@ -966,11 +1085,13 @@ export type LessonUncheckedUpdateManyWithoutChapterInput = {
 export type LessonCountOutputType = {
   lessonProgress: number
   progressBookmarks: number
+  approvalRequests: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lessonProgress?: boolean | LessonCountOutputTypeCountLessonProgressArgs
   progressBookmarks?: boolean | LessonCountOutputTypeCountProgressBookmarksArgs
+  approvalRequests?: boolean | LessonCountOutputTypeCountApprovalRequestsArgs
 }
 
 /**
@@ -997,6 +1118,13 @@ export type LessonCountOutputTypeCountProgressBookmarksArgs<ExtArgs extends runt
   where?: Prisma.CourseProgressWhereInput
 }
 
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountApprovalRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApprovalRequestWhereInput
+}
+
 
 export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1013,6 +1141,7 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   lessonProgress?: boolean | Prisma.Lesson$lessonProgressArgs<ExtArgs>
   progressBookmarks?: boolean | Prisma.Lesson$progressBookmarksArgs<ExtArgs>
   chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
+  approvalRequests?: boolean | Prisma.Lesson$approvalRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -1063,6 +1192,7 @@ export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   lessonProgress?: boolean | Prisma.Lesson$lessonProgressArgs<ExtArgs>
   progressBookmarks?: boolean | Prisma.Lesson$progressBookmarksArgs<ExtArgs>
   chapter?: boolean | Prisma.ChapterDefaultArgs<ExtArgs>
+  approvalRequests?: boolean | Prisma.Lesson$approvalRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1079,6 +1209,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     lessonProgress: Prisma.$LessonProgressPayload<ExtArgs>[]
     progressBookmarks: Prisma.$CourseProgressPayload<ExtArgs>[]
     chapter: Prisma.$ChapterPayload<ExtArgs>
+    approvalRequests: Prisma.$ApprovalRequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1489,6 +1620,7 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   lessonProgress<T extends Prisma.Lesson$lessonProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$lessonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   progressBookmarks<T extends Prisma.Lesson$progressBookmarksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$progressBookmarksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   chapter<T extends Prisma.ChapterDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChapterDefaultArgs<ExtArgs>>): Prisma.Prisma__ChapterClient<runtime.Types.Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  approvalRequests<T extends Prisma.Lesson$approvalRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$approvalRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApprovalRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1993,6 +2125,30 @@ export type Lesson$progressBookmarksArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.CourseProgressScalarFieldEnum | Prisma.CourseProgressScalarFieldEnum[]
+}
+
+/**
+ * Lesson.approvalRequests
+ */
+export type Lesson$approvalRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApprovalRequest
+   */
+  select?: Prisma.ApprovalRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApprovalRequest
+   */
+  omit?: Prisma.ApprovalRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApprovalRequestInclude<ExtArgs> | null
+  where?: Prisma.ApprovalRequestWhereInput
+  orderBy?: Prisma.ApprovalRequestOrderByWithRelationInput | Prisma.ApprovalRequestOrderByWithRelationInput[]
+  cursor?: Prisma.ApprovalRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApprovalRequestScalarFieldEnum | Prisma.ApprovalRequestScalarFieldEnum[]
 }
 
 /**

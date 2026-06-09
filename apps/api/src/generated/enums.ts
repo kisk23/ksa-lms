@@ -39,6 +39,8 @@ export type VideoProvider = (typeof VideoProvider)[keyof typeof VideoProvider]
 
 export const CourseStatus = {
   DRAFT: 'DRAFT',
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  CHANGES_REQUESTED: 'CHANGES_REQUESTED',
   PUBLISHED: 'PUBLISHED',
   ARCHIVED: 'ARCHIVED'
 } as const
@@ -193,3 +195,22 @@ export const DiscountType = {
 } as const
 
 export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType]
+
+
+export const RequestType = {
+  NEW_COURSE: 'NEW_COURSE',
+  EDIT_COURSE: 'EDIT_COURSE',
+  NEW_LESSON: 'NEW_LESSON'
+} as const
+
+export type RequestType = (typeof RequestType)[keyof typeof RequestType]
+
+
+export const ApprovalStatus = {
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  APPROVED: 'APPROVED',
+  CHANGES_REQUESTED: 'CHANGES_REQUESTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ApprovalStatus = (typeof ApprovalStatus)[keyof typeof ApprovalStatus]
