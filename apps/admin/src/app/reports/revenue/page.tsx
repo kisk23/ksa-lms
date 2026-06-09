@@ -1,6 +1,6 @@
 'use client';
 
-import { RevenueReportDetail } from '@/features/reports-overview/components/RevenueReportDetail';
+import { RevenueReportDetail } from '@/features/reports-revenue/components/RevenueReportDetail';
 
 export default function RevenueDetailPage() {
   return (

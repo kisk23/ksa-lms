@@ -111,7 +111,7 @@ export class PaymentsRepository {
 
   listMonthlyRevenue(query: PaymentFilterQuery, year: number) {
     const start = new Date(Date.UTC(year, 0, 1));
-    const end = new Date(Date.UTC(year + 1, 0, 1));
+    const end = new Date(Date.UTC(year + 1, 0, 1) - 1);
 
     return this.prisma.payment.findMany({
       where: this.whereFromQuery({
