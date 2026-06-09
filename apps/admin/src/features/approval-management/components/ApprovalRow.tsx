@@ -12,7 +12,7 @@ type ApprovalRowProps = {
 };
 
 export function ApprovalRow({ approval, zebra = false }: ApprovalRowProps) {
-  const isPending = approval.status === 'pending_review';
+  const isPending = approval.status === 'PENDING_REVIEW';
 
   return (
     <tr className={`${zebra ? 'bg-slate-50/50' : ''} hover:bg-slate-50 transition-colors group`}>

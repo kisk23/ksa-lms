@@ -6,19 +6,19 @@ const typeConfig: Record<
   RequestType,
   { label: string; bg: string; color: string; icon: typeof Sparkles }
 > = {
-  new_course: {
+  NEW_COURSE: {
     label: 'كورس جديد',
     bg: 'bg-blue-50',
     color: 'text-primary-container',
     icon: Sparkles,
   },
-  edit_course: {
+  EDIT_COURSE: {
     label: 'تعديل كورس',
     bg: 'bg-purple-50',
     color: 'text-purple-700',
     icon: Pencil,
   },
-  new_lesson: {
+  NEW_LESSON: {
     label: 'درس جديد',
     bg: 'bg-emerald-50',
     color: 'text-emerald-700',

@@ -12,12 +12,7 @@ export { ReviewActionCard } from './components/ReviewActionCard';
 export { StatusTimeline } from './components/StatusTimeline';
 
 // Data
-export {
-  MOCK_APPROVALS_LIST,
-  MOCK_APPROVAL,
-  getApprovalById,
-  getPendingApprovalsCount,
-} from './data/mock-approval';
+export { MOCK_APPROVALS_LIST, getPendingApprovalsCount } from './data/mock-approval';
 
 // Types
 export type {

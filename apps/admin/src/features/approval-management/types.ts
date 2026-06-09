@@ -1,7 +1,6 @@
-export type ApprovalStatus = 'pending_review' | 'approved' | 'changes_requested' | 'rejected';
+export type ApprovalStatus = 'PENDING_REVIEW' | 'APPROVED' | 'CHANGES_REQUESTED' | 'REJECTED';
 
-// New for list page
-export type RequestType = 'new_course' | 'edit_course' | 'new_lesson';
+export type RequestType = 'NEW_COURSE' | 'EDIT_COURSE' | 'NEW_LESSON';
 
 export type ApprovalListItem = {
   id: string;
@@ -15,7 +14,6 @@ export type ApprovalListItem = {
 
 export type ApprovalStatusFilter = 'all' | ApprovalStatus;
 
-// Existing detail types
 export type LessonType = 'video' | 'assignment';
 
 export type Lesson = {
@@ -40,17 +38,29 @@ export type TimelineEntry = {
   status: 'current' | 'past';
 };
 
+// Represents exactly what the API returns for GET /approvals/:id
 export type ApprovalRequest = {
   id: string;
-  requestNumber: string;
-  courseTitle: string;
-  submittedBy: string;
+  requestType: RequestType;
   status: ApprovalStatus;
-  previewImageUrl: string;
-  previewDuration: string;
-  tags: string[];
-  description: string;
-  modules: Module[];
-  instructorNote: string;
-  timeline: TimelineEntry[];
+  courseId: string;
+  lessonId: string | null;
+  requestedBy: string;
+  reviewedBy: string | null;
+  createdAt: string;
+  updatedAt: string;
+  requester: { id: string; name: string; email: string };
+  reviewer: { id: string; name: string; email: string } | null;
+  course: {
+    id: string;
+    title: string;
+    description?: string;
+    thumbnailUrl?: string;
+    chapters?: {
+      id: string;
+      title: string;
+      lessons: { id: string; title: string; videoDuration?: number }[];
+    }[];
+  };
+  lesson: { id: string; title: string } | null;
 };

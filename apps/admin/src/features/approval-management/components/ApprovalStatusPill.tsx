@@ -1,22 +1,22 @@
 import type { ApprovalStatus } from '../types';
 
 const statusConfig: Record<ApprovalStatus, { label: string; bg: string; color: string }> = {
-  pending_review: {
+  PENDING_REVIEW: {
     label: 'في الانتظار',
     bg: 'bg-amber-100',
     color: 'text-amber-600',
   },
-  approved: {
+  APPROVED: {
     label: 'مقبول',
     bg: 'bg-emerald-100',
     color: 'text-emerald-600',
   },
-  rejected: {
+  REJECTED: {
     label: 'مرفوض',
     bg: 'bg-red-100',
     color: 'text-red-600',
   },
-  changes_requested: {
+  CHANGES_REQUESTED: {
     label: 'يحتاج تعديلات',
     bg: 'bg-orange-100',
     color: 'text-orange-600',
