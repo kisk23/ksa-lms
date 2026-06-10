@@ -718,14 +718,18 @@ model ApprovalRequest {
   courseId    String         @map("course_id") @db.Uuid
   lessonId    String?        @map("lesson_id") @db.Uuid
   requestedBy String         @map("requested_by") @db.Uuid
-  reviewedBy  String?        @map("reviewed_by") @db.Uuid
-  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  reviewedBy     String?        @map("reviewed_by") @db.Uuid
+  reviewedAt     DateTime?      @map("reviewed_at") @db.Timestamptz(6)
+  supersededById String?        @map("superseded_by_id") @db.Uuid
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  course    Course  @relation(fields: [courseId], references: [id])
-  lesson    Lesson? @relation(fields: [lessonId], references: [id])
-  requester User    @relation("RequestInitiator", fields: [requestedBy], references: [id])
-  reviewer  User?   @relation("RequestReviewer", fields: [reviewedBy], references: [id])
+  course       Course            @relation(fields: [courseId], references: [id])
+  lesson       Lesson?           @relation(fields: [lessonId], references: [id])
+  requester    User              @relation("RequestInitiator", fields: [requestedBy], references: [id])
+  reviewer     User?             @relation("RequestReviewer", fields: [reviewedBy], references: [id])
+  supersededBy ApprovalRequest?  @relation("SupersededRequest", fields: [supersededById], references: [id])
+  supersedes   ApprovalRequest[] @relation("SupersededRequest")
 
   @@index([courseId])
   @@index([requestedBy])
@@ -744,4 +748,5 @@ enum ApprovalStatus {
   APPROVED
   CHANGES_REQUESTED
   REJECTED
+  SUPERSEDED
 }

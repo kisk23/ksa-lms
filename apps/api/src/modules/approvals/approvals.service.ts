@@ -38,12 +38,15 @@ export class ApprovalsService {
       throw new ForbiddenException('You do not have permission to edit this course.');
     }
 
-    if (course.status === CourseStatus.PUBLISHED) {
-      throw new ForbiddenException('Course is already published and cannot be edited directly.');
-    }
-
-    if (course.status === CourseStatus.PENDING_REVIEW) {
-      throw new ForbiddenException('Course is currently pending review and is locked for editing.');
+    const nonEditableStatuses = [
+      CourseStatus.PUBLISHED,
+      CourseStatus.PENDING_REVIEW,
+      CourseStatus.ARCHIVED,
+    ];
+    if (nonEditableStatuses.includes(course.status)) {
+      throw new ForbiddenException(
+        `Course is currently in ${course.status} state and cannot be edited.`,
+      );
     }
   }
 
@@ -54,28 +57,42 @@ export class ApprovalsService {
    * @returns The created approval request
    */
   async createApproval(userId: string, dto: CreateApprovalDto) {
-    const course = await this.prisma.course.findUnique({ where: { id: dto.courseId } });
-    if (!course) {
-      throw new NotFoundException('Course not found');
-    }
-    if (course.teacherUserId !== userId) {
-      throw new ForbiddenException('You can only submit approval requests for your own courses');
+    await this.assertCourseIsEditable(dto.courseId, userId);
+
+    const existingPending = await this.prisma.approvalRequest.findFirst({
+      where: { courseId: dto.courseId, status: ApprovalStatus.PENDING_REVIEW },
+    });
+    if (existingPending) {
+      throw new BadRequestException('Course already has a pending approval request');
     }
 
     // Wrap the updates in a transaction to ensure database consistency
     return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // 1. Create the approval request
-      const request = await tx.approvalRequest.create({
-        data: {
+      const request = await this.repository.create(
+        {
           requestType: dto.requestType,
           courseId: dto.courseId,
           lessonId: dto.lessonId,
           requestedBy: userId,
           status: ApprovalStatus.PENDING_REVIEW,
         },
+        tx,
+      );
+
+      // 2. Mark previous non-resolved requests as SUPERSEDED
+      await tx.approvalRequest.updateMany({
+        where: {
+          courseId: dto.courseId,
+          status: { in: [ApprovalStatus.CHANGES_REQUESTED, ApprovalStatus.REJECTED] },
+        },
+        data: {
+          status: ApprovalStatus.SUPERSEDED,
+          supersededById: request.id,
+        },
       });
 
-      // 2. Lock the course in PENDING_REVIEW state
+      // 3. Lock the course in PENDING_REVIEW state
       await tx.course.update({
         where: { id: dto.courseId },
         data: { status: CourseStatus.PENDING_REVIEW },
@@ -95,7 +112,16 @@ export class ApprovalsService {
     const limit = dto.limit || 10;
     const skip = (page - 1) * limit;
 
-    const where = dto.status ? { status: dto.status } : {};
+    const where: Prisma.ApprovalRequestWhereInput = {};
+    if (dto.status) where.status = dto.status;
+    if (dto.courseId) where.courseId = dto.courseId;
+    if (dto.requestedBy) where.requestedBy = dto.requestedBy;
+
+    if (dto.startDate || dto.endDate) {
+      where.createdAt = {};
+      if (dto.startDate) where.createdAt.gte = new Date(dto.startDate);
+      if (dto.endDate) where.createdAt.lte = new Date(dto.endDate);
+    }
 
     const { items, total } = await this.repository.findAll({ skip, take: limit, where });
 
@@ -143,13 +169,16 @@ export class ApprovalsService {
     // Wrap the updates in a transaction to ensure database consistency
     return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // 1. Update the approval request
-      const updatedApproval = await tx.approvalRequest.update({
-        where: { id },
-        data: {
+      // (only reached if status was PENDING_REVIEW)
+      const updatedApproval = await this.repository.update(
+        id,
+        {
           status: dto.status,
           reviewedBy: adminId,
+          reviewedAt: new Date(),
         },
-      });
+        tx,
+      );
 
       // 2. Handle course status side-effects based on the review outcome
       if (dto.status === ApprovalStatus.APPROVED) {

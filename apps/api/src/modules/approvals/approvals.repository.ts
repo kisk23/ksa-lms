@@ -11,8 +11,12 @@ export class ApprovalsRepository {
    * @param data The creation data matching Prisma's input type
    * @returns The created ApprovalRequest
    */
-  async create(data: Prisma.ApprovalRequestUncheckedCreateInput): Promise<ApprovalRequest> {
-    return this.prisma.approvalRequest.create({
+  async create(
+    data: Prisma.ApprovalRequestUncheckedCreateInput,
+    tx?: Prisma.TransactionClient,
+  ): Promise<ApprovalRequest> {
+    const db = tx || this.prisma;
+    return db.approvalRequest.create({
       data,
     });
   }
@@ -22,15 +26,19 @@ export class ApprovalsRepository {
    * @param params Filtering and pagination parameters
    * @returns An array of ApprovalRequest objects and total count
    */
-  async findAll(params: {
-    skip?: number;
-    take?: number;
-    where?: Prisma.ApprovalRequestWhereInput;
-  }) {
+  async findAll(
+    params: {
+      skip?: number;
+      take?: number;
+      where?: Prisma.ApprovalRequestWhereInput;
+    },
+    tx?: Prisma.TransactionClient,
+  ) {
     const { skip, take, where } = params;
+    const db = tx || this.prisma;
 
-    const [items, total] = await this.prisma.$transaction([
-      this.prisma.approvalRequest.findMany({
+    const [items, total] = await db.$transaction([
+      db.approvalRequest.findMany({
         skip,
         take,
         where,
@@ -42,7 +50,7 @@ export class ApprovalsRepository {
           lesson: { select: { id: true, title: true } },
         },
       }),
-      this.prisma.approvalRequest.count({ where }),
+      db.approvalRequest.count({ where }),
     ]);
 
     return { items, total };
@@ -53,8 +61,9 @@ export class ApprovalsRepository {
    * @param id The UUID of the approval request
    * @returns The ApprovalRequest object with course, chapters, and lessons, or null
    */
-  async findById(id: string) {
-    return this.prisma.approvalRequest.findUnique({
+  async findById(id: string, tx?: Prisma.TransactionClient) {
+    const db = tx || this.prisma;
+    return db.approvalRequest.findUnique({
       where: { id },
       include: {
         requester: { select: { id: true, name: true, email: true } },
@@ -83,8 +92,10 @@ export class ApprovalsRepository {
   async update(
     id: string,
     data: Prisma.ApprovalRequestUncheckedUpdateInput,
+    tx?: Prisma.TransactionClient,
   ): Promise<ApprovalRequest> {
-    return this.prisma.approvalRequest.update({
+    const db = tx || this.prisma;
+    return db.approvalRequest.update({
       where: { id },
       data,
     });
