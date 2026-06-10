@@ -1,5 +1,5 @@
 -- AlterTable
-ALTER TABLE "courses" ADD COLUMN     "category" VARCHAR(100);
+ALTER TABLE "courses" ADD COLUMN     "category" TEXT;
 
 -- CreateIndex
 CREATE INDEX "courses_category_idx" ON "courses"("category");

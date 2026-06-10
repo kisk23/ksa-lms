@@ -38,7 +38,7 @@ export class ApprovalsService {
       throw new ForbiddenException('You do not have permission to edit this course.');
     }
 
-    const nonEditableStatuses = [
+    const nonEditableStatuses: CourseStatus[] = [
       CourseStatus.PUBLISHED,
       CourseStatus.PENDING_REVIEW,
       CourseStatus.ARCHIVED,
