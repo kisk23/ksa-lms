@@ -4,10 +4,10 @@ import type { ApprovalStatusFilter } from '../types';
 
 const filters: { value: ApprovalStatusFilter; label: string }[] = [
   { value: 'all', label: 'الكل' },
-  { value: 'pending_review', label: 'في الانتظار' },
-  { value: 'approved', label: 'مقبول' },
-  { value: 'rejected', label: 'مرفوض' },
-  { value: 'changes_requested', label: 'يحتاج تعديلات' },
+  { value: 'PENDING_REVIEW', label: 'في الانتظار' },
+  { value: 'APPROVED', label: 'مقبول' },
+  { value: 'REJECTED', label: 'مرفوض' },
+  { value: 'CHANGES_REQUESTED', label: 'يحتاج تعديلات' },
 ];
 
 type ApprovalsFiltersProps = {

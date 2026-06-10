@@ -10,10 +10,10 @@ type ApprovalHeaderProps = {
 };
 
 const statusConfig: Record<ApprovalStatus, { label: string; dotColor: string }> = {
-  pending_review: { label: 'قيد المراجعة', dotColor: 'bg-primary' },
-  approved: { label: 'معتمد', dotColor: 'bg-secondary' },
-  changes_requested: { label: 'تعديلات مطلوبة', dotColor: 'bg-yellow-500' },
-  rejected: { label: 'مرفوض', dotColor: 'bg-error' },
+  PENDING_REVIEW: { label: 'قيد المراجعة', dotColor: 'bg-primary' },
+  APPROVED: { label: 'معتمد', dotColor: 'bg-secondary' },
+  CHANGES_REQUESTED: { label: 'تعديلات مطلوبة', dotColor: 'bg-yellow-500' },
+  REJECTED: { label: 'مرفوض', dotColor: 'bg-error' },
 };
 
 export function ApprovalHeader({ title, requestNumber, submittedBy, status }: ApprovalHeaderProps) {
