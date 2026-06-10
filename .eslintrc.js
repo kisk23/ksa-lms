@@ -9,6 +9,9 @@ module.exports = {
     '@typescript-eslint/prefer-nullish-coalescing': 'off',
     '@typescript-eslint/prefer-optional-chain': 'off',
 
+    // Disable import/no-unresolved because TS compiler already checks imports, and eslint-plugin-import struggles with generated/monorepo paths
+    'import/no-unresolved': 'off',
+
     // 🔥 Kill Next.js rule globally
     '@next/next/no-html-link-for-pages': 'off',
   },
