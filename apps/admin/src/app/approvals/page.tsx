@@ -2,6 +2,7 @@
 
 import { ApprovalsHeader, ApprovalsFilters, ApprovalsTable } from '@features/approval-management';
 import type {
+  ApprovalStatus,
   ApprovalStatusFilter,
   ApprovalListItem,
   ApprovalRequest,
@@ -46,6 +47,12 @@ export default function ApprovalsPage() {
     fetchApprovals();
   }, [status]);
 
+  const handleStatusUpdate = (id: string, newStatus: string) => {
+    setApprovals((prev) =>
+      prev.map((app) => (app.id === id ? { ...app, status: newStatus as ApprovalStatus } : app)),
+    );
+  };
+
   return (
     <div className="max-w-[1280px] mx-auto w-full flex flex-col gap-lg">
       <div className="flex flex-col gap-md">
@@ -56,7 +63,7 @@ export default function ApprovalsPage() {
       {loading ? (
         <div className="py-12 flex justify-center text-slate-400">جاري التحميل...</div>
       ) : (
-        <ApprovalsTable approvals={approvals} />
+        <ApprovalsTable approvals={approvals} onStatusUpdate={handleStatusUpdate} />
       )}
     </div>
   );

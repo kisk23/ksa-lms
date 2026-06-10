@@ -12,6 +12,7 @@
     "db:migrate": "pnpm --filter @lms/api exec prisma migrate dev",
     "db:generate": "pnpm --filter @lms/api exec prisma generate",
     "db:seed": "pnpm --filter @lms/api exec tsx prisma/seed.ts",
+    "db:seed:approvals": "pnpm --filter @lms/api exec tsx prisma/seed_approvals.ts",
     "db:studio": "pnpm --filter @lms/api exec prisma studio",
     "prepare": "husky",
     "clean": "turbo clean && rimraf node_modules"

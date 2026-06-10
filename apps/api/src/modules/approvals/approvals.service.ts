@@ -9,13 +9,14 @@ import { ApprovalsRepository } from './approvals.repository';
 import { CreateApprovalDto } from './dto/create-approval.dto';
 import { ListApprovalsDto } from './dto/list-approvals.dto';
 import { ReviewApprovalDto } from './dto/review-approval.dto';
-import { ApprovalStatus, PrismaClient, CourseStatus, Prisma } from '../../generated/client';
+import { ApprovalStatus, CourseStatus, Prisma } from '../../generated/client';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class ApprovalsService {
   constructor(
     private readonly repository: ApprovalsRepository,
-    private readonly prisma: PrismaClient,
+    private readonly prisma: PrismaService,
   ) {}
 
   /**

@@ -9,11 +9,12 @@ import type { ApprovalListItem } from '../types';
 type ApprovalsTableProps = {
   approvals: ApprovalListItem[];
   pageSize?: number;
+  onStatusUpdate?: (id: string, newStatus: string) => void;
 };
 
 const columns = ['نوع الطلب', 'اسم المعلم', 'اسم المقرر / الدرس', 'تاريخ الطلب', 'الحالة'];
 
-export function ApprovalsTable({ approvals, pageSize = 6 }: ApprovalsTableProps) {
+export function ApprovalsTable({ approvals, pageSize = 6, onStatusUpdate }: ApprovalsTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -54,7 +55,12 @@ export function ApprovalsTable({ approvals, pageSize = 6 }: ApprovalsTableProps)
               </tr>
             ) : (
               visibleApprovals.map((approval, idx) => (
-                <ApprovalRow key={approval.id} approval={approval} zebra={idx % 2 === 1} />
+                <ApprovalRow
+                  key={approval.id}
+                  approval={approval}
+                  zebra={idx % 2 === 1}
+                  onStatusUpdate={onStatusUpdate}
+                />
               ))
             )}
           </tbody>

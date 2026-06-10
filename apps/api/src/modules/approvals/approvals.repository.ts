@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrismaClient, ApprovalRequest, Prisma } from '../../generated/client';
+import { ApprovalRequest, Prisma } from '../../generated/client';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class ApprovalsRepository {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   /**
    * Creates a new approval request in the database.

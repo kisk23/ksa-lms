@@ -1,6 +1,8 @@
 import { Avatar } from '@shared/components/ui/Avatar';
+import { apiClient } from '@shared/lib/api-client';
 import { Eye, CheckCircle2, XCircle, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { ApprovalStatusPill } from './ApprovalStatusPill';
 import { RequestTypeBadge } from './RequestTypeBadge';
@@ -9,10 +11,27 @@ import type { ApprovalListItem } from '../types';
 type ApprovalRowProps = {
   approval: ApprovalListItem;
   zebra?: boolean;
+  onStatusUpdate?: (id: string, newStatus: string) => void;
 };
 
-export function ApprovalRow({ approval, zebra = false }: ApprovalRowProps) {
+export function ApprovalRow({ approval, zebra = false, onStatusUpdate }: ApprovalRowProps) {
   const isPending = approval.status === 'PENDING_REVIEW';
+  const [loadingAction, setLoadingAction] = useState<string | null>(null);
+
+  const handleReview = async (newStatus: string) => {
+    try {
+      setLoadingAction(newStatus);
+      await apiClient.patch(`/approvals/${approval.id}/review`, { status: newStatus });
+      if (onStatusUpdate) {
+        onStatusUpdate(approval.id, newStatus);
+      }
+    } catch (err) {
+      console.error('Failed to quick review', err);
+      alert('حدث خطأ أثناء المراجعة.');
+    } finally {
+      setLoadingAction(null);
+    }
+  };
 
   return (
     <tr className={`${zebra ? 'bg-slate-50/50' : ''} hover:bg-slate-50 transition-colors group`}>
@@ -50,11 +69,15 @@ export function ApprovalRow({ approval, zebra = false }: ApprovalRowProps) {
                 icon={CheckCircle2}
                 title="موافقة سريعة"
                 hoverColor="hover:text-emerald-600 hover:bg-emerald-50"
+                onClick={() => handleReview('APPROVED')}
+                disabled={loadingAction !== null}
               />
               <ActionButton
                 icon={XCircle}
                 title="رفض سريع"
                 hoverColor="hover:text-red-600 hover:bg-red-50"
+                onClick={() => handleReview('REJECTED')}
+                disabled={loadingAction !== null}
               />
             </>
           )}
@@ -90,15 +113,21 @@ function ActionButton({
   icon: Icon,
   title,
   hoverColor,
+  onClick,
+  disabled,
 }: {
   icon: LucideIcon;
   title: string;
   hoverColor: string;
+  onClick?: () => void;
+  disabled?: boolean;
 }) {
   return (
     <button
       title={title}
-      className={`p-1.5 text-slate-400 rounded-lg transition-colors ${hoverColor}`}
+      onClick={onClick}
+      disabled={disabled}
+      className={`p-1.5 text-slate-400 rounded-lg transition-colors ${hoverColor} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <Icon size={20} />
     </button>

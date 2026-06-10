@@ -4,6 +4,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { AppController } from './app.controller';
+import { ApprovalsModule } from './modules/approvals/approvals.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CoursesModule } from './modules/courses/courses.module';
 import { EnrollmentModule } from './modules/enrollments/enrollment.module';
@@ -42,6 +43,7 @@ import { PrismaModule } from './prisma/prisma.module';
     PaymentsModule,
     NotificationsModule,
     AuthModule,
+    ApprovalsModule,
   ],
   controllers: [AppController],
 })
