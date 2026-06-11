@@ -1,19 +1,19 @@
-import { Mail, MapPin, Phone } from "lucide-react";
-import Link from "next/link";
+import { Mail, MapPin, Phone } from 'lucide-react';
+import Link from 'next/link';
 
 const quickLinks = [
-  {name:"الرئيسية", link:"/"},
-  {name:"عن سُلَّم", link:"/about"},
-  {name:"جميع الكورسات", link:"/courses"},
-  {name:"المعلمون", link:"/teachers"},
-  {name:"المدونة", link:"/blog"},
+  { name: 'الرئيسية', link: '/' },
+  { name: 'عن سُلَّم', link: '/about' },
+  { name: 'جميع الكورسات', link: '/courses' },
+  { name: 'المعلمون', link: '/teachers' },
+  { name: 'المدونة', link: '/blog' },
 ];
 const supportLinks = [
-  {name:"الأسئلة الشائعة", link:"/faq"},
-  {name:"كيفية التسجيل", link:"/registration"},
-  {name:"طرق الدفع", link:"/payment"},
-  {name:"الشروط والأحكام", link:"/terms"},
-  {name:"سياسة الخصوصية", link:"/privacy"},
+  { name: 'الأسئلة الشائعة', link: '/faq' },
+  { name: 'كيفية التسجيل', link: '/registration' },
+  { name: 'طرق الدفع', link: '/payment' },
+  { name: 'الشروط والأحكام', link: '/terms' },
+  { name: 'سياسة الخصوصية', link: '/privacy' },
 ];
 
 function TwitterIcon() {
@@ -50,21 +50,15 @@ function InstagramIcon() {
 
 export default function Footer() {
   return (
-    <footer
-      dir="rtl"
-      className="bg-footer-background text-text-muted py-16"
-    >
+    <footer dir="rtl" className="bg-footer-background text-text-muted py-16">
       <div className="px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1 flex flex-col items-center md:items-start">
-            <span
-              className="text-3xl font-black text-white tracking-tight block mb-4">
-              سُلَّم
-            </span>
+            <span className="text-3xl font-black text-white tracking-tight block mb-4">سُلَّم</span>
             <p className="text-text-muted text-sm leading-relaxed mb-6">
-              منصة تعليمية رائدة تهدف إلى تمكين الطلاب وتقديم أفضل تجربة
-              تعليمية عبر الإنترنت بمعايير عالمية.
+              منصة تعليمية رائدة تهدف إلى تمكين الطلاب وتقديم أفضل تجربة تعليمية عبر الإنترنت
+              بمعايير عالمية.
             </p>
             <div className="flex gap-3">
               {[
@@ -124,11 +118,13 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-6">تواصل معنا</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
-                <MapPin className="text-primary"/>
-                <span className="text-gray-400 font-semibold">الرياض، المملكة العربية السعودية</span>
+                <MapPin className="text-primary" />
+                <span className="text-gray-400 font-semibold">
+                  الرياض، المملكة العربية السعودية
+                </span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="text-primary"/>
+                <Mail className="text-primary" />
                 <Link
                   href="mailto:info@sullam.edu.sa"
                   dir="ltr"
@@ -138,11 +134,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="text-primary"/>
-                <span
-                  dir="ltr"
-                  className="text-gray-400 font-semibold"
-                >
+                <Phone className="text-primary" />
+                <span dir="ltr" className="text-gray-400 font-semibold">
                   +966 50 000 0000
                 </span>
               </li>
@@ -151,10 +144,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div
-          className="pt-8 border-t border-surface flex flex-col md:flex-row justify-between items-center gap-4 text-sm"
-        
-        >
+        <div className="pt-8 border-t border-surface flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
           <p>© 2024 سُلَّم للتعليم. جميع الحقوق محفوظة.</p>
           <p className="text-gray-400">صُنع بكل حب لخدمة التعليم</p>
         </div>

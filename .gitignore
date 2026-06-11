@@ -39,3 +39,8 @@ npm-debug.log*
 pnpm-debug.log*
 *.tsbuildinfo
 **/*.tsbuildinfo
+
+# TS build info files
+apps/admin/tsconfig.tsbuildinfo
+apps/api/tsconfig.build.tsbuildinfo
+packages/utils/tsconfig.tsbuildinfo

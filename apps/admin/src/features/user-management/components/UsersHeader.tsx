@@ -1,9 +1,7 @@
 import { Button } from '@shared/components/ui/Button';
 import { Plus } from 'lucide-react';
 
-interface UsersHeaderProps {
-  onAddUser?: () => void;
-}
+import type { UsersHeaderProps } from '../types';
 
 export function UsersHeader({ onAddUser }: UsersHeaderProps) {
   return (
