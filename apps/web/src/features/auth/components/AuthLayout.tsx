@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { TrendingUp } from 'lucide-react';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -44,7 +43,7 @@ export function AuthLayout({ children, panel }: AuthLayoutProps) {
         <div className="relative z-10 px-16 py-20 text-center max-w-2xl flex flex-col items-center justify-center h-full">
           {/* Glassmorphism emblem */}
           <div className="mb-12 bg-white/10 p-6 rounded-2xl backdrop-blur-md border border-white/20 shadow-2xl flex flex-col items-center gap-4 transition-transform hover:-translate-y-2 duration-500">
-            {panel.icon ?? <TrendingUp className="text-white w-14 h-14" />}
+            {panel.icon ?? <Image src="/Logo.svg" alt="سُلَّم" width={32} height={32} />}
             <h2 className="text-white font-bold text-[42px] leading-[1.2] font-arabic">سُلَّم</h2>
           </div>
 
@@ -65,7 +64,7 @@ export function AuthLayout({ children, panel }: AuthLayoutProps) {
         {/* Mobile branding */}
         <div className="lg:hidden mb-12 flex items-center justify-center gap-3">
           <div className="bg-primary p-2 rounded-lg shadow-sm">
-            <TrendingUp className="text-white w-6 h-6" />
+            <Image src="/Logo.svg" alt="سُلَّم" width={32} height={32} />
           </div>
           <span className="text-primary font-bold text-2xl font-arabic">سُلَّم</span>
         </div>
@@ -80,7 +79,7 @@ export function AuthLayout({ children, panel }: AuthLayoutProps) {
 export function BrandLink() {
   return (
     <Link href="/" className="inline-flex items-center gap-2">
-      <TrendingUp className="text-primary w-8 h-8" />
+      <Image src="/Logo.svg" alt="سُلَّم" width={32} height={32} />
       <span className="text-primary font-bold text-2xl font-arabic">سُلَّم</span>
     </Link>
   );

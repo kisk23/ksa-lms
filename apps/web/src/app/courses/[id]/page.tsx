@@ -41,7 +41,6 @@ export default function CourseDetailPage({ params }: PageProps) {
   return (
     <main
       className="max-w-7xl mx-auto px-4 md:px-6 py-12"
-      style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}
       dir="rtl"
     >
       <CourseDetailClient id={params.id} />

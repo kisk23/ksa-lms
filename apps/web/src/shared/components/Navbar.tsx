@@ -55,7 +55,7 @@ export default function Navbar() {
             aria-label="Toggle menu"
             aria-expanded={collapse}
             className={`md:hidden p-2 rounded-lg shadow-md transition ${
-              collapsActive ? 'bg-surface text-text' : 'text-primary hover:bg-surface-hover/50'
+              collapsActive ? 'bg-secondary text-text' : 'bg-primary hover:bg-primary/80'
             }`}
             onClick={() => {
               setCollapse(!collapse);
@@ -97,13 +97,16 @@ export default function Navbar() {
           <div className="w-full md:w-2/6 flex items-center md:justify-end lg:gap-4 gap-2 mt-4 md:mt-0">
 
             {isLoading ? (
-              <div className="h-10 w-28 rounded-lg bg-surface animate-pulse ms-auto" />
+              <>
+              <div className="h-10 w-28 rounded-lg bg-gray-300 animate-pulse ms-auto" />
+              <div className="h-10 w-28 rounded-lg bg-gray-300 animate-pulse " />
+              </>
             ) : isAuthenticated ? (
               <>
                 <Button
                   onClick={() => logoutMutation.mutate()}
                   disabled={logoutMutation.isPending}
-                  className="bg-danger font-semibold text-sm py-2.5 px-4 hover:bg-danger/80 cursor-pointer transition-all duration-200 active:scale-95 text-text shadow-none disabled:opacity-70"
+                  className="bg-danger/85! font-semibold text-sm py-2.5 px-4 hover:bg-danger! cursor-pointer transition-all duration-200 active:scale-95 text-text shadow-none disabled:opacity-70"
                 >
                   {logoutMutation.isPending ? 'جاري...' : 'تسجيل الخروج'}
                 </Button>

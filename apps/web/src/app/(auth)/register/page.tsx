@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { TrendingUp, GraduationCap } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import Link from 'next/link';
 import { RegisterForm } from '@/features/auth/components/RegisterForm';
 
@@ -20,7 +20,7 @@ export default function RegisterPage() {
         <section className="lg:w-1/2 p-10 xl:p-16 flex flex-col justify-center overflow-y-auto">
           {/* Brand */}
           <Link href="/" className="inline-flex items-center gap-2 mb-10">
-            <TrendingUp className="text-primary w-8 h-8" />
+            <Image src="/Logo.svg" alt="سُلَّم" width={32} height={32} />
             <span className="text-primary font-bold text-2xl font-arabic">سُلَّم</span>
           </Link>
 
