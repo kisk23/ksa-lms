@@ -1,11 +1,14 @@
 import { ClipboardList, AlertCircle } from 'lucide-react';
 
 import type { Assignment } from '../types';
+import Link from 'next/link';
 
 interface AssignmentListProps {
   assignments: Assignment[];
   isLoading: boolean;
   error: Error | null;
+  courseId: string;
+  lessonId: string;
 }
 
 /**
@@ -15,7 +18,7 @@ interface AssignmentListProps {
  * Shows skeleton while loading, error banner on failure,
  * and a friendly empty state when there are no assignments.
  */
-export function AssignmentList({ assignments, isLoading, error }: AssignmentListProps) {
+export function AssignmentList({ assignments, isLoading, error, courseId, lessonId }: AssignmentListProps) {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-3 animate-pulse">
@@ -65,9 +68,12 @@ export function AssignmentList({ assignments, isLoading, error }: AssignmentList
               {assignment.maxAttempts !== null && ` • ${assignment.maxAttempts} محاولات`}
             </span>
           </div>
-          <button className="px-4 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-colors">
+          <Link
+            href={`/courses/${courseId}/lessons/${lessonId}/assignment/${assignment.id}`}
+            className="px-4 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-colors"
+          >
             ابدأ
-          </button>
+          </Link>
         </div>
       ))}
     </div>

@@ -43,7 +43,7 @@ export default function Navbar() {
   
       <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="md:w-1/6 w-1/2">
-          <Link href="/" className="flex items-center cursor-pointer ps-2 lg:ps-0">
+          <Link href="/" className="flex items-center cursor-pointer ps-2 lg:ps-0 w-fit">
             <Image src="/Logo.svg" alt="Logo" width={40} height={20} priority />
           </Link>
         </div>

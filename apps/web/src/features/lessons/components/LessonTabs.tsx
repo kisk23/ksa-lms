@@ -18,6 +18,8 @@ interface LessonTabsProps {
   files:           LessonFile[];
   filesLoading:    boolean;
   filesError:      Error | null;
+  courseId:        string;
+  lessonId:        string;
 }
 
 /**
@@ -39,6 +41,8 @@ export function LessonTabs({
   files,
   filesLoading,
   filesError,
+  courseId,
+  lessonId,
 }: LessonTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
 
@@ -126,6 +130,8 @@ export function LessonTabs({
             assignments={assignments}
             isLoading={assignmentsLoading}
             error={assignmentsError}
+            lessonId={lessonId}
+            courseId={courseId}
           />
         )}
 
