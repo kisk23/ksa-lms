@@ -54,6 +54,7 @@ function LessonError({ message, courseId }: { message: string; courseId: string 
     >
       <span className="text-5xl">⚠️</span>
       <h2 className="text-xl font-bold text-gray-800">تعذّر تحميل الدرس</h2>
+      <p className="text-sm text-gray-500 max-w-sm">من فضلك حاول مره اخرى بعد تسجيل الدخول</p>
       <p className="text-sm text-gray-500 max-w-sm">{message}</p>
       <div className="flex gap-3">
         <button
@@ -272,6 +273,8 @@ export function LessonPageClient({
           files={files}
           filesLoading={filesLoading}
           filesError={filesError as Error | null}
+          courseId={courseId}
+          lessonId={lessonId}
         />
 
       </section>

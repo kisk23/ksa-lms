@@ -20,6 +20,7 @@ export default function LessonError({ error, reset }: ErrorProps) {
     >
       <span className="text-6xl">⚠️</span>
       <h1 className="text-2xl font-bold text-gray-800">تعذّر تحميل الدرس</h1>
+      <p className="text-sm text-gray-500 max-w-sm">من فضلك حاول مره اخرى بعد تسجيل الدخول</p>
       <p className="text-sm text-gray-500 max-w-sm">
         {error.message ?? 'حدث خطأ غير متوقع. يرجى المحاولة مجدداً.'}
       </p>

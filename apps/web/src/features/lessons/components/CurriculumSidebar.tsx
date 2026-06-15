@@ -122,7 +122,7 @@ export function CurriculumSidebar({
                     return (
                       <Link
                         key={lesson.id}
-                        href={`/courses/${courseId}/chapters/${chapter.id}/lessons/${lesson.id}`}
+                        href={`/courses/${courseId}/lessons/${lesson.id}`}
                         className={`flex items-center justify-between py-2.5 px-6 transition-colors group ${
                           isActive
                             ? 'bg-primary/5 border-r-4 border-primary'

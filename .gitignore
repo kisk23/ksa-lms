@@ -1,12 +1,18 @@
 # Dependencies
 node_modules/
 .pnpm-store/
-*tsbuildinfo
 
 # Build outputs
 dist/
 .next/
 out/
+
+# TypeScript build info
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Generated code (e.g. Prisma client)
+**/generated/
 
 # Environment
 .env
@@ -28,6 +34,7 @@ Thumbs.db
 
 # Prisma
 apps/api/prisma/migrations/**/migration_lock.toml
+apps/api/prisma/enroll.ts
 apps/api/src/generated/
 
 # Testing
@@ -37,5 +44,3 @@ coverage/
 *.log
 npm-debug.log*
 pnpm-debug.log*
-*.tsbuildinfo
-**/*.tsbuildinfo
