@@ -103,6 +103,50 @@ export class UsersService {
     });
   }
 
+  async lockTeacher(id: string, reason?: string) {
+    const user = await this.findOne(id);
+    if (user.role !== UserRole.TEACHER) {
+      throw new Error('User is not a teacher');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isLocked: true, lockReason: reason, lockedAt: new Date() },
+    });
+  }
+
+  async unlockTeacher(id: string) {
+    const user = await this.findOne(id);
+    if (user.role !== UserRole.TEACHER) {
+      throw new Error('User is not a teacher');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isLocked: false, lockReason: null, lockedAt: null },
+    });
+  }
+
+  async banTeacher(id: string, reason?: string, expiresAt?: Date) {
+    const user = await this.findOne(id);
+    if (user.role !== UserRole.TEACHER) {
+      throw new Error('User is not a teacher');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isBanned: true, banReason: reason, bannedAt: new Date(), banExpiresAt: expiresAt },
+    });
+  }
+
+  async unbanTeacher(id: string) {
+    const user = await this.findOne(id);
+    if (user.role !== UserRole.TEACHER) {
+      throw new Error('User is not a teacher');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isBanned: false, banReason: null, bannedAt: null, banExpiresAt: null },
+    });
+  }
+
   async linkChild(parentId: string, studentId: string, relationship: ParentRelationship) {
     // Verify student exists and has STUDENT role
     const student = await this.findOne(studentId);

@@ -108,4 +108,42 @@ export class AdminUsersController {
   getDashboardStats() {
     return this.usersService.getDashboardStats();
   }
+
+  // --- Teacher Management ---
+
+  @Patch('teachers/:id/lock')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Lock a teacher account (prevent edits but allow login)' })
+  lockTeacher(@Param('id') id: string, @Body() dto: { reason?: string }) {
+    return this.usersService.lockTeacher(id, dto.reason);
+  }
+
+  @Patch('teachers/:id/unlock')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Unlock a teacher account' })
+  unlockTeacher(@Param('id') id: string) {
+    return this.usersService.unlockTeacher(id);
+  }
+
+  @Patch('teachers/:id/ban')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Ban a teacher account (prevent login)' })
+  banTeacher(@Param('id') id: string, @Body() dto: { reason?: string; expiresAt?: string }) {
+    return this.usersService.banTeacher(
+      id,
+      dto.reason,
+      dto.expiresAt ? new Date(dto.expiresAt) : undefined,
+    );
+  }
+
+  @Patch('teachers/:id/unban')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Unban a teacher account' })
+  unbanTeacher(@Param('id') id: string) {
+    return this.usersService.unbanTeacher(id);
+  }
 }
