@@ -17,6 +17,13 @@ model User {
   role                      UserRole
   isVerified                Boolean                   @default(false) @map("is_verified")
   isActive                  Boolean                   @default(true) @map("is_active")
+  isLocked                  Boolean                   @default(false) @map("is_locked")
+  lockReason                String?                   @map("lock_reason")
+  lockedAt                  DateTime?                 @map("locked_at") @db.Timestamptz(6)
+  isBanned                  Boolean                   @default(false) @map("is_banned")
+  banReason                 String?                   @map("ban_reason")
+  bannedAt                  DateTime?                 @map("banned_at") @db.Timestamptz(6)
+  banExpiresAt              DateTime?                 @map("ban_expires_at") @db.Timestamptz(6)
   guardianPhone             String?                   @map("guardian_phone") @db.VarChar(20)
   guardianIdentity          String?                   @map("guardian_identity") @db.VarChar(20)
   createdAt                 DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -53,6 +60,7 @@ model User {
   createdPromoCodes         PromoCode[]               @relation("PromoCodeCreator")
   approvalRequestsInitiated ApprovalRequest[]         @relation("RequestInitiator")
   approvalRequestsReviewed  ApprovalRequest[]         @relation("RequestReviewer")
+  approvedSnapshots         CourseSnapshot[]          @relation("SnapshotApprover")
 
   @@index([role])
   @@map("users")
@@ -133,11 +141,14 @@ model Course {
   publishedBy        String?           @map("published_by") @db.Uuid
   archivedAt         DateTime?         @map("archived_at") @db.Timestamptz(6)
   archivedBy         String?           @map("archived_by") @db.Uuid
+  liveSnapshotId     String?           @unique @map("live_snapshot_id") @db.Uuid
   createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
   teacher            User              @relation("TeacherCourses", fields: [teacherUserId], references: [id])
   publishedByUser    User?             @relation("CoursePublisher", fields: [publishedBy], references: [id])
   archivedByUser     User?             @relation("CourseArchiver", fields: [archivedBy], references: [id])
+  liveSnapshot       CourseSnapshot?   @relation("LiveCourseSnapshot", fields: [liveSnapshotId], references: [id])
+  snapshots          CourseSnapshot[]  @relation("CourseSnapshots")
   courseProgresses   CourseProgress[]
   chapters           Chapter[]
   auditLogs          CourseAuditLog[]
@@ -712,30 +723,53 @@ enum DiscountType {
 // ---------------------------------------------
 
 model ApprovalRequest {
-  id          String         @id @default(uuid()) @db.Uuid
-  requestType RequestType    @map("request_type")
-  status      ApprovalStatus @default(PENDING_REVIEW)
-  seen        Boolean        @default(false)
-  courseId    String         @map("course_id") @db.Uuid
-  lessonId    String?        @map("lesson_id") @db.Uuid
-  requestedBy String         @map("requested_by") @db.Uuid
-  reviewedBy     String?        @map("reviewed_by") @db.Uuid
-  reviewedAt     DateTime?      @map("reviewed_at") @db.Timestamptz(6)
-  supersededById String?        @map("superseded_by_id") @db.Uuid
-  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id              String         @id @default(uuid()) @db.Uuid
+  requestType     RequestType    @map("request_type")
+  status          ApprovalStatus @default(PENDING_REVIEW)
+  rejectionReason String?        @map("rejection_reason")
+  seen            Boolean        @default(false)
+  courseId        String         @map("course_id") @db.Uuid
+  lessonId        String?        @map("lesson_id") @db.Uuid
+  requestedBy     String         @map("requested_by") @db.Uuid
+  reviewedBy      String?        @map("reviewed_by") @db.Uuid
+  reviewedAt      DateTime?      @map("reviewed_at") @db.Timestamptz(6)
+  supersededById  String?        @map("superseded_by_id") @db.Uuid
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   course       Course            @relation(fields: [courseId], references: [id])
   lesson       Lesson?           @relation(fields: [lessonId], references: [id])
-  requester    User              @relation("RequestInitiator", fields: [requestedBy], references: [id])
-  reviewer     User?             @relation("RequestReviewer", fields: [reviewedBy], references: [id])
-  supersededBy ApprovalRequest?  @relation("SupersededRequest", fields: [supersededById], references: [id])
-  supersedes   ApprovalRequest[] @relation("SupersededRequest")
+  requester      User              @relation("RequestInitiator", fields: [requestedBy], references: [id])
+  reviewer       User?             @relation("RequestReviewer", fields: [reviewedBy], references: [id])
+  supersededBy   ApprovalRequest?  @relation("SupersededRequest", fields: [supersededById], references: [id])
+  supersedes     ApprovalRequest[] @relation("SupersededRequest")
+  snapshots      CourseSnapshot[]  @relation("ApprovalSnapshots")
 
   @@index([courseId])
   @@index([requestedBy])
   @@index([status])
   @@map("approval_requests")
+}
+
+model CourseSnapshot {
+  id           String   @id @default(uuid()) @db.Uuid
+  courseId     String?  @map("course_id") @db.Uuid
+  approvalId   String   @map("approval_id") @db.Uuid
+  version      Int
+  snapshotData Json     @map("snapshot_data")
+  approvedBy   String   @map("approved_by") @db.Uuid
+  approvedAt   DateTime @default(now()) @map("approved_at") @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  course   Course?         @relation("CourseSnapshots", fields: [courseId], references: [id], onDelete: SetNull)
+  approval ApprovalRequest @relation("ApprovalSnapshots", fields: [approvalId], references: [id])
+  approver User            @relation("SnapshotApprover", fields: [approvedBy], references: [id])
+
+  liveForCourse Course? @relation("LiveCourseSnapshot")
+
+  @@unique([courseId, version])
+  @@index([courseId])
+  @@map("course_snapshots")
 }
 
 enum RequestType {
