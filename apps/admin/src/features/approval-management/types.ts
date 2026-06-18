@@ -56,6 +56,7 @@ export type ApprovalRequest = {
     title: string;
     description?: string;
     thumbnailUrl?: string;
+    teacher?: { id: string; name: string; email: string; phone: string | null };
     chapters?: {
       id: string;
       title: string;
