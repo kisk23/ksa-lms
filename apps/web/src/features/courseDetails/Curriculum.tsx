@@ -49,10 +49,7 @@ export default function Curriculum({ chapters, courseId }: CurriculumProps) {
               .sort((a, b) => a.orderIndex - b.orderIndex);
 
             return (
-              <div
-                key={chapter.id}
-                className="border-2 border-gray-300 rounded-lg overflow-hidden"
-              >
+              <div key={chapter.id} className="border-2 border-gray-300 rounded-lg overflow-hidden">
                 {/* Chapter header */}
                 <button
                   onClick={() => setOpenChapterId(isOpen ? '' : chapter.id)}
@@ -64,7 +61,9 @@ export default function Curriculum({ chapters, courseId }: CurriculumProps) {
                     <span className={isOpen ? 'text-primary ' : 'text-gray-700'}>
                       {isOpen ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
                     </span>
-                    <h3 className="font-semibold text-base">وحده {chapter.orderIndex} : {chapter.title}</h3>
+                    <h3 className="font-semibold text-base">
+                      وحده {chapter.orderIndex} : {chapter.title}
+                    </h3>
                   </div>
                   <span className="text-xs text-gray-700 shrink-0 mr-2">
                     {activeLessons.length} {activeLessons.length === 1 ? 'درس' : 'دروس'}

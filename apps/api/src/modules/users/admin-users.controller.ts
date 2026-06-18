@@ -43,8 +43,8 @@ export class AdminUsersController {
   @ApiOperation({ summary: 'List all users' })
   findAll(@Query() query: PaginationQueryDto & { role?: UserRole }) {
     return this.usersService.findAll({
-      page: query.page ?? 1,
-      limit: query.limit ?? 10,
+      page: Number(query.page) || 1,
+      limit: Number(query.limit) || 10,
       search: query.search,
       role: query.role,
     });

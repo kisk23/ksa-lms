@@ -1,25 +1,272 @@
-export type CourseStatus = 'active' | 'suspended' | 'pending' | 'deleted';
+import type React from 'react';
 
+// ─── Course Status from API ────────────────────────
+export type CourseStatus =
+  | 'DRAFT'
+  | 'PENDING_REVIEW'
+  | 'CHANGES_REQUESTED'
+  | 'PUBLISHED'
+  | 'ARCHIVED';
+
+// ─── Course from API (GET /courses/manage) ─────────
 export type Course = {
   id: string;
-  name: string;
-  imageUrl?: string;
-  teacher: string;
-  price: number | null; // null = free
-  studentsCount: number;
-  rating: number | null;
+  slug: string;
+  teacherUserId: string;
+  title: string;
+  category: string | null;
+  description: string | null;
+  thumbnailUrl: string | null;
+  promoVideoUrl: string | null;
+  promoVideoProvider: 'YOUTUBE' | 'BUNNY' | null;
+  price: string; // Prisma Decimal → serialised as string
+  currency: string;
   status: CourseStatus;
+  publishedAt: string | null;
+  publishedBy: string | null;
+  archivedAt: string | null;
+  archivedBy: string | null;
   createdAt: string;
+  updatedAt: string;
+  teacher: {
+    id: string;
+    name: string;
+  };
+  _count: {
+    enrollments: number;
+    chapters: number;
+  };
 };
 
+// ─── Pagination metadata from API ──────────────────
+export type CoursesMeta = {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+};
+
+// ─── API response shape for courses list ───────────
+export type CoursesApiResponse = {
+  data: Course[];
+  meta: CoursesMeta;
+};
+
+// ─── Filter types ──────────────────────────────────
 export type CourseStatusFilter = 'all' | CourseStatus;
 export type PriceRangeFilter = 'all' | 'free' | 'lt100' | 'gt100';
-export type SubjectFilter = string;
-export type TeacherFilter = string;
 
-export type CoursesFiltersState = {
-  subject: SubjectFilter;
-  teacher: TeacherFilter;
+// ─── Domain Types ──────────────────────────────────
+export interface Teacher {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface QuestionOption {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+  orderIndex: number;
+}
+
+export interface Question {
+  id: string;
+  text: string;
+  orderIndex: number;
+  options: QuestionOption[];
+}
+
+export interface AddQuestionFormProps {
+  assignmentId: string;
+  questionCount: number;
+  onSuccess: () => Promise<void>;
+  onCancel: () => void;
+}
+
+export interface QuestionCardProps {
+  question: Question;
+  index: number;
+  onDelete: (id: string) => void;
+}
+
+export interface Assignment {
+  id: string;
+  passingScorePct: number;
+  maxAttempts?: number | null;
+  questions: Question[];
+}
+
+export interface Lesson {
+  id: string;
+  title: string;
+  orderIndex: number;
+  createdAt: string;
+  updatedAt: string;
+  videoUrl?: string;
+  videoProvider?: 'YOUTUBE' | 'BUNNY';
+  assignment?: Assignment | null;
+}
+
+export interface Chapter {
+  id: string;
+  courseId: string;
+  title: string;
+  orderIndex: number;
+  createdAt: string;
+  updatedAt: string;
+  archivedAt: string | null;
+  lessons: Lesson[];
+}
+
+export interface ExtendedCourse extends Omit<Course, 'chapters'> {
+  chapters: Chapter[];
+}
+
+export interface CreatedCourse {
+  id: string;
+  title: string;
+  status: string;
+  description?: string;
+  price?: number;
+  currency?: string;
+  teacherName?: string;
+  teacherUserId?: string;
+  thumbnailUrl?: string | null;
+  promoVideoUrl?: string | null;
+  promoVideoProvider?: string | null;
+  createdAt?: string;
+}
+
+// ─── Component Props ───────────────────────────────
+export type CourseCardProps = {
+  course: Course;
+  onRefresh?: () => void;
+};
+
+export type ActiveTab = 'details' | 'curriculum';
+
+export type CourseEditorProps = {
+  courseId: string;
+  initialTab?: ActiveTab;
+};
+
+export type CourseRowProps = {
+  course: Course;
+};
+
+export type CoursesFiltersProps = {
   status: CourseStatusFilter;
   priceRange: PriceRangeFilter;
+  search: string;
+  onStatusChange: (value: CourseStatusFilter) => void;
+  onPriceRangeChange: (value: PriceRangeFilter) => void;
+  onSearchChange: (value: string) => void;
+  onReset?: () => void;
 };
+
+export type CoursesTableProps = {
+  courses: Course[];
+  isLoading: boolean;
+  error: string | null;
+  meta: CoursesMeta | null;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+  onRetry: () => void;
+  onRefresh?: () => void;
+};
+
+export interface CourseSuccessViewProps {
+  createdCourse: CreatedCourse;
+  onReset: () => void;
+}
+
+export type CurriculumBuilderProps = {
+  courseId: string;
+};
+
+export interface AssignmentEditorProps {
+  lessonId: string;
+  lessonTitle: string;
+  type: 'QUIZ' | 'ASSIGNMENT';
+  onClose: () => void;
+}
+
+export interface CourseCardPreviewProps {
+  title: string;
+  selectedTeacherName: string;
+  price: number | '';
+  currency: string;
+  thumbnailUrl?: string | null;
+}
+
+export interface AddLessonFormProps {
+  chapterId: string;
+  lessonType: 'VIDEO' | 'ASSIGNMENT';
+  onClose: () => void;
+  fetchCourseCurriculum: () => Promise<void>;
+  setActiveAssignmentLesson: (
+    lesson: { id: string; title: string; type: 'QUIZ' | 'ASSIGNMENT' } | null,
+  ) => void;
+}
+
+export interface ChapterCardProps {
+  chapter: Chapter;
+  fetchCourseCurriculum: () => Promise<void>;
+  setActiveAssignmentLesson: (
+    lesson: { id: string; title: string; type: 'QUIZ' | 'ASSIGNMENT' } | null,
+  ) => void;
+}
+
+export interface CourseDetailsFormProps {
+  courseId: string;
+  course: ExtendedCourse;
+  onUpdate: (updatedCourse: ExtendedCourse) => void;
+  onNavigateToCurriculum: () => void;
+}
+
+export interface CourseFormFieldsProps {
+  title: string;
+  setTitle: (val: string) => void;
+  description: string;
+  setDescription: (val: string) => void;
+  price: number | '';
+  setPrice: (val: number | '') => void;
+  currency: string;
+  setCurrency: (val: string) => void;
+  teacherUserId: string;
+  setTeacherUserId: (val: string) => void;
+  thumbnailUrl: string;
+  setThumbnailUrl: (val: string) => void;
+  promoVideoUrl: string;
+  setPromoVideoUrl: (val: string) => void;
+  promoVideoProvider: string;
+  setPromoVideoProvider: (val: 'YOUTUBE' | 'BUNNY') => void;
+  category: string;
+  setCategory: (val: string) => void;
+  teachers: Teacher[];
+  isLoadingTeachers: boolean;
+  currentUser: { id: string; role: string; name: string } | null;
+  headerRight?: React.ReactNode;
+}
+
+export interface CourseSidebarProps {
+  course: ExtendedCourse;
+  isAddingChapter: boolean;
+  setIsAddingChapter: (val: boolean) => void;
+  newChapterTitle: string;
+  setNewChapterTitle: (val: string) => void;
+  isSubmittingChapter: boolean;
+  handleAddChapter: (e: React.FormEvent) => void;
+}
+
+export interface LessonRowProps {
+  lesson: Lesson;
+  lessonIndex: number;
+  fetchCourseCurriculum: () => Promise<void>;
+  setActiveAssignmentLesson: (
+    lesson: { id: string; title: string; type: 'QUIZ' | 'ASSIGNMENT' } | null,
+  ) => void;
+}

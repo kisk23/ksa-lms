@@ -1,95 +1,113 @@
 'use client';
 
-import {
-  CoursesHeader,
-  CoursesFilters,
-  CoursesTable,
-  MOCK_COURSES,
-} from '@features/course-management';
+import { CoursesHeader, CoursesFilters, CoursesTable } from '@features/course-management';
 import type {
   Course,
   CourseStatusFilter,
   PriceRangeFilter,
-  SubjectFilter,
-  TeacherFilter,
+  CoursesApiResponse,
+  CoursesMeta,
 } from '@features/course-management';
-import { useState, useMemo } from 'react';
+import { apiClient } from '@shared/lib/api-client';
+import { useState, useEffect, useCallback } from 'react';
 
-// Helpers to map filter values → matching logic
-function matchesSubject(courseName: string, subject: SubjectFilter): boolean {
-  if (subject === 'all') return true;
-
-  const subjectKeywords: Record<string, string[]> = {
-    math: ['رياضيات', 'إحصاء', 'حساب'],
-    physics: ['فيزياء'],
-    chemistry: ['كيمياء'],
-  };
-
-  const keywords = subjectKeywords[subject] || [];
-  return keywords.some((kw) => courseName.includes(kw));
-}
-
-function matchesTeacher(teacherName: string, teacher: TeacherFilter): boolean {
-  if (teacher === 'all') return true;
-
-  const teacherNames: Record<string, string> = {
-    ahmed: 'أحمد محمد',
-    sara: 'سارة علي',
-  };
-
-  const target = teacherNames[teacher];
-  return target ? teacherName.includes(target) : true;
-}
-
-function matchesPriceRange(price: number | null, range: PriceRangeFilter): boolean {
-  if (range === 'all') return true;
-  if (range === 'free') return price === null;
-  if (price === null) return false;
-  if (range === 'lt100') return price < 100;
-  if (range === 'gt100') return price >= 100;
-  return true;
-}
+const PAGE_SIZE = 12;
 
 export default function CoursesPage() {
-  const [courses] = useState<Course[]>(MOCK_COURSES);
-  const [subject, setSubject] = useState<SubjectFilter>('all');
-  const [teacher, setTeacher] = useState<TeacherFilter>('all');
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [meta, setMeta] = useState<CoursesMeta | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Filters (status & search → sent to API, priceRange → client-side)
   const [status, setStatus] = useState<CourseStatusFilter>('all');
   const [priceRange, setPriceRange] = useState<PriceRangeFilter>('all');
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredCourses = useMemo(() => {
-    return courses.filter((course) => {
-      if (course.status === 'deleted') return false;
-      if (!matchesSubject(course.name, subject)) return false;
-      if (!matchesTeacher(course.teacher, teacher)) return false;
-      if (status !== 'all' && course.status !== status) return false;
-      if (!matchesPriceRange(course.price, priceRange)) return false;
-      return true;
-    });
-  }, [courses, subject, teacher, status, priceRange]);
+  // Debounce search input to avoid firing on every keystroke
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+      setCurrentPage(1);
+    }, 400);
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  // Fetch courses from the real API
+  const fetchCourses = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const params = new URLSearchParams();
+      params.set('page', String(currentPage));
+      params.set('limit', String(PAGE_SIZE));
+      if (status !== 'all') params.set('status', status);
+      if (debouncedSearch) params.set('search', debouncedSearch);
+
+      const response = await apiClient.get<CoursesApiResponse>(
+        `/courses/manage?${params.toString()}`,
+      );
+      setCourses(response.data);
+      setMeta(response.meta);
+    } catch (err) {
+      const error = err as Error;
+      console.error('Failed to fetch courses:', error);
+      setError(error.message || 'فشل في تحميل الكورسات');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, status, debouncedSearch]);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
+
+  // Client-side price filtering (not supported by API)
+  const filteredCourses = courses.filter((course) => {
+    if (priceRange === 'all') return true;
+    const price = parseFloat(course.price);
+    if (priceRange === 'free') return price === 0;
+    if (priceRange === 'lt100') return price > 0 && price < 100;
+    if (priceRange === 'gt100') return price >= 100;
+    return true;
+  });
+
+  const handleStatusChange = (value: CourseStatusFilter) => {
+    setStatus(value);
+    setCurrentPage(1);
+  };
 
   const handleReset = () => {
-    setSubject('all');
-    setTeacher('all');
     setStatus('all');
     setPriceRange('all');
+    setSearch('');
+    setCurrentPage(1);
   };
 
   return (
     <div className="max-w-7xl mx-auto w-full">
       <CoursesHeader />
       <CoursesFilters
-        subject={subject}
-        teacher={teacher}
         status={status}
         priceRange={priceRange}
-        onSubjectChange={setSubject}
-        onTeacherChange={setTeacher}
-        onStatusChange={setStatus}
+        search={search}
+        onStatusChange={handleStatusChange}
         onPriceRangeChange={setPriceRange}
+        onSearchChange={setSearch}
         onReset={handleReset}
       />
-      <CoursesTable courses={filteredCourses} />
+      <CoursesTable
+        courses={filteredCourses}
+        isLoading={isLoading}
+        error={error}
+        meta={meta}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        onRetry={fetchCourses}
+        onRefresh={fetchCourses}
+      />
     </div>
   );
 }

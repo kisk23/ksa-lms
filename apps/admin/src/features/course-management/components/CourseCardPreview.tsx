@@ -1,14 +1,9 @@
 'use client';
 
-import { User, Image as ImageIcon, Sparkles, HelpCircle } from 'lucide-react';
+import { User, Sparkles, Image as ImageIcon, HelpCircle } from 'lucide-react';
+import Image from 'next/image';
 
-interface CourseCardPreviewProps {
-  title: string;
-  thumbnailUrl: string;
-  selectedTeacherName: string;
-  price: number | '';
-  currency: string;
-}
+import type { CourseCardPreviewProps } from '../types';
 
 export function CourseCardPreview({
   title,
@@ -29,11 +24,12 @@ export function CourseCardPreview({
         {/* Image Preview / Placeholder */}
         <div className="relative aspect-[16/9] w-full bg-gradient-to-br from-primary-container/10 to-primary/5 flex items-center justify-center group overflow-hidden border-b border-outline-variant/40">
           {thumbnailUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={thumbnailUrl}
               alt="Course Preview"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              fill
+              unoptimized
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}

@@ -1,55 +1,76 @@
 'use client';
 
 import { Pagination } from '@shared/components/ui/Pagination';
-import { useState, useMemo, useEffect } from 'react';
+import { Loader2, AlertCircle, BookOpen } from 'lucide-react';
 
 import { CourseCard } from './CourseCard';
-import type { Course } from '../types';
+import type { CoursesTableProps } from '../types';
 
-type CoursesTableProps = {
-  courses: Course[];
-  pageSize?: number;
-};
+export function CoursesTable({
+  courses,
+  isLoading,
+  error,
+  meta,
+  currentPage,
+  onPageChange,
+  onRetry,
+  onRefresh,
+}: CoursesTableProps) {
+  if (isLoading) {
+    return (
+      <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-16 text-center shadow-sm">
+        <Loader2 size={40} className="animate-spin text-primary mx-auto mb-4" />
+        <p className="font-body-md-ar text-on-surface-variant">جاري تحميل الكورسات...</p>
+      </div>
+    );
+  }
 
-export function CoursesTable({ courses, pageSize = 6 }: CoursesTableProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [courses]);
-
-  const totalItems = courses.length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-
-  const visibleCourses = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return courses.slice(start, start + pageSize);
-  }, [courses, currentPage, pageSize]);
+  if (error) {
+    return (
+      <div className="bg-surface-container-lowest rounded-xl border border-error/20 p-12 text-center shadow-sm">
+        <AlertCircle size={40} className="text-error mx-auto mb-4" />
+        <p className="font-body-md-ar text-error font-semibold mb-2">فشل في تحميل الكورسات</p>
+        <p className="font-caption-ar text-on-surface-variant mb-4">{error}</p>
+        <button
+          onClick={onRetry}
+          className="px-6 py-2.5 bg-primary-container text-on-primary rounded-xl hover:bg-primary transition-colors font-body-md-ar font-semibold"
+        >
+          إعادة المحاولة
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-base">
-      {visibleCourses.length === 0 ? (
-        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-12 text-center text-on-surface-variant font-body-md-ar shadow-sm">
-          لا توجد نتائج مطابقة للفلاتر المحددة
+      {courses.length === 0 ? (
+        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-12 text-center shadow-sm">
+          <BookOpen size={48} className="mx-auto mb-4 text-outline/40" />
+          <p className="font-body-md-ar text-on-surface-variant font-semibold mb-1">
+            لا توجد كورسات
+          </p>
+          <p className="font-caption-ar text-on-surface-variant/70">
+            لا توجد نتائج مطابقة للفلاتر المحددة، جرب تعديل معايير البحث.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-gutter">
-          {visibleCourses.map((course) => (
-            <CourseCard key={course.id} course={course} />
+          {courses.map((course) => (
+            <CourseCard key={course.id} course={course} onRefresh={onRefresh} />
           ))}
         </div>
       )}
 
-      {/* Standalone Premium Pagination Container */}
-      {totalItems > 0 && (
+      {/* Pagination from API meta */}
+      {meta && meta.total > 0 && (
         <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
           <Pagination
             currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={totalItems}
-            pageSize={pageSize}
+            totalPages={meta.totalPages}
+            totalItems={meta.total}
+            pageSize={meta.limit}
             itemLabel="كورس"
-            onPageChange={setCurrentPage}
+            onPageChange={onPageChange}
           />
         </div>
       )}

@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import {
-  CheckCircle2,
-  ChevronDown,
-  ChevronLeft,
-  CirclePlay,
-} from 'lucide-react';
+import { CheckCircle2, ChevronDown, ChevronLeft, CirclePlay } from 'lucide-react';
 
 import type { Chapter, LessonProgressStatus } from '../types';
 
@@ -82,8 +77,7 @@ export function CurriculumSidebar({
       <div className="flex-1 overflow-y-auto">
         {sortedChapters.map((chapter) => {
           const isOpen = openChapters.has(chapter.id);
-          const sortedLessons = [...chapter.lessons]
-            .sort((a, b) => a.orderIndex - b.orderIndex);
+          const sortedLessons = [...chapter.lessons].sort((a, b) => a.orderIndex - b.orderIndex);
 
           const chapterCompleted = sortedLessons.filter((l) => completedMap.get(l.id)).length;
           const allDone = sortedLessons.length > 0 && chapterCompleted === sortedLessons.length;
@@ -116,7 +110,7 @@ export function CurriculumSidebar({
               {isOpen && (
                 <div className="pb-1">
                   {sortedLessons.map((lesson) => {
-                    const isActive    = lesson.id === activeLessonId;
+                    const isActive = lesson.id === activeLessonId;
                     const isCompleted = completedMap.get(lesson.id) ?? false;
 
                     return (

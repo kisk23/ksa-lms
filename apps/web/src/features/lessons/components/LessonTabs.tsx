@@ -4,20 +4,20 @@ import { useState } from 'react';
 
 import type { LessonDetail, Assignment, LessonFile } from '../types';
 import { AssignmentList } from './AssignmentList';
-import { LessonFiles }    from './LessonFiles';
+import { LessonFiles } from './LessonFiles';
 
 type TabId = 'overview' | 'files' | 'assignments' | 'discussions';
 
 interface LessonTabsProps {
-  lesson:          LessonDetail;
-  courseTitle:     string;
-  teacherName:     string;
-  assignments:     Assignment[];
+  lesson: LessonDetail;
+  courseTitle: string;
+  teacherName: string;
+  assignments: Assignment[];
   assignmentsLoading: boolean;
-  assignmentsError:   Error | null;
-  files:           LessonFile[];
-  filesLoading:    boolean;
-  filesError:      Error | null;
+  assignmentsError: Error | null;
+  files: LessonFile[];
+  filesLoading: boolean;
+  filesError: Error | null;
 }
 
 /**
@@ -43,12 +43,15 @@ export function LessonTabs({
   const [activeTab, setActiveTab] = useState<TabId>('overview');
 
   const tabs: { id: TabId; label: string; badge?: number | string }[] = [
-    { id: 'overview',     label: 'نظرة عامة' },
-    { id: 'files',        label: 'الملفات',   badge: files.length > 0 ? files.length : undefined },
-    { id: 'assignments',  label: 'الواجبات',  badge: assignments.length > 0 ? assignments.length : undefined },
+    { id: 'overview', label: 'نظرة عامة' },
+    { id: 'files', label: 'الملفات', badge: files.length > 0 ? files.length : undefined },
+    {
+      id: 'assignments',
+      label: 'الواجبات',
+      badge: assignments.length > 0 ? assignments.length : undefined,
+    },
     // { id: 'discussions',  label: 'النقاشات' },
   ];
-  
 
   return (
     <div className="flex flex-col gap-0" dir="rtl">
@@ -68,9 +71,7 @@ export function LessonTabs({
             {tab.badge !== undefined && (
               <span
                 className={`text-[10px] font-bold px-1.5 rounded-full ${
-                  tab.id === 'assignments'
-                    ? 'bg-red-500 text-white'
-                    : 'bg-gray-200 text-gray-600'
+                  tab.id === 'assignments' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-600'
                 }`}
               >
                 {tab.badge}
@@ -82,7 +83,6 @@ export function LessonTabs({
 
       {/* ── Tab panels ── */}
       <div className="bg-white border border-t-0 border-gray-200 rounded-b-xl p-5">
-
         {/* Overview */}
         {activeTab === 'overview' && (
           <div className="flex flex-col gap-5">
@@ -96,15 +96,14 @@ export function LessonTabs({
                 <p className="text-xs text-gray-500">محاضر في دورة {courseTitle}</p>
               </div>
             </div>
-            
 
             {/* Lesson description */}
             <div className="text-sm text-gray-600 leading-relaxed">
               {lesson.title && (
                 <p>
                   في هذا الدرس سنتناول:{' '}
-                  <span className="font-semibold text-gray-800">{lesson.title}</span>.
-                  اتبع الفيديو وأكمل الواجب في النهاية لتأكيد الفهم.
+                  <span className="font-semibold text-gray-800">{lesson.title}</span>. اتبع الفيديو
+                  وأكمل الواجب في النهاية لتأكيد الفهم.
                 </p>
               )}
             </div>
@@ -113,11 +112,7 @@ export function LessonTabs({
 
         {/* Files */}
         {activeTab === 'files' && (
-          <LessonFiles
-            files={files}
-            isLoading={filesLoading}
-            error={filesError}
-          />
+          <LessonFiles files={files} isLoading={filesLoading} error={filesError} />
         )}
 
         {/* Assignments */}
