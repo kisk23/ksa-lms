@@ -48,6 +48,17 @@ export class ApprovalsController {
   }
 
   /**
+   * Endpoint for admins to get the count of unseen approval requests.
+   * @returns Total count of unseen approval requests
+   */
+  @Get('unseen-count')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  async getUnseenCount() {
+    const total = await this.approvalsService.getUnseenCount();
+    return { meta: { total } };
+  }
+
+  /**
    * Endpoint for admins to fetch detailed information for a single approval request.
    * @param id The UUID of the request
    * @returns Detailed approval request including related course and lessons
@@ -56,6 +67,17 @@ export class ApprovalsController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   async getApprovalDetail(@Param('id') id: string) {
     return this.approvalsService.getApprovalDetail(id);
+  }
+
+  /**
+   * Endpoint for admins to mark an approval request as seen.
+   * @param id The UUID of the request
+   * @returns The updated approval request
+   */
+  @Patch(':id/seen')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  async markAsSeen(@Param('id') id: string) {
+    return this.approvalsService.markAsSeen(id);
   }
 
   /**

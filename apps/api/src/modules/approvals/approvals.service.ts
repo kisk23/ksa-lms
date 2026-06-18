@@ -205,4 +205,31 @@ export class ApprovalsService {
       return updatedApproval;
     });
   }
+  /**
+   * Retrieves the count of unseen approval requests.
+   * @returns Total count of unseen approval requests
+   */
+  async getUnseenCount() {
+    return this.prisma.approvalRequest.count({
+      where: { seen: false },
+    });
+  }
+
+  /**
+   * Marks an approval request as seen.
+   * @param id The UUID of the request to mark as seen
+   * @returns The updated approval request
+   */
+  async markAsSeen(id: string) {
+    const approval = await this.repository.findById(id);
+    if (!approval) {
+      throw new NotFoundException('Approval request not found');
+    }
+
+    if (approval.seen) {
+      return approval; // Already seen, do nothing
+    }
+
+    return this.repository.update(id, { seen: true });
+  }
 }

@@ -715,6 +715,7 @@ model ApprovalRequest {
   id          String         @id @default(uuid()) @db.Uuid
   requestType RequestType    @map("request_type")
   status      ApprovalStatus @default(PENDING_REVIEW)
+  seen        Boolean        @default(false)
   courseId    String         @map("course_id") @db.Uuid
   lessonId    String?        @map("lesson_id") @db.Uuid
   requestedBy String         @map("requested_by") @db.Uuid

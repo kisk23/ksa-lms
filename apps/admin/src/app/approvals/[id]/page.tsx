@@ -9,14 +9,14 @@ import {
 } from '@features/approval-management';
 import type { ApprovalRequest } from '@features/approval-management';
 import { apiClient } from '@shared/lib/api-client';
-import { use, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 type ApprovalDetailPageProps = {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 };
 
 export default function ApprovalDetailPage({ params }: ApprovalDetailPageProps) {
-  const { id } = use(params);
+  const { id } = params;
   const [approval, setApproval] = useState<ApprovalRequest | null>(null);
   const [loading, setLoading] = useState(true);
 
