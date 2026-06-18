@@ -1,39 +1,37 @@
 import { ChevronDown, IdCard, Mail, Phone, User } from 'lucide-react';
 
 import { FormField } from './FormField';
-import type { TeacherFormFieldsProps } from '../types';
+import type { StaffFormFieldsProps } from '../types';
 
-export function TeacherFormFields({
-  name,
-  onChangeName,
-  email,
-  onChangeEmail,
-  phone,
-  onChangePhone,
-  identity,
-  onChangeIdentity,
-  touched,
-  onBlur,
-  inputStyles,
-  isNameValid,
-  isEmailValid,
-  isPhoneValid,
-  isIdentityValid,
-  handlePhoneChange,
-}: TeacherFormFieldsProps) {
+export function StaffFormFields({ role, form }: StaffFormFieldsProps) {
+  const isTeacher = role === 'TEACHER';
+
+  const section1Title = isTeacher ? 'البيانات الشخصية والمهنية' : 'البيانات الشخصية للمشرف';
+  const nameLabel = isTeacher ? 'الاسم الثلاثي للمعلم' : 'الاسم الثلاثي للمشرف';
+  const emailLabel = isTeacher ? 'البريد الإلكتروني للمعلم' : 'البريد الإلكتروني للمشرف';
+  const emailPlaceholder = isTeacher ? 'teacher@example.com' : 'admin@example.com';
+  const phoneLabel = isTeacher ? 'رقم هاتف المعلم' : 'رقم هاتف المشرف';
+
+  const section2Title = isTeacher ? 'التحقق والبيانات المهنية' : 'التحقق وبيانات الصلاحيات';
+  const identityLabel = isTeacher
+    ? 'رقم الهوية الوطنية / الإقامة للمعلم'
+    : 'رقم الهوية الوطنية للمشرف';
+
   return (
     <>
       {/* Section 1: Personal Details */}
       <section className="space-y-6">
         <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
-          البيانات الشخصية والمهنية
+          {section1Title}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Full Name */}
           <FormField
-            label="الاسم الثلاثي للمعلم"
+            label={nameLabel}
             error={
-              touched.name && !isNameValid ? 'يجب أن يتكون الاسم من 3 أحرف على الأقل' : undefined
+              form.touched.name && !form.isNameValid
+                ? 'يجب أن يتكون الاسم من 3 أحرف على الأقل'
+                : undefined
             }
           >
             <div className="relative w-full">
@@ -44,11 +42,11 @@ export function TeacherFormFields({
               <input
                 required
                 name="name"
-                value={name}
-                onChange={(e) => onChangeName(e.target.value)}
-                onBlur={() => onBlur('name')}
-                className={inputStyles}
-                placeholder="الاسم الثلاثي للمعلم"
+                value={form.data.name}
+                onChange={(e) => form.onChange('name', e.target.value)}
+                onBlur={() => form.onBlur('name')}
+                className={form.inputStyles}
+                placeholder={nameLabel}
                 type="text"
               />
             </div>
@@ -56,9 +54,9 @@ export function TeacherFormFields({
 
           {/* Email Address */}
           <FormField
-            label="البريد الإلكتروني للمعلم"
+            label={emailLabel}
             error={
-              touched.email && !isEmailValid(email)
+              form.touched.email && !form.isEmailValid(form.data.email)
                 ? 'البريد الإلكتروني المدخل غير صالح'
                 : undefined
             }
@@ -71,12 +69,12 @@ export function TeacherFormFields({
               <input
                 required
                 name="email"
-                value={email}
-                onChange={(e) => onChangeEmail(e.target.value)}
-                onBlur={() => onBlur('email')}
-                className={`${inputStyles} text-left`}
+                value={form.data.email}
+                onChange={(e) => form.onChange('email', e.target.value)}
+                onBlur={() => form.onBlur('email')}
+                className={`${form.inputStyles} text-left`}
                 dir="ltr"
-                placeholder="teacher@example.com"
+                placeholder={emailPlaceholder}
                 type="email"
               />
             </div>
@@ -84,9 +82,9 @@ export function TeacherFormFields({
 
           {/* Phone Number */}
           <FormField
-            label="رقم هاتف المعلم"
+            label={phoneLabel}
             error={
-              touched.phone && !isPhoneValid(phone)
+              form.touched.phone && !form.isPhoneValid(form.data.phone)
                 ? 'رقم الجوال غير صالح. يجب أن يبدأ بـ 5 ويتكون من 9 أرقام'
                 : undefined
             }
@@ -114,10 +112,10 @@ export function TeacherFormFields({
                 <input
                   required
                   name="phone"
-                  value={phone}
-                  onChange={(e) => handlePhoneChange(e, onChangePhone)}
-                  onBlur={() => onBlur('phone')}
-                  className={`${inputStyles} text-left`}
+                  value={form.data.phone}
+                  onChange={(e) => form.handlePhoneChange(e, 'phone')}
+                  onBlur={() => form.onBlur('phone')}
+                  className={`${form.inputStyles} text-left`}
                   dir="ltr"
                   placeholder="5xxxxxxxx"
                   type="tel"
@@ -132,14 +130,14 @@ export function TeacherFormFields({
       {/* Section 2: Verification / Professional ID */}
       <section className="space-y-6">
         <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
-          التحقق والبيانات المهنية
+          {section2Title}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Identity */}
           <FormField
-            label="رقم الهوية الوطنية / الإقامة للمعلم"
+            label={identityLabel}
             error={
-              touched.identity && !isIdentityValid(identity)
+              form.touched.identity && !form.isIdentityValid(form.data.identity)
                 ? 'يجب أن يكون بين 3 و 20 حرفاً'
                 : undefined
             }
@@ -152,10 +150,10 @@ export function TeacherFormFields({
               <input
                 required
                 name="identity"
-                value={identity}
-                onChange={(e) => onChangeIdentity(e.target.value)}
-                onBlur={() => onBlur('identity')}
-                className={inputStyles}
+                value={form.data.identity}
+                onChange={(e) => form.onChange('identity', e.target.value)}
+                onBlur={() => form.onBlur('identity')}
+                className={form.inputStyles}
                 placeholder="رقم الهوية الوطنية"
                 type="text"
               />

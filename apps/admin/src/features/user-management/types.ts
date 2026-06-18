@@ -69,40 +69,18 @@ export interface CreatedUser {
   roleLabel: string;
 }
 
-export interface StudentFormFieldsProps {
+export interface UserFormData {
   name: string;
-  onChangeName: (val: string) => void;
   email: string;
-  onChangeEmail: (val: string) => void;
   phone: string;
-  onChangePhone: (val: string) => void;
   identity: string;
-  onChangeIdentity: (val: string) => void;
   guardianIdentity: string;
-  onChangeGuardianIdentity: (val: string) => void;
   guardianPhone: string;
-  onChangeGuardianPhone: (val: string) => void;
-  hasParentInfo: boolean;
-  onToggleParentInfo: () => void;
-  touched: Record<string, boolean>;
-  onBlur: (field: string) => void;
-  inputStyles: string;
-  isNameValid: boolean;
-  isEmailValid: (email: string) => boolean;
-  isPhoneValid: (phone: string) => boolean;
-  isIdentityValid: (identity: string) => boolean;
-  handlePhoneChange: (e: ChangeEvent<HTMLInputElement>, setter: (v: string) => void) => void;
 }
 
-export interface TeacherFormFieldsProps {
-  name: string;
-  onChangeName: (val: string) => void;
-  email: string;
-  onChangeEmail: (val: string) => void;
-  phone: string;
-  onChangePhone: (val: string) => void;
-  identity: string;
-  onChangeIdentity: (val: string) => void;
+export interface UserFormProps {
+  data: UserFormData;
+  onChange: (field: keyof UserFormData, value: string) => void;
   touched: Record<string, boolean>;
   onBlur: (field: string) => void;
   inputStyles: string;
@@ -110,26 +88,18 @@ export interface TeacherFormFieldsProps {
   isEmailValid: (email: string) => boolean;
   isPhoneValid: (phone: string) => boolean;
   isIdentityValid: (identity: string) => boolean;
-  handlePhoneChange: (e: ChangeEvent<HTMLInputElement>, setter: (v: string) => void) => void;
+  handlePhoneChange: (e: ChangeEvent<HTMLInputElement>, field: keyof UserFormData) => void;
+  hasParentInfo?: boolean;
+  onToggleParentInfo?: () => void;
 }
 
-export interface AssistantAdminFormFieldsProps {
-  name: string;
-  onChangeName: (val: string) => void;
-  email: string;
-  onChangeEmail: (val: string) => void;
-  phone: string;
-  onChangePhone: (val: string) => void;
-  identity: string;
-  onChangeIdentity: (val: string) => void;
-  touched: Record<string, boolean>;
-  onBlur: (field: string) => void;
-  inputStyles: string;
-  isNameValid: boolean;
-  isEmailValid: (email: string) => boolean;
-  isPhoneValid: (phone: string) => boolean;
-  isIdentityValid: (identity: string) => boolean;
-  handlePhoneChange: (e: ChangeEvent<HTMLInputElement>, setter: (v: string) => void) => void;
+export interface StudentFormFieldsProps {
+  form: UserFormProps;
+}
+
+export interface StaffFormFieldsProps {
+  role: 'TEACHER' | 'ASSISTANT_ADMIN';
+  form: UserFormProps;
 }
 
 export interface AddUserSuccessProps {

@@ -6,16 +6,16 @@ import { motion } from 'motion/react';
 import { useState, useRef } from 'react';
 
 import { AddUserSuccess } from './AddUserSuccess';
-import { AssistantAdminFormFields } from './AssistantAdminFormFields';
 import { FormField } from './FormField';
+import { StaffFormFields } from './StaffFormFields';
 import { StudentFormFields } from './StudentFormFields';
-import { TeacherFormFields } from './TeacherFormFields';
 import {
   UserRole,
   type CreateUserResponse,
   type SearchUserResponse,
   type AddUserModalProps,
   type CreatedUser,
+  type UserFormProps,
 } from '../types';
 
 export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) {
@@ -126,14 +126,6 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
 
   const handleBlur = (field: string) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
-  };
-
-  const handlePhoneChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    setter: (v: string) => void,
-  ) => {
-    const val = e.target.value.replace(/[^0-9]/g, '');
-    setter(val);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -312,6 +304,46 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
 
   const activeConfig = config[accountType as keyof typeof config];
 
+  const formProps: UserFormProps = {
+    data: { name, email, phone, identity, guardianIdentity, guardianPhone },
+    onChange: (field, value) => {
+      switch (field) {
+        case 'name':
+          setName(value);
+          break;
+        case 'email':
+          setEmail(value);
+          break;
+        case 'phone':
+          setPhone(value);
+          break;
+        case 'identity':
+          setIdentity(value);
+          break;
+        case 'guardianIdentity':
+          setGuardianIdentity(value);
+          break;
+        case 'guardianPhone':
+          setGuardianPhone(value);
+          break;
+      }
+    },
+    touched,
+    onBlur: handleBlur,
+    inputStyles,
+    isNameValid,
+    isEmailValid,
+    isPhoneValid,
+    isIdentityValid,
+    handlePhoneChange: (e, field) => {
+      const val = e.target.value.replace(/[^0-9]/g, '');
+      if (field === 'phone') setPhone(val);
+      else if (field === 'guardianPhone') setGuardianPhone(val);
+    },
+    hasParentInfo,
+    onToggleParentInfo: () => setHasParentInfo(!hasParentInfo),
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -403,73 +435,10 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
             </div>
 
             {/* Sub-components for Form Fields based on Account Type */}
-            {accountType === UserRole.STUDENT && (
-              <StudentFormFields
-                name={name}
-                onChangeName={setName}
-                email={email}
-                onChangeEmail={setEmail}
-                phone={phone}
-                onChangePhone={setPhone}
-                identity={identity}
-                onChangeIdentity={setIdentity}
-                guardianIdentity={guardianIdentity}
-                onChangeGuardianIdentity={setGuardianIdentity}
-                guardianPhone={guardianPhone}
-                onChangeGuardianPhone={setGuardianPhone}
-                hasParentInfo={hasParentInfo}
-                onToggleParentInfo={() => setHasParentInfo(!hasParentInfo)}
-                touched={touched}
-                onBlur={handleBlur}
-                inputStyles={inputStyles}
-                isNameValid={isNameValid}
-                isEmailValid={isEmailValid}
-                isPhoneValid={isPhoneValid}
-                isIdentityValid={isIdentityValid}
-                handlePhoneChange={handlePhoneChange}
-              />
-            )}
+            {accountType === UserRole.STUDENT && <StudentFormFields form={formProps} />}
 
-            {accountType === UserRole.TEACHER && (
-              <TeacherFormFields
-                name={name}
-                onChangeName={setName}
-                email={email}
-                onChangeEmail={setEmail}
-                phone={phone}
-                onChangePhone={setPhone}
-                identity={identity}
-                onChangeIdentity={setIdentity}
-                touched={touched}
-                onBlur={handleBlur}
-                inputStyles={inputStyles}
-                isNameValid={isNameValid}
-                isEmailValid={isEmailValid}
-                isPhoneValid={isPhoneValid}
-                isIdentityValid={isIdentityValid}
-                handlePhoneChange={handlePhoneChange}
-              />
-            )}
-
-            {accountType === UserRole.ASSISTANT_ADMIN && (
-              <AssistantAdminFormFields
-                name={name}
-                onChangeName={setName}
-                email={email}
-                onChangeEmail={setEmail}
-                phone={phone}
-                onChangePhone={setPhone}
-                identity={identity}
-                onChangeIdentity={setIdentity}
-                touched={touched}
-                onBlur={handleBlur}
-                inputStyles={inputStyles}
-                isNameValid={isNameValid}
-                isEmailValid={isEmailValid}
-                isPhoneValid={isPhoneValid}
-                isIdentityValid={isIdentityValid}
-                handlePhoneChange={handlePhoneChange}
-              />
+            {(accountType === UserRole.TEACHER || accountType === UserRole.ASSISTANT_ADMIN) && (
+              <StaffFormFields role={accountType} form={formProps} />
             )}
 
             {/* Section 3: Password & Security */}

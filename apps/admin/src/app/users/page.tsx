@@ -9,7 +9,7 @@ import {
   updateUser,
 } from '@features/user-management';
 import type { RoleFilter, StatusFilter, User } from '@features/user-management';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -40,38 +40,40 @@ export default function UsersPage() {
     return () => clearTimeout(handler);
   }, [search]);
 
-  const loadUsers = async (silent = false, customPage = page) => {
-    try {
-      if (!silent) setIsTableLoading(true);
-      setError(null);
+  const loadUsers = useCallback(
+    async (silent = false, customPage = page) => {
+      try {
+        if (!silent) setIsTableLoading(true);
+        setError(null);
 
-      const response = await fetchUsers({
-        page: customPage,
-        limit: PAGE_SIZE,
-        role: role === 'all' ? undefined : role,
-        search: debouncedSearch.trim() || undefined,
-        status: status === 'all' ? undefined : status,
-      });
+        const response = await fetchUsers({
+          page: customPage,
+          limit: PAGE_SIZE,
+          role: role === 'all' ? undefined : role,
+          search: debouncedSearch.trim() || undefined,
+          status: status === 'all' ? undefined : status,
+        });
 
-      setUsers(response.data || []);
-      setTotalItems(response.meta.total || 0);
-      setTotalPages(response.meta.totalPages || 1);
-    } catch (err) {
-      const error = err as Error;
-      console.error('loadUsers API error:', error);
-      if (!silent) setUsers([]); // Clear previous user state on error only if not initial load
-      setError(error.message || 'حدث خطأ أثناء تحميل بيانات المستخدمين من الخادم.');
-    } finally {
-      setIsInitialLoading(false);
-      setIsTableLoading(false);
-    }
-  };
+        setUsers(response.data || []);
+        setTotalItems(response.meta.total || 0);
+        setTotalPages(response.meta.totalPages || 1);
+      } catch (err) {
+        const error = err as Error;
+        console.error('loadUsers API error:', error);
+        if (!silent) setUsers([]); // Clear previous user state on error only if not initial load
+        setError(error.message || 'حدث خطأ أثناء تحميل بيانات المستخدمين من الخادم.');
+      } finally {
+        setIsInitialLoading(false);
+        setIsTableLoading(false);
+      }
+    },
+    [page, role, debouncedSearch, status, PAGE_SIZE],
+  );
 
   // Fetch users when page, role, status, or debouncedSearch changes
   useEffect(() => {
     loadUsers(false, page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, role, status, debouncedSearch]);
+  }, [loadUsers, page]);
 
   const handleRoleChange = (newRole: RoleFilter) => {
     setRole(newRole);

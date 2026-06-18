@@ -4,30 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { FormField } from './FormField';
 import type { StudentFormFieldsProps } from '../types';
 
-export function StudentFormFields({
-  name,
-  onChangeName,
-  email,
-  onChangeEmail,
-  phone,
-  onChangePhone,
-  identity,
-  onChangeIdentity,
-  guardianIdentity,
-  onChangeGuardianIdentity,
-  guardianPhone,
-  onChangeGuardianPhone,
-  hasParentInfo,
-  onToggleParentInfo,
-  touched,
-  onBlur,
-  inputStyles,
-  isNameValid,
-  isEmailValid,
-  isPhoneValid,
-  isIdentityValid,
-  handlePhoneChange,
-}: StudentFormFieldsProps) {
+export function StudentFormFields({ form }: StudentFormFieldsProps) {
   return (
     <>
       {/* Section 1: Personal Details */}
@@ -40,7 +17,7 @@ export function StudentFormFields({
           <FormField
             label="الاسم رباعي للطالب"
             error={
-              touched.name && !isNameValid
+              form.touched.name && !form.isNameValid
                 ? 'يجب إدخال الاسم رباعي للطالب (٤ أسماء على الأقل)'
                 : undefined
             }
@@ -53,10 +30,10 @@ export function StudentFormFields({
               <input
                 required
                 name="name"
-                value={name}
-                onChange={(e) => onChangeName(e.target.value)}
-                onBlur={() => onBlur('name')}
-                className={inputStyles}
+                value={form.data.name}
+                onChange={(e) => form.onChange('name', e.target.value)}
+                onBlur={() => form.onBlur('name')}
+                className={form.inputStyles}
                 placeholder="أدخل الاسم رباعي للطالب"
                 type="text"
               />
@@ -67,7 +44,7 @@ export function StudentFormFields({
           <FormField
             label="البريد الإلكتروني للطالب"
             error={
-              touched.email && !isEmailValid(email)
+              form.touched.email && !form.isEmailValid(form.data.email)
                 ? 'البريد الإلكتروني المدخل غير صالح'
                 : undefined
             }
@@ -80,10 +57,10 @@ export function StudentFormFields({
               <input
                 required
                 name="email"
-                value={email}
-                onChange={(e) => onChangeEmail(e.target.value)}
-                onBlur={() => onBlur('email')}
-                className={`${inputStyles} text-left`}
+                value={form.data.email}
+                onChange={(e) => form.onChange('email', e.target.value)}
+                onBlur={() => form.onBlur('email')}
+                className={`${form.inputStyles} text-left`}
                 dir="ltr"
                 placeholder="student@example.com"
                 type="email"
@@ -95,7 +72,7 @@ export function StudentFormFields({
           <FormField
             label="رقم هاتف الطالب"
             error={
-              touched.phone && !isPhoneValid(phone)
+              form.touched.phone && !form.isPhoneValid(form.data.phone)
                 ? 'رقم الجوال غير صالح. يجب أن يبدأ بـ 5 ويتكون من 9 أرقام'
                 : undefined
             }
@@ -123,10 +100,10 @@ export function StudentFormFields({
                 <input
                   required
                   name="phone"
-                  value={phone}
-                  onChange={(e) => handlePhoneChange(e, onChangePhone)}
-                  onBlur={() => onBlur('phone')}
-                  className={`${inputStyles} text-left`}
+                  value={form.data.phone}
+                  onChange={(e) => form.handlePhoneChange(e, 'phone')}
+                  onBlur={() => form.onBlur('phone')}
+                  className={`${form.inputStyles} text-left`}
                   dir="ltr"
                   placeholder="5xxxxxxxx"
                   type="tel"
@@ -140,7 +117,7 @@ export function StudentFormFields({
           <FormField
             label="رقم هوية الطالب"
             error={
-              touched.identity && !isIdentityValid(identity)
+              form.touched.identity && !form.isIdentityValid(form.data.identity)
                 ? 'يجب أن يكون بين 3 و 20 حرفاً'
                 : undefined
             }
@@ -153,10 +130,10 @@ export function StudentFormFields({
               <input
                 required
                 name="identity"
-                value={identity}
-                onChange={(e) => onChangeIdentity(e.target.value)}
-                onBlur={() => onBlur('identity')}
-                className={inputStyles}
+                value={form.data.identity}
+                onChange={(e) => form.onChange('identity', e.target.value)}
+                onBlur={() => form.onBlur('identity')}
+                className={form.inputStyles}
                 placeholder="رقم هوية الطالب"
                 type="text"
               />
@@ -178,9 +155,11 @@ export function StudentFormFields({
               إضافة بيانات ولي الأمر
             </span>
             <div
-              onClick={onToggleParentInfo}
+              onClick={form.onToggleParentInfo}
               className={`w-11 h-6 flex items-center rounded-full p-0.5 cursor-pointer transition-colors duration-300 ${
-                hasParentInfo ? 'bg-primary-container justify-end' : 'bg-outline/30 justify-start'
+                form.hasParentInfo
+                  ? 'bg-primary-container justify-end'
+                  : 'bg-outline/30 justify-start'
               }`}
             >
               <motion.div
@@ -193,7 +172,7 @@ export function StudentFormFields({
         </div>
 
         <AnimatePresence initial={false}>
-          {hasParentInfo && (
+          {form.hasParentInfo && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
@@ -206,7 +185,7 @@ export function StudentFormFields({
                 <FormField
                   label="رقم هاتف ولي الأمر"
                   error={
-                    touched.guardianPhone && !isPhoneValid(guardianPhone)
+                    form.touched.guardianPhone && !form.isPhoneValid(form.data.guardianPhone)
                       ? 'رقم جوال ولي الأمر غير صالح. يجب أن يبدأ بـ 5 ويتكون من 9 أرقام'
                       : undefined
                   }
@@ -232,12 +211,12 @@ export function StudentFormFields({
                         className="absolute left-3 top-1/2 -translate-y-1/2 text-outline z-10 pointer-events-none"
                       />
                       <input
-                        required={hasParentInfo}
+                        required={form.hasParentInfo}
                         name="guardianPhone"
-                        value={guardianPhone}
-                        onChange={(e) => handlePhoneChange(e, onChangeGuardianPhone)}
-                        onBlur={() => onBlur('guardianPhone')}
-                        className={`${inputStyles} text-left`}
+                        value={form.data.guardianPhone}
+                        onChange={(e) => form.handlePhoneChange(e, 'guardianPhone')}
+                        onBlur={() => form.onBlur('guardianPhone')}
+                        className={`${form.inputStyles} text-left`}
                         dir="ltr"
                         placeholder="5xxxxxxxx"
                         type="tel"
@@ -251,7 +230,8 @@ export function StudentFormFields({
                 <FormField
                   label="رقم هوية ولي الأمر"
                   error={
-                    touched.guardianIdentity && !isIdentityValid(guardianIdentity)
+                    form.touched.guardianIdentity &&
+                    !form.isIdentityValid(form.data.guardianIdentity)
                       ? 'يجب أن يكون بين 3 و 20 حرفاً'
                       : undefined
                   }
@@ -262,12 +242,12 @@ export function StudentFormFields({
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none z-10"
                     />
                     <input
-                      required={hasParentInfo}
+                      required={form.hasParentInfo}
                       name="guardianIdentity"
-                      value={guardianIdentity}
-                      onChange={(e) => onChangeGuardianIdentity(e.target.value)}
-                      onBlur={() => onBlur('guardianIdentity')}
-                      className={inputStyles}
+                      value={form.data.guardianIdentity}
+                      onChange={(e) => form.onChange('guardianIdentity', e.target.value)}
+                      onBlur={() => form.onBlur('guardianIdentity')}
+                      className={form.inputStyles}
                       placeholder="رقم هوية ولي الأمر"
                       type="text"
                     />
