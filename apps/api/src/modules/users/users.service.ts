@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto, UpdateUserDto } from './dto';
@@ -106,7 +106,7 @@ export class UsersService {
   async lockTeacher(id: string, reason?: string) {
     const user = await this.findOne(id);
     if (user.role !== UserRole.TEACHER) {
-      throw new Error('User is not a teacher');
+      throw new BadRequestException('User is not a teacher');
     }
     return this.prisma.user.update({
       where: { id },
@@ -117,7 +117,7 @@ export class UsersService {
   async unlockTeacher(id: string) {
     const user = await this.findOne(id);
     if (user.role !== UserRole.TEACHER) {
-      throw new Error('User is not a teacher');
+      throw new BadRequestException('User is not a teacher');
     }
     return this.prisma.user.update({
       where: { id },
@@ -128,7 +128,7 @@ export class UsersService {
   async banTeacher(id: string, reason?: string, expiresAt?: Date) {
     const user = await this.findOne(id);
     if (user.role !== UserRole.TEACHER) {
-      throw new Error('User is not a teacher');
+      throw new BadRequestException('User is not a teacher');
     }
     return this.prisma.user.update({
       where: { id },
@@ -139,7 +139,7 @@ export class UsersService {
   async unbanTeacher(id: string) {
     const user = await this.findOne(id);
     if (user.role !== UserRole.TEACHER) {
-      throw new Error('User is not a teacher');
+      throw new BadRequestException('User is not a teacher');
     }
     return this.prisma.user.update({
       where: { id },

@@ -12,6 +12,57 @@ import { ReviewApprovalDto } from './dto/review-approval.dto';
 import { ApprovalStatus, CourseStatus, Prisma } from '../../generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
+type SnapshotOption = {
+  text: string;
+  isCorrect: boolean;
+  orderIndex: number;
+};
+
+type SnapshotQuestion = {
+  text: string;
+  orderIndex: number;
+  options?: SnapshotOption[];
+};
+
+type SnapshotAssignment = {
+  id: string;
+  passingScorePct: number;
+  maxAttempts?: number | null;
+  questions?: SnapshotQuestion[];
+};
+
+type SnapshotLesson = {
+  id: string;
+  title: string;
+  orderIndex: number;
+  videoUrl?: string;
+  videoProvider?: string;
+  version?: number;
+  assignment?: SnapshotAssignment | null;
+};
+
+type SnapshotChapter = {
+  id: string;
+  title: string;
+  orderIndex: number;
+  lessons?: SnapshotLesson[];
+};
+
+type SnapshotCourse = {
+  id: string;
+  slug?: string;
+  teacherUserId?: string;
+  title: string;
+  category?: string | null;
+  description?: string | null;
+  thumbnailUrl?: string | null;
+  promoVideoUrl?: string | null;
+  promoVideoProvider?: string | null;
+  price?: string | number | Prisma.Decimal;
+  currency?: string;
+  chapters?: SnapshotChapter[];
+};
+
 @Injectable()
 export class ApprovalsService {
   constructor(
@@ -199,7 +250,7 @@ export class ApprovalsService {
                     assignment: {
                       include: {
                         questions: {
-                          include: { options: true },
+                          include: { options: { orderBy: { orderIndex: 'asc' } } },
                           orderBy: { orderIndex: 'asc' },
                         },
                       },
@@ -210,6 +261,10 @@ export class ApprovalsService {
             },
           },
         });
+
+        if (!fullCourse) {
+          throw new NotFoundException('Course not found');
+        }
 
         // 2. Determine next version
         const lastSnapshot = await tx.courseSnapshot.findFirst({
@@ -270,6 +325,11 @@ export class ApprovalsService {
         throw new NotFoundException('Snapshot not found for this course');
       }
 
+      const snapshotCourse = targetSnapshot.snapshotData as unknown as SnapshotCourse;
+      if (!snapshotCourse?.id || !Array.isArray(snapshotCourse.chapters)) {
+        throw new BadRequestException('Snapshot data is invalid');
+      }
+
       // Determine next version
       const lastSnapshot = await tx.courseSnapshot.findFirst({
         where: { courseId },
@@ -292,12 +352,190 @@ export class ApprovalsService {
       await tx.course.update({
         where: { id: courseId },
         data: {
+          ...this.toCourseRollbackData(snapshotCourse),
+          status: CourseStatus.PUBLISHED,
+          publishedBy: adminId,
+          publishedAt: new Date(),
+          archivedAt: null,
+          archivedBy: null,
           liveSnapshotId: newSnapshot.id,
         },
       });
 
+      await this.restoreEditableCourseTree(tx, courseId, snapshotCourse);
+
       return newSnapshot;
     });
+  }
+
+  private toCourseRollbackData(snapshotCourse: SnapshotCourse): Prisma.CourseUncheckedUpdateInput {
+    const data: Prisma.CourseUncheckedUpdateInput = {
+      title: snapshotCourse.title,
+      category: snapshotCourse.category ?? null,
+      description: snapshotCourse.description ?? null,
+      thumbnailUrl: snapshotCourse.thumbnailUrl ?? null,
+      promoVideoUrl: snapshotCourse.promoVideoUrl ?? null,
+      currency: snapshotCourse.currency ?? 'SAR',
+    };
+
+    if (snapshotCourse.slug) data.slug = snapshotCourse.slug;
+    if (snapshotCourse.teacherUserId) data.teacherUserId = snapshotCourse.teacherUserId;
+    if (snapshotCourse.promoVideoProvider) {
+      data.promoVideoProvider =
+        snapshotCourse.promoVideoProvider as Prisma.EnumVideoProviderFieldUpdateOperationsInput['set'];
+    } else {
+      data.promoVideoProvider = null;
+    }
+    if (snapshotCourse.price !== undefined) {
+      data.price = snapshotCourse.price;
+    }
+
+    return data;
+  }
+
+  private async restoreEditableCourseTree(
+    tx: Prisma.TransactionClient,
+    courseId: string,
+    snapshotCourse: SnapshotCourse,
+  ) {
+    const now = new Date();
+    const existingChapters = await tx.chapter.findMany({
+      where: { courseId },
+      select: { id: true, orderIndex: true },
+      orderBy: { orderIndex: 'asc' },
+    });
+    const chapterOrderBase =
+      Math.max(0, ...existingChapters.map((chapter) => chapter.orderIndex)) +
+      existingChapters.length +
+      1;
+
+    for (const [index, chapter] of existingChapters.entries()) {
+      await tx.chapter.update({
+        where: { id: chapter.id },
+        data: { archivedAt: now, orderIndex: chapterOrderBase + index },
+      });
+    }
+
+    const existingLessons = await tx.lesson.findMany({
+      where: { chapter: { courseId } },
+      select: { id: true, orderIndex: true },
+      orderBy: { orderIndex: 'asc' },
+    });
+    const lessonOrderBase =
+      Math.max(0, ...existingLessons.map((lesson) => lesson.orderIndex)) +
+      existingLessons.length +
+      1;
+
+    for (const [index, lesson] of existingLessons.entries()) {
+      await tx.lesson.update({
+        where: { id: lesson.id },
+        data: { archivedAt: now, orderIndex: lessonOrderBase + index },
+      });
+    }
+
+    for (const chapter of snapshotCourse.chapters ?? []) {
+      await tx.chapter.upsert({
+        where: { id: chapter.id },
+        create: {
+          id: chapter.id,
+          courseId,
+          title: chapter.title,
+          orderIndex: chapter.orderIndex,
+          archivedAt: null,
+        },
+        update: {
+          courseId,
+          title: chapter.title,
+          orderIndex: chapter.orderIndex,
+          archivedAt: null,
+        },
+      });
+
+      for (const lesson of chapter.lessons ?? []) {
+        await tx.lesson.upsert({
+          where: { id: lesson.id },
+          create: {
+            id: lesson.id,
+            chapterId: chapter.id,
+            title: lesson.title,
+            orderIndex: lesson.orderIndex,
+            videoUrl: lesson.videoUrl ?? '',
+            videoProvider:
+              lesson.videoProvider as Prisma.EnumVideoProviderFieldUpdateOperationsInput['set'],
+            version: lesson.version ?? 1,
+            archivedAt: null,
+          },
+          update: {
+            chapterId: chapter.id,
+            title: lesson.title,
+            orderIndex: lesson.orderIndex,
+            videoUrl: lesson.videoUrl ?? '',
+            videoProvider:
+              lesson.videoProvider as Prisma.EnumVideoProviderFieldUpdateOperationsInput['set'],
+            version: lesson.version ?? 1,
+            archivedAt: null,
+          },
+        });
+
+        await this.restoreLessonAssignment(tx, lesson);
+      }
+    }
+  }
+
+  private async restoreLessonAssignment(tx: Prisma.TransactionClient, lesson: SnapshotLesson) {
+    const existingAssignment = await tx.assignment.findUnique({
+      where: { lessonId: lesson.id },
+      select: { id: true },
+    });
+
+    if (!lesson.assignment) {
+      if (existingAssignment) {
+        await tx.assignment.update({
+          where: { id: existingAssignment.id },
+          data: { archivedAt: new Date() },
+        });
+      }
+      return;
+    }
+
+    const assignment = existingAssignment
+      ? await tx.assignment.update({
+          where: { id: existingAssignment.id },
+          data: {
+            passingScorePct: lesson.assignment.passingScorePct,
+            maxAttempts: lesson.assignment.maxAttempts ?? null,
+            archivedAt: null,
+            archivedBy: null,
+          },
+        })
+      : await tx.assignment.create({
+          data: {
+            id: lesson.assignment.id,
+            lessonId: lesson.id,
+            passingScorePct: lesson.assignment.passingScorePct,
+            maxAttempts: lesson.assignment.maxAttempts ?? null,
+            archivedAt: null,
+          },
+        });
+
+    await tx.question.deleteMany({ where: { assignmentId: assignment.id } });
+
+    for (const question of lesson.assignment.questions ?? []) {
+      await tx.question.create({
+        data: {
+          assignmentId: assignment.id,
+          text: question.text,
+          orderIndex: question.orderIndex,
+          options: {
+            create: (question.options ?? []).map((option) => ({
+              text: option.text,
+              isCorrect: option.isCorrect,
+              orderIndex: option.orderIndex,
+            })),
+          },
+        },
+      });
+    }
   }
 
   /**

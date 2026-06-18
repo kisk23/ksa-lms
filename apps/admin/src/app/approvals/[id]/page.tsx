@@ -10,7 +10,7 @@ import {
 import type { ApprovalRequest } from '@features/approval-management';
 import { apiClient } from '@shared/lib/api-client';
 import { Mail, Phone, User as UserIcon } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 type ApprovalDetailPageProps = {
   params: { id: string };
@@ -21,20 +21,21 @@ export default function ApprovalDetailPage({ params }: ApprovalDetailPageProps) 
   const [approval, setApproval] = useState<ApprovalRequest | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchDetail() {
-      try {
-        setLoading(true);
-        const response = await apiClient.get<ApprovalRequest>(`/approvals/${id}`);
-        setApproval(response);
-      } catch (err) {
-        console.error('Failed to fetch approval detail', err);
-      } finally {
-        setLoading(false);
-      }
+  const fetchDetail = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get<ApprovalRequest>(`/approvals/${id}`);
+      setApproval(response);
+    } catch (err) {
+      console.error('Failed to fetch approval detail', err);
+    } finally {
+      setLoading(false);
     }
-    fetchDetail();
   }, [id]);
+
+  useEffect(() => {
+    fetchDetail();
+  }, [fetchDetail]);
 
   if (loading) {
     return <div className="py-24 text-center text-slate-400">جاري التحميل...</div>;
@@ -104,7 +105,11 @@ export default function ApprovalDetailPage({ params }: ApprovalDetailPageProps) 
 
         {/* Side Column */}
         <div className="xl:col-span-4 flex flex-col gap-gutter">
-          <ReviewActionCard approvalId={approval.id} currentStatus={approval.status} />
+          <ReviewActionCard
+            approvalId={approval.id}
+            currentStatus={approval.status}
+            onReviewed={fetchDetail}
+          />
 
           {approval.course?.teacher && (
             <div className="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-md">

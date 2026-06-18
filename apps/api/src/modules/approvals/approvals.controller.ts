@@ -15,6 +15,7 @@ import { ApprovalsService } from './approvals.service';
 import { CreateApprovalDto } from './dto/create-approval.dto';
 import { ListApprovalsDto } from './dto/list-approvals.dto';
 import { ReviewApprovalDto } from './dto/review-approval.dto';
+import { RollbackSnapshotDto } from './dto/rollback-snapshot.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -105,7 +106,7 @@ export class ApprovalsController {
   async rollbackToSnapshot(
     @Param('courseId') courseId: string,
     @Request() req: { user: { id: string } },
-    @Body() dto: { snapshotId: string },
+    @Body() dto: RollbackSnapshotDto,
   ) {
     return this.approvalsService.rollbackToSnapshot(courseId, dto.snapshotId, req.user.id);
   }

@@ -10,9 +10,10 @@ import type { ApprovalStatus } from '../types';
 type ReviewActionCardProps = {
   approvalId: string;
   currentStatus: ApprovalStatus;
+  onReviewed?: () => Promise<void> | void;
 };
 
-export function ReviewActionCard({ approvalId, currentStatus }: ReviewActionCardProps) {
+export function ReviewActionCard({ approvalId, currentStatus, onReviewed }: ReviewActionCardProps) {
   const [loadingAction, setLoadingAction] = useState<ApprovalStatus | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const router = useRouter();
@@ -22,9 +23,10 @@ export function ReviewActionCard({ approvalId, currentStatus }: ReviewActionCard
   }
 
   const handleReview = async (newStatus: ApprovalStatus) => {
+    const trimmedReason = rejectionReason.trim();
     if (
       (newStatus === 'CHANGES_REQUESTED' || newStatus === 'REJECTED') &&
-      rejectionReason.length < 10
+      trimmedReason.length < 10
     ) {
       alert('الرجاء إدخال سبب الرفض/التعديل (10 أحرف على الأقل)');
       return;
@@ -34,10 +36,10 @@ export function ReviewActionCard({ approvalId, currentStatus }: ReviewActionCard
       setLoadingAction(newStatus);
       await apiClient.patch(`/approvals/${approvalId}/review`, {
         status: newStatus,
-        ...(newStatus !== 'APPROVED' ? { rejectionReason } : {}),
+        ...(newStatus !== 'APPROVED' ? { rejectionReason: trimmedReason } : {}),
       });
-      router.refresh(); // Refresh the page to get the updated status
-      // You could also navigate back to the list using router.push('/approvals')
+      await onReviewed?.();
+      router.refresh();
     } catch (err) {
       console.error('Failed to submit review', err);
       alert('حدث خطأ أثناء تقديم المراجعة. يرجى المحاولة مرة أخرى.');

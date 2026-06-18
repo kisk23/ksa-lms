@@ -22,7 +22,19 @@ export function ApprovalRow({ approval, zebra = false, onStatusUpdate }: Approva
   const handleReview = async (newStatus: string) => {
     try {
       setLoadingAction(newStatus);
-      await apiClient.patch(`/approvals/${approval.id}/review`, { status: newStatus });
+      const payload: { status: string; rejectionReason?: string } = { status: newStatus };
+
+      if (newStatus === 'REJECTED') {
+        const rejectionReason = prompt('سبب الرفض (10 أحرف على الأقل):');
+        if (rejectionReason === null) return;
+        if (rejectionReason.trim().length < 10) {
+          alert('الرجاء إدخال سبب الرفض (10 أحرف على الأقل).');
+          return;
+        }
+        payload.rejectionReason = rejectionReason.trim();
+      }
+
+      await apiClient.patch(`/approvals/${approval.id}/review`, payload);
       if (onStatusUpdate) {
         onStatusUpdate(approval.id, newStatus);
       }
