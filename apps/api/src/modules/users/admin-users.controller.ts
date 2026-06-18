@@ -41,12 +41,12 @@ export class AdminUsersController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('VIEW_USERS')
   @ApiOperation({ summary: 'List all users' })
-  findAll(@Query() query: PaginationQueryDto & { role?: UserRole }) {
+  findAll(@Query() query: PaginationQueryDto, @Query('role') role?: UserRole) {
     return this.usersService.findAll({
       page: query.page ?? 1,
       limit: query.limit ?? 10,
       search: query.search,
-      role: query.role,
+      role: role,
     });
   }
 

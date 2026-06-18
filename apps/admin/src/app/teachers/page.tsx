@@ -23,8 +23,8 @@ export default function TeachersPage() {
   const fetchTeachers = async () => {
     try {
       setLoading(true);
-      const res = await apiClient.get<{ data: User[] }>('/admin/users?role=TEACHER&limit=50');
-      setTeachers(res.data);
+      const res = await apiClient.get<User[]>('/admin/users?role=TEACHER&limit=50');
+      setTeachers(res);
     } catch (error) {
       console.error('Failed to fetch teachers:', error);
     } finally {
