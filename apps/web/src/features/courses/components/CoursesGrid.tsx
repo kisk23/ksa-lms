@@ -33,7 +33,6 @@ export function CoursesGrid({ courses, isLoading, isFetching }: CoursesGridProps
     );
   }
 
-
   if (courses.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-text-muted">

@@ -102,6 +102,18 @@ export class CoursesService {
    * Get course with security check for drafts
    */
   async findById(id: string, actor?: IUser) {
+    const isStaff =
+      actor && (actor.role === UserRole.SUPER_ADMIN || actor.role === UserRole.ASSISTANT_ADMIN);
+    // Since we need teacher ID to check ownership, we do a basic query first
+    const basicCourse = await this.prisma.course.findUnique({
+      where: { id },
+      select: { teacherUserId: true },
+    });
+    if (!basicCourse) throw new NotFoundException(`Course #${id} not found`);
+
+    const isOwner = actor && basicCourse.teacherUserId === actor.id;
+    const canViewFullLessons = isStaff || isOwner;
+
     const course = await this.prisma.course.findUnique({
       where: { id },
       include: {
@@ -119,8 +131,14 @@ export class CoursesService {
                 orderIndex: true,
                 createdAt: true,
                 updatedAt: true,
-                // videoUrl is intentionally excluded —
-                // it is only returned by GET /dashboard/courses/:id
+                // Only include sensitive fields for owners and staff
+                ...(canViewFullLessons
+                  ? {
+                      videoUrl: true,
+                      videoProvider: true,
+                      assignment: { select: { id: true } },
+                    }
+                  : {}),
               },
             },
           },
@@ -132,9 +150,6 @@ export class CoursesService {
 
     // Draft/archived courses are only visible to their owner and staff
     const isPublished = course.status === CourseStatus.PUBLISHED;
-    const isOwner = actor && course.teacherUserId === actor.id;
-    const isStaff =
-      actor && (actor.role === UserRole.SUPER_ADMIN || actor.role === UserRole.ASSISTANT_ADMIN);
 
     if (!isPublished && !isOwner && !isStaff) {
       throw new ForbiddenException('This course is not accessible.');

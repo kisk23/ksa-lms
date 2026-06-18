@@ -2,54 +2,14 @@
 
 import { BackLink } from '@shared/components/ui/BackLink';
 import { apiClient } from '@shared/lib/api-client';
-import {
-  BookOpen,
-  User,
-  DollarSign,
-  Image as ImageIcon,
-  Video,
-  FileText,
-  Globe,
-  Sparkles,
-  Check,
-  AlertCircle,
-} from 'lucide-react';
+import { Sparkles, Check, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import { CourseCardPreview } from './CourseCardPreview';
 import { CourseSuccessView } from './CourseSuccessView';
-
-// Teacher interface
-interface Teacher {
-  id: string;
-  name: string;
-  email: string;
-}
-
-// Default mock teachers for fallback/mock mode
-const MOCK_TEACHERS: Teacher[] = [
-  { id: '123e4567-e89b-12d3-a456-426614174002', name: 'أ. سارة محمد', email: 'sara.m@edu.sa' },
-  { id: '123e4567-e89b-12d3-a456-426614174005', name: 'أ. نورة الشمري', email: 'noura.s@edu.sa' },
-  { id: '123e4567-e89b-12d3-a456-426614174009', name: 'د. هدى المنصور', email: 'huda.m@edu.sa' },
-  { id: '123e4567-e89b-12d3-a456-426614174013', name: 'أ. عمر الشهري', email: 'omar.sh@edu.sa' },
-  { id: '123e4567-e89b-12d3-a456-426614174016', name: 'أ. سلمى الرشيدي', email: 'salma.r@edu.sa' },
-];
-
-interface CreatedCourse {
-  title: string;
-  description?: string;
-  price: number;
-  currency: string;
-  teacherName: string;
-  teacherUserId?: string;
-  thumbnailUrl?: string | null;
-  promoVideoUrl?: string | null;
-  promoVideoProvider?: string | null;
-  status: string;
-  id: string;
-  createdAt: string;
-}
+import type { Teacher, CreatedCourse } from '../types';
+import { CourseFormFields } from './CourseFormFields';
 
 export function CreateCourseForm() {
   const router = useRouter();
@@ -62,25 +22,54 @@ export function CreateCourseForm() {
   const [teacherUserId, setTeacherUserId] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [promoVideoUrl, setPromoVideoUrl] = useState('');
-  const [promoVideoProvider, setPromoVideoProvider] = useState('YOUTUBE');
+  const [promoVideoProvider, setPromoVideoProvider] = useState<'YOUTUBE' | 'BUNNY'>('YOUTUBE');
+  const [category, setCategory] = useState('');
 
   // Interactive UI states
-  const [teachers, setTeachers] = useState<Teacher[]>(MOCK_TEACHERS);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [isLoadingTeachers, setIsLoadingTeachers] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdCourse, setCreatedCourse] = useState<CreatedCourse | null>(null);
+  const [currentUser, setCurrentUser] = useState<{ id: string; role: string; name: string } | null>(
+    null,
+  );
 
-  // Fetch teachers from backend
+  // Fetch logged-in user and teachers from backend
   useEffect(() => {
-    async function fetchTeachers() {
+    async function loadInitialData() {
       setIsLoadingTeachers(true);
       try {
+        // 1. Fetch current user role info
+        const me = await apiClient.get<{ id: string; role: string; name: string; email?: string }>(
+          '/auth/me',
+        );
+        setCurrentUser(me);
+
+        // 2. If the user is a teacher, assign course to themselves and skip fetching other teachers
+        if (me.role === 'TEACHER') {
+          setTeacherUserId(me.id);
+          setTeachers([{ id: me.id, name: me.name, email: me.email || '' }]);
+          setIsLoadingTeachers(false);
+          return;
+        }
+
+        // 3. Otherwise (admin/assistant), fetch all teachers
         const response = (await apiClient.get('/admin/users?role=TEACHER&limit=100')) as
-          | { items?: Teacher[] }
+          | { data?: Teacher[]; items?: Teacher[] }
           | Teacher[];
-        if (response && 'items' in response && response.items) {
+        if (
+          response &&
+          typeof response === 'object' &&
+          'data' in response &&
+          Array.isArray(response.data)
+        ) {
+          setTeachers(response.data);
+          if (response.data.length > 0) {
+            setTeacherUserId(response.data[0].id);
+          }
+        } else if (response && 'items' in response && response.items) {
           setTeachers(response.items);
           if (response.items.length > 0) {
             setTeacherUserId(response.items[0].id);
@@ -92,14 +81,14 @@ export function CreateCourseForm() {
           }
         }
       } catch (err) {
-        console.warn('Could not fetch teachers from backend, falling back to mock data:', err);
-        setTeachers(MOCK_TEACHERS);
-        setTeacherUserId(MOCK_TEACHERS[0].id);
+        console.warn('Could not load initial data:', err);
+        setTeachers([]);
+        setTeacherUserId('');
       } finally {
         setIsLoadingTeachers(false);
       }
     }
-    fetchTeachers();
+    loadInitialData();
   }, []);
 
   // Selected teacher details for preview
@@ -123,12 +112,14 @@ export function CreateCourseForm() {
       thumbnailUrl: thumbnailUrl || undefined,
       promoVideoUrl: promoVideoUrl || undefined,
       promoVideoProvider: promoVideoUrl ? (promoVideoProvider as 'YOUTUBE' | 'BUNNY') : undefined,
+      category: category || undefined,
     };
 
     try {
       const response = await apiClient.post<CreatedCourse>('/courses', payload);
       setCreatedCourse({
         ...response,
+        price: Number(response.price),
         teacherName: selectedTeacherName,
         status: response.status || 'DRAFT',
       });
@@ -151,18 +142,8 @@ export function CreateCourseForm() {
     setPrice('');
     setThumbnailUrl('');
     setPromoVideoUrl('');
+    setCategory('');
   };
-
-  // Input styles
-  const inputContainerStyles = 'relative w-full group';
-  const inputStyles =
-    'w-full pl-4 pr-11 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface placeholder:text-outline/50 group-hover:border-outline';
-  const textareaStyles =
-    'w-full pl-4 pr-11 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface placeholder:text-outline/50 group-hover:border-outline resize-none min-h-[120px]';
-  const selectStyles =
-    'w-full pl-4 pr-11 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface appearance-none cursor-pointer group-hover:border-outline';
-  const iconStyles =
-    'absolute right-4 top-1/2 -translate-y-1/2 text-outline/70 group-hover:text-primary transition-colors pointer-events-none z-10';
 
   // Success view state check
   if (isSuccess && createdCourse) {
@@ -192,198 +173,29 @@ export function CreateCourseForm() {
           className="lg:col-span-8 space-y-8 bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-6 md:p-8"
         >
           {/* Main Info */}
-          <section className="space-y-6">
-            <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container pb-2 border-b border-outline-variant flex items-center gap-2 font-bold">
-              <BookOpen size={20} />
-              البيانات الأساسية للدورة
-            </h3>
-
-            {/* Title field */}
-            <div className="space-y-2">
-              <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                عنوان الدورة <span className="text-[#ef4444]">*</span>
-              </label>
-              <div className={inputContainerStyles}>
-                <BookOpen size={20} className={iconStyles} />
-                <input
-                  required
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="مثال: أساسيات البرمجة بلغة بايثون من الصفر"
-                  minLength={5}
-                  maxLength={255}
-                  className={inputStyles}
-                />
-              </div>
-              <p className="text-[10px] text-on-surface-variant/70 pr-1">
-                عنوان الدورة يجب أن لا يقل عن 5 أحرف.
-              </p>
-            </div>
-
-            {/* Teacher Selector */}
-            <div className="space-y-2">
-              <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                المعلم المسؤول <span className="text-[#ef4444]">*</span>
-              </label>
-              <div className={inputContainerStyles}>
-                <User size={20} className={iconStyles} />
-                <select
-                  required
-                  value={teacherUserId}
-                  onChange={(e) => setTeacherUserId(e.target.value)}
-                  className={selectStyles}
-                  disabled={isLoadingTeachers}
-                >
-                  {isLoadingTeachers ? (
-                    <option disabled value="">
-                      جاري تحميل المعلمين...
-                    </option>
-                  ) : (
-                    teachers.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name} ({t.email})
-                      </option>
-                    ))
-                  )}
-                </select>
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
-                  ▼
-                </div>
-              </div>
-            </div>
-
-            {/* Price field */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                  سعر الدورة <span className="text-[#ef4444]">*</span>
-                </label>
-                <div className={inputContainerStyles}>
-                  <DollarSign size={20} className={iconStyles} />
-                  <input
-                    required
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={price}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setPrice(v === '' ? '' : Number(v));
-                    }}
-                    placeholder="ضع 0 للدورات المجانية"
-                    className={inputStyles}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                  العملة
-                </label>
-                <div className={inputContainerStyles}>
-                  <Globe size={20} className={iconStyles} />
-                  <select
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                    className={selectStyles}
-                  >
-                    <option value="SAR">ريال سعودي (SAR)</option>
-                    <option value="USD">دولار أمريكي (USD)</option>
-                  </select>
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
-                    ▼
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Description */}
-            <div className="space-y-2">
-              <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                وصف الدورة بالتفصيل
-              </label>
-              <div className={inputContainerStyles}>
-                <FileText
-                  size={20}
-                  className="absolute right-4 top-4 text-outline/70 group-hover:text-primary transition-colors pointer-events-none z-10"
-                />
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="اكتب نبذة شاملة عن محتويات الدورة، الفئة المستهدفة، والمتطلبات..."
-                  className={textareaStyles}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Media Info */}
-          <section className="space-y-6 pt-4">
-            <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container pb-2 border-b border-outline-variant flex items-center gap-2 font-bold">
-              <ImageIcon size={20} />
-              الوسائط والمحتوى الترويجي
-            </h3>
-
-            {/* Thumbnail URL */}
-            <div className="space-y-2">
-              <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                رابط الصورة المصغرة (Thumbnail URL)
-              </label>
-              <div className={inputContainerStyles}>
-                <ImageIcon size={20} className={iconStyles} />
-                <input
-                  type="url"
-                  value={thumbnailUrl}
-                  onChange={(e) => setThumbnailUrl(e.target.value)}
-                  placeholder="https://example.com/thumbnail.jpg"
-                  className={inputStyles}
-                />
-              </div>
-              <p className="text-[10px] text-on-surface-variant/70 pr-1">
-                رابط مباشر لصورة الغلاف الخاصة بالدورة (أبعاد 16:9 موصى بها).
-              </p>
-            </div>
-
-            {/* Promo Video */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                  رابط الفيديو التعريفي (Promo Video URL)
-                </label>
-                <div className={inputContainerStyles}>
-                  <Video size={20} className={iconStyles} />
-                  <input
-                    type="url"
-                    value={promoVideoUrl}
-                    onChange={(e) => setPromoVideoUrl(e.target.value)}
-                    placeholder="https://youtube.com/watch?v=..."
-                    className={inputStyles}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                  مزود الفيديو
-                </label>
-                <div className={inputContainerStyles}>
-                  <Globe size={20} className={iconStyles} />
-                  <select
-                    value={promoVideoProvider}
-                    onChange={(e) => setPromoVideoProvider(e.target.value)}
-                    className={selectStyles}
-                  >
-                    <option value="YOUTUBE">YouTube</option>
-                    <option value="BUNNY">Bunny.net</option>
-                  </select>
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
-                    ▼
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+          <CourseFormFields
+            title={title}
+            setTitle={setTitle}
+            description={description}
+            setDescription={setDescription}
+            price={price}
+            setPrice={setPrice}
+            currency={currency}
+            setCurrency={setCurrency}
+            teacherUserId={teacherUserId}
+            setTeacherUserId={setTeacherUserId}
+            thumbnailUrl={thumbnailUrl}
+            setThumbnailUrl={setThumbnailUrl}
+            promoVideoUrl={promoVideoUrl}
+            setPromoVideoUrl={setPromoVideoUrl}
+            promoVideoProvider={promoVideoProvider}
+            setPromoVideoProvider={setPromoVideoProvider}
+            category={category}
+            setCategory={setCategory}
+            teachers={teachers}
+            isLoadingTeachers={isLoadingTeachers}
+            currentUser={currentUser}
+          />
 
           {/* Form Actions / Backend Errors */}
           <div className="space-y-4 pt-6 border-t border-outline-variant">

@@ -3,17 +3,7 @@
 import { BookOpen, Check, Clock, DollarSign, Plus, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-interface CreatedCourse {
-  title: string;
-  teacherName: string;
-  price: number;
-  currency: string;
-}
-
-interface CourseSuccessViewProps {
-  createdCourse: CreatedCourse;
-  onReset: () => void;
-}
+import type { CourseSuccessViewProps } from '../types';
 
 export function CourseSuccessView({ createdCourse, onReset }: CourseSuccessViewProps) {
   const router = useRouter();
@@ -108,24 +98,30 @@ export function CourseSuccessView({ createdCourse, onReset }: CourseSuccessViewP
         </div>
 
         {/* Action Buttons */}
-        <div
-          className="flex flex-col md:flex-row gap-4"
-          style={{ maxWidth: '32rem', margin: '0 auto' }}
-        >
+        <div className="flex flex-col gap-4" style={{ maxWidth: '32rem', margin: '0 auto' }}>
           <button
-            onClick={() => router.push('/courses')}
-            className="flex-1 py-3.5 bg-primary-container text-on-primary hover:bg-primary rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 shadow-md shadow-primary-container/20"
+            onClick={() => router.push(`/courses/${createdCourse.id}`)}
+            className="w-full py-4 bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container rounded-xl font-body-md-ar text-body-md-ar font-bold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 shadow-md shadow-primary/25 cursor-pointer"
           >
-            العودة لقائمة الدورات
+            <span>بناء منهج الدورة (الوحدات والدروس)</span>
+            <Plus size={20} />
           </button>
 
-          <button
-            onClick={onReset}
-            className="flex-1 py-3.5 bg-transparent border-[1.5px] border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5"
-          >
-            <Plus size={18} />
-            إضافة كورس آخر
-          </button>
+          <div className="flex flex-col md:flex-row gap-4 w-full">
+            <button
+              onClick={() => router.push('/courses')}
+              className="flex-1 py-3.5 bg-surface-container border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 cursor-pointer"
+            >
+              العودة لقائمة الدورات
+            </button>
+
+            <button
+              onClick={onReset}
+              className="flex-1 py-3.5 bg-transparent border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 cursor-pointer"
+            >
+              إضافة كورس آخر
+            </button>
+          </div>
         </div>
       </div>
     </div>

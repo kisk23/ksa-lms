@@ -37,9 +37,7 @@ export function LessonFiles({ files, isLoading, error }: LessonFilesProps) {
     return (
       <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
         <AlertCircle size={18} className="shrink-0" />
-        {isNotFound
-          ? 'لا تتوفر ملفات لهذا الدرس.'
-          : 'تعذّر تحميل الملفات. يرجى المحاولة لاحقاً.'}
+        {isNotFound ? 'لا تتوفر ملفات لهذا الدرس.' : 'تعذّر تحميل الملفات. يرجى المحاولة لاحقاً.'}
       </div>
     );
   }
@@ -65,7 +63,10 @@ export function LessonFiles({ files, isLoading, error }: LessonFilesProps) {
           className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-white hover:border-primary/40 hover:bg-primary/5 transition-all group"
         >
           <div className="flex items-center gap-3">
-            <FileText size={20} className="text-gray-400 group-hover:text-primary transition-colors shrink-0" />
+            <FileText
+              size={20}
+              className="text-gray-400 group-hover:text-primary transition-colors shrink-0"
+            />
             <div>
               <p className="text-sm font-semibold text-gray-800 group-hover:text-primary transition-colors">
                 {file.name}
@@ -73,7 +74,10 @@ export function LessonFiles({ files, isLoading, error }: LessonFilesProps) {
               <p className="text-xs text-gray-400">{formatBytes(file.sizeBytes)}</p>
             </div>
           </div>
-          <Download size={18} className="text-gray-400 group-hover:text-primary transition-colors shrink-0" />
+          <Download
+            size={18}
+            className="text-gray-400 group-hover:text-primary transition-colors shrink-0"
+          />
         </a>
       ))}
     </div>

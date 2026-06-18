@@ -11,9 +11,10 @@ export class CreateLessonDto {
   @MaxLength(255)
   title!: string;
 
-  @ApiProperty({ example: 'https://www.youtube.com/watch?v=abc123' })
+  @ApiPropertyOptional({ example: 'https://www.youtube.com/watch?v=abc123' })
+  @IsOptional()
   @IsUrl({}, { message: 'videoUrl must be a valid URL' })
-  videoUrl!: string;
+  videoUrl?: string;
 
   @ApiPropertyOptional({ enum: VideoProvider, default: VideoProvider.YOUTUBE })
   @IsOptional()

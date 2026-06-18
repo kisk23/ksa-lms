@@ -44,21 +44,17 @@ export default function CourseInfo({ course }: CourseInfoProps) {
         </span>
         {course.category && (
           <span className="px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-sm font-semibold border border-green-500/20">
-          {course.category}
-        </span>
+            {course.category}
+          </span>
         )}
       </div>
 
       {/* Title */}
-      <h1 className="text-3xl font-semibold text-black leading-tight">
-        {course.title}
-      </h1>
+      <h1 className="text-3xl font-semibold text-black leading-tight">{course.title}</h1>
 
       {/* Description */}
       {course.description && (
-        <p className="text-lg text-gray-600 leading-relaxed">
-          {course.description}
-        </p>
+        <p className="text-lg text-gray-600 leading-relaxed">{course.description}</p>
       )}
 
       {/* Meta row */}
@@ -68,9 +64,7 @@ export default function CourseInfo({ course }: CourseInfoProps) {
           <div className="w-9 h-9 rounded-full bg-surface-hover border-2 border-border flex items-center justify-center text-sm font-bold text-text">
             {course.teacher.name.charAt(0)}
           </div>
-          <span className="font-semibold text-black text-sm">
-            {course.teacher.name}
-          </span>
+          <span className="font-semibold text-black text-sm">{course.teacher.name}</span>
         </div>
 
         {/* Enrollment count (no rating in schema yet — show enrollments instead) */}
@@ -78,15 +72,14 @@ export default function CourseInfo({ course }: CourseInfoProps) {
           <span className="text-amber-400">
             <StarIcon />
           </span>
-          <span className="font-semibold text-black text-sm">4.8</span><span className="text-gray-600 text-sm">(124 تقييم)</span>
+          <span className="font-semibold text-black text-sm">4.8</span>
+          <span className="text-gray-600 text-sm">(124 تقييم)</span>
         </div>
 
         {/* Students */}
         <div className="flex items-center gap-1.5 text-gray-600">
           <Users size={18} className="text-gray-700" />
-          <span className="text-sm">
-            {10 + " Static"} طالب مسجل
-          </span>
+          <span className="text-sm">{10 + ' Static'} طالب مسجل</span>
         </div>
       </div>
 
