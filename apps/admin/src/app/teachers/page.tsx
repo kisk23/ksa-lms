@@ -1,6 +1,5 @@
 'use client';
 
-import { PageHeader } from '@shared/components/PageHeader';
 import { apiClient } from '@shared/lib/api-client';
 import { ShieldAlert, ShieldCheck, Lock, Unlock } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -70,7 +69,12 @@ export default function TeachersPage() {
   return (
     <div className="flex flex-col h-full bg-surface">
       <div className="p-gutter pb-0">
-        <PageHeader title="إدارة المعلمين" description="إدارة حالة حسابات المعلمين وإمكانياتهم" />
+        <div className="mb-8">
+          <h1 className="font-h1-ar text-h1-ar text-on-background mb-2">إدارة المعلمين</h1>
+          <p className="font-body-ar text-body-ar text-on-surface-variant">
+            إدارة حالة حسابات المعلمين وإمكانياتهم
+          </p>
+        </div>
       </div>
 
       <div className="flex-grow p-gutter overflow-auto">
