@@ -96,4 +96,17 @@ export class ApprovalsController {
   ) {
     return this.approvalsService.reviewApproval(id, req.user.id, dto);
   }
+
+  /**
+   * Endpoint for admins to rollback a course to a previous snapshot.
+   */
+  @Post('courses/:courseId/rollback')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  async rollbackToSnapshot(
+    @Param('courseId') courseId: string,
+    @Request() req: { user: { id: string } },
+    @Body() dto: { snapshotId: string },
+  ) {
+    return this.approvalsService.rollbackToSnapshot(courseId, dto.snapshotId, req.user.id);
+  }
 }

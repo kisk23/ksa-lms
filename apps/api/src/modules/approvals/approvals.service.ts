@@ -175,6 +175,7 @@ export class ApprovalsService {
         id,
         {
           status: dto.status,
+          rejectionReason: dto.rejectionReason,
           reviewedBy: adminId,
           reviewedAt: new Date(),
         },
@@ -183,10 +184,60 @@ export class ApprovalsService {
 
       // 2. Handle course status side-effects based on the review outcome
       if (dto.status === ApprovalStatus.APPROVED) {
-        // publish course if approved
+        // 1. Fetch full course tree for snapshot
+        const fullCourse = await tx.course.findUnique({
+          where: { id: approval.courseId },
+          include: {
+            chapters: {
+              where: { archivedAt: null },
+              orderBy: { orderIndex: 'asc' },
+              include: {
+                lessons: {
+                  where: { archivedAt: null },
+                  orderBy: { orderIndex: 'asc' },
+                  include: {
+                    assignment: {
+                      include: {
+                        questions: {
+                          include: { options: true },
+                          orderBy: { orderIndex: 'asc' },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // 2. Determine next version
+        const lastSnapshot = await tx.courseSnapshot.findFirst({
+          where: { courseId: approval.courseId },
+          orderBy: { version: 'desc' },
+        });
+        const nextVersion = (lastSnapshot?.version ?? 0) + 1;
+
+        // 3. Create immutable snapshot
+        const snapshot = await tx.courseSnapshot.create({
+          data: {
+            courseId: approval.courseId,
+            approvalId: id,
+            version: nextVersion,
+            snapshotData: fullCourse as unknown as Prisma.InputJsonValue,
+            approvedBy: adminId,
+          },
+        });
+
+        // 4. Publish course and link live snapshot
         await tx.course.update({
           where: { id: approval.courseId },
-          data: { status: CourseStatus.PUBLISHED, publishedBy: adminId, publishedAt: new Date() },
+          data: {
+            status: CourseStatus.PUBLISHED,
+            publishedBy: adminId,
+            publishedAt: new Date(),
+            liveSnapshotId: snapshot.id,
+          },
         });
       } else if (dto.status === ApprovalStatus.CHANGES_REQUESTED) {
         // change status to CHANGES_REQUESTED
@@ -205,6 +256,50 @@ export class ApprovalsService {
       return updatedApproval;
     });
   }
+
+  /**
+   * Rolls back a course to a previous snapshot.
+   */
+  async rollbackToSnapshot(courseId: string, snapshotId: string, adminId: string) {
+    return this.prisma.$transaction(async (tx) => {
+      const targetSnapshot = await tx.courseSnapshot.findUnique({
+        where: { id: snapshotId },
+      });
+
+      if (!targetSnapshot || targetSnapshot.courseId !== courseId) {
+        throw new NotFoundException('Snapshot not found for this course');
+      }
+
+      // Determine next version
+      const lastSnapshot = await tx.courseSnapshot.findFirst({
+        where: { courseId },
+        orderBy: { version: 'desc' },
+      });
+      const nextVersion = (lastSnapshot?.version ?? 0) + 1;
+
+      // Create new snapshot with identical data to preserve history
+      const newSnapshot = await tx.courseSnapshot.create({
+        data: {
+          courseId,
+          approvalId: targetSnapshot.approvalId,
+          version: nextVersion,
+          snapshotData: targetSnapshot.snapshotData as unknown as Prisma.InputJsonValue,
+          approvedBy: adminId,
+        },
+      });
+
+      // Update course to point to new snapshot
+      await tx.course.update({
+        where: { id: courseId },
+        data: {
+          liveSnapshotId: newSnapshot.id,
+        },
+      });
+
+      return newSnapshot;
+    });
+  }
+
   /**
    * Retrieves the count of unseen approval requests.
    * @returns Total count of unseen approval requests
