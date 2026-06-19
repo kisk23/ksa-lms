@@ -12,7 +12,6 @@ import { StudentFormFields } from './StudentFormFields';
 import {
   UserRole,
   type CreateUserResponse,
-  type SearchUserResponse,
   type AddUserModalProps,
   type CreatedUser,
   type UserFormProps,
@@ -169,53 +168,39 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       setSubmitError(null);
 
       // Perform real NestJS API post call
-      const response = await apiClient.post<CreateUserResponse>('/admin/users', payload);
+      let response;
 
       if (accountType === UserRole.STUDENT && hasParentInfo) {
-        // Search if parent already exists in database
-        let parentId = '';
-        try {
-          const searchResponse = await apiClient.get<SearchUserResponse>(
-            `/admin/users?search=${guardianIdentity}`,
-          );
-          const existingParent = searchResponse.data?.find(
-            (u) => u.identity === guardianIdentity && u.role === 'PARENT',
-          );
-          if (existingParent) {
-            parentId = existingParent.id;
-          }
-        } catch (searchErr) {
-          console.error('Failed to search existing parent:', searchErr);
-        }
+        // The backend team already built the transaction logic inside /auth/register!
+        const parentNameParts = name.trim().split(/\s+/).filter(Boolean);
+        const parentName =
+          parentNameParts.length >= 4
+            ? parentNameParts.slice(1).join(' ')
+            : parentNameParts.join(' ');
 
-        // If parent does not exist, create a new parent account
-        if (!parentId) {
-          const nameParts = name.trim().split(/\s+/).filter(Boolean);
-          const parentName =
-            nameParts.length >= 4 ? nameParts.slice(1).join(' ') : nameParts.join(' ');
-          const parentPayload = {
+        const registerPayload = {
+          name,
+          email,
+          phone: formattedPhone,
+          identity,
+          password,
+          guardian: {
             name: parentName,
             email: `parent_${guardianIdentity}@sulam.sa`,
-            identity: guardianIdentity,
             phone: formattedGuardianPhone,
-            password: `Parent@${guardianPhone}`, // Prepend 'Parent@' to satisfy backend password strength validation (requires Uppercase, Lowercase, Number/Symbol)
-            role: 'PARENT',
-          };
-          const parentResponse = await apiClient.post<CreateUserResponse>(
-            '/admin/users',
-            parentPayload,
-          );
-          parentId = parentResponse.id;
-        }
-
-        // Link parent and student
-        if (parentId && response.id) {
-          await apiClient.post<unknown>('/admin/link-parent-student', {
-            parent_id: parentId,
-            student_id: response.id,
+            identity: guardianIdentity,
             relationship: 'FATHER',
-          });
-        }
+          },
+        };
+
+        const result = await apiClient.post<{ message: string; user: CreateUserResponse }>(
+          '/auth/register',
+          registerPayload,
+        );
+        response = result.user; // Extract the user from the register response
+      } else {
+        // Fallback for other roles or student without parent info
+        response = await apiClient.post<CreateUserResponse>('/admin/users', payload);
       }
 
       setCreatedUser({

@@ -1,7 +1,6 @@
 import { UserRole } from '@lms/shared-types';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsEnum } from 'class-validator';
-import { IsIn } from 'class-validator';
+import { IsOptional, IsEnum, IsIn } from 'class-validator';
 
 import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
 
@@ -14,5 +13,5 @@ export class AdminUsersQueryDto extends PaginationQueryDto {
   @ApiPropertyOptional({ enum: ['active', 'blocked', 'pending'] })
   @IsOptional()
   @IsIn(['active', 'blocked', 'pending'])
-declare status?: string;
+  declare status?: string;
 }

@@ -57,19 +57,11 @@ export async function fetchUsers(params?: {
     });
 
     // Deterministic advanced mock metadata mapping based on u.id so filters work
-    let grade: string | undefined = undefined;
-    let academicYear: string | undefined = undefined;
+    const grade: string | undefined = undefined;
+    const academicYear: string | undefined = undefined;
 
-    if (role === UserRole.STUDENT) {
-      const idCharCodeSum = u.id
-        .split('')
-        .reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
-      const gradeOptions = ['first-secondary', 'second-secondary', 'third-secondary'];
-      const yearOptions = ['2024-2025', '2025-2026'];
-
-      grade = gradeOptions[idCharCodeSum % gradeOptions.length];
-      academicYear = yearOptions[idCharCodeSum % yearOptions.length];
-    }
+    // TODO: Fetch real grade and academicYear from the backend when available.
+    // Fake data generation has been removed to prevent showing random incorrect data to users.
 
     const country = 'saudi-arabia';
 
