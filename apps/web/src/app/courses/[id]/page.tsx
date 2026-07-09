@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 
 import CourseDetailClient from '@/features/courseDetails/CourseDetailClient';
@@ -23,12 +22,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const course = await res.json();
 
     return {
-      title:       `${course.title} | سُلَّم`,
+      title: `${course.title} | سُلَّم`,
       description: course.description ?? `دورة ${course.title} على منصة سُلَّم التعليمية`,
     };
   } catch {
     return {
-      title:       'تفاصيل الدورة | سُلَّم',
+      title: 'تفاصيل الدورة | سُلَّم',
       description: 'استعرض تفاصيل الدورة التعليمية على منصة سُلَّم',
     };
   }
@@ -39,17 +38,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
  * All data-fetching and interactivity live inside CourseDetailClient ('use client').
  */
 export default function CourseDetailPage({ params }: PageProps) {
-
-
   return (
     <main
       className="max-w-7xl mx-auto px-4 md:px-6 py-12"
       style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}
       dir="rtl"
     >
-
       <CourseDetailClient id={params.id} />
-
     </main>
   );
 }

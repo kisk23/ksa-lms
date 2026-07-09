@@ -1,13 +1,13 @@
 'use client';
 
 import CourseDetailLoading from '@/app/courses/[id]/loading';
-import CourseHero         from '@/features/courseDetails/CourseHero';
-import CourseInfo         from '@/features/courseDetails/CourseInfo';
-import Curriculum         from '@/features/courseDetails/Curriculum';
-import InstructorProfile  from '@/features/courseDetails/InstructorProfile';
-import PricingCard        from '@/features/courseDetails/PricingCard';
-import WhatYouLearn       from '@/features/courseDetails/WhatYouLearn';
-import { useCourse }      from '@/features/courses/hooks/useCourse';
+import CourseHero from '@/features/courseDetails/CourseHero';
+import CourseInfo from '@/features/courseDetails/CourseInfo';
+import Curriculum from '@/features/courseDetails/Curriculum';
+import InstructorProfile from '@/features/courseDetails/InstructorProfile';
+import PricingCard from '@/features/courseDetails/PricingCard';
+import WhatYouLearn from '@/features/courseDetails/WhatYouLearn';
+import { useCourse } from '@/features/courses/hooks/useCourse';
 
 interface CourseDetailClientProps {
   id: string;
@@ -45,9 +45,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
     return (
       <DetailError
         message={
-          error instanceof Error
-            ? error.message
-            : 'حدث خطأ غير متوقع. يرجى المحاولة مجدداً.'
+          error instanceof Error ? error.message : 'حدث خطأ غير متوقع. يرجى المحاولة مجدداً.'
         }
       />
     );
@@ -65,21 +63,13 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      
-
       {/* ── RIGHT — Course content ── */}
       <div className="lg:col-span-8 flex flex-col gap-10">
-        <CourseHero
-          youtubeVideoId={firstLesson?.youtubeVideoId}
-          title={course.title}
-        />
+        <CourseHero youtubeVideoId={firstLesson?.youtubeVideoId} title={course.title} />
         <CourseInfo course={course} />
         <WhatYouLearn chapters={course.chapters} />
         <Curriculum chapters={course.chapters} courseId={course.id} />
-        <InstructorProfile
-          teacher={course.teacher}
-          courseCount={10}
-        />
+        <InstructorProfile teacher={course.teacher} courseCount={10} />
       </div>
       {/* ── LEFT — Sticky pricing card ── */}
       <div className="lg:col-span-4 order-first lg:order-0">

@@ -49,7 +49,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 overflow-y-auto py-sm px-base flex flex-col gap-xs mt-sm text-right">
-        {SIDEBAR_NAV.map((item) => {
+        {SIDEBAR_NAV.filter((item) => !item.hidden).map((item) => {
           const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
           const Icon = item.icon;
           const badgeCount = item.badgeKey ? badges[item.badgeKey] : 0;

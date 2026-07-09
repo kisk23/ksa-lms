@@ -23,9 +23,7 @@ export default function LessonError({ error, reset }: ErrorProps) {
       <p className="text-sm text-gray-500 max-w-sm">
         {error.message ?? 'حدث خطأ غير متوقع. يرجى المحاولة مجدداً.'}
       </p>
-      {error.digest && (
-        <p className="text-xs text-gray-400 font-mono">رمز الخطأ: {error.digest}</p>
-      )}
+      {error.digest && <p className="text-xs text-gray-400 font-mono">رمز الخطأ: {error.digest}</p>}
       <div className="flex gap-3 mt-2">
         <button
           onClick={reset}
