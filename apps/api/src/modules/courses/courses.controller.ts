@@ -56,7 +56,6 @@ export class CoursesController {
       teacherUserId?: string;
       category?: string;
     },
-
   ) {
     // Logic: Teachers can ONLY see their own courses.
     // Admins/Assistants can see all or filter by a specific teacher.

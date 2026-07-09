@@ -15,6 +15,7 @@ export type NavItem = {
   icon: LucideIcon;
   href: string;
   badgeKey?: 'pendingApprovals'; // optional dynamic badge
+  hidden?: boolean; // set true to hide from sidebar without deleting
 };
 
 export const SIDEBAR_NAV: NavItem[] = [
@@ -30,5 +31,5 @@ export const SIDEBAR_NAV: NavItem[] = [
   { label: 'إدارة المدفوعات', icon: CreditCard, href: '/payments' },
   { label: 'إدارة الاسترجاعات', icon: Undo2, href: '/refunds' },
   { label: 'التقارير', icon: BarChart3, href: '/reports' },
-  { label: 'إعدادات المنصة', icon: Settings, href: '/settings' },
+  { label: 'إعدادات المنصة', icon: Settings, href: '/settings', hidden: true },
 ];

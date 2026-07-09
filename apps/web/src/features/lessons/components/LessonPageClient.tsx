@@ -4,19 +4,19 @@ import Link from 'next/link';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useMemo } from 'react';
 
-import { useLesson }          from '../hooks/useLesson';
+import { useLesson } from '../hooks/useLesson';
 import {
   useLessonStatuses,
   useAssignments,
   useLessonFiles,
   useCourseProgress,
 } from '../hooks/useQueries';
-import { VideoPlayer }        from './VideoPlayer';
-import { LessonHeader }       from './LessonHeader';
-import { CurriculumSidebar }  from './CurriculumSidebar';
+import { VideoPlayer } from './VideoPlayer';
+import { LessonHeader } from './LessonHeader';
+import { CurriculumSidebar } from './CurriculumSidebar';
 import { MarkCompleteButton } from './MarkCompleteButton';
-import { LessonTabs }         from './LessonTabs';
-import { CourseProgressBar }  from './CourseProgressBar';
+import { LessonTabs } from './LessonTabs';
+import { CourseProgressBar } from './CourseProgressBar';
 import type { Chapter, FlatLesson } from '../types';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -78,10 +78,10 @@ function LessonError({ message, courseId }: { message: string; courseId: string 
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface LessonPageClientProps {
-  courseId:    string;
-  chapterId:   string;
-  lessonId:    string;
-  chapters:    Chapter[];
+  courseId: string;
+  chapterId: string;
+  lessonId: string;
+  chapters: Chapter[];
   courseTitle: string;
   teacherName: string;
 }
@@ -98,7 +98,6 @@ export function LessonPageClient({
   courseTitle,
   teacherName,
 }: LessonPageClientProps) {
-
   // ── Data fetching ──────────────────────────────────────────────────────────
   const {
     data: lesson,
@@ -107,7 +106,7 @@ export function LessonPageClient({
   } = useLesson(courseId, chapterId, lessonId);
 
   const { data: rawStatuses } = useLessonStatuses(courseId);
-  const statuses = Array.isArray(rawStatuses) ? rawStatuses : [];
+  const statuses = useMemo(() => (Array.isArray(rawStatuses) ? rawStatuses : []), [rawStatuses]);
 
   // progress is passed directly to CourseProgressBar — it handles null/undefined gracefully
   const { data: progress } = useCourseProgress(courseId);
@@ -118,11 +117,7 @@ export function LessonPageClient({
     error: assignmentsError,
   } = useAssignments(lessonId);
 
-  const {
-    data: files = [],
-    isLoading: filesLoading,
-    error: filesError,
-  } = useLessonFiles(lessonId);
+  const { data: files = [], isLoading: filesLoading, error: filesError } = useLessonFiles(lessonId);
 
   // ── Flat lesson list for prev / next navigation ────────────────────────────
   const flatLessons = useMemo<FlatLesson[]>(() => {
@@ -136,13 +131,13 @@ export function LessonPageClient({
           .filter((l) => !l.isArchived)
           .sort((a, b) => a.orderIndex - b.orderIndex)
           .map((l) => ({
-            lessonId:          l.id,
-            chapterId:         ch.id,
+            lessonId: l.id,
+            chapterId: ch.id,
             courseId,
-            title:             l.title,
-            orderIndex:        l.orderIndex,
+            title: l.title,
+            orderIndex: l.orderIndex,
             chapterOrderIndex: ch.orderIndex,
-            isCompleted:       completedSet.has(l.id),
+            isCompleted: completedSet.has(l.id),
           })),
       );
   }, [chapters, statuses, courseId]);
@@ -158,15 +153,12 @@ export function LessonPageClient({
     return (
       <LessonError
         courseId={courseId}
-        message={
-          lessonError instanceof Error ? lessonError.message : 'حدث خطأ غير متوقع.'
-        }
+        message={lessonError instanceof Error ? lessonError.message : 'حدث خطأ غير متوقع.'}
       />
     );
   }
 
-  const isCompleted = statuses.find(s => s.lessonId === lessonId)?.progress?.isCompleted ?? false;
-
+  const isCompleted = statuses.find((s) => s.lessonId === lessonId)?.progress?.isCompleted ?? false;
 
   // fallbackTotal: use chapter data when the backend progress row hasn't loaded yet
   const fallbackTotal = chapters.reduce(
@@ -177,7 +169,6 @@ export function LessonPageClient({
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col lg:flex-row gap-6 items-start" dir="rtl">
-
       {/* ════ SIDEBAR ════ */}
       <aside className="w-full lg:w-80 xl:w-90 md:sticky md:top-25 shrink-0 order-2 lg:order-1">
         <CurriculumSidebar
@@ -192,7 +183,6 @@ export function LessonPageClient({
 
       {/* ════ MAIN CONTENT ════ */}
       <section className="flex-1 flex flex-col gap-5 w-full order-1 lg:order-2">
-
         {/*
           ── PROGRESS BAR ──────────────────────────────────────────────────────
           Sits above the video. Reads live from useCourseProgress — updates
@@ -206,15 +196,11 @@ export function LessonPageClient({
         />
 
         {/* ── VIDEO ── */}
-        <VideoPlayer
-          youtubeVideoId={lesson.youtubeVideoId}
-          title={lesson.title}
-        />
+        <VideoPlayer youtubeVideoId={lesson.youtubeVideoId} title={lesson.title} />
 
         {/* ── ACTION BAR: prev / next / mark complete ── */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white border border-gray-200 rounded-xl px-4 py-3 shadow-sm">
           <div className="flex items-center gap-2 w-full sm:w-auto">
-
             {/* Prev */}
             {prevLesson ? (
               <Link
@@ -273,7 +259,6 @@ export function LessonPageClient({
           filesLoading={filesLoading}
           filesError={filesError as Error | null}
         />
-
       </section>
     </div>
   );

@@ -56,12 +56,9 @@ export function AssignmentList({ assignments, isLoading, error }: AssignmentList
           className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-primary/40 hover:shadow-sm transition-all"
         >
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold text-gray-800">
-              اختبار الدرس
-            </span>
+            <span className="text-sm font-semibold text-gray-800">اختبار الدرس</span>
             <span className="text-xs text-gray-500">
-              {assignment.questions.length} سؤال •{' '}
-              درجة النجاح {assignment.passingScorePct}%
+              {assignment.questions.length} سؤال • درجة النجاح {assignment.passingScorePct}%
               {assignment.maxAttempts !== null && ` • ${assignment.maxAttempts} محاولات`}
             </span>
           </div>

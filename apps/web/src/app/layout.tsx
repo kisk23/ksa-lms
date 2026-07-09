@@ -16,18 +16,18 @@ const ibmPlexArabic = IBM_Plex_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: 'LMS - Learn Anything',
-  description: 'A modern Learning Management System for students and instructors.',
+  title: 'منصة التعلم الذكي',
+  description: 'نظام إدارة تعلم حديث للطلاب والمعلمين.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${ibmPlexArabic.variable}`}>
-      <body>
+    <html lang="ar" dir="rtl" className={`${inter.variable} ${ibmPlexArabic.variable}`}>
+      <body className="font-arabic font-sans">
         <QueryProvider>
           <Toaster position="top-center" />
           <Navbar />
-          <main className="container mx-auto">{children}</main>
+          <main className="min-h-screen w-full">{children}</main>
           <Footer />
         </QueryProvider>
       </body>

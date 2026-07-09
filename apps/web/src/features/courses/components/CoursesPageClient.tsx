@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
-import { useCourses }      from '../hooks/useCourses';
-import { CoursesGrid }     from './CoursesGrid';
-import { Pagination }      from './Pagination';
-import { CourseFilters }   from './CourseFilters';
+import { useCourses } from '../hooks/useCourses';
+import { CoursesGrid } from './CoursesGrid';
+import { Pagination } from './Pagination';
+import { CourseFilters } from './CourseFilters';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CoursesPageClient — main component
@@ -14,7 +14,7 @@ import { CourseFilters }   from './CourseFilters';
 
 export function CoursesPageClient() {
   // ── Search state ──────────────────────────────────────────────────────────
-  const [search,          setSearch]          = useState('');
+  const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
   // ── Filter state: single selected category ────────────────────────────────
@@ -60,32 +60,31 @@ export function CoursesPageClient() {
   const { data, isLoading, isFetching, error } = useCourses({
     page,
     limit: 9,
-    search:   debouncedSearch || undefined,
+    search: debouncedSearch || undefined,
     category: selectedCategory,
   });
 
-  const courses = data?.data?.data ?? data?.data ?? [];
-  const meta    = data?.meta;
+  const courses = data?.data ?? [];
+  const meta = data?.meta;
 
   // ── Separate query to collect ALL distinct categories from the backend ────
   // Uses a high limit with no category filter so the pill list stays stable
   // even while a category is selected. Only the search term is forwarded so
   // the category options reflect what's actually searchable right now.
   const { data: allData } = useCourses({
-    page:   1,
-    limit:  200,
+    page: 1,
+    limit: 200,
     search: debouncedSearch || undefined,
   });
 
-  const allCourses = allData?.data?.data ?? allData?.data ?? [];
-
   const availableCategories = useMemo<string[]>(() => {
+    const allCourses = allData?.data ?? [];
     const seen = new Set<string>();
     for (const course of allCourses) {
       if (course.category) seen.add(course.category);
     }
     return [...seen].sort((a, b) => a.localeCompare(b, 'ar'));
-  }, [allCourses]);
+  }, [allData]);
 
   const hasActiveFilters = !!selectedCategory;
 
@@ -93,10 +92,7 @@ export function CoursesPageClient() {
   // Render
   // ─────────────────────────────────────────────────────────────────────────
   return (
-    <main
-      className="grow w-full max-w-7xl mx-auto px-4 md:px-6 py-10"
-      dir="rtl"
-    >
+    <main className="grow w-full max-w-7xl mx-auto px-4 md:px-6 py-10" dir="rtl">
       {/*
         ── Two-column layout ──
         RTL: sidebar is on the RIGHT (comes first in DOM order),
@@ -104,13 +100,11 @@ export function CoursesPageClient() {
         On mobile both stack vertically.
       */}
       <div className="flex flex-col lg:flex-row gap-6 items-start">
-
         {/* ════════════════════════════════════════════════
             SIDEBAR — desktop: sticky right column (w-64)
                       mobile: toggled panel above courses
             ════════════════════════════════════════════════ */}
         <aside className="w-full lg:w-64 shrink-0 lg:sticky lg:top-24">
-
           {/* ── Mobile: toggle button ── */}
           <button
             onClick={() => setMobileSidebarOpen((v) => !v)}
@@ -143,7 +137,6 @@ export function CoursesPageClient() {
             MAIN CONTENT — search bar + grid + pagination
             ════════════════════════════════════════════════ */}
         <section className="flex-1 flex flex-col gap-6 min-w-0">
-
           {/* ── Search bar ── */}
           <div className="relative w-full">
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none select-none">
@@ -206,15 +199,10 @@ export function CoursesPageClient() {
             <>
               <CoursesGrid courses={courses} isLoading={false} isFetching={isFetching} />
               {meta && (
-                <Pagination
-                  page={meta.page}
-                  totalPages={meta.totalPages}
-                  onPageChange={setPage}
-                />
+                <Pagination page={meta.page} totalPages={meta.totalPages} onPageChange={setPage} />
               )}
             </>
           )}
-
         </section>
       </div>
     </main>

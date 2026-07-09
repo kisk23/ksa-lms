@@ -28,23 +28,18 @@ export function CourseProgressBar({
   fallbackTotal = 0,
   courseTitle,
 }: CourseProgressBarProps) {
-  const isLoading   = progress === undefined;
-  const pct         = progress?.progressPct         ?? 0;
-  const completed   = progress?.completedLessons     ?? 0;
-  const total       = progress?.totalLessons         ?? fallbackTotal;
-  const isDone      = pct === 100;
+  const isLoading = progress === undefined;
+  const pct = progress?.progressPct ?? 0;
+  const completed = progress?.completedLessons ?? 0;
+  const total = progress?.totalLessons ?? fallbackTotal;
+  const isDone = pct === 100;
 
   // ── Colour tokens ──────────────────────────────────────────────────────────
   // 0–39%  → primary blue
   // 40–79% → amber
   // 80–99% → primary blue (nearly there)
   // 100%   → green celebration
-  const barColor =
-    isDone
-      ? 'bg-green-500'
-      : pct >= 40 && pct < 80
-      ? 'bg-amber-400'
-      : 'bg-primary';
+  const barColor = isDone ? 'bg-green-500' : pct >= 40 && pct < 80 ? 'bg-amber-400' : 'bg-primary';
 
   const textColor = isDone ? 'text-green-600' : 'text-primary';
 
@@ -71,8 +66,8 @@ export function CourseProgressBar({
             {isDone
               ? 'أكملت الدورة! 🎉'
               : courseTitle
-              ? `تقدمك في ${courseTitle}`
-              : 'تقدمك في الدورة'}
+                ? `تقدمك في ${courseTitle}`
+                : 'تقدمك في الدورة'}
           </span>
         </div>
 
@@ -84,9 +79,7 @@ export function CourseProgressBar({
             </span>
           )}
           <span
-            className={`text-sm font-bold tabular-nums ${
-              isLoading ? 'text-gray-300' : textColor
-            }`}
+            className={`text-sm font-bold tabular-nums ${isLoading ? 'text-gray-300' : textColor}`}
           >
             {isLoading ? '—' : `${pct}%`}
           </span>
