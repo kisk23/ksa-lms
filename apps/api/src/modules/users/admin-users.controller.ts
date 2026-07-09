@@ -13,10 +13,15 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 import { Permissions } from './decorators/permissions.decorator';
-import { CreateUserDto, UpdateUserDto, AssistantPermissionsDto, AdminLinkChildDto } from './dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  AssistantPermissionsDto,
+  AdminLinkChildDto,
+  ListUsersQueryDto,
+} from './dto';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { UsersService } from './users.service';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -41,7 +46,7 @@ export class AdminUsersController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('VIEW_USERS')
   @ApiOperation({ summary: 'List all users' })
-  findAll(@Query() query: PaginationQueryDto & { role?: UserRole }) {
+  findAll(@Query() query: ListUsersQueryDto) {
     return this.usersService.findAll({
       page: query.page ?? 1,
       limit: query.limit ?? 10,
@@ -107,5 +112,43 @@ export class AdminUsersController {
   @ApiOperation({ summary: 'Get overview stats for admin dashboard' })
   getDashboardStats() {
     return this.usersService.getDashboardStats();
+  }
+
+  // --- Teacher Management ---
+
+  @Patch('teachers/:id/lock')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Lock a teacher account (prevent edits but allow login)' })
+  lockTeacher(@Param('id') id: string, @Body() dto: { reason?: string }) {
+    return this.usersService.lockTeacher(id, dto.reason);
+  }
+
+  @Patch('teachers/:id/unlock')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Unlock a teacher account' })
+  unlockTeacher(@Param('id') id: string) {
+    return this.usersService.unlockTeacher(id);
+  }
+
+  @Patch('teachers/:id/ban')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Ban a teacher account (prevent login)' })
+  banTeacher(@Param('id') id: string, @Body() dto: { reason?: string; expiresAt?: string }) {
+    return this.usersService.banTeacher(
+      id,
+      dto.reason,
+      dto.expiresAt ? new Date(dto.expiresAt) : undefined,
+    );
+  }
+
+  @Patch('teachers/:id/unban')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
+  @Permissions('UPDATE_USER')
+  @ApiOperation({ summary: 'Unban a teacher account' })
+  unbanTeacher(@Param('id') id: string) {
+    return this.usersService.unbanTeacher(id);
   }
 }

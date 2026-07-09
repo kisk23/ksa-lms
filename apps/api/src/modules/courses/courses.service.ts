@@ -106,6 +106,44 @@ export class CoursesService {
       where: { id },
       include: {
         teacher: { select: { id: true, name: true } },
+        liveSnapshot: true,
+      },
+    });
+
+    if (!course) throw new NotFoundException(`Course #${id} not found`);
+
+    // Draft/archived courses are only visible to their owner and staff
+    const isPublished = course.status === CourseStatus.PUBLISHED;
+    const isOwner = actor && course.teacherUserId === actor.id;
+    const isStaff =
+      actor && (actor.role === UserRole.SUPER_ADMIN || actor.role === UserRole.ASSISTANT_ADMIN);
+
+    if (!isPublished && !isOwner && !isStaff) {
+      throw new ForbiddenException('This course is not accessible.');
+    }
+
+    // Students / Public: Serve the snapshot if published
+    if (isPublished && !isOwner && !isStaff) {
+      if (!course.liveSnapshot) {
+        // Fallback for courses published before snapshots were implemented
+        return this.getDraftTree(id);
+      }
+      return {
+        ...((course.liveSnapshot.snapshotData as object) || {}),
+        id: course.id,
+        status: course.status,
+      };
+    }
+
+    // Owner / Staff: Serve the editable draft tree
+    return this.getDraftTree(id);
+  }
+
+  private async getDraftTree(id: string) {
+    const course = await this.prisma.course.findUnique({
+      where: { id },
+      include: {
+        teacher: { select: { id: true, name: true } },
         chapters: {
           where: { archivedAt: null },
           orderBy: { orderIndex: 'asc' },
@@ -127,18 +165,6 @@ export class CoursesService {
         },
       },
     });
-
-    if (!course) throw new NotFoundException(`Course #${id} not found`);
-
-    // Draft/archived courses are only visible to their owner and staff
-    const isPublished = course.status === CourseStatus.PUBLISHED;
-    const isOwner = actor && course.teacherUserId === actor.id;
-    const isStaff =
-      actor && (actor.role === UserRole.SUPER_ADMIN || actor.role === UserRole.ASSISTANT_ADMIN);
-
-    if (!isPublished && !isOwner && !isStaff) {
-      throw new ForbiddenException('This course is not accessible.');
-    }
 
     return course;
   }

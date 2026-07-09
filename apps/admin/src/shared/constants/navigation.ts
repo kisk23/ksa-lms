@@ -20,6 +20,7 @@ export type NavItem = {
 export const SIDEBAR_NAV: NavItem[] = [
   { label: 'لوحة التحكم', icon: LayoutDashboard, href: '/' },
   { label: 'إدارة المستخدمين', icon: Users, href: '/users' },
+  { label: 'إدارة المعلمين', icon: Users, href: '/teachers' },
   { label: 'إدارة الكورسات', icon: BookOpen, href: '/courses' },
   {
     label: 'طلبات الموافقة',

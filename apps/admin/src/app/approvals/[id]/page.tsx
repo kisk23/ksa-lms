@@ -9,31 +9,33 @@ import {
 } from '@features/approval-management';
 import type { ApprovalRequest } from '@features/approval-management';
 import { apiClient } from '@shared/lib/api-client';
-import { use, useState, useEffect } from 'react';
+import { Mail, Phone, User as UserIcon } from 'lucide-react';
+import { useCallback, useState, useEffect } from 'react';
 
 type ApprovalDetailPageProps = {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 };
 
 export default function ApprovalDetailPage({ params }: ApprovalDetailPageProps) {
-  const { id } = use(params);
+  const { id } = params;
   const [approval, setApproval] = useState<ApprovalRequest | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchDetail() {
-      try {
-        setLoading(true);
-        const response = await apiClient.get<ApprovalRequest>(`/approvals/${id}`);
-        setApproval(response);
-      } catch (err) {
-        console.error('Failed to fetch approval detail', err);
-      } finally {
-        setLoading(false);
-      }
+  const fetchDetail = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get<ApprovalRequest>(`/approvals/${id}`);
+      setApproval(response);
+    } catch (err) {
+      console.error('Failed to fetch approval detail', err);
+    } finally {
+      setLoading(false);
     }
-    fetchDetail();
   }, [id]);
+
+  useEffect(() => {
+    fetchDetail();
+  }, [fetchDetail]);
 
   if (loading) {
     return <div className="py-24 text-center text-slate-400">جاري التحميل...</div>;
@@ -103,7 +105,38 @@ export default function ApprovalDetailPage({ params }: ApprovalDetailPageProps) 
 
         {/* Side Column */}
         <div className="xl:col-span-4 flex flex-col gap-gutter">
-          <ReviewActionCard approvalId={approval.id} currentStatus={approval.status} />
+          <ReviewActionCard
+            approvalId={approval.id}
+            currentStatus={approval.status}
+            onReviewed={fetchDetail}
+          />
+
+          {approval.course?.teacher && (
+            <div className="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-md">
+              <h3 className="font-h3-ar text-h3-ar text-on-surface mb-4">معلومات المعلم</h3>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3 text-on-surface-variant">
+                  <UserIcon size={18} />
+                  <span className="font-body-ar text-body-ar">{approval.course.teacher.name}</span>
+                </div>
+                <div className="flex items-center gap-3 text-on-surface-variant">
+                  <Mail size={18} />
+                  <span className="font-label-en text-label-en">
+                    {approval.course.teacher.email}
+                  </span>
+                </div>
+                {approval.course.teacher.phone && (
+                  <div className="flex items-center gap-3 text-on-surface-variant">
+                    <Phone size={18} />
+                    <span className="font-label-en text-label-en">
+                      {approval.course.teacher.phone}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <StatusTimeline entries={timeline} />
         </div>
       </div>
