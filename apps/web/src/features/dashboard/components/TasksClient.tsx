@@ -330,10 +330,10 @@ export function TasksClient() {
                     </Link>
                     <button
                       onClick={() => setActiveSubmission(assignment)}
-                      className="px-6 py-2 rounded-lg bg-primary-container text-on-primary text-xs font-bold hover:bg-primary transition-colors flex items-center gap-2 shadow-sm cursor-pointer"
+                      className="px-6 py-2 rounded-lg bg-primary text-white text-xs font-bold hover:bg-primary-hover transition-colors flex items-center gap-2 shadow-sm cursor-pointer"
                     >
-                      <UploadCloud size={16} />
-                      <span>تسليم الواجب</span>
+                      <UploadCloud size={16} className="text-white" />
+                      <span className="text-white">تسليم الواجب</span>
                     </button>
                   </>
                 )}

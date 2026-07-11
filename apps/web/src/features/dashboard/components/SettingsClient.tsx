@@ -1,12 +1,9 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import { useState } from 'react';
+import Image from 'next/image';
 import {
   User,
-  Mail,
-  Phone,
-  GraduationCap,
   Users,
   Lock,
   Eye,
@@ -152,8 +149,9 @@ export function SettingsClient() {
               {/* Photo Upload Container */}
               <div className="flex-shrink-0 flex flex-col items-center gap-3">
                 <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-surface-container-high relative group cursor-pointer">
-                  <img
+                  <Image
                     alt="Student Avatar"
+                    fill
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     src={avatar}
                   />

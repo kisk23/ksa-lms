@@ -1,7 +1,7 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { BookOpen, Calculator, Atom, GraduationCap, CheckCircle, ChevronLeft } from 'lucide-react';
 import type { StudentEnrollment } from '../types';
 import { EnrolledCourseCard } from './EnrolledCourseCard';
@@ -81,7 +81,7 @@ export function EnrolledCourses({ courses, isLoading, viewMode }: EnrolledCourse
         </p>
         <a
           href="/courses"
-          className="bg-primary text-on-primary hover:bg-primary-hover px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-95 shadow-[0_4px_14px_rgba(0,45,155,0.25)] no-underline hover:no-underline"
+          className="bg-primary text-white hover:bg-primary-hover px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-95 shadow-[0_4px_14px_rgba(0,45,155,0.25)] no-underline hover:no-underline"
         >
           تصفح الدورات المتاحة
         </a>
@@ -165,8 +165,10 @@ export function EnrolledCourses({ courses, isLoading, viewMode }: EnrolledCourse
                 {/* Instructor */}
                 <div className="hidden md:flex col-span-2 items-center gap-2">
                   <div className="w-6 h-6 rounded-full bg-surface-container-high overflow-hidden shrink-0">
-                    <img
+                    <Image
                       alt="صورة المعلم"
+                      width={24}
+                      height={24}
                       className="w-full h-full object-cover"
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbb_O8nMC--pDgaHloeN4SRzjQHKLMeuAt989rNTULijxVQarhkObo5fjvs2_rjKYJ7cELhG1zFvaXD6XQ5VvOVm5yWoCMcfjAIyZPfsKFysUdOmwp8xczanQSRQwMDKcBDrg4ezg6ZtMSGH8MEvZDqE2th__7Co2vRPAfL_61GkkUusfAoPGWb2j6AzVHp_hbMHwZTscid0SGKU7ssNd0T059-nP77gBnlgfkppYXzX2KH6poU3Kpd5wrWfbbaU6bnM9bIvJv0IsL"
                     />

@@ -150,10 +150,10 @@ export function QuizResultClient() {
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
             <button
               onClick={() => router.push('/dashboard')}
-              className="bg-primary-container hover:bg-primary text-on-primary text-xs font-bold py-3 px-8 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer"
+              className="bg-primary hover:bg-primary-hover text-white text-xs font-bold py-3 px-8 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer"
             >
-              <span>العودة للكورس</span>
-              <ArrowRight size={16} />
+              <span className="text-white">العودة للكورس</span>
+              <ArrowRight size={16} className="text-white" />
             </button>
             <button
               onClick={() => router.push(`/dashboard/quizzes/${quizId}/take`)}

@@ -1,7 +1,7 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import { Bell, MessageSquare, HelpCircle, Menu, User } from 'lucide-react';
+import Image from 'next/image';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
 interface TopAppBarProps {
@@ -31,7 +31,13 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
           <Menu size={20} />
         </button>
         <div className="flex items-center gap-2">
-          <img src="/Sullam.svg" alt="سُلَّم" className="h-7 w-auto object-contain" />
+          <Image
+            src="/Sullam.svg"
+            alt="سُلَّم"
+            width={80}
+            height={28}
+            className="h-7 w-auto object-contain"
+          />
         </div>
       </div>
 
@@ -68,7 +74,13 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
           title={user?.name || 'الملف الشخصي'}
         >
           {avatarUrl ? (
-            <img src={avatarUrl} alt="صورة الطالب الشخصية" className="w-full h-full object-cover" />
+            <Image
+              src={avatarUrl}
+              alt="صورة الطالب الشخصية"
+              width={32}
+              height={32}
+              className="w-full h-full object-cover"
+            />
           ) : (
             <User size={16} className="text-gray-400" />
           )}

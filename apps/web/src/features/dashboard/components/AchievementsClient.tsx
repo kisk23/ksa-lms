@@ -1,7 +1,7 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import { useState } from 'react';
+import Image from 'next/image';
 import {
   Award,
   BookOpen,
@@ -13,11 +13,6 @@ import {
   Zap,
   Star,
   Users,
-  Search,
-  CheckCircle,
-  HelpCircle,
-  Bell,
-  ChevronLeft,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -255,8 +250,10 @@ export function AchievementsClient() {
 
             <div className="w-32 h-32 flex-shrink-0 relative z-10">
               <div className="absolute inset-0 bg-primary-container/10 rounded-full animate-pulse"></div>
-              <img
+              <Image
                 alt="3D Gold Trophy"
+                width={128}
+                height={128}
                 className="w-full h-full object-contain drop-shadow-xl"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5QBQrpPASFthF2jl10j-LRrNnoDE2OZ_vrD4_W2CxXuutvVUBdZtl5DkiRW1bJ3piWbq243Hc8d-z_cJQ44Qu1udSOqnDuBUcpvie6SezuZbxKLrzfrI0LqqqkVm9DZv4Zsk0Zsgknnd9Bf6kVjZIwfL-bJhOJJz0ZHMbovSvH0yGIw7AM2E12OFQJt0iX5p34tna4KkPXdw7rn-Tie81c3hHDiHcSnrkoiwtgNlL39ATRJtB3-ZvwDOQjxrzktkzbKCivUASg7XH"
               />
@@ -388,7 +385,7 @@ export function AchievementsClient() {
             </div>
 
             <div className="relative z-10 flex justify-between gap-1 w-full mt-4">
-              {['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء'].map((day, i) => (
+              {['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء'].map((day) => (
                 <div key={day} className="flex flex-col items-center gap-1.5">
                   <span className="text-[9px] opacity-85">{day}</span>
                   <div className="w-7 h-7 rounded-full bg-amber-400 text-on-background font-bold text-xs flex items-center justify-center shadow-sm">
@@ -457,8 +454,10 @@ export function AchievementsClient() {
                       ${user.rank <= 3 ? badgeColor : 'border-transparent'}`}
                   >
                     <div className="w-5 font-black text-center text-xs">{user.rank}</div>
-                    <img
+                    <Image
                       alt={user.name}
+                      width={32}
+                      height={32}
                       className="w-8 h-8 rounded-full object-cover"
                       src={user.avatar}
                     />
@@ -477,8 +476,10 @@ export function AchievementsClient() {
             <div className="mt-3 pt-3 border-t border-outline-variant/30 shrink-0">
               <div className="flex items-center gap-3 p-2.5 rounded-xl bg-primary/5 border border-primary/10">
                 <div className="w-5 font-black text-center text-xs text-primary">15</div>
-                <img
+                <Image
                   alt="أنت"
+                  width={32}
+                  height={32}
                   className="w-8 h-8 rounded-full border border-primary/20 object-cover"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7pdaEj9VBvJBui05CC6DkY37MKxxUaUMfElR7HU2J44cy59zo9iccn-eoKZBOJnQCwKVthTUEov7KCxKM8Oh1jYKh9b3uwdKi1TQJETyFfqtrsWX0us69s4-40iSpuIWgBO5GX1mujZsX3wslSE2DB5DaupzY2OAPgeXkyGb8p34MAFziFBcvLhWCtdpVqlpj8mPcCKIL1OEFudLYoINKJL2n08pBxGnEhKSHjw543yPh25gzmf_nQr7goPQrnzb_tSjKVxJp9ceL"
                 />

@@ -1,8 +1,8 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import Link from 'next/link';
-import { Clock, UserRound, Award, History, ArrowRight, RotateCcw, BookOpen } from 'lucide-react';
+import Image from 'next/image';
+import { UserRound, Award, History, ArrowRight, RotateCcw } from 'lucide-react';
 import type { StudentEnrollment } from '../types';
 
 interface EnrolledCourseCardProps {
@@ -15,7 +15,6 @@ export function EnrolledCourseCard({ enrollment }: EnrolledCourseCardProps) {
   // Calculate progress details
   const progressPct = progress?.progressPct ?? 0;
   const completedLessons = progress?.completedLessons ?? 0;
-  const totalLessons = progress?.totalLessons ?? 0;
   const lastLesson = progress?.lastLesson;
 
   const isCompleted = status === 'COMPLETED' || progressPct >= 100;
@@ -45,20 +44,21 @@ export function EnrolledCourseCard({ enrollment }: EnrolledCourseCardProps) {
     <article className="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden flex flex-col hover:shadow-md transition-all duration-300">
       {/* Course Thumbnail & Status Badge */}
       <div className="relative h-48 w-full bg-surface-container overflow-hidden">
-        <img
+        <Image
           alt={course.title}
+          fill
           className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out"
           src={imageUrl}
         />
 
         {/* Status Badge */}
         {isCompleted ? (
-          <div className="absolute top-4 right-4 bg-secondary text-on-secondary text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm font-semibold">
+          <div className="absolute top-4 right-4 bg-secondary text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm font-semibold">
             <span className="w-1.5 h-1.5 bg-white rounded-full inline-block animate-pulse" />
             مكتمل
           </div>
         ) : (
-          <div className="absolute top-4 right-4 bg-primary-container text-on-primary text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm font-semibold">
+          <div className="absolute top-4 right-4 bg-primary text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm font-semibold">
             <span className="w-1.5 h-1.5 bg-white rounded-full inline-block animate-pulse" />
             قيد التقدم
           </div>
@@ -131,10 +131,10 @@ export function EnrolledCourseCard({ enrollment }: EnrolledCourseCardProps) {
         ) : (
           <Link
             href={`/dashboard/courses/${course.id}`}
-            className="mt-auto w-full bg-primary text-on-primary hover:bg-surface-tint active:scale-[0.98] transition-all py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer no-underline hover:no-underline"
+            className="mt-auto w-full bg-primary text-white hover:bg-primary-hover active:scale-[0.98] transition-all py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer no-underline hover:no-underline"
           >
-            <span>أكمل الكورس</span>
-            <ArrowRight size={16} className="transform rotate-180" />
+            <span className="text-white">أكمل الكورس</span>
+            <ArrowRight size={16} className="transform rotate-180 text-white" />
           </Link>
         )}
       </div>

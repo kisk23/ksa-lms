@@ -1,8 +1,8 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authService } from '@/features/auth';
 import { AUTH_QUERY_KEY } from '@/features/auth/hooks/useAuth';
@@ -91,9 +91,11 @@ export function SideNavBar({ isOpen = true, onClose }: SideNavBarProps) {
         <div className="px-6 mb-4 flex flex-col items-center justify-center text-center transition-all duration-300">
           <div className="relative">
             <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center border-2 border-outline-variant/30 overflow-hidden shadow-sm">
-              <img
+              <Image
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6zwZpsWh_pqqtUFNMCNi4C0j9Ch28_8xo6NxqWSg6ykUFAIaTaHYkHxuRaEnSCpl7LCZomIgcK4GYRhb29zY_TRkBFL2oEp4wygxaUQ56DQyXzpO9M2sdcJGhn2CQPgen-GcRnrl014NQRKmGuBjU7UnPRc1LBEMvqF8s_FFo7b-NOzlKOTADf956Jv9I6wnGzGi0gF6D7ZWWQg5ZltRLKAzOgIZwcr65FR004D-xWruKEhG01w"
                 alt="أحمد علي"
+                width={64}
+                height={64}
                 className="w-full h-full object-cover"
               />
             </div>

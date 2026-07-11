@@ -1,8 +1,8 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ChevronLeft,
   Calendar,
@@ -129,8 +129,10 @@ export function GradedAssignmentClient({ assignmentId }: GradedAssignmentClientP
               <h3 className="font-bold text-sm text-on-surface">ملاحظات المعلم</h3>
             </div>
             <div className="flex gap-4">
-              <img
+              <Image
                 alt="صورة المعلم"
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full object-cover shadow-sm shrink-0"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrWbSQCUPurexXeSyKDwR5AfbZgFVaxnqQzxL3clSRzUDX1yjY5_D9fp2s1EGnts4t8ekW7rxWCU2MfOUCMKbQIcPcwEkxxYUOubiolq0HuyE9rfX8D10V3Hzak7nGD7nnAfOMKUmaoGfICvM9yjpHPtY2Jsao2ilGZHjkvvax4dDmt8D8ky2gMlWWvWnEMg3SylOIUc1gKhB1liqbyx2DgRaEWI9VBIX5BkF9t99tgaRyI2De22xTIBgnBtP-vNKbKUCHH6e3r6Rl"
               />
@@ -229,10 +231,10 @@ export function GradedAssignmentClient({ assignmentId }: GradedAssignmentClientP
                 <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
                   <button
                     onClick={() => setIsPreviewOpen(true)}
-                    className="bg-primary text-on-primary px-6 py-3 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1.5 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 cursor-pointer"
+                    className="bg-primary text-white px-6 py-3 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1.5 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 cursor-pointer"
                   >
-                    <Eye size={16} />
-                    <span>عرض بملء الشاشة</span>
+                    <Eye size={16} className="text-white" />
+                    <span className="text-white">عرض بملء الشاشة</span>
                   </button>
                 </div>
               </div>
@@ -270,7 +272,7 @@ export function GradedAssignmentClient({ assignmentId }: GradedAssignmentClientP
             </Link>
             <button
               onClick={() => alert('جاري توجيهك إلى المحتوى التعليمي التالي...')}
-              className="px-6 py-2.5 bg-primary text-on-primary text-xs font-bold rounded-lg hover:bg-primary-hover transition-colors shadow-sm cursor-pointer"
+              className="px-6 py-2.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-hover transition-colors shadow-sm cursor-pointer"
             >
               الدرس التالي
             </button>

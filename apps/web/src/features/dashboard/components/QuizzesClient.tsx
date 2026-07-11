@@ -243,9 +243,9 @@ export function QuizzesClient() {
                     ) : (
                       <button
                         onClick={() => setConfirmQuiz(quiz)}
-                        className="w-full bg-primary-container hover:bg-primary text-on-primary text-xs font-bold py-2.5 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full bg-primary hover:bg-primary-hover text-white text-xs font-bold py-2.5 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
                       >
-                        <span>ابدأ الاختبار</span>
+                        <span className="text-white">ابدأ الاختبار</span>
                         <ArrowLeft size={14} className="text-white" />
                       </button>
                     )}

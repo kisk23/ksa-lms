@@ -1,8 +1,8 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ChevronLeft,
   ChevronDown,
@@ -240,8 +240,9 @@ export function CourseDashboardClient({ courseId }: CourseDashboardClientProps) 
           <div className="w-full sm:w-1/3 aspect-video sm:aspect-square bg-surface-container-high rounded-lg overflow-hidden relative group">
             {activeLesson ? (
               <>
-                <img
+                <Image
                   alt="صورة توضيحية للدرس"
+                  fill
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF3PJ27TUL8391m7F5wRTL3h2Pk7omO8vXNT6loVhkBwzGBnmAIAesDsO7nmhIjL0U7mqHpBDB7dk-xyfqJI4B_pXaHPHjF0jdpUQVCHR1kPFQ-E4Cj0EhimHUmmjSAIbYvHZqysuh5993aocOxMQ3sCWqRNKXjFSM-gGAmljQU78JDbIq0neKHBnPGcMxb3_UsmD6rkQjTdEdbrDiw7kn50oC8D44qAE-Dql5qVWyL1ZuWlVH7TFp_SG45bjHM7Wxc-NyD3NobXqD"
                 />

@@ -286,10 +286,10 @@ export function QuizTakerClient() {
             {!isLastQuestion ? (
               <button
                 onClick={handleNext}
-                className="flex items-center gap-1.5 px-6 py-2.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 transition-all shadow-sm active:scale-95 cursor-pointer"
+                className="flex items-center gap-1.5 px-6 py-2.5 rounded-lg bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow-sm active:scale-95 cursor-pointer"
               >
-                <span>التالي</span>
-                <ArrowLeft size={16} />
+                <span className="text-white">التالي</span>
+                <ArrowLeft size={16} className="text-white" />
               </button>
             ) : (
               <button

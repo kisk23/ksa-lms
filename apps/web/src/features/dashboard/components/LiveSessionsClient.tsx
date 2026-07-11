@@ -1,7 +1,7 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 
 import { useState, useMemo } from 'react';
+import Image from 'next/image';
 import {
   Video,
   User,
@@ -281,8 +281,9 @@ export function LiveSessionsClient() {
                   {/* Card Illustration Banner */}
                   <div className="h-32 relative bg-surface-variant overflow-hidden">
                     {session.bgImage ? (
-                      <img
+                      <Image
                         alt="خلفية الحصة"
+                        fill
                         className="w-full h-full object-cover"
                         src={session.bgImage}
                       />
