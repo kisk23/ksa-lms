@@ -37,6 +37,8 @@ export default function Navbar() {
     },
   });
 
+  if (pathname?.startsWith('/dashboard')) return null;
+
   return (
     <nav className="sticky top-0 z-50 w-full backdrop-blur-md border-b border-border/40 shadow-sm">
       <FadeInSection
