@@ -16,7 +16,7 @@ import { FadeInSection, FadeInItem } from './FadeInSection';
 const NAV_LINKS = [
   { href: '/', label: 'الرئيسية' },
   { href: '/courses', label: 'الدورات' },
-  { href: '/teachers', label: 'المعلمون' },
+  { href: '/subjects', label: 'المعلمون' },
   { href: '/about', label: 'عن سُلَّم' },
 ] as const;
 
