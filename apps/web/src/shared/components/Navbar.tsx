@@ -14,10 +14,26 @@ import { useRouter } from 'next/navigation';
 import { FadeInSection, FadeInItem } from './FadeInSection';
 
 const NAV_LINKS = [
-  { href: '/', label: 'الرئيسية' },
-  { href: '/courses', label: 'الدورات' },
-  { href: '/subjects', label: 'المعلمون' },
-  { href: '/about', label: 'عن سُلَّم' },
+  {
+    href: '/',
+    label: 'الرئيسية',
+    activePaths: ['/'],
+  },
+  {
+    href: '/courses',
+    label: 'الدورات',
+    activePaths: ['/courses'],
+  },
+  {
+    href: '/subjects',
+    label: 'المعلمون',
+    activePaths: ['/subjects', '/teachers'],
+  },
+  {
+    href: '/about',
+    label: 'عن سُلَّم',
+    activePaths: ['/about'],
+  },
 ] as const;
 
 export default function Navbar() {
@@ -76,8 +92,15 @@ export default function Navbar() {
         >
           <div className="w-full md:w-4/6 flex md:justify-center ">
             <ul className="font-medium flex flex-col md:flex-row space-x-0 md:space-x-4 mt-4 md:mt-0 gap-1 md:gap-0">
-              {NAV_LINKS.map(({ href, label }) => {
-                const active = pathname === href;
+              {NAV_LINKS.map(({ href, label, activePaths }) => {
+                const active = activePaths.some((path) => {
+                  if (path === '/') {
+                    return pathname === '/';
+                  }
+
+                  return pathname === path || pathname.startsWith(`${path}/`);
+                });
+
                 return (
                   <li key={href}>
                     <Link
