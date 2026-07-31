@@ -138,7 +138,7 @@ export function CoursesPageClient() {
         {/* ════════════════════════════════════════════════
             MAIN CONTENT — search bar + grid + pagination
             ════════════════════════════════════════════════ */}
-        <section className="flex-1 flex flex-col gap-6 min-w-0">
+        <section className="flex-1 flex flex-col gap-6 min-w-0 w-full">
           {/* ── Search bar ── */}
           <div className="relative w-full">
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none select-none">

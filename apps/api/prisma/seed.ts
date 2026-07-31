@@ -147,6 +147,138 @@ async function main() {
     },
   });
 
+  const teacherMath = await prisma.user.create({
+    data: {
+      name: 'أحمد محمد',
+      identity: 'teacher-math@sulam.sa',
+      email: 'teacher-math@sulam.sa',
+      phone: '+966500000008',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherMath2 = await prisma.user.create({
+    data: {
+      name: 'فهد العتيبي',
+      identity: 'teacher-math2@sulam.sa',
+      email: 'teacher-math2@sulam.sa',
+      phone: '+966500000009',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherPhysics = await prisma.user.create({
+    data: {
+      name: 'خالد حسن',
+      identity: 'teacher-physics@sulam.sa',
+      email: 'teacher-physics@sulam.sa',
+      phone: '+966500000010',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherChemistry = await prisma.user.create({
+    data: {
+      name: 'سارة أحمد',
+      identity: 'teacher-chemistry@sulam.sa',
+      email: 'teacher-chemistry@sulam.sa',
+      phone: '+966500000011',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherBiology = await prisma.user.create({
+    data: {
+      name: 'نور إبراهيم',
+      identity: 'teacher-biology@sulam.sa',
+      email: 'teacher-biology@sulam.sa',
+      phone: '+966500000012',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherArabic = await prisma.user.create({
+    data: {
+      name: 'محمد علي',
+      identity: 'teacher-arabic@sulam.sa',
+      email: 'teacher-arabic@sulam.sa',
+      phone: '+966500000013',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherEnglish = await prisma.user.create({
+    data: {
+      name: 'ليلى الصقر',
+      identity: 'teacher-english@sulam.sa',
+      email: 'teacher-english@sulam.sa',
+      phone: '+966500000014',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherScience = await prisma.user.create({
+    data: {
+      name: 'عبدالله القحطاني',
+      identity: 'teacher-science@sulam.sa',
+      email: 'teacher-science@sulam.sa',
+      phone: '+966500000015',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherComputer = await prisma.user.create({
+    data: {
+      name: 'ياسر الشمري',
+      identity: 'teacher-computer@sulam.sa',
+      email: 'teacher-computer@sulam.sa',
+      phone: '+966500000016',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherQudrat = await prisma.user.create({
+    data: {
+      name: 'ريم الحربي',
+      identity: 'teacher-qudrat@sulam.sa',
+      email: 'teacher-qudrat@sulam.sa',
+      phone: '+966500000017',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
+  const teacherTahsili = await prisma.user.create({
+    data: {
+      name: 'عمر الدوسري',
+      identity: 'teacher-tahsili@sulam.sa',
+      email: 'teacher-tahsili@sulam.sa',
+      phone: '+966500000018',
+      passwordHash: '$2b$10$pl9R5i3u6o5QWdksLaSiZ.ssvPDJ5UPgGCwf8Osn5C1gygDXhZMA6',
+      role: UserRole.TEACHER,
+      isVerified: true,
+    },
+  });
+
   // ── Assistant Permissions ────────────────────────
   const permissionsList = [
     'ENROLLMENT_READ',
@@ -182,6 +314,307 @@ async function main() {
       description: 'تعلم أساسيات البرمجة من الصفر باستخدام لغة بايثون',
       price: new Decimal('199.00'),
       status: CourseStatus.PUBLISHED,
+      category: 'البرمجة',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacher.id,
+      slug: 'python-advanced',
+      title: 'برمجة متقدمة بلغة بايثون',
+      description: 'تعمّق في مفاهيم البرمجة المتقدمة بلغة بايثون',
+      price: new Decimal('249.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'البرمجة',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherMath.id,
+      slug: 'math-grade-10',
+      title: 'رياضيات الصف الأول الثانوي',
+      description: 'دورة شاملة في رياضيات الصف الأول الثانوي تغطي المنهج السعودي',
+      price: new Decimal('179.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الرياضيات',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherMath.id,
+      slug: 'math-grade-11',
+      title: 'رياضيات الصف الثاني الثانوي',
+      description: 'دورة شاملة في رياضيات الصف الثاني الثانوي تغطي المنهج السعودي',
+      price: new Decimal('189.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الرياضيات',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherMath.id,
+      slug: 'math-grade-12',
+      title: 'رياضيات الصف الثالث الثانوي',
+      description: 'دورة شاملة في رياضيات الصف الثالث الثانوي تغطي المنهج السعودي',
+      price: new Decimal('199.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الرياضيات',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherMath2.id,
+      slug: 'math-middle-school',
+      title: 'رياضيات المرحلة المتوسطة',
+      description: 'دورة رياضيات للمرحلة المتوسطة مع تمارين وحلول تفصيلية',
+      price: new Decimal('149.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الرياضيات',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherMath2.id,
+      slug: 'math-qudrat-prep',
+      title: 'مراجعة رياضيات اختبار القدرات',
+      description: 'مراجعة مكثفة لقسم الكمي في اختبار القدرات',
+      price: new Decimal('229.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الرياضيات',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherPhysics.id,
+      slug: 'physics-grade-10',
+      title: 'فيزياء الصف الأول الثانوي',
+      description: 'دورة فيزياء للصف الأول الثانوي مع تجارب وشرح مبسّط',
+      price: new Decimal('179.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الفيزياء',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherPhysics.id,
+      slug: 'physics-grade-11',
+      title: 'فيزياء الصف الثاني الثانوي',
+      description: 'دورة فيزياء للصف الثاني الثانوي تغطي الميكانيكا والكهرباء',
+      price: new Decimal('189.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الفيزياء',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherPhysics.id,
+      slug: 'physics-grade-12',
+      title: 'فيزياء الصف الثالث الثانوي',
+      description: 'دورة فيزياء للصف الثالث الثانوي استعداداً للاختبارات النهائية',
+      price: new Decimal('199.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الفيزياء',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherChemistry.id,
+      slug: 'chemistry-grade-10',
+      title: 'كيمياء الصف الأول الثانوي',
+      description: 'دورة كيمياء للصف الأول الثانوي مع شرح التفاعلات والحسابات',
+      price: new Decimal('179.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الكيمياء',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherChemistry.id,
+      slug: 'chemistry-grade-11',
+      title: 'كيمياء الصف الثاني الثانوي',
+      description: 'دورة كيمياء للصف الثاني الثانوي تغطي الكيمياء العضوية والتحليلية',
+      price: new Decimal('189.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الكيمياء',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherBiology.id,
+      slug: 'biology-grade-11',
+      title: 'أحياء الصف الثاني الثانوي',
+      description: 'دورة أحياء للصف الثاني الثانوي مع رسوم توضيحية ومراجعات',
+      price: new Decimal('189.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الأحياء',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherBiology.id,
+      slug: 'biology-grade-12',
+      title: 'أحياء الصف الثالث الثانوي',
+      description: 'دورة أحياء للصف الثالث الثانوي استعداداً للاختبار التحصيلي',
+      price: new Decimal('199.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الأحياء',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherArabic.id,
+      slug: 'arabic-grade-10',
+      title: 'اللغة العربية للصف الأول الثانوي',
+      description: 'دورة اللغة العربية للصف الأول الثانوي تشمل النحو والبلاغة والأدب',
+      price: new Decimal('169.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'اللغة العربية',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherArabic.id,
+      slug: 'arabic-grade-12',
+      title: 'اللغة العربية للصف الثالث الثانوي',
+      description: 'دورة اللغة العربية للصف الثالث الثانوي مع تدريبات على التحليل الأدبي',
+      price: new Decimal('189.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'اللغة العربية',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherEnglish.id,
+      slug: 'english-grade-10',
+      title: 'اللغة الإنجليزية للصف الأول الثانوي',
+      description: 'دورة اللغة الإنجليزية للصف الأول الثانوي تركز على القواعد والمفردات',
+      price: new Decimal('169.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'اللغة الإنجليزية',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherEnglish.id,
+      slug: 'english-grade-11',
+      title: 'اللغة الإنجليزية للصف الثاني الثانوي',
+      description: 'دورة اللغة الإنجليزية للصف الثاني الثانوي مع تدريب على القراءة والكتابة',
+      price: new Decimal('179.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'اللغة الإنجليزية',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherScience.id,
+      slug: 'science-middle-school',
+      title: 'العلوم للمرحلة المتوسطة',
+      description: 'دورة علوم شاملة للمرحلة المتوسطة تغطي الفيزياء والكيمياء والأحياء',
+      price: new Decimal('149.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'العلوم',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherScience.id,
+      slug: 'science-grade-10',
+      title: 'العلوم للصف الأول الثانوي',
+      description: 'دورة علوم للصف الأول الثانوي مع أنشطة تطبيقية',
+      price: new Decimal('169.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'العلوم',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherComputer.id,
+      slug: 'computer-basics',
+      title: 'مبادئ الحاسب الآلي',
+      description: 'دورة مبادئ الحاسب الآلي تشمل العتاد والبرمجيات وأنظمة التشغيل',
+      price: new Decimal('159.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الحاسب الآلي',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherComputer.id,
+      slug: 'computer-applications',
+      title: 'تطبيقات الحاسب الآلي',
+      description: 'دورة تطبيقات الحاسب الآلي تشمل معالجة النصوص والجداول والعروض',
+      price: new Decimal('169.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'الحاسب الآلي',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherQudrat.id,
+      slug: 'qudrat-quantitative',
+      title: 'التحضير لاختبار القدرات — القسم الكمي',
+      description: 'دورة تحضيرية مكثفة لقسم الكمي في اختبار القدرات',
+      price: new Decimal('249.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'القدرات',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherQudrat.id,
+      slug: 'qudrat-verbal',
+      title: 'التحضير لاختبار القدرات — القسم اللفظي',
+      description: 'دورة تحضيرية مكثفة لقسم اللفظي في اختبار القدرات',
+      price: new Decimal('249.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'القدرات',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherTahsili.id,
+      slug: 'tahsili-math',
+      title: 'التحضير للتحصيلي — الرياضيات',
+      description: 'دورة تحضيرية للاختبار التحصيلي في مادة الرياضيات',
+      price: new Decimal('259.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'التحصيلي',
+    },
+  });
+
+  await prisma.course.create({
+    data: {
+      teacherUserId: teacherTahsili.id,
+      slug: 'tahsili-science',
+      title: 'التحضير للتحصيلي — العلوم',
+      description: 'دورة تحضيرية للاختبار التحصيلي في العلوم (فيزياء، كيمياء، أحياء)',
+      price: new Decimal('259.00'),
+      status: CourseStatus.PUBLISHED,
+      category: 'التحصيلي',
     },
   });
 

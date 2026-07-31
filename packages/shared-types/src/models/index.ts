@@ -268,3 +268,23 @@ export interface ISection {
   courseId: string;
   archivedAt?: Date;
 }
+
+// ─── Teacher ─────────────────────────────────────────
+export interface Teacher {
+  /** Stable identifier used in routing */
+  id: string;
+  /** Full display name, including academic title (e.g. "د. طارق عبدالرحمن") */
+  name: string;
+  /** Short qualification / bio line shown under the name */
+  title: string;
+  /** Profile photo URL. Falls back to initials when missing. */
+  image?: string;
+  /** Average rating out of 5 */
+  rating: number;
+  /** Total number of enrolled students */
+  studentsCount: number;
+  /** The subject this teacher is associated with */
+  subjectId: string;
+  /** Display label for the subject pill (e.g. "فيزياء") */
+  subjectLabel: string;
+}
