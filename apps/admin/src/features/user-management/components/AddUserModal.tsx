@@ -34,8 +34,10 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
   const [confirmPassword, setConfirmPassword] = useState('');
 
   // Student Specific
+  const [guardianName, setGuardianName] = useState('');
   const [guardianIdentity, setGuardianIdentity] = useState('');
   const [guardianPhone, setGuardianPhone] = useState('');
+  const [guardianRelationship, setGuardianRelationship] = useState('FATHER');
   const [hasParentInfo, setHasParentInfo] = useState(true);
 
   // Dirty state for touch interaction error display
@@ -121,7 +123,9 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
     password === confirmPassword &&
     (accountType !== UserRole.STUDENT ||
       !hasParentInfo ||
-      (isIdentityValid(guardianIdentity) && isPhoneValid(guardianPhone)));
+      (isIdentityValid(guardianIdentity) &&
+        isPhoneValid(guardianPhone) &&
+        guardianName.trim().length >= 3));
 
   const handleBlur = (field: string) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
@@ -171,13 +175,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       let response;
 
       if (accountType === UserRole.STUDENT && hasParentInfo) {
-        // The backend team already built the transaction logic inside /auth/register!
-        const parentNameParts = name.trim().split(/\s+/).filter(Boolean);
-        const parentName =
-          parentNameParts.length >= 4
-            ? parentNameParts.slice(1).join(' ')
-            : parentNameParts.join(' ');
-
+        // Single atomic transaction on the backend via /auth/register
         const registerPayload = {
           name,
           email,
@@ -185,11 +183,13 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
           identity,
           password,
           guardian: {
-            name: parentName,
+            name: guardianName.trim(),
             email: `parent_${guardianIdentity}@sulam.sa`,
             phone: formattedGuardianPhone,
             identity: guardianIdentity,
-            relationship: 'FATHER',
+            // Password = guardian's national ID (الهوية) per owner requirement
+            password: guardianIdentity,
+            relationship: guardianRelationship,
           },
         };
 
@@ -237,8 +237,10 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
     setPhone('');
     setPassword('');
     setConfirmPassword('');
+    setGuardianName('');
     setGuardianIdentity('');
     setGuardianPhone('');
+    setGuardianRelationship('FATHER');
     setHasParentInfo(true);
     setTouched({});
     setIsSuccess(false);
@@ -290,7 +292,16 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
   const activeConfig = config[accountType as keyof typeof config];
 
   const formProps: UserFormProps = {
-    data: { name, email, phone, identity, guardianIdentity, guardianPhone },
+    data: {
+      name,
+      email,
+      phone,
+      identity,
+      guardianIdentity,
+      guardianPhone,
+      guardianName,
+      guardianRelationship,
+    },
     onChange: (field, value) => {
       switch (field) {
         case 'name':
@@ -310,6 +321,12 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
           break;
         case 'guardianPhone':
           setGuardianPhone(value);
+          break;
+        case 'guardianName':
+          setGuardianName(value);
+          break;
+        case 'guardianRelationship':
+          setGuardianRelationship(value);
           break;
       }
     },

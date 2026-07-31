@@ -13,5 +13,5 @@ export class AdminUsersQueryDto extends PaginationQueryDto {
   @ApiPropertyOptional({ enum: ['active', 'blocked', 'pending'] })
   @IsOptional()
   @IsIn(['active', 'blocked', 'pending'])
-  declare status?: string;
+  status?: string;
 }

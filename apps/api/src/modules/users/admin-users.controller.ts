@@ -18,11 +18,7 @@ import {
   UpdateUserDto,
   AssistantPermissionsDto,
   AdminLinkChildDto,
-
-  AdminUsersQueryDto,
-
-  ListUsersQueryDto
-
+  ListUsersQueryDto,
 } from './dto';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { UsersService } from './users.service';
@@ -50,9 +46,7 @@ export class AdminUsersController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('VIEW_USERS')
   @ApiOperation({ summary: 'List all users' })
-
   findAll(@Query() query: ListUsersQueryDto) {
-
     return this.usersService.findAll({
       page: Number(query.page ?? 1),
       limit: Number(query.limit ?? 10),

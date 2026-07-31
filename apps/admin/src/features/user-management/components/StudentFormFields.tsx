@@ -1,8 +1,16 @@
-import { ChevronDown, IdCard, Mail, Phone, User } from 'lucide-react';
+import { ChevronDown, IdCard, Mail, Phone, User, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { FormField } from './FormField';
 import type { StudentFormFieldsProps } from '../types';
+
+const relationshipOptions: { value: string; label: string }[] = [
+  { value: 'FATHER', label: 'أب' },
+  { value: 'MOTHER', label: 'أم' },
+  { value: 'GUARDIAN', label: 'وصي' },
+  { value: 'SIBLING', label: 'أخ / أخت' },
+  { value: 'OTHER', label: 'أخرى' },
+];
 
 export function StudentFormFields({ form }: StudentFormFieldsProps) {
   return (
@@ -142,14 +150,14 @@ export function StudentFormFields({ form }: StudentFormFieldsProps) {
         </div>
       </section>
 
-      {/* Section 2: Verification / Guardian Links */}
+      {/* Section 2: Guardian Information */}
       <section className="space-y-6 animate-in fade-in duration-300">
         <div className="flex justify-between items-center border-b border-outline-variant pb-2">
           <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container">
             بيانات ولي الأمر والتحقق
           </h3>
 
-          {/* Toggle Switch with Framer Motion Layout Animation */}
+          {/* Toggle Switch */}
           <div className="flex items-center gap-3 select-none">
             <span className="font-caption-ar text-sm text-on-surface-variant font-medium">
               إضافة بيانات ولي الأمر
@@ -181,6 +189,55 @@ export function StudentFormFields({ form }: StudentFormFieldsProps) {
               className="overflow-hidden"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                {/* Guardian Name */}
+                <FormField
+                  label="اسم ولي الأمر"
+                  error={
+                    form.touched.guardianName && form.data.guardianName.trim().length < 3
+                      ? 'يجب إدخال اسم ولي الأمر (3 أحرف على الأقل)'
+                      : undefined
+                  }
+                >
+                  <div className="relative w-full">
+                    <Users
+                      size={20}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none z-10"
+                    />
+                    <input
+                      required={form.hasParentInfo}
+                      name="guardianName"
+                      value={form.data.guardianName}
+                      onChange={(e) => form.onChange('guardianName', e.target.value)}
+                      onBlur={() => form.onBlur('guardianName')}
+                      className={form.inputStyles}
+                      placeholder="أدخل اسم ولي الأمر"
+                      type="text"
+                    />
+                  </div>
+                </FormField>
+
+                {/* Guardian Relationship */}
+                <FormField label="صلة القرابة">
+                  <div className="relative w-full">
+                    <select
+                      name="guardianRelationship"
+                      value={form.data.guardianRelationship}
+                      onChange={(e) => form.onChange('guardianRelationship', e.target.value)}
+                      className={`${form.inputStyles} appearance-none`}
+                    >
+                      {relationshipOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      size={16}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none"
+                    />
+                  </div>
+                </FormField>
+
                 {/* Guardian Phone */}
                 <FormField
                   label="رقم هاتف ولي الأمر"
@@ -226,9 +283,9 @@ export function StudentFormFields({ form }: StudentFormFieldsProps) {
                   </div>
                 </FormField>
 
-                {/* Guardian Identity */}
+                {/* Guardian Identity — also used as login password */}
                 <FormField
-                  label="رقم هوية ولي الأمر"
+                  label="رقم هوية ولي الأمر (تُستخدم كلمة مرور الدخول)"
                   error={
                     form.touched.guardianIdentity &&
                     !form.isIdentityValid(form.data.guardianIdentity)

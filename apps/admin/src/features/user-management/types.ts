@@ -76,6 +76,8 @@ export interface UserFormData {
   identity: string;
   guardianIdentity: string;
   guardianPhone: string;
+  guardianName: string;
+  guardianRelationship: string;
 }
 
 export interface UserFormProps {

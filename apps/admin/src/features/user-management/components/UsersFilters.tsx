@@ -196,9 +196,14 @@ export function UsersFilters({
             dir="rtl"
           >
             <div className="flex items-center justify-between border-b border-outline-variant/30 pb-3">
-              <h4 className="font-body-md-ar text-body-md-ar text-on-surface font-semibold">
-                تخصيص الفلاتر المتقدمة
-              </h4>
+              <div>
+                <h4 className="font-body-md-ar text-body-md-ar text-on-surface font-semibold">
+                  تخصيص الفلاتر المتقدمة
+                </h4>
+                <p className="text-xs text-on-surface-variant/60 mt-0.5 font-caption-ar">
+                  قريباً — تتطلب هذه الفلاتر بيانات إضافية من الخادم
+                </p>
+              </div>
 
               {(grade !== 'all' || academicYear !== 'all' || country !== 'all') && (
                 <button
@@ -213,16 +218,18 @@ export function UsersFilters({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {/* Grade Select */}
-              <div className="space-y-2">
+              {/* Grade Select — disabled until backend returns grade field */}
+              <div className="space-y-2 opacity-50">
                 <label className="block font-caption-ar text-caption-ar text-on-surface-variant">
                   الصف الدراسي
+                  <span className="mr-1 text-[10px] text-outline">(قريباً)</span>
                 </label>
                 <div className="relative">
                   <select
                     value={grade}
                     onChange={(e) => onGradeChange(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg focus:border-primary-container outline-none appearance-none font-body-md-ar text-body-md-ar text-on-surface cursor-pointer"
+                    disabled
+                    className="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg outline-none appearance-none font-body-md-ar text-body-md-ar text-on-surface cursor-not-allowed"
                   >
                     <option value="all">كل الصفوف</option>
                     <option value="first-secondary">الصف الأول الثانوي</option>
@@ -236,16 +243,18 @@ export function UsersFilters({
                 </div>
               </div>
 
-              {/* Academic Year Select */}
-              <div className="space-y-2">
+              {/* Academic Year Select — disabled until backend returns academicYear field */}
+              <div className="space-y-2 opacity-50">
                 <label className="block font-caption-ar text-caption-ar text-on-surface-variant">
                   السنة الدراسية
+                  <span className="mr-1 text-[10px] text-outline">(قريباً)</span>
                 </label>
                 <div className="relative">
                   <select
                     value={academicYear}
                     onChange={(e) => onAcademicYearChange(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg focus:border-primary-container outline-none appearance-none font-body-md-ar text-body-md-ar text-on-surface cursor-pointer"
+                    disabled
+                    className="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg outline-none appearance-none font-body-md-ar text-body-md-ar text-on-surface cursor-not-allowed"
                   >
                     <option value="all">كل السنوات الدراسية</option>
                     <option value="2024-2025">2024-2025</option>
@@ -258,16 +267,18 @@ export function UsersFilters({
                 </div>
               </div>
 
-              {/* Country Select */}
-              <div className="space-y-2">
+              {/* Country Select — disabled until backend returns country field */}
+              <div className="space-y-2 opacity-50">
                 <label className="block font-caption-ar text-caption-ar text-on-surface-variant">
                   الدولة
+                  <span className="mr-1 text-[10px] text-outline">(قريباً)</span>
                 </label>
                 <div className="relative">
                   <select
                     value={country}
                     onChange={(e) => onCountryChange(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg focus:border-primary-container outline-none appearance-none font-body-md-ar text-body-md-ar text-on-surface cursor-pointer"
+                    disabled
+                    className="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg outline-none appearance-none font-body-md-ar text-body-md-ar text-on-surface cursor-not-allowed"
                   >
                     <option value="all">كل الدول</option>
                     <option value="saudi-arabia">المملكة العربية السعودية</option>
