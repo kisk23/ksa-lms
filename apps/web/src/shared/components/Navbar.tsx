@@ -37,6 +37,7 @@ export default function Navbar() {
     },
   });
 
+
   if (pathname?.startsWith('/dashboard')) return null;
 
   return (
@@ -46,6 +47,7 @@ export default function Navbar() {
         className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4"
       >
         <FadeInItem className="md:w-1/6 w-1/2">
+
           <Link href="/" className="flex items-center cursor-pointer ps-2 lg:ps-0">
             <Image src="/Sullam.svg" alt="Sullam Logo" width={80} height={40} priority />
           </Link>

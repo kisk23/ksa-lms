@@ -1,6 +1,8 @@
+
 'use client';
 
 import { usePathname } from 'next/navigation';
+
 import { Mail, MapPin, Phone } from 'lucide-react';
 import Link from 'next/link';
 

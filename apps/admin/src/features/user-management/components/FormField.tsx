@@ -1,11 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
-
-interface FormFieldProps {
-  label: string;
-  icon?: LucideIcon;
-  error?: string;
-  children: React.ReactNode;
-}
+import type { FormFieldProps } from '../types';
 
 export function FormField({ label, icon: Icon, error, children }: FormFieldProps) {
   return (

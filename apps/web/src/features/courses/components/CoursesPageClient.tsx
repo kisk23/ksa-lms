@@ -64,7 +64,9 @@ export function CoursesPageClient() {
     category: selectedCategory,
   });
 
+
   const courses = data?.data ?? [];
+
   const meta = data?.meta;
 
   // ── Separate query to collect ALL distinct categories from the backend ────

@@ -16,7 +16,7 @@
   --color-primary-fixed: #dde1ff;
   --color-outline-variant: #c4c5d6;
   --color-on-secondary-fixed: #002114;
-  --color-surface: #faf8ff;
+  --color-surface: #f8fafc;
   --color-on-error: #ffffff;
   --color-inverse-surface: #252f4d;
   --color-on-primary-fixed-variant: #143aad;
@@ -41,7 +41,7 @@
   --color-surface-dim: #ced9ff;
   --color-on-tertiary-container: #92c9ff;
   --color-on-tertiary: #ffffff;
-  --color-background: #faf8ff;
+  --color-background: #f8fafc;
   --color-tertiary-fixed: #cee5ff;
   --color-on-surface: #0f1a37;
   --color-surface-container-highest: #dae1ff;
@@ -52,7 +52,7 @@
   --color-outline: #747685;
   --color-on-secondary-fixed-variant: #005138;
   --color-primary: #002d9b;
-  --color-surface-bright: #faf8ff;
+  --color-surface-bright: #f8fafc;
 
   /* ===== Border Radius ===== */
   --radius: 0.25rem;
