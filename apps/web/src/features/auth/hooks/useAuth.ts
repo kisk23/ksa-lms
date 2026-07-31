@@ -24,8 +24,7 @@ export function useAuth() {
     refetch: query.refetch,
     logout: async () => {
       await authService.logout();
-      queryClient.setQueryData(AUTH_QUERY_KEY, null);
-      queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEY });
+      queryClient.clear();
     },
   };
 }
