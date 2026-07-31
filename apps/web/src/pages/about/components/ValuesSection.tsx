@@ -1,3 +1,4 @@
+import type { Value } from '../types';
 import RevealSection from './reusable/RevealSection';
 import SectionLabel from './reusable/SectionLabel';
 

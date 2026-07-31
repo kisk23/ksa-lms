@@ -1,6 +1,10 @@
-import Link from "next/link";
-import RevealSection from "./reusable/RevealSection";
-import SectionLabel from "./reusable/SectionLabel";
+import Link from 'next/link';
+import RevealSection from './reusable/RevealSection';
+import SectionLabel from './reusable/SectionLabel';
+
+// TODO: Update NEXT_PUBLIC_CONTACT_EMAIL in your .env file once the official
+// Sulam domain/email is ready. See .env.example for the placeholder.
+const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'contact@sulam.sa';
 
 export default function CTASection() {
   return (
@@ -40,7 +44,7 @@ export default function CTASection() {
           <Link href={"/register"} className="px-10 py-4 rounded-[0.75rem] bg-primary hover:bg-primary-hover text-white font-bold text-base transition-all duration-300 hover:shadow-[0_0_40px_rgba(36,70,184,0.5)] active:scale-95">
             سجل دخولك الآن
           </Link>
-          <a href={"mailto:[EMAIL_ADDRESS]"} className="px-10 py-4 rounded-[0.75rem] border border-gray-300 hover:border-secondary/60 text-gray-600 hover:text-gray-900 font-semibold text-base transition-all duration-300 bg-white/70">
+          <a href={`mailto:${CONTACT_EMAIL}`} className="px-10 py-4 rounded-[0.75rem] border border-gray-300 hover:border-secondary/60 text-gray-600 hover:text-gray-900 font-semibold text-base transition-all duration-300 bg-white/70">
             تواصل معنا
           </a>
         </div>

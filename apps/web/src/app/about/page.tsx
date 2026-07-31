@@ -1,5 +1,3 @@
-'use client';
-
 import CTASection from '@/pages/about/components/CTASection';
 import HeroSection from '@/pages/about/components/HeroSection';
 import HowWeWorkSection from '@/pages/about/components/HowWeWorkSection';
@@ -8,7 +6,6 @@ import StorySection from '@/pages/about/components/StorySection';
 import ValuesSection from '@/pages/about/components/ValuesSection';
 import WhoWeServeSection from '@/pages/about/components/WhoWeServeSection';
 import { FullBleed } from '@/shared/components/reusable/FullBleed';
-
 
 export default function AboutPage() {
   return (

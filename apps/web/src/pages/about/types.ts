@@ -1,10 +1,10 @@
-interface Value {
+export interface Value {
   icon: string;
   title: string;
   description: string;
 }
 
-interface Step {
+export interface Step {
   number: string;
   title: string;
   description: string;
