@@ -71,6 +71,7 @@ export class ApprovalsRepository {
         reviewer: { select: { id: true, name: true, email: true } },
         course: {
           include: {
+            teacher: { select: { id: true, name: true, email: true, phone: true } },
             chapters: {
               include: {
                 lessons: true,

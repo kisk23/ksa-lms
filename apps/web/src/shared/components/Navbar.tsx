@@ -11,6 +11,7 @@ import { Button } from '@lms/ui';
 import { authService } from '@/features/auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { FadeInSection, FadeInItem } from './FadeInSection';
 
 const NAV_LINKS = [
   { href: '/', label: 'الرئيسية' },
@@ -36,17 +37,24 @@ export default function Navbar() {
     },
   });
 
+
+  if (pathname?.startsWith('/dashboard')) return null;
+
   return (
     <nav className="sticky top-0 z-50 w-full backdrop-blur-md border-b border-border/40 shadow-sm">
-      <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <div className="md:w-1/6 w-1/2">
+      <FadeInSection
+        animateImmediate
+        className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <FadeInItem className="md:w-1/6 w-1/2">
+
           <Link href="/" className="flex items-center cursor-pointer ps-2 lg:ps-0">
-            <Image src="/Logo.svg" alt="Logo" width={40} height={20} priority />
+            <Image src="/Sullam.svg" alt="Sullam Logo" width={80} height={40} priority />
           </Link>
-        </div>
+        </FadeInItem>
 
         {/*collapse button*/}
-        <div className="flex items-center gap-3">
+        <FadeInItem className="flex items-center gap-3">
           <button
             type="button"
             aria-label="Toggle menu"
@@ -61,9 +69,9 @@ export default function Navbar() {
           >
             <Menu size={20} />
           </button>
-        </div>
+        </FadeInItem>
 
-        <div
+        <FadeInItem
           className={`${
             collapse ? 'block' : 'hidden'
           } w-full md:flex md:w-5/6 px-4 flex flex-col md:flex-row md:justify-between`}
@@ -132,8 +140,8 @@ export default function Navbar() {
               </div>
             )}
           </div>
-        </div>
-      </div>
+        </FadeInItem>
+      </FadeInSection>
     </nav>
   );
 }

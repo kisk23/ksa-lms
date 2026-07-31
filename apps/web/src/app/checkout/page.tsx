@@ -6,8 +6,9 @@ import { useEffect, useState } from 'react';
 import Script from 'next/script';
 import Link from 'next/link';
 import { CreditCard, CheckCircle2, ChevronRight, BookOpen, User } from 'lucide-react';
+import Image from 'next/image';
 
-import { coursesService } from '@/features/courses/services/courses.service';
+import { courseService } from '@/features/courses/services/course.service';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
 declare global {
@@ -41,7 +42,7 @@ export default function CheckoutPage() {
     error: courseError,
   } = useQuery({
     queryKey: ['course', courseId],
-    queryFn: () => (courseId ? coursesService.getById(courseId) : Promise.reject('No course ID')),
+    queryFn: () => (courseId ? courseService.getCourse(courseId) : Promise.reject('No course ID')),
     enabled: !!courseId,
   });
 
@@ -186,9 +187,13 @@ export default function CheckoutPage() {
                 {/* Course Details */}
                 <div className="flex gap-4">
                   {course.thumbnailUrl && (
-                    <img
+
+                    <Image
                       src={course.thumbnailUrl}
                       alt={course.title}
+                      width={96}
+                      height={64}
+
                       className="w-24 h-16 object-cover rounded-lg border border-zinc-850"
                     />
                   )}

@@ -64,7 +64,9 @@ export function CoursesPageClient() {
     category: selectedCategory,
   });
 
-  const courses = data?.data?.data ?? data?.data ?? [];
+
+  const courses = data?.data ?? [];
+
   const meta = data?.meta;
 
   // ── Separate query to collect ALL distinct categories from the backend ────
@@ -77,15 +79,14 @@ export function CoursesPageClient() {
     search: debouncedSearch || undefined,
   });
 
-  const allCourses = allData?.data?.data ?? allData?.data ?? [];
-
   const availableCategories = useMemo<string[]>(() => {
+    const allCourses = allData?.data ?? [];
     const seen = new Set<string>();
     for (const course of allCourses) {
       if (course.category) seen.add(course.category);
     }
     return [...seen].sort((a, b) => a.localeCompare(b, 'ar'));
-  }, [allCourses]);
+  }, [allData]);
 
   const hasActiveFilters = !!selectedCategory;
 

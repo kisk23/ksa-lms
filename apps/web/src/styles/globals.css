@@ -11,13 +11,68 @@
   --color-text: #f8fafc;
   --color-text-muted: #94a3b8;
   --color-border: #334155;
-  --color-success: #10b981;
+  --color-success: #16b88a;
   --color-danger: #ef4444;
   --color-warning: #f59e0b;
   --color-footer-background: #060d1f;
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
+
+  /* Google Stitch / Material Design Dashboard Specific Colors */
+  --color-inverse-on-surface: #eef0ff;
+  --color-on-primary-fixed: #001453;
+  --color-surface-container: #eaedff;
+  --color-on-error-container: #93000a;
+  --color-on-primary-fixed-variant: #143aad;
+  --color-surface-container-highest: #dae1ff;
+  --color-inverse-primary: #b8c4ff;
+  --color-on-tertiary-fixed: #001d33;
+  --color-surface-dim: #ced9ff;
+  --color-on-surface: #0f1a37;
+  --color-tertiary: #003d62;
+  --color-on-secondary-fixed: #002114;
+  --color-secondary-container: #6afcc0;
+  --color-primary-fixed: #dde1ff;
+  --color-secondary-fixed-dim: #48dfa5;
+  --color-surface-variant: #dae1ff;
+  --color-surface-container-high: #e2e7ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-primary-fixed-dim: #b8c4ff;
+  --color-on-tertiary-fixed-variant: #004a76;
+  --color-inverse-surface: #252f4d;
+  --color-on-surface-variant: #444653;
+  --color-surface-bright: #faf8ff;
+  --color-on-primary-container: #b4c1ff;
+  --color-secondary-fixed: #6afcc0;
+  --color-error-container: #ffdad6;
+  --color-tertiary-fixed-dim: #97cbff;
+  --color-surface-container-low: #f2f3ff;
+  --color-primary-container: #2446b8;
+  --color-on-secondary-container: #007350;
+  --color-on-tertiary-container: #92c9ff;
+  --color-on-secondary-fixed-variant: #005138;
+  --color-surface-tint: #3554c6;
+  --color-outline-variant: #c4c5d6;
+  --color-tertiary-fixed: #cee5ff;
+  --color-tertiary-container: #005586;
+  --color-background: #faf8ff;
+  --color-on-background: #0f1a37;
+}
+
+/* Dashboard Theme - Isolated Light Mode settings */
+.dashboard-theme {
+  --color-primary: #002d9b;
+  --color-primary-hover: #3554c6;
+  --color-bg: #faf8ff;
+  --color-surface: #ffffff;
+  --color-text: #0f1a37;
+  --color-text-muted: #444653;
+  --color-border: #c4c5d6;
+  --color-secondary: #006c4b;
+  --color-success: #006c4b;
+  --color-background: #faf8ff;
+  --color-on-background: #0f1a37;
 }
 
 @layer base {

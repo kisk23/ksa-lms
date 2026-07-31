@@ -10,10 +10,12 @@ import type { ApprovalStatus } from '../types';
 type ReviewActionCardProps = {
   approvalId: string;
   currentStatus: ApprovalStatus;
+  onReviewed?: () => Promise<void> | void;
 };
 
-export function ReviewActionCard({ approvalId, currentStatus }: ReviewActionCardProps) {
+export function ReviewActionCard({ approvalId, currentStatus, onReviewed }: ReviewActionCardProps) {
   const [loadingAction, setLoadingAction] = useState<ApprovalStatus | null>(null);
+  const [rejectionReason, setRejectionReason] = useState('');
   const router = useRouter();
 
   if (currentStatus !== 'PENDING_REVIEW') {
@@ -21,11 +23,23 @@ export function ReviewActionCard({ approvalId, currentStatus }: ReviewActionCard
   }
 
   const handleReview = async (newStatus: ApprovalStatus) => {
+    const trimmedReason = rejectionReason.trim();
+    if (
+      (newStatus === 'CHANGES_REQUESTED' || newStatus === 'REJECTED') &&
+      trimmedReason.length < 10
+    ) {
+      alert('الرجاء إدخال سبب الرفض/التعديل (10 أحرف على الأقل)');
+      return;
+    }
+
     try {
       setLoadingAction(newStatus);
-      await apiClient.patch(`/approvals/${approvalId}/review`, { status: newStatus });
-      router.refresh(); // Refresh the page to get the updated status
-      // You could also navigate back to the list using router.push('/approvals')
+      await apiClient.patch(`/approvals/${approvalId}/review`, {
+        status: newStatus,
+        ...(newStatus !== 'APPROVED' ? { rejectionReason: trimmedReason } : {}),
+      });
+      await onReviewed?.();
+      router.refresh();
     } catch (err) {
       console.error('Failed to submit review', err);
       alert('حدث خطأ أثناء تقديم المراجعة. يرجى المحاولة مرة أخرى.');
@@ -42,6 +56,13 @@ export function ReviewActionCard({ approvalId, currentStatus }: ReviewActionCard
       </h2>
 
       <div className="flex flex-col gap-3">
+        <textarea
+          value={rejectionReason}
+          onChange={(e) => setRejectionReason(e.target.value)}
+          placeholder="سبب الرفض أو التعديلات المطلوبة (إلزامي في حال الرفض/التعديل)"
+          className="w-full bg-surface-container rounded-lg border border-outline-variant p-3 text-body-ar font-body-ar text-on-surface focus:outline-none focus:ring-2 focus:ring-primary min-h-[100px] resize-y"
+          disabled={loadingAction !== null}
+        />
         <button
           onClick={() => handleReview('APPROVED')}
           disabled={loadingAction !== null}

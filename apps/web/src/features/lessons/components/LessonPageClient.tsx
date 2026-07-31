@@ -106,7 +106,7 @@ export function LessonPageClient({
   } = useLesson(courseId, chapterId, lessonId);
 
   const { data: rawStatuses } = useLessonStatuses(courseId);
-  const statuses = Array.isArray(rawStatuses) ? rawStatuses : [];
+  const statuses = useMemo(() => (Array.isArray(rawStatuses) ? rawStatuses : []), [rawStatuses]);
 
   // progress is passed directly to CourseProgressBar — it handles null/undefined gracefully
   const { data: progress } = useCourseProgress(courseId);

@@ -1,3 +1,8 @@
+
+'use client';
+
+import { usePathname } from 'next/navigation';
+
 import { Mail, MapPin, Phone } from 'lucide-react';
 import Link from 'next/link';
 
@@ -49,6 +54,9 @@ function InstagramIcon() {
 }
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/dashboard')) return null;
+
   return (
     <footer dir="rtl" className="bg-footer-background text-text-muted py-16">
       <div className="px-6">
