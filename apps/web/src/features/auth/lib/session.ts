@@ -3,6 +3,7 @@ import type { AuthUser } from '@lms/shared-types';
 type JwtPayload = {
   sub?: string;
   isVerified?: boolean;
+  role?: string;
   exp?: number;
 };
 
@@ -33,6 +34,7 @@ export function isTokenExpired(payload: JwtPayload | null): boolean {
 export type SessionHint = {
   authenticated: boolean;
   isVerified: boolean;
+  role?: string;
 };
 
 export function sessionFromAccessCookie(accessToken: string | undefined): SessionHint {
@@ -46,9 +48,13 @@ export function sessionFromAccessCookie(accessToken: string | undefined): Sessio
   return {
     authenticated: true,
     isVerified: Boolean(payload.isVerified),
+    role: payload.role,
   };
 }
 
 export function redirectPathForUser(user: AuthUser): string {
-  return user.isVerified ? '/dashboard' : '/verify-otp';
+  if (!user.isVerified) return '/verify-otp';
+  if (user.role === 'TEACHER') return '/dashboard/teacher';
+  if (user.role === 'PARENT') return '/dashboard/parent';
+  return '/dashboard'; // Default is STUDENT
 }
