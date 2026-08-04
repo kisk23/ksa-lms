@@ -17,6 +17,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [pathname]);
 
+  if (pathname.startsWith('/dashboard/parent') || pathname.startsWith('/dashboard/teacher')) {
+    return <>{children}</>;
+  }
+
   return (
     <div
       className="dashboard-theme min-h-screen bg-background text-on-background relative"

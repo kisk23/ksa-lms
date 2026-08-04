@@ -25,10 +25,25 @@ import {
 
 const TEACHER_NAV_ITEMS = [
   { href: '/dashboard/teacher', label: 'الصفوف التعليمية', icon: GraduationCap, isBottom: false },
-  { href: '/dashboard/teacher/grading', label: 'تصحيح الواجبات', icon: ClipboardList, isBottom: false },
-  { href: '/dashboard/teacher/quizzes', label: 'إدارة الاختبارات', icon: FileQuestion, isBottom: false },
+  {
+    href: '/dashboard/teacher/grading',
+    label: 'تصحيح الواجبات',
+    icon: ClipboardList,
+    isBottom: false,
+  },
+  {
+    href: '/dashboard/teacher/quizzes',
+    label: 'إدارة الاختبارات',
+    icon: FileQuestion,
+    isBottom: false,
+  },
   { href: '/dashboard/teacher/calendar', label: 'الجدول الدراسي', icon: Calendar, isBottom: false },
-  { href: '/dashboard/teacher/reports', label: 'إحصائيات الأداء', icon: BarChart3, isBottom: false },
+  {
+    href: '/dashboard/teacher/reports',
+    label: 'إحصائيات الأداء',
+    icon: BarChart3,
+    isBottom: false,
+  },
   { href: '/dashboard/teacher/settings', label: 'الإعدادات', icon: Settings, isBottom: true },
 ] as const;
 
@@ -65,7 +80,10 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
     'https://lh3.googleusercontent.com/aida-public/AB6AXuA-p0N3jiU9Z8OvlXBikfLmVN-gTUWTyQUHWJzlmTpd6AJu50CvfULvKBVabDNIxcqcYb7_98b2JBs_eGmWUqeb9JA6SBZCP2kJVyy1grOOibOIj4z2wRXdUdgScZVoXt8ZdBYd4xpcNxdmGMzP0xuScsGNalCQMmsA2FWj9Xj7EV9qTlE0-D_k7r2UzI4BnKwo6QIhO-8yxoeCfO1ZCXiERMSZOWgEDHpCoqyVS-ouslTlX9crIaUsLmlKI0g9X2PszcxdmkKHAQso';
 
   return (
-    <div className="dashboard-theme min-h-screen bg-background text-on-background relative" dir="rtl">
+    <div
+      className="dashboard-theme min-h-screen bg-background text-on-background relative"
+      dir="rtl"
+    >
       {/* 1. Header (TopAppBar) */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-md border-b border-gray-200/80 z-50 flex items-center justify-between px-6 font-sans antialiased text-sm font-medium">
         <div className="flex items-center gap-3">
@@ -77,24 +95,47 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-2">
-            <Image src="/Sullam.svg" alt="سُلَّم" width={80} height={28} className="h-7 w-auto object-contain" />
-            <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">بوابة المعلم</span>
+            <Image
+              src="/Sullam.svg"
+              alt="سُلَّم"
+              width={80}
+              height={28}
+              className="h-7 w-auto object-contain"
+            />
+            <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">
+              بوابة المعلم
+            </span>
           </div>
         </div>
 
         <div className="flex items-center gap-3 mr-auto">
-          <button className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95" title="المساعدة والدعم">
+          <button
+            className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95"
+            title="المساعدة والدعم"
+          >
             <HelpCircle size={20} />
           </button>
-          <button className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95" title="الرسائل">
+          <button
+            className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95"
+            title="الرسائل"
+          >
             <MessageSquare size={20} />
           </button>
-          <button className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95 relative" title="الإشعارات">
+          <button
+            className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95 relative"
+            title="الإشعارات"
+          >
             <Bell size={20} />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full"></span>
           </button>
           <div className="h-8 w-8 rounded-full bg-gray-100 border border-gray-200 overflow-hidden ms-2 cursor-pointer hover:border-primary transition-colors flex items-center justify-center relative">
-            <Image src={avatarUrl} alt="المعلم" width={32} height={32} className="w-full h-full object-cover" />
+            <Image
+              src={avatarUrl}
+              alt="المعلم"
+              width={32}
+              height={32}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </header>
@@ -123,15 +164,27 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
         {/* Teacher Profile Card */}
         <div className="px-6 mb-4 flex flex-col items-center justify-center text-center transition-all duration-300">
           <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center border-2 border-outline-variant/30 overflow-hidden shadow-sm">
-            <Image src={avatarUrl} alt="المعلم" width={64} height={64} className="w-full h-full object-cover" />
+            <Image
+              src={avatarUrl}
+              alt="المعلم"
+              width={64}
+              height={64}
+              className="w-full h-full object-cover"
+            />
           </div>
-          <div className={`mt-3 transition-all duration-300 ${sidebarOpen ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}>
-            <h2 className="text-sm font-bold text-on-background">{user?.name || 'أ. أحمد الشمري'}</h2>
+          <div
+            className={`mt-3 transition-all duration-300 ${sidebarOpen ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}
+          >
+            <h2 className="text-sm font-bold text-on-background">
+              {user?.name || 'أ. أحمد الشمري'}
+            </h2>
             <p className="text-[10px] text-primary font-bold mt-0.5">معلم علوم حاسب</p>
           </div>
         </div>
 
-        <div className={`border-b border-gray-100 mb-4 mx-6 transition-all duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0'}`} />
+        <div
+          className={`border-b border-gray-100 mb-4 mx-6 transition-all duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0'}`}
+        />
 
         <nav className="flex-grow flex flex-col gap-1.5 px-4 lg:px-2 transition-all duration-300">
           {TEACHER_NAV_ITEMS.filter((item) => !item.isBottom).map((item) => {
@@ -148,9 +201,16 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
                   ${isActive ? 'bg-primary/5 text-primary font-bold' : 'text-text-muted hover:bg-gray-50/80 hover:text-text'}
                 `}
               >
-                {isActive && <div className="absolute right-0 top-0 bottom-0 w-[4px] bg-primary rounded-l-md" />}
-                <Icon size={18} className={`${isActive ? 'text-primary' : 'text-gray-400'} shrink-0`} />
-                <span className={`transition-all duration-300 whitespace-nowrap text-right leading-none ${sidebarOpen ? 'text-xs font-semibold' : 'text-xs font-semibold lg:text-[9px] lg:font-bold lg:text-center'}`}>
+                {isActive && (
+                  <div className="absolute right-0 top-0 bottom-0 w-[4px] bg-primary rounded-l-md" />
+                )}
+                <Icon
+                  size={18}
+                  className={`${isActive ? 'text-primary' : 'text-gray-400'} shrink-0`}
+                />
+                <span
+                  className={`transition-all duration-300 whitespace-nowrap text-right leading-none ${sidebarOpen ? 'text-xs font-semibold' : 'text-xs font-semibold lg:text-[9px] lg:font-bold lg:text-center'}`}
+                >
                   {item.label}
                 </span>
               </Link>
@@ -172,9 +232,16 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
                     ${isActive ? 'bg-primary/5 text-primary font-bold' : 'text-text-muted hover:bg-gray-50/80 hover:text-text'}
                   `}
                 >
-                  {isActive && <div className="absolute right-0 top-0 bottom-0 w-[4px] bg-primary rounded-l-md" />}
-                  <Icon size={18} className={`${isActive ? 'text-primary' : 'text-gray-400'} shrink-0`} />
-                  <span className={`transition-all duration-300 whitespace-nowrap text-right leading-none ${sidebarOpen ? 'text-xs font-semibold' : 'text-xs font-semibold lg:text-[9px] lg:font-bold lg:text-center'}`}>
+                  {isActive && (
+                    <div className="absolute right-0 top-0 bottom-0 w-[4px] bg-primary rounded-l-md" />
+                  )}
+                  <Icon
+                    size={18}
+                    className={`${isActive ? 'text-primary' : 'text-gray-400'} shrink-0`}
+                  />
+                  <span
+                    className={`transition-all duration-300 whitespace-nowrap text-right leading-none ${sidebarOpen ? 'text-xs font-semibold' : 'text-xs font-semibold lg:text-[9px] lg:font-bold lg:text-center'}`}
+                  >
                     {item.label}
                   </span>
                 </Link>
@@ -192,7 +259,9 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
               `}
             >
               <LogOut size={18} className="text-rose-500 shrink-0" />
-              <span className={`transition-all duration-300 whitespace-nowrap text-right leading-none ${sidebarOpen ? 'text-xs font-bold' : 'text-xs font-bold lg:text-[9px] lg:font-bold lg:text-center'}`}>
+              <span
+                className={`transition-all duration-300 whitespace-nowrap text-right leading-none ${sidebarOpen ? 'text-xs font-bold' : 'text-xs font-bold lg:text-[9px] lg:font-bold lg:text-center'}`}
+              >
                 {logoutMutation.isPending ? 'خروج...' : 'تسجيل الخروج'}
               </span>
             </button>
@@ -201,10 +270,10 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
       </aside>
 
       {/* 3. Main content page */}
-      <main className={`min-h-screen pt-16 transition-all duration-300 ${sidebarOpen ? 'lg:mr-72' : 'lg:mr-20'}`}>
-        <div className="p-6 md:p-8 max-w-7xl mx-auto w-full">
-          {children}
-        </div>
+      <main
+        className={`min-h-screen pt-16 transition-all duration-300 ${sidebarOpen ? 'lg:mr-72' : 'lg:mr-20'}`}
+      >
+        <div className="p-6 md:p-8 max-w-7xl mx-auto w-full">{children}</div>
       </main>
     </div>
   );
