@@ -19,7 +19,6 @@ import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Permissions } from '../users/decorators/permissions.decorator';
 import { PermissionsGuard } from '../users/guards/permissions.guard';
@@ -73,9 +72,10 @@ export class CoursesController {
   }
 
   @Get(':id')
-  @UseGuards(OptionalJwtAuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get course details' })
-  findOne(@Param('id') id: string, @GetCurrentUser() user?: IUser) {
+  findOne(@Param('id') id: string, @GetCurrentUser() user: IUser) {
     return this.coursesService.findById(id, user);
   }
 
