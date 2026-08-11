@@ -1,11 +1,11 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-type BackLinkProps = {
+interface BackLinkProps {
   href: string;
   label: string;
   className?: string;
-};
+}
 
 export function BackLink({ href, label, className = '' }: BackLinkProps) {
   return (

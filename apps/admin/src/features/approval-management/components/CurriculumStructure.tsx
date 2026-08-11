@@ -1,9 +1,9 @@
 import { ModuleSection } from './ModuleSection';
 import type { Module } from '../types';
 
-type CurriculumStructureProps = {
+interface CurriculumStructureProps {
   modules: Module[];
-};
+}
 
 export function CurriculumStructure({ modules }: CurriculumStructureProps) {
   return (

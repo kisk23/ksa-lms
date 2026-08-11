@@ -2,7 +2,7 @@ export type ApprovalStatus = 'PENDING_REVIEW' | 'APPROVED' | 'CHANGES_REQUESTED'
 
 export type RequestType = 'NEW_COURSE' | 'EDIT_COURSE' | 'NEW_LESSON';
 
-export type ApprovalListItem = {
+export interface ApprovalListItem {
   id: string;
   requestType: RequestType;
   teacherName: string;
@@ -10,36 +10,36 @@ export type ApprovalListItem = {
   courseOrLessonName: string;
   requestDate: string;
   status: ApprovalStatus;
-};
+}
 
 export type ApprovalStatusFilter = 'all' | ApprovalStatus;
 
 export type LessonType = 'video' | 'assignment';
 
-export type Lesson = {
+export interface Lesson {
   id: string;
   title: string;
   type: LessonType;
   duration: string;
-};
+}
 
-export type Module = {
+export interface Module {
   id: string;
   title: string;
   lessons: Lesson[];
   durationLabel: string;
-};
+}
 
-export type TimelineEntry = {
+export interface TimelineEntry {
   id: string;
   title: string;
   description?: string;
   meta?: string;
   status: 'current' | 'past';
-};
+}
 
 // Represents exactly what the API returns for GET /approvals/:id
-export type ApprovalRequest = {
+export interface ApprovalRequest {
   id: string;
   requestType: RequestType;
   status: ApprovalStatus;
@@ -63,4 +63,4 @@ export type ApprovalRequest = {
     }[];
   };
   lesson: { id: string; title: string } | null;
-};
+}

@@ -25,7 +25,7 @@ const statusFilters: {
   { value: 'pending', label: 'معلق', dot: 'warning' },
 ];
 
-type UsersFiltersProps = {
+interface UsersFiltersProps {
   role: RoleFilter;
   status: StatusFilter;
   search: string;
@@ -39,7 +39,7 @@ type UsersFiltersProps = {
   onAcademicYearChange: (year: string) => void;
   onCountryChange: (country: string) => void;
   onResetFilters: () => void;
-};
+}
 
 export function UsersFilters({
   role,

@@ -2,9 +2,9 @@
 
 import { CourseEditor } from '@features/course-management';
 
-type CourseDetailPageProps = {
+interface CourseDetailPageProps {
   params: { id: string };
-};
+}
 
 export default function CourseDetailPage({ params }: CourseDetailPageProps) {
   return (

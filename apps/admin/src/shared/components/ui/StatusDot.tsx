@@ -1,9 +1,9 @@
 type StatusVariant = 'success' | 'error' | 'warning' | 'neutral' | 'info';
 
-type StatusDotProps = {
+interface StatusDotProps {
   variant: StatusVariant;
   className?: string;
-};
+}
 
 const variantStyles: Record<StatusVariant, string> = {
   success: 'bg-secondary',

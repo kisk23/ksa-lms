@@ -23,9 +23,9 @@ const statusConfig: Record<ApprovalStatus, { label: string; bg: string; color: s
   },
 };
 
-type ApprovalStatusPillProps = {
+interface ApprovalStatusPillProps {
   status: ApprovalStatus;
-};
+}
 
 export function ApprovalStatusPill({ status }: ApprovalStatusPillProps) {
   const config = statusConfig[status];

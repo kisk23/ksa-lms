@@ -2,11 +2,11 @@ import type { ReactNode } from 'react';
 
 type BadgeVariant = 'success' | 'neutral' | 'error' | 'info' | 'warning';
 
-type BadgeProps = {
+interface BadgeProps {
   children: ReactNode;
   variant?: BadgeVariant;
   className?: string;
-};
+}
 
 const variantStyles: Record<BadgeVariant, string> = {
   success: 'text-secondary bg-secondary-container/20',

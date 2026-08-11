@@ -1,12 +1,12 @@
 import Image from 'next/image';
 
-type AvatarProps = {
+interface AvatarProps {
   src?: string;
   alt?: string;
   fallback?: string;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-};
+}
 
 const sizeMap = {
   sm: { box: 'w-8 h-8', img: 32 },

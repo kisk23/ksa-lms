@@ -3,13 +3,13 @@ import { IconBadge } from '@shared/components/ui/IconBadge';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-export type QuickStatCardProps = {
+export interface QuickStatCardProps {
   icon: LucideIcon;
   iconColor: string;
   iconBg: string;
   title: string;
   value: ReactNode;
-};
+}
 
 export function QuickStatCard({ icon, iconColor, iconBg, title, value }: QuickStatCardProps) {
   return (

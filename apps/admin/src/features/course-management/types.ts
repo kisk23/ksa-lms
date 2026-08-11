@@ -9,7 +9,7 @@ export type CourseStatus =
   | 'ARCHIVED';
 
 // ─── Course from API (GET /courses/manage) ─────────
-export type Course = {
+export interface Course {
   id: string;
   slug: string;
   teacherUserId: string;
@@ -36,23 +36,23 @@ export type Course = {
     enrollments: number;
     chapters: number;
   };
-};
+}
 
 // ─── Pagination metadata from API ──────────────────
-export type CoursesMeta = {
+export interface CoursesMeta {
   total: number;
   page: number;
   limit: number;
   totalPages: number;
   hasNextPage: boolean;
   hasPrevPage: boolean;
-};
+}
 
 // ─── API response shape for courses list ───────────
-export type CoursesApiResponse = {
+export interface CoursesApiResponse {
   data: Course[];
   meta: CoursesMeta;
-};
+}
 
 // ─── Filter types ──────────────────────────────────
 export type CourseStatusFilter = 'all' | CourseStatus;
@@ -141,23 +141,23 @@ export interface CreatedCourse {
 }
 
 // ─── Component Props ───────────────────────────────
-export type CourseCardProps = {
+export interface CourseCardProps {
   course: Course;
   onRefresh?: () => void;
-};
+}
 
 export type ActiveTab = 'details' | 'curriculum';
 
-export type CourseEditorProps = {
+export interface CourseEditorProps {
   courseId: string;
   initialTab?: ActiveTab;
-};
+}
 
-export type CourseRowProps = {
+export interface CourseRowProps {
   course: Course;
-};
+}
 
-export type CoursesFiltersProps = {
+export interface CoursesFiltersProps {
   status: CourseStatusFilter;
   priceRange: PriceRangeFilter;
   search: string;
@@ -165,9 +165,9 @@ export type CoursesFiltersProps = {
   onPriceRangeChange: (value: PriceRangeFilter) => void;
   onSearchChange: (value: string) => void;
   onReset?: () => void;
-};
+}
 
-export type CoursesTableProps = {
+export interface CoursesTableProps {
   courses: Course[];
   isLoading: boolean;
   error: string | null;
@@ -176,16 +176,16 @@ export type CoursesTableProps = {
   onPageChange: (page: number) => void;
   onRetry: () => void;
   onRefresh?: () => void;
-};
+}
 
 export interface CourseSuccessViewProps {
   createdCourse: CreatedCourse;
   onReset: () => void;
 }
 
-export type CurriculumBuilderProps = {
+export interface CurriculumBuilderProps {
   courseId: string;
-};
+}
 
 export interface AssignmentEditorProps {
   lessonId: string;

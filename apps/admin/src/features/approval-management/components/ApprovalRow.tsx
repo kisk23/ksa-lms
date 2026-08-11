@@ -8,11 +8,11 @@ import { ApprovalStatusPill } from './ApprovalStatusPill';
 import { RequestTypeBadge } from './RequestTypeBadge';
 import type { ApprovalListItem } from '../types';
 
-type ApprovalRowProps = {
+interface ApprovalRowProps {
   approval: ApprovalListItem;
   zebra?: boolean;
   onStatusUpdate?: (id: string, newStatus: string) => void;
-};
+}
 
 export function ApprovalRow({ approval, zebra = false, onStatusUpdate }: ApprovalRowProps) {
   const isPending = approval.status === 'PENDING_REVIEW';

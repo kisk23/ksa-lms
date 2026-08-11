@@ -1,9 +1,9 @@
 import { Star } from 'lucide-react';
 
-type RatingProps = {
+interface RatingProps {
   value: number | null;
   className?: string;
-};
+}
 
 export function Rating({ value, className = '' }: RatingProps) {
   if (value === null || value === undefined) {

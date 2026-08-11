@@ -1,16 +1,16 @@
 export type TimelineItemStatus = 'current' | 'past' | 'future';
 
-export type TimelineItem = {
+export interface TimelineItem {
   id: string;
   title: string;
   description?: string;
   meta?: string;
   status?: TimelineItemStatus;
-};
+}
 
-type TimelineProps = {
+interface TimelineProps {
   items: TimelineItem[];
-};
+}
 
 export function Timeline({ items }: TimelineProps) {
   return (

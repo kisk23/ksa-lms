@@ -11,9 +11,9 @@ import type { ApprovalRequest } from '@features/approval-management';
 import { apiClient } from '@shared/lib/api-client';
 import { use, useState, useEffect } from 'react';
 
-type ApprovalDetailPageProps = {
+interface ApprovalDetailPageProps {
   params: Promise<{ id: string }>;
-};
+}
 
 export default function ApprovalDetailPage({ params }: ApprovalDetailPageProps) {
   const { id } = use(params);

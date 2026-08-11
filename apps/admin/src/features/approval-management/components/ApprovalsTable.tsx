@@ -6,11 +6,11 @@ import { useState, useMemo, useEffect } from 'react';
 import { ApprovalRow } from './ApprovalRow';
 import type { ApprovalListItem } from '../types';
 
-type ApprovalsTableProps = {
+interface ApprovalsTableProps {
   approvals: ApprovalListItem[];
   pageSize?: number;
   onStatusUpdate?: (id: string, newStatus: string) => void;
-};
+}
 
 const columns = ['نوع الطلب', 'اسم المعلم', 'اسم المقرر / الدرس', 'تاريخ الطلب', 'الحالة'];
 

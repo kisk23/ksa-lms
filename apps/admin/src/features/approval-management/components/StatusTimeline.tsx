@@ -2,9 +2,9 @@ import { Timeline, type TimelineItem } from '@shared/components/ui/Timeline';
 
 import type { TimelineEntry } from '../types';
 
-type StatusTimelineProps = {
+interface StatusTimelineProps {
   entries: TimelineEntry[];
-};
+}
 
 export function StatusTimeline({ entries }: StatusTimelineProps) {
   const items: TimelineItem[] = entries.map((entry) => ({

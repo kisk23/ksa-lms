@@ -1,18 +1,18 @@
 import type { ReactNode } from 'react';
 
-type SelectOption = {
+interface SelectOption {
   value: string;
   label: string;
-};
+}
 
-type SelectProps = {
+interface SelectProps {
   label?: string;
   options: SelectOption[];
   value?: string;
   onChange?: (value: string) => void;
   className?: string;
   children?: ReactNode;
-};
+}
 
 export function Select({ label, options, value, onChange, className = '' }: SelectProps) {
   return (

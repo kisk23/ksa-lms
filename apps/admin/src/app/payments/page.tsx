@@ -1,5 +1,12 @@
 'use client';
 
+import {
+  PaymentsHeader,
+  PaymentsSummaryCards,
+  PaymentsFilters,
+  PaymentsTable,
+  RevenueChart,
+} from '@features/payments';
 import type {
   MonthlyRevenue,
   Payment,
@@ -7,13 +14,6 @@ import type {
   PaymentGatewayStatus,
   PaymentMethod,
   PaymentSummary,
-} from '@features/payments';
-import {
-  PaymentsHeader,
-  PaymentsSummaryCards,
-  PaymentsFilters,
-  PaymentsTable,
-  RevenueChart,
 } from '@features/payments';
 import type { FormEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
@@ -88,20 +88,20 @@ type WebhookEvent = {
 
 type LoadState = 'idle' | 'loading' | 'success' | 'error';
 
-type UpdateForm = {
+interface UpdateForm {
   status: PaymentGatewayStatus;
   description: string;
   metadata: string;
-};
+}
 
-type PaymentActionForm = {
+interface PaymentActionForm {
   paymentId: string;
   type: 'refund' | 'capture';
   amount: string;
   reason: string;
-};
+}
 
-type CreatePaymentForm = {
+interface CreatePaymentForm {
   orderId: string;
   amount: string;
   currency: string;
@@ -113,7 +113,7 @@ type CreatePaymentForm = {
   cardMonth: string;
   cardYear: string;
   cardCvc: string;
-};
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);

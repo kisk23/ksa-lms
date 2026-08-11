@@ -7,10 +7,10 @@ import { useState } from 'react';
 
 import type { ApprovalStatus } from '../types';
 
-type ReviewActionCardProps = {
+interface ReviewActionCardProps {
   approvalId: string;
   currentStatus: ApprovalStatus;
-};
+}
 
 export function ReviewActionCard({ approvalId, currentStatus }: ReviewActionCardProps) {
   const [loadingAction, setLoadingAction] = useState<ApprovalStatus | null>(null);

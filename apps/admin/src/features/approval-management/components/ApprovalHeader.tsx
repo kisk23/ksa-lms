@@ -2,12 +2,12 @@ import { BackLink } from '@shared/components/ui/BackLink';
 
 import type { ApprovalStatus } from '../types';
 
-type ApprovalHeaderProps = {
+interface ApprovalHeaderProps {
   title: string;
   requestNumber: string;
   submittedBy: string;
   status: ApprovalStatus;
-};
+}
 
 const statusConfig: Record<ApprovalStatus, { label: string; dotColor: string }> = {
   PENDING_REVIEW: { label: 'قيد المراجعة', dotColor: 'bg-primary' },

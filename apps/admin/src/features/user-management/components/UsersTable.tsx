@@ -6,13 +6,13 @@ import { useState, useMemo, useEffect } from 'react';
 import { UserRow } from './UserRow';
 import type { User } from '../types';
 
-type UsersTableProps = {
+interface UsersTableProps {
   users: User[];
   pageSize?: number;
   onBanUser?: (userId: string) => void;
   onApproveUser?: (userId: string) => void;
   onDeleteUser?: (userId: string) => void;
-};
+}
 
 const columns = ['المستخدم', 'البريد الإلكتروني', 'الدور', 'تاريخ التسجيل', 'الحالة'];
 

@@ -3,14 +3,14 @@ import type { LucideIcon } from 'lucide-react';
 type IconBadgeSize = 'sm' | 'md' | 'lg';
 type IconBadgeShape = 'rounded' | 'circle';
 
-type IconBadgeProps = {
+interface IconBadgeProps {
   icon: LucideIcon;
   size?: IconBadgeSize;
   shape?: IconBadgeShape;
   bgClass?: string;
   iconClass?: string;
   className?: string;
-};
+}
 
 const sizeMap: Record<IconBadgeSize, { box: string; icon: number }> = {
   sm: { box: 'w-9 h-9', icon: 18 },

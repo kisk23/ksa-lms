@@ -1,13 +1,13 @@
 import type { LucideIcon } from 'lucide-react';
 
-export type DropdownItemProps = {
+export interface DropdownItemProps {
   onClick?: () => void;
   icon: LucideIcon;
   label: string;
   variant?: 'default' | 'danger' | 'warning' | 'success';
   disabled?: boolean;
   hoverClass?: string;
-};
+}
 
 export function DropdownItem({
   icon: Icon,

@@ -1,8 +1,8 @@
 import { MessageSquareQuote } from 'lucide-react';
 
-type InstructorNotesProps = {
+interface InstructorNotesProps {
   note: string;
-};
+}
 
 export function InstructorNotes({ note }: InstructorNotesProps) {
   return (

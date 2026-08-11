@@ -1,12 +1,12 @@
 import type { LucideIcon } from 'lucide-react';
 
-type IconButtonProps = {
+interface IconButtonProps {
   icon: LucideIcon;
   onClick?: () => void;
   className?: string;
   ariaLabel?: string;
   size?: number;
-};
+}
 
 export function IconButton({
   icon: Icon,

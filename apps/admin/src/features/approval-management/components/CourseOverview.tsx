@@ -1,12 +1,12 @@
 import { Play } from 'lucide-react';
 import Image from 'next/image';
 
-type CourseOverviewProps = {
+interface CourseOverviewProps {
   imageUrl: string;
   duration: string;
   tags: string[];
   description: string;
-};
+}
 
 export function CourseOverview({ imageUrl, duration, tags, description }: CourseOverviewProps) {
   return (

@@ -4,13 +4,13 @@ import { CheckCircle2, Clock, Ban, Eye, Check, Trash2, type LucideIcon } from 'l
 
 import type { User, UserRole, UserStatus } from '../types';
 
-type UserRowProps = {
+interface UserRowProps {
   user: User;
   zebra?: boolean;
   onBanUser?: (userId: string) => void;
   onApproveUser?: (userId: string) => void;
   onDeleteUser?: (userId: string) => void;
-};
+}
 
 // Role → Tag config
 const roleConfig: Record<

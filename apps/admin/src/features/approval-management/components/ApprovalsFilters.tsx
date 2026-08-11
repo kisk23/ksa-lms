@@ -10,10 +10,10 @@ const filters: { value: ApprovalStatusFilter; label: string }[] = [
   { value: 'CHANGES_REQUESTED', label: 'يحتاج تعديلات' },
 ];
 
-type ApprovalsFiltersProps = {
+interface ApprovalsFiltersProps {
   status: ApprovalStatusFilter;
   onStatusChange: (status: ApprovalStatusFilter) => void;
-};
+}
 
 export function ApprovalsFilters({ status, onStatusChange }: ApprovalsFiltersProps) {
   return (

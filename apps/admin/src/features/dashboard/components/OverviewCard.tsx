@@ -5,7 +5,7 @@ import type { LucideIcon } from 'lucide-react';
 
 type BadgeVariant = 'success' | 'neutral' | 'error' | 'info' | 'warning';
 
-export type OverviewCardProps = {
+export interface OverviewCardProps {
   icon: LucideIcon;
   iconColor: string;
   glowColor: string;
@@ -13,7 +13,7 @@ export type OverviewCardProps = {
   badgeVariant?: BadgeVariant;
   title: string;
   value: string;
-};
+}
 
 export function OverviewCard({
   icon,

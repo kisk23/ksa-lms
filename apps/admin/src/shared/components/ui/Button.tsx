@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'success' | 'danger-outline';
 type ButtonSize = 'sm' | 'md';
 
-type ButtonProps = {
+interface ButtonProps {
   children: ReactNode;
   onClick?: () => void;
   variant?: ButtonVariant;
@@ -14,7 +14,7 @@ type ButtonProps = {
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   fullWidth?: boolean;
-};
+}
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: 'bg-primary-container text-on-primary hover:bg-primary shadow-sm',

@@ -2,9 +2,9 @@ import { PlayCircle, FileText } from 'lucide-react';
 
 import type { Module } from '../types';
 
-type ModuleSectionProps = {
+interface ModuleSectionProps {
   module: Module;
-};
+}
 
 export function ModuleSection({ module }: ModuleSectionProps) {
   return (

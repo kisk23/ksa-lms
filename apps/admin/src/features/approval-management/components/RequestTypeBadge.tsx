@@ -26,9 +26,9 @@ const typeConfig: Record<
   },
 };
 
-type RequestTypeBadgeProps = {
+interface RequestTypeBadgeProps {
   type: RequestType;
-};
+}
 
 export function RequestTypeBadge({ type }: RequestTypeBadgeProps) {
   const config = typeConfig[type];
