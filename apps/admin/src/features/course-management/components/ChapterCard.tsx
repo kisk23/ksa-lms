@@ -1,6 +1,6 @@
 import { ConfirmToast } from '@shared/components/ConfirmToast';
 import { apiClient } from '@shared/lib/api-client';
-import { Plus, Trash2, GripVertical } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import type { Toast } from 'react-hot-toast';
 import toast from 'react-hot-toast';
@@ -63,9 +63,7 @@ export function ChapterCard({
     <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group/chapter">
       <div className="bg-surface-container-low px-6 py-4 border-b border-outline-variant flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <div className="cursor-move text-outline/50 hover:text-on-surface-variant transition-colors hidden md:block">
-            <GripVertical size={20} />
-          </div>
+          {/* TODO: Grip handle — hidden until drag-and-drop reordering is implemented */}
           {isEditing ? (
             <form onSubmit={handleUpdateChapter} className="flex flex-1 items-center gap-2">
               <input
