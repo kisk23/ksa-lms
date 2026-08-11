@@ -1,4 +1,7 @@
 import type React from 'react';
+import type { Control } from 'react-hook-form';
+
+import type { CreateCourseFormInput } from './schemas/course.schema';
 
 // ─── Course Status from API ────────────────────────
 export type CourseStatus =
@@ -195,10 +198,11 @@ export interface AssignmentEditorProps {
 }
 
 export interface CourseCardPreviewProps {
-  title: string;
+  control?: Control<CreateCourseFormInput>;
   selectedTeacherName: string;
-  price: number | '';
-  currency: string;
+  title?: string;
+  price?: number | '';
+  currency?: string;
   thumbnailUrl?: string | null;
 }
 
@@ -228,24 +232,6 @@ export interface CourseDetailsFormProps {
 }
 
 export interface CourseFormFieldsProps {
-  title: string;
-  setTitle: (val: string) => void;
-  description: string;
-  setDescription: (val: string) => void;
-  price: number | '';
-  setPrice: (val: number | '') => void;
-  currency: string;
-  setCurrency: (val: string) => void;
-  teacherUserId: string;
-  setTeacherUserId: (val: string) => void;
-  thumbnailUrl: string;
-  setThumbnailUrl: (val: string) => void;
-  promoVideoUrl: string;
-  setPromoVideoUrl: (val: string) => void;
-  promoVideoProvider: string;
-  setPromoVideoProvider: (val: 'YOUTUBE' | 'BUNNY') => void;
-  category: string;
-  setCategory: (val: string) => void;
   teachers: Teacher[];
   isLoadingTeachers: boolean;
   currentUser: { id: string; role: string; name: string } | null;

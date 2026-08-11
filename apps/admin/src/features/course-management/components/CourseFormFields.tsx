@@ -10,7 +10,9 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
+import type { CreateCourseFormInput } from '../schemas/course.schema';
 import {
   inputContainerStyles,
   inputStyles,
@@ -21,29 +23,16 @@ import {
 import type { CourseFormFieldsProps } from '../types';
 
 export function CourseFormFields({
-  title,
-  setTitle,
-  description,
-  setDescription,
-  price,
-  setPrice,
-  currency,
-  setCurrency,
-  teacherUserId,
-  setTeacherUserId,
-  thumbnailUrl,
-  setThumbnailUrl,
-  promoVideoUrl,
-  setPromoVideoUrl,
-  promoVideoProvider,
-  setPromoVideoProvider,
-  category,
-  setCategory,
   teachers,
   isLoadingTeachers,
   currentUser,
   headerRight,
 }: CourseFormFieldsProps) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<CreateCourseFormInput>();
+
   return (
     <>
       <section className="space-y-6">
@@ -62,19 +51,19 @@ export function CourseFormFields({
           <div className={inputContainerStyles}>
             <BookOpen size={20} className={iconStyles} />
             <input
-              required
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              {...register('title')}
               placeholder="مثال: أساسيات البرمجة بلغة بايثون"
-              minLength={5}
-              maxLength={255}
               className={inputStyles}
             />
           </div>
-          <p className="text-[10px] text-on-surface-variant/70 pr-1">
-            عنوان الدورة يجب أن لا يقل عن 5 أحرف.
-          </p>
+          {errors.title?.message ? (
+            <p className="text-xs text-error font-medium pe-1">{errors.title.message}</p>
+          ) : (
+            <p className="text-[10px] text-on-surface-variant/70 pe-1">
+              عنوان الدورة يجب أن لا يقل عن 5 أحرف.
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -84,9 +73,7 @@ export function CourseFormFields({
           <div className={inputContainerStyles}>
             <User size={20} className={iconStyles} />
             <select
-              required
-              value={teacherUserId}
-              onChange={(e) => setTeacherUserId(e.target.value)}
+              {...register('teacherUserId')}
               className={selectStyles}
               disabled={
                 isLoadingTeachers || currentUser?.role === 'TEACHER' || teachers.length === 0
@@ -108,12 +95,15 @@ export function CourseFormFields({
                 ))
               )}
             </select>
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
+            <div className="absolute end-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
               ▼
             </div>
           </div>
+          {errors.teacherUserId?.message && (
+            <p className="text-xs text-error font-medium pe-1">{errors.teacherUserId.message}</p>
+          )}
           {!isLoadingTeachers && teachers.length === 0 && currentUser?.role !== 'TEACHER' && (
-            <p className="text-xs text-error font-medium pr-1 flex items-center gap-1">
+            <p className="text-xs text-error font-medium pe-1 flex items-center gap-1">
               <AlertCircle size={14} />
               تعذر جلب قائمة المعلمين. يرجى المحاولة لاحقاً.
             </p>
@@ -128,19 +118,24 @@ export function CourseFormFields({
             <div className={inputContainerStyles}>
               <DollarSign size={20} className={iconStyles} />
               <input
-                required
                 type="number"
                 min="0"
                 step="0.01"
-                value={price}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  setPrice(v === '' ? '' : Number(v));
-                }}
+                {...register('price', {
+                  setValueAs: (v) =>
+                    v === '' || v === null || v === undefined
+                      ? ''
+                      : isNaN(Number(v))
+                        ? ''
+                        : Number(v),
+                })}
                 placeholder="ضع 0 للدورات المجانية"
                 className={inputStyles}
               />
             </div>
+            {errors.price?.message && (
+              <p className="text-xs text-error font-medium pe-1">{errors.price.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -149,15 +144,11 @@ export function CourseFormFields({
             </label>
             <div className={inputContainerStyles}>
               <Globe size={20} className={iconStyles} />
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className={selectStyles}
-              >
+              <select {...register('currency')} className={selectStyles}>
                 <option value="SAR">ريال سعودي (SAR)</option>
                 <option value="USD">دولار أمريكي (USD)</option>
               </select>
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
+              <div className="absolute end-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
                 ▼
               </div>
             </div>
@@ -171,15 +162,17 @@ export function CourseFormFields({
           <div className={inputContainerStyles}>
             <FileText
               size={20}
-              className="absolute right-4 top-4 text-outline/70 group-hover:text-primary transition-colors pointer-events-none z-10"
+              className="absolute start-4 top-4 text-outline/70 group-hover:text-primary transition-colors pointer-events-none z-10"
             />
             <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              {...register('description')}
               placeholder="اكتب نبذة شاملة عن محتويات الدورة، الفئة المستهدفة، والمتطلبات..."
               className={textareaStyles}
             />
           </div>
+          {errors.description?.message && (
+            <p className="text-xs text-error font-medium pe-1">{errors.description.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -190,12 +183,14 @@ export function CourseFormFields({
             <Tag size={20} className={iconStyles} />
             <input
               type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              {...register('category')}
               placeholder="أدخل تصنيف الدورة (مثل: رياضيات، تقنية...)"
               className={inputStyles}
             />
           </div>
+          {errors.category?.message && (
+            <p className="text-xs text-error font-medium pe-1">{errors.category.message}</p>
+          )}
         </div>
       </section>
 
@@ -213,15 +208,18 @@ export function CourseFormFields({
             <ImageIcon size={20} className={iconStyles} />
             <input
               type="url"
-              value={thumbnailUrl}
-              onChange={(e) => setThumbnailUrl(e.target.value)}
+              {...register('thumbnailUrl')}
               placeholder="https://example.com/thumbnail.jpg"
               className={inputStyles}
             />
           </div>
-          <p className="text-[10px] text-on-surface-variant/70 pr-1">
-            رابط مباشر لصورة الغلاف الخاصة بالدورة (أبعاد 16:9 موصى بها).
-          </p>
+          {errors.thumbnailUrl?.message ? (
+            <p className="text-xs text-error font-medium pe-1">{errors.thumbnailUrl.message}</p>
+          ) : (
+            <p className="text-[10px] text-on-surface-variant/70 pe-1">
+              رابط مباشر لصورة الغلاف الخاصة بالدورة (أبعاد 16:9 موصى بها).
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -233,12 +231,14 @@ export function CourseFormFields({
               <Video size={20} className={iconStyles} />
               <input
                 type="url"
-                value={promoVideoUrl}
-                onChange={(e) => setPromoVideoUrl(e.target.value)}
+                {...register('promoVideoUrl')}
                 placeholder="https://youtube.com/watch?v=..."
                 className={inputStyles}
               />
             </div>
+            {errors.promoVideoUrl?.message && (
+              <p className="text-xs text-error font-medium pe-1">{errors.promoVideoUrl.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -247,15 +247,11 @@ export function CourseFormFields({
             </label>
             <div className={inputContainerStyles}>
               <Globe size={20} className={iconStyles} />
-              <select
-                value={promoVideoProvider}
-                onChange={(e) => setPromoVideoProvider(e.target.value as 'YOUTUBE' | 'BUNNY')}
-                className={selectStyles}
-              >
+              <select {...register('promoVideoProvider')} className={selectStyles}>
                 <option value="YOUTUBE">YouTube</option>
                 <option value="BUNNY">Bunny.net</option>
               </select>
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
+              <div className="absolute end-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-outline">
                 ▼
               </div>
             </div>

@@ -1,40 +1,62 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { BackLink } from '@shared/components/ui/BackLink';
 import { apiClient } from '@shared/lib/api-client';
 import { Sparkles, Check, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { useForm, FormProvider, useWatch } from 'react-hook-form';
 
 import { CourseCardPreview } from './CourseCardPreview';
-import { CourseSuccessView } from './CourseSuccessView';
-import type { Teacher, CreatedCourse } from '../types';
 import { CourseFormFields } from './CourseFormFields';
+import { CourseSuccessView } from './CourseSuccessView';
+import {
+  createCourseSchema,
+  type CreateCourseFormInput,
+  type CreateCourseFormValues,
+} from '../schemas/course.schema';
+import type { Teacher, CreatedCourse } from '../types';
+
+const INITIAL_FORM_DATA: CreateCourseFormInput = {
+  title: '',
+  description: '',
+  price: '',
+  currency: 'SAR',
+  teacherUserId: '',
+  thumbnailUrl: '',
+  promoVideoUrl: '',
+  promoVideoProvider: 'YOUTUBE',
+  category: '',
+};
 
 export function CreateCourseForm() {
   const router = useRouter();
 
-  // Form states
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState<number | ''>('');
-  const [currency, setCurrency] = useState('SAR');
-  const [teacherUserId, setTeacherUserId] = useState('');
-  const [thumbnailUrl, setThumbnailUrl] = useState('');
-  const [promoVideoUrl, setPromoVideoUrl] = useState('');
-  const [promoVideoProvider, setPromoVideoProvider] = useState<'YOUTUBE' | 'BUNNY'>('YOUTUBE');
-  const [category, setCategory] = useState('');
-
   // Interactive UI states
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [isLoadingTeachers, setIsLoadingTeachers] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdCourse, setCreatedCourse] = useState<CreatedCourse | null>(null);
   const [currentUser, setCurrentUser] = useState<{ id: string; role: string; name: string } | null>(
     null,
   );
+
+  // React Hook Form
+  const methods = useForm<CreateCourseFormInput, unknown, CreateCourseFormValues>({
+    resolver: zodResolver(createCourseSchema),
+    defaultValues: INITIAL_FORM_DATA,
+    mode: 'onTouched',
+  });
+
+  const {
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { isSubmitting },
+    control,
+  } = methods;
 
   // Fetch logged-in user and teachers from backend
   useEffect(() => {
@@ -49,7 +71,7 @@ export function CreateCourseForm() {
 
         // 2. If the user is a teacher, assign course to themselves and skip fetching other teachers
         if (me.role === 'TEACHER') {
-          setTeacherUserId(me.id);
+          setValue('teacherUserId', me.id);
           setTeachers([{ id: me.id, name: me.name, email: me.email || '' }]);
           setIsLoadingTeachers(false);
           return;
@@ -67,52 +89,55 @@ export function CreateCourseForm() {
         ) {
           setTeachers(response.data);
           if (response.data.length > 0) {
-            setTeacherUserId(response.data[0].id);
+            setValue('teacherUserId', response.data[0].id);
           }
         } else if (response && 'items' in response && response.items) {
           setTeachers(response.items);
           if (response.items.length > 0) {
-            setTeacherUserId(response.items[0].id);
+            setValue('teacherUserId', response.items[0].id);
           }
         } else if (Array.isArray(response)) {
           setTeachers(response);
           if (response.length > 0) {
-            setTeacherUserId(response[0].id);
+            setValue('teacherUserId', response[0].id);
           }
         }
       } catch (err) {
         console.warn('Could not load initial data:', err);
         setTeachers([]);
-        setTeacherUserId('');
+        setValue('teacherUserId', '');
       } finally {
         setIsLoadingTeachers(false);
       }
     }
     loadInitialData();
-  }, []);
+  }, [setValue]);
 
-  // Selected teacher details for preview
+  // Watch only teacherUserId to calculate preview teacher name
+  const watchedTeacherUserId = useWatch({
+    control,
+    name: 'teacherUserId',
+  });
+
   const selectedTeacherName =
-    teachers.find((t) => t.id === teacherUserId)?.name || 'لم يتم تحديد معلم';
+    teachers.find((t) => t.id === watchedTeacherUserId)?.name ||
+    currentUser?.name ||
+    'لم يتم تحديد معلم';
 
   // Handle actual API submit
-  const handleActualSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title || price === '') return;
-
-    setIsSubmitting(true);
+  const onSubmit = async (data: CreateCourseFormValues) => {
     setErrorMsg(null);
 
     const payload = {
-      title,
-      description: description || undefined,
-      price: Number(price),
-      currency: currency || 'SAR',
-      teacherUserId: teacherUserId || undefined,
-      thumbnailUrl: thumbnailUrl || undefined,
-      promoVideoUrl: promoVideoUrl || undefined,
-      promoVideoProvider: promoVideoUrl ? (promoVideoProvider as 'YOUTUBE' | 'BUNNY') : undefined,
-      category: category || undefined,
+      title: data.title.trim(),
+      description: data.description?.trim() || undefined,
+      price: Number(data.price),
+      currency: data.currency || 'SAR',
+      teacherUserId: data.teacherUserId || undefined,
+      thumbnailUrl: data.thumbnailUrl?.trim() || undefined,
+      promoVideoUrl: data.promoVideoUrl?.trim() || undefined,
+      promoVideoProvider: data.promoVideoUrl?.trim() ? data.promoVideoProvider : undefined,
+      category: data.category?.trim() || undefined,
     };
 
     try {
@@ -128,8 +153,6 @@ export function CreateCourseForm() {
       const error = err as Error & { message?: string };
       console.error('API Error during course creation:', error);
       setErrorMsg(error.message || 'فشلت عملية حفظ الدورة بالخادم الرئيسي.');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -137,12 +160,7 @@ export function CreateCourseForm() {
   const handleReset = () => {
     setIsSuccess(false);
     setCreatedCourse(null);
-    setTitle('');
-    setDescription('');
-    setPrice('');
-    setThumbnailUrl('');
-    setPromoVideoUrl('');
-    setCategory('');
+    reset(INITIAL_FORM_DATA);
   };
 
   // Success view state check
@@ -168,78 +186,56 @@ export function CreateCourseForm() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* RIGHT: Form block (8 cols on lg) */}
-        <form
-          onSubmit={handleActualSubmit}
-          className="lg:col-span-8 space-y-8 bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-6 md:p-8"
-        >
-          {/* Main Info */}
-          <CourseFormFields
-            title={title}
-            setTitle={setTitle}
-            description={description}
-            setDescription={setDescription}
-            price={price}
-            setPrice={setPrice}
-            currency={currency}
-            setCurrency={setCurrency}
-            teacherUserId={teacherUserId}
-            setTeacherUserId={setTeacherUserId}
-            thumbnailUrl={thumbnailUrl}
-            setThumbnailUrl={setThumbnailUrl}
-            promoVideoUrl={promoVideoUrl}
-            setPromoVideoUrl={setPromoVideoUrl}
-            promoVideoProvider={promoVideoProvider}
-            setPromoVideoProvider={setPromoVideoProvider}
-            category={category}
-            setCategory={setCategory}
-            teachers={teachers}
-            isLoadingTeachers={isLoadingTeachers}
-            currentUser={currentUser}
-          />
+        <FormProvider {...methods}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="lg:col-span-8 space-y-8 bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-6 md:p-8"
+          >
+            {/* Main Info */}
+            <CourseFormFields
+              teachers={teachers}
+              isLoadingTeachers={isLoadingTeachers}
+              currentUser={currentUser}
+            />
 
-          {/* Form Actions / Backend Errors */}
-          <div className="space-y-4 pt-6 border-t border-outline-variant">
-            {errorMsg && (
-              <div className="p-4 rounded-xl bg-error/10 border border-error/20 text-error flex flex-col gap-2 relative">
-                <div className="flex items-center gap-2 font-semibold text-sm">
-                  <AlertCircle size={20} />
-                  تعذر إتمام الإرسال إلى الخادم:
+            {/* Form Actions / Backend Errors */}
+            <div className="space-y-4 pt-6 border-t border-outline-variant">
+              {errorMsg && (
+                <div className="p-4 rounded-xl bg-error/10 border border-error/20 text-error flex flex-col gap-2 relative">
+                  <div className="flex items-center gap-2 font-semibold text-sm">
+                    <AlertCircle size={20} />
+                    تعذر إتمام الإرسال إلى الخادم:
+                  </div>
+                  <div className="text-xs pe-7 leading-relaxed">{errorMsg}</div>
                 </div>
-                <div className="text-xs pr-7 leading-relaxed">{errorMsg}</div>
+              )}
+
+              <div className="flex flex-wrap items-center gap-4">
+                {/* Primary action */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-8 py-3.5 bg-primary-container text-on-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-body-md-ar text-body-md-ar font-bold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 shadow-md shadow-primary-container/20 cursor-pointer"
+                >
+                  {isSubmitting ? 'جاري الحفظ...' : 'حفظ ونشر كمسودة'}
+                  <Check size={20} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => router.push('/courses')}
+                  className="px-6 py-3.5 bg-transparent border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-colors cursor-pointer"
+                >
+                  إلغاء
+                </button>
               </div>
-            )}
-
-            <div className="flex flex-wrap items-center gap-4">
-              {/* Primary action */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-8 py-3.5 bg-primary-container text-on-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-body-md-ar text-body-md-ar font-bold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 shadow-md shadow-primary-container/20"
-              >
-                {isSubmitting ? 'جاري الحفظ...' : 'حفظ ونشر كمسودة'}
-                <Check size={20} />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => router.push('/courses')}
-                className="px-6 py-3.5 bg-transparent border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-colors"
-              >
-                إلغاء
-              </button>
             </div>
-          </div>
-        </form>
+          </form>
+        </FormProvider>
 
         {/* LEFT: Live Dynamic Card Preview (4 cols on lg) */}
         <div className="lg:col-span-4 sticky top-6">
-          <CourseCardPreview
-            title={title}
-            thumbnailUrl={thumbnailUrl}
-            selectedTeacherName={selectedTeacherName}
-            price={price}
-            currency={currency}
-          />
+          <CourseCardPreview control={control} selectedTeacherName={selectedTeacherName} />
         </div>
       </div>
     </div>

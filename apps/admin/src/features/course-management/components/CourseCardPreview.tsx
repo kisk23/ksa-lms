@@ -2,16 +2,28 @@
 
 import { User, Sparkles, Image as ImageIcon, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
+import { useWatch } from 'react-hook-form';
 
+import type { CreateCourseFormInput } from '../schemas/course.schema';
 import type { CourseCardPreviewProps } from '../types';
 
 export function CourseCardPreview({
-  title,
-  thumbnailUrl,
+  control,
+  title: initialTitle,
+  thumbnailUrl: initialThumbnailUrl,
   selectedTeacherName,
-  price,
-  currency,
+  price: initialPrice,
+  currency: initialCurrency,
 }: CourseCardPreviewProps) {
+  const watchedValues = useWatch<CreateCourseFormInput>({
+    control,
+  });
+
+  const title = watchedValues?.title ?? initialTitle ?? '';
+  const thumbnailUrl = watchedValues?.thumbnailUrl ?? initialThumbnailUrl ?? '';
+  const price = watchedValues?.price ?? initialPrice ?? '';
+  const currency = watchedValues?.currency ?? initialCurrency ?? 'SAR';
+
   return (
     <div className="bg-surface-container-low border border-outline-variant rounded-2xl p-6 shadow-sm">
       <h3 className="font-body-lg-ar text-body-lg-ar text-on-surface pb-3 border-b border-outline-variant/50 mb-5 flex items-center gap-2 font-bold">
@@ -42,7 +54,7 @@ export function CourseCardPreview({
           )}
 
           {/* Draft Badge */}
-          <div className="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur-sm border border-outline-variant text-[#1967D2] px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-sm">
+          <div className="absolute top-3 end-3 bg-surface-container-lowest/90 backdrop-blur-sm border border-outline-variant text-[#1967D2] px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-sm">
             مسودة (Draft)
           </div>
         </div>
@@ -63,7 +75,7 @@ export function CourseCardPreview({
           <div className="border-t border-outline-variant/30 pt-3 flex items-center justify-between">
             {/* Rating placeholder */}
             <div className="flex items-center gap-1 text-amber-500 font-caption-ar text-xs font-semibold">
-              ★ 5.0 <span className="text-outline font-normal font-sans pr-1">(جديدة)</span>
+              ★ 5.0 <span className="text-outline font-normal font-sans pe-1">(جديدة)</span>
             </div>
 
             {/* Price */}
@@ -84,7 +96,7 @@ export function CourseCardPreview({
           <HelpCircle size={16} />
           نصائح للإنشاء:
         </div>
-        <ul className="text-[11px] text-on-surface-variant/90 list-disc list-inside space-y-1.5 pr-1">
+        <ul className="text-[11px] text-on-surface-variant/90 list-disc list-inside space-y-1.5 pe-1">
           <li>استخدم صور غلاف واضحة بترميز JPG أو PNG.</li>
           <li>تأكد من اختيار المعلم الصحيح المعتمد في المنصة.</li>
           <li>الدورة تحفظ فوراً كمسودة لحماية بياناتك قبل نشرها للطلاب.</li>

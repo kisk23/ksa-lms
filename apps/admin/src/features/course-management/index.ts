@@ -16,3 +16,8 @@ export type {
   CoursesMeta,
   CoursesApiResponse,
 } from './types';
+export {
+  createCourseSchema,
+  type CreateCourseFormInput,
+  type CreateCourseFormValues,
+} from './schemas/course.schema';

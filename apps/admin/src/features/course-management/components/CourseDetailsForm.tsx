@@ -1,11 +1,18 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { apiClient } from '@shared/lib/api-client';
 import { AlertCircle, Loader2, Check } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useForm, FormProvider, useWatch } from 'react-hook-form';
 
 import { CourseCardPreview } from './CourseCardPreview';
 import { CourseFormFields } from './CourseFormFields';
+import {
+  createCourseSchema,
+  type CreateCourseFormInput,
+  type CreateCourseFormValues,
+} from '../schemas/course.schema';
 import type { ExtendedCourse, Teacher, CourseDetailsFormProps } from '../types';
 
 export function CourseDetailsForm({
@@ -14,20 +21,6 @@ export function CourseDetailsForm({
   onUpdate,
   onNavigateToCurriculum,
 }: CourseDetailsFormProps) {
-  const [title, setTitle] = useState(course.title || '');
-  const [description, setDescription] = useState(course.description || '');
-  const [price, setPrice] = useState<number | ''>(parseFloat(course.price) || 0);
-  const [currency, setCurrency] = useState(course.currency || 'SAR');
-  const [teacherUserId, setTeacherUserId] = useState(
-    course.teacherUserId || course.teacher?.id || '',
-  );
-  const [thumbnailUrl, setThumbnailUrl] = useState(course.thumbnailUrl || '');
-  const [promoVideoUrl, setPromoVideoUrl] = useState(course.promoVideoUrl || '');
-  const [promoVideoProvider, setPromoVideoProvider] = useState(
-    course.promoVideoProvider || 'YOUTUBE',
-  );
-  const [category, setCategory] = useState(course.category || '');
-
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [isLoadingTeachers, setIsLoadingTeachers] = useState(false);
 
@@ -39,6 +32,24 @@ export function CourseDetailsForm({
   );
   const isFirstRender = useRef(true);
   const lastSavedPayloadStr = useRef('');
+
+  const methods = useForm<CreateCourseFormInput, unknown, CreateCourseFormValues>({
+    resolver: zodResolver(createCourseSchema),
+    defaultValues: {
+      title: course.title || '',
+      description: course.description || '',
+      price: parseFloat(course.price) || 0,
+      currency: course.currency || 'SAR',
+      teacherUserId: course.teacherUserId || course.teacher?.id || '',
+      thumbnailUrl: course.thumbnailUrl || '',
+      promoVideoUrl: course.promoVideoUrl || '',
+      promoVideoProvider: (course.promoVideoProvider as 'YOUTUBE' | 'BUNNY') || 'YOUTUBE',
+      category: course.category || '',
+    },
+    mode: 'onTouched',
+  });
+
+  const { control, watch, getValues } = methods;
 
   useEffect(() => {
     async function loadTeachers() {
@@ -82,181 +93,130 @@ export function CourseDetailsForm({
     loadTeachers();
   }, []);
 
-  const autoSaveDetails = useCallback(async () => {
-    if (!title.trim()) return;
+  const autoSaveDetails = useCallback(
+    async (formData: CreateCourseFormInput) => {
+      const title = formData.title?.trim() || '';
+      if (!title || title.length < 5) return;
 
-    setSaveStatus('saving');
-    setDetailsSaveMsg(null);
+      setSaveStatus('saving');
+      setDetailsSaveMsg(null);
 
-    const payload: Record<string, unknown> = {
-      title: title.trim(),
-      description: description.trim() || undefined,
-      price: Number(price) || 0,
-      currency: currency || 'SAR',
-      thumbnailUrl: thumbnailUrl.trim() || undefined,
-      promoVideoUrl: promoVideoUrl.trim() || undefined,
-      promoVideoProvider: promoVideoUrl.trim() ? promoVideoProvider : undefined,
-      category: category || undefined,
-    };
+      const payload: Record<string, unknown> = {
+        title,
+        description: formData.description?.trim() || undefined,
+        price: Number(formData.price) || 0,
+        currency: formData.currency || 'SAR',
+        thumbnailUrl: formData.thumbnailUrl?.trim() || undefined,
+        promoVideoUrl: formData.promoVideoUrl?.trim() || undefined,
+        promoVideoProvider: formData.promoVideoUrl?.trim()
+          ? formData.promoVideoProvider
+          : undefined,
+        category: formData.category?.trim() || undefined,
+      };
 
-    if (currentUser?.role !== 'TEACHER' && teacherUserId) {
-      payload.teacherUserId = teacherUserId;
-    }
+      if (currentUser?.role !== 'TEACHER' && formData.teacherUserId) {
+        payload.teacherUserId = formData.teacherUserId;
+      }
 
-    try {
-      const updated = (await apiClient.patch(`/courses/${courseId}`, payload)) as ExtendedCourse;
-      onUpdate({ ...course, ...updated, chapters: updated.chapters || course.chapters });
-      setSaveStatus('saved');
-    } catch (err) {
-      console.error('Failed to save course details:', err);
-      setDetailsSaveMsg((err as Error).message || 'فشل في حفظ التعديلات.');
-      setSaveStatus('error');
-    }
-  }, [
-    title,
-    description,
-    price,
-    currency,
-    thumbnailUrl,
-    promoVideoUrl,
-    promoVideoProvider,
-    category,
-    teacherUserId,
-    currentUser?.role,
-    courseId,
-    course,
-    onUpdate,
-  ]);
+      try {
+        const updated = (await apiClient.patch(`/courses/${courseId}`, payload)) as ExtendedCourse;
+        onUpdate({ ...course, ...updated, chapters: updated.chapters || course.chapters });
+        setSaveStatus('saved');
+      } catch (err) {
+        console.error('Failed to save course details:', err);
+        setDetailsSaveMsg((err as Error).message || 'فشل في حفظ التعديلات.');
+        setSaveStatus('error');
+      }
+    },
+    [currentUser?.role, courseId, course, onUpdate],
+  );
 
-  // Debounced Auto-Save
+  // Debounced Auto-Save on form change
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
-      // Initialize the last saved string to the initial state
-      lastSavedPayloadStr.current = JSON.stringify({
-        title: title.trim(),
-        description: description.trim(),
-        price: Number(price) || 0,
-        currency,
-        thumbnailUrl: thumbnailUrl.trim(),
-        promoVideoUrl: promoVideoUrl.trim(),
-        promoVideoProvider,
-        category,
-        teacherUserId,
-      });
+      lastSavedPayloadStr.current = JSON.stringify(getValues());
       return;
     }
 
-    const currentPayloadStr = JSON.stringify({
-      title: title.trim(),
-      description: description.trim(),
-      price: Number(price) || 0,
-      currency,
-      thumbnailUrl: thumbnailUrl.trim(),
-      promoVideoUrl: promoVideoUrl.trim(),
-      promoVideoProvider,
-      category,
-      teacherUserId,
+    let timeoutId: NodeJS.Timeout;
+    const subscription = watch((value) => {
+      const currentStr = JSON.stringify(value);
+      if (currentStr === lastSavedPayloadStr.current) {
+        return;
+      }
+
+      setSaveStatus('saving');
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        lastSavedPayloadStr.current = currentStr;
+        autoSaveDetails(value as CreateCourseFormInput);
+      }, 1500);
     });
 
-    // Only auto-save if the actual stringified values have changed
-    if (currentPayloadStr === lastSavedPayloadStr.current) {
-      return;
-    }
+    return () => {
+      clearTimeout(timeoutId);
+      subscription.unsubscribe();
+    };
+  }, [watch, getValues, autoSaveDetails]);
 
-    setSaveStatus('saving');
-    const handler = setTimeout(() => {
-      lastSavedPayloadStr.current = currentPayloadStr;
-      autoSaveDetails();
-    }, 1500);
+  const watchedTeacherUserId = useWatch({
+    control,
+    name: 'teacherUserId',
+  });
 
-    return () => clearTimeout(handler);
-  }, [
-    title,
-    description,
-    price,
-    currency,
-    thumbnailUrl,
-    promoVideoUrl,
-    promoVideoProvider,
-    category,
-    teacherUserId,
-    autoSaveDetails,
-  ]);
+  const selectedTeacherName =
+    teachers.find((t) => t.id === watchedTeacherUserId)?.name || currentUser?.name || 'غير محدد';
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className="lg:col-span-8 space-y-8 bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-6 md:p-8"
-      >
-        <CourseFormFields
-          title={title}
-          setTitle={setTitle}
-          description={description}
-          setDescription={setDescription}
-          price={price}
-          setPrice={setPrice}
-          currency={currency}
-          setCurrency={setCurrency}
-          teacherUserId={teacherUserId}
-          setTeacherUserId={setTeacherUserId}
-          thumbnailUrl={thumbnailUrl}
-          setThumbnailUrl={setThumbnailUrl}
-          promoVideoUrl={promoVideoUrl}
-          setPromoVideoUrl={setPromoVideoUrl}
-          promoVideoProvider={promoVideoProvider}
-          setPromoVideoProvider={setPromoVideoProvider}
-          category={category}
-          setCategory={setCategory}
-          teachers={teachers}
-          isLoadingTeachers={isLoadingTeachers}
-          currentUser={currentUser}
-          headerRight={
-            <div className="flex items-center gap-2 text-sm font-caption-ar font-medium px-3 py-1.5">
-              {saveStatus === 'saving' && (
-                <span className="text-on-surface-variant flex items-center gap-1.5 bg-surface px-3 py-1 rounded-full shadow-sm">
-                  جاري الحفظ... <Loader2 size={12} className="animate-spin" />
-                </span>
-              )}
-              {saveStatus === 'saved' && (
-                <span className="text-primary flex items-center gap-1.5 bg-primary/5 px-3 py-1 rounded-full border border-primary/20">
-                  تم الحفظ <Check size={12} />
-                </span>
-              )}
-              {saveStatus === 'error' && (
-                <span
-                  className="text-error flex items-center gap-1.5 bg-error/5 px-3 py-1 rounded-full border border-error/20"
-                  title={detailsSaveMsg || ''}
-                >
-                  فشل الحفظ <AlertCircle size={12} />
-                </span>
-              )}
-            </div>
-          }
-        />
+      <FormProvider {...methods}>
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="lg:col-span-8 space-y-8 bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-6 md:p-8"
+        >
+          <CourseFormFields
+            teachers={teachers}
+            isLoadingTeachers={isLoadingTeachers}
+            currentUser={currentUser}
+            headerRight={
+              <div className="flex items-center gap-2 text-sm font-caption-ar font-medium px-3 py-1.5">
+                {saveStatus === 'saving' && (
+                  <span className="text-on-surface-variant flex items-center gap-1.5 bg-surface px-3 py-1 rounded-full shadow-sm">
+                    جاري الحفظ... <Loader2 size={12} className="animate-spin" />
+                  </span>
+                )}
+                {saveStatus === 'saved' && (
+                  <span className="text-primary flex items-center gap-1.5 bg-primary/5 px-3 py-1 rounded-full border border-primary/20">
+                    تم الحفظ <Check size={12} />
+                  </span>
+                )}
+                {saveStatus === 'error' && (
+                  <span
+                    className="text-error flex items-center gap-1.5 bg-error/5 px-3 py-1 rounded-full border border-error/20"
+                    title={detailsSaveMsg || ''}
+                  >
+                    فشل الحفظ <AlertCircle size={12} />
+                  </span>
+                )}
+              </div>
+            }
+          />
 
-        <div className="pt-6 flex justify-end">
-          <button
-            type="button"
-            onClick={onNavigateToCurriculum}
-            className="px-6 py-3.5 bg-transparent border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-colors cursor-pointer"
-          >
-            الانتقال للمنهج الدراسي ←
-          </button>
-        </div>
-      </form>
+          <div className="pt-6 flex justify-end">
+            <button
+              type="button"
+              onClick={onNavigateToCurriculum}
+              className="px-6 py-3.5 bg-transparent border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-colors cursor-pointer"
+            >
+              الانتقال للمنهج الدراسي ←
+            </button>
+          </div>
+        </form>
+      </FormProvider>
 
       <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-6">
-        <CourseCardPreview
-          title={title}
-          selectedTeacherName={
-            teachers.find((t) => t.id === teacherUserId)?.name || currentUser?.name || 'غير محدد'
-          }
-          price={price}
-          currency={currency}
-          thumbnailUrl={thumbnailUrl}
-        />
+        <CourseCardPreview control={control} selectedTeacherName={selectedTeacherName} />
         <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-6 space-y-4">
           <h3 className="font-body-lg-ar text-on-surface font-bold border-b border-outline-variant/40 pb-2">
             تفاصيل الدورة
