@@ -100,7 +100,7 @@ export function CourseSuccessView({ createdCourse, onReset }: CourseSuccessViewP
         {/* Action Buttons */}
         <div className="flex flex-col gap-4" style={{ maxWidth: '32rem', margin: '0 auto' }}>
           <button
-            onClick={() => router.push(`/courses/${createdCourse.id}`)}
+            onClick={() => router.push(`/courses/${createdCourse.id}?tab=curriculum`)}
             className="w-full py-4 bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container rounded-xl font-body-md-ar text-body-md-ar font-bold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 shadow-md shadow-primary/25 cursor-pointer"
           >
             <span>بناء منهج الدورة (الوحدات والدروس)</span>

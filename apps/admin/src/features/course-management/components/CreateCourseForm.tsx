@@ -4,14 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { AuthUser } from '@lms/shared-types';
 import { BackLink } from '@shared/components/ui/BackLink';
 import { apiClient } from '@shared/lib/api-client';
-import { Sparkles, Check, AlertCircle } from 'lucide-react';
+import { Sparkles, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { CourseCardPreview } from './CourseCardPreview';
 import { CourseFormFields } from './CourseFormFields';
-import { CourseSuccessView } from './CourseSuccessView';
 import {
   createCourseSchema,
   type CreateCourseFormInput,
@@ -38,8 +38,6 @@ export function CreateCourseForm() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [isLoadingTeachers, setIsLoadingTeachers] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [createdCourse, setCreatedCourse] = useState<CreatedCourse | null>(null);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
   // React Hook Form
@@ -52,7 +50,6 @@ export function CreateCourseForm() {
   const {
     handleSubmit,
     setValue,
-    reset,
     formState: { isSubmitting },
     control,
   } = methods;
@@ -139,31 +136,14 @@ export function CreateCourseForm() {
 
     try {
       const response = await apiClient.post<CreatedCourse>('/courses', payload);
-      setCreatedCourse({
-        ...response,
-        price: Number(response.price),
-        teacherName: selectedTeacherName,
-        status: response.status || 'DRAFT',
-      });
-      setIsSuccess(true);
+      toast.success('تم إنشاء مسودة الدورة بنجاح — ابدأ بإضافة فصولك الآن');
+      router.push(`/courses/${response.id}?tab=curriculum`);
     } catch (err) {
       const error = err as Error & { message?: string };
       console.error('API Error during course creation:', error);
       setErrorMsg(error.message || 'فشلت عملية حفظ الدورة بالخادم الرئيسي.');
     }
   };
-
-  // Reset form to add another course
-  const handleReset = () => {
-    setIsSuccess(false);
-    setCreatedCourse(null);
-    reset(INITIAL_FORM_DATA);
-  };
-
-  // Success view state check
-  if (isSuccess && createdCourse) {
-    return <CourseSuccessView createdCourse={createdCourse} onReset={handleReset} />;
-  }
 
   return (
     <div className="max-w-7xl mx-auto w-full pb-16 pt-10" dir="rtl">
@@ -212,10 +192,10 @@ export function CreateCourseForm() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-8 py-3.5 bg-primary-container text-on-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-body-md-ar text-body-md-ar font-bold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 shadow-md shadow-primary-container/20 cursor-pointer"
+                  className="px-8 py-3.5 bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-body-md-ar text-body-md-ar font-bold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 shadow-md shadow-primary/20 cursor-pointer"
                 >
-                  {isSubmitting ? 'جاري الحفظ...' : 'حفظ ونشر كمسودة'}
-                  <Check size={20} />
+                  {isSubmitting ? 'جاري الحفظ...' : 'حفظ ومتابعة لبناء المنهج'}
+                  <ArrowLeft size={20} />
                 </button>
 
                 <button

@@ -4,19 +4,23 @@ import type { AuthUser } from '@lms/shared-types';
 import { BackLink } from '@shared/components/ui/BackLink';
 import { apiClient } from '@shared/lib/api-client';
 import { Settings2, BookOpen, Loader2, AlertCircle, Check } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 
 import { statusConfig } from '../constants';
-import type { ExtendedCourse } from '../types';
+import type { ExtendedCourse, ActiveTab, CourseEditorProps } from '../types';
 import { CourseDetailsForm } from './CourseDetailsForm';
 import { CurriculumBuilder } from './CurriculumBuilder';
 
-export function CourseEditor({ courseId }: { courseId: string }) {
+export function CourseEditor({ courseId, initialTab }: CourseEditorProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab') as ActiveTab | null;
 
-  const [activeTab, setActiveTab] = useState<'details' | 'curriculum'>('details');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(
+    tabParam === 'curriculum' || tabParam === 'details' ? tabParam : initialTab || 'details',
+  );
   const [course, setCourse] = useState<ExtendedCourse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -208,7 +212,13 @@ export function CourseEditor({ courseId }: { courseId: string }) {
           />
         )}
 
-        {activeTab === 'curriculum' && <CurriculumBuilder courseId={courseId} />}
+        {activeTab === 'curriculum' && (
+          <CurriculumBuilder
+            courseId={courseId}
+            course={course}
+            fetchCourseCurriculum={fetchCourse}
+          />
+        )}
       </div>
     </div>
   );

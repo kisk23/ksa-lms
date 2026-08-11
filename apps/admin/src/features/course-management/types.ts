@@ -189,6 +189,8 @@ export interface CourseSuccessViewProps {
 
 export interface CurriculumBuilderProps {
   courseId: string;
+  course: ExtendedCourse;
+  fetchCourseCurriculum: () => Promise<void>;
 }
 
 export interface AssignmentEditorProps {
