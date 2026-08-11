@@ -1,5 +1,6 @@
 'use client';
 
+import type { AuthUser } from '@lms/shared-types';
 import { BackLink } from '@shared/components/ui/BackLink';
 import { apiClient } from '@shared/lib/api-client';
 import { Settings2, BookOpen, Loader2, AlertCircle, Check } from 'lucide-react';
@@ -7,10 +8,10 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 
+import { statusConfig } from '../constants';
 import type { ExtendedCourse } from '../types';
 import { CourseDetailsForm } from './CourseDetailsForm';
 import { CurriculumBuilder } from './CurriculumBuilder';
-import { statusConfig } from '../constants';
 
 export function CourseEditor({ courseId }: { courseId: string }) {
   const router = useRouter();
@@ -20,9 +21,7 @@ export function CourseEditor({ courseId }: { courseId: string }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSubmittingFinal, setIsSubmittingFinal] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{ id: string; role: string; name: string } | null>(
-    null,
-  );
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
   const fetchCourse = useCallback(async () => {
     try {
@@ -38,7 +37,7 @@ export function CourseEditor({ courseId }: { courseId: string }) {
   useEffect(() => {
     async function init() {
       try {
-        const me = await apiClient.get<{ id: string; role: string; name: string }>('/auth/me');
+        const me = await apiClient.get<AuthUser>('/auth/me');
         setCurrentUser(me);
       } catch (err) {
         console.error('Failed to get current user:', err);

@@ -8,7 +8,7 @@ export function QuestionCard({ question, index, onDelete }: QuestionCardProps) {
     <div className="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
       <div className="flex justify-between items-start mb-4">
         <h4 className="font-bold text-on-surface font-body-lg-ar">
-          <span className="text-primary ml-2">{index + 1}.</span>
+          <span className="text-primary me-2">{index + 1}.</span>
           {question.text}
         </h4>
         <button
@@ -19,18 +19,18 @@ export function QuestionCard({ question, index, onDelete }: QuestionCardProps) {
           <Trash2 size={18} />
         </button>
       </div>
-      <div className="space-y-2 pr-6">
-        {question.options.map((opt) => (
+      <div className="space-y-2 pe-6">
+        {question.options.map((option) => (
           <div
-            key={opt.id}
-            className={`flex items-center gap-3 p-3 rounded-lg border ${opt.isCorrect ? 'border-primary/50 bg-primary/5 text-primary' : 'border-outline-variant bg-surface-container-lowest text-on-surface-variant'}`}
+            key={option.id}
+            className={`flex items-center gap-3 p-3 rounded-lg border ${option.isCorrect ? 'border-primary/50 bg-primary/5 text-primary' : 'border-outline-variant bg-surface-container-lowest text-on-surface-variant'}`}
           >
-            {opt.isCorrect ? (
+            {option.isCorrect ? (
               <CheckCircle2 size={18} />
             ) : (
               <Circle size={18} className="opacity-40" />
             )}
-            <span className="font-medium text-sm">{opt.text}</span>
+            <span className="font-medium text-sm">{option.text}</span>
           </div>
         ))}
       </div>

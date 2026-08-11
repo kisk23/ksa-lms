@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { AuthUser } from '@lms/shared-types';
 import { BackLink } from '@shared/components/ui/BackLink';
 import { apiClient } from '@shared/lib/api-client';
 import { Sparkles, Check, AlertCircle } from 'lucide-react';
@@ -39,9 +40,7 @@ export function CreateCourseForm() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdCourse, setCreatedCourse] = useState<CreatedCourse | null>(null);
-  const [currentUser, setCurrentUser] = useState<{ id: string; role: string; name: string } | null>(
-    null,
-  );
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
   // React Hook Form
   const methods = useForm<CreateCourseFormInput, unknown, CreateCourseFormValues>({
@@ -64,9 +63,7 @@ export function CreateCourseForm() {
       setIsLoadingTeachers(true);
       try {
         // 1. Fetch current user role info
-        const me = await apiClient.get<{ id: string; role: string; name: string; email?: string }>(
-          '/auth/me',
-        );
+        const me = await apiClient.get<AuthUser>('/auth/me');
         setCurrentUser(me);
 
         // 2. If the user is a teacher, assign course to themselves and skip fetching other teachers

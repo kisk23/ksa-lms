@@ -1,5 +1,12 @@
 'use client';
 
+import {
+  PaymentsHeader,
+  PaymentsSummaryCards,
+  PaymentsFilters,
+  PaymentsTable,
+  RevenueChart,
+} from '@features/payments';
 import type {
   MonthlyRevenue,
   Payment,
@@ -7,13 +14,6 @@ import type {
   PaymentGatewayStatus,
   PaymentMethod,
   PaymentSummary,
-} from '@features/payments';
-import {
-  PaymentsHeader,
-  PaymentsSummaryCards,
-  PaymentsFilters,
-  PaymentsTable,
-  RevenueChart,
 } from '@features/payments';
 import type { FormEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';

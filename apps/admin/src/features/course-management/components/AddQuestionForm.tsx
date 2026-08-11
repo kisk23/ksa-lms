@@ -12,8 +12,8 @@ export function AddQuestionForm({
   onSuccess,
   onCancel,
 }: AddQuestionFormProps) {
-  const [qText, setQText] = useState('');
-  const [qOptions, setQOptions] = useState<Omit<QuestionOption, 'id'>[]>([
+  const [questionText, setQuestionText] = useState('');
+  const [questionOptions, setQuestionOptions] = useState<Omit<QuestionOption, 'id'>[]>([
     { text: '', isCorrect: true, orderIndex: 1 },
     { text: '', isCorrect: false, orderIndex: 2 },
   ]);
@@ -27,35 +27,35 @@ export function AddQuestionForm({
   }, []);
 
   const handleAddQuestion = async () => {
-    if (!qText.trim() || qOptions.length < 2) {
+    if (!questionText.trim() || questionOptions.length < 2) {
       toast.error('الرجاء كتابة السؤال وإضافة خيارين على الأقل.');
       return;
     }
-    const hasCorrect = qOptions.some((o) => o.isCorrect);
-    if (!hasCorrect) {
+    const hasCorrectOption = questionOptions.some((option) => option.isCorrect);
+    if (!hasCorrectOption) {
       toast.error('الرجاء تحديد إجابة صحيحة واحدة على الأقل.');
       return;
     }
 
     try {
       await apiClient.post(`/assignments/${assignmentId}/questions`, {
-        text: qText.trim(),
+        text: questionText.trim(),
         orderIndex: questionCount + 1,
-        options: qOptions.map((o, idx) => ({
-          text: o.text.trim(),
-          isCorrect: o.isCorrect,
-          orderIndex: idx + 1,
+        options: questionOptions.map((option, index) => ({
+          text: option.text.trim(),
+          isCorrect: option.isCorrect,
+          orderIndex: index + 1,
         })),
       });
       // Reset form
-      setQText('');
-      setQOptions([
+      setQuestionText('');
+      setQuestionOptions([
         { text: '', isCorrect: true, orderIndex: 1 },
         { text: '', isCorrect: false, orderIndex: 2 },
       ]);
       await onSuccess();
-    } catch (err: unknown) {
-      toast.error((err as Error).message || 'فشل في إضافة السؤال.');
+    } catch (error: unknown) {
+      toast.error((error as Error).message || 'فشل في إضافة السؤال.');
     }
   };
 
@@ -68,8 +68,8 @@ export function AddQuestionForm({
         <div className="space-y-2">
           <label className="block text-sm font-medium text-on-surface-variant">نص السؤال</label>
           <textarea
-            value={qText}
-            onChange={(e) => setQText(e.target.value)}
+            value={questionText}
+            onChange={(e) => setQuestionText(e.target.value)}
             className={`${inputStyles} min-h-[80px]`}
             placeholder="اكتب سؤالك هنا..."
           />
@@ -78,31 +78,36 @@ export function AddQuestionForm({
           <label className="block text-sm font-medium text-on-surface-variant">
             الخيارات (اختر الإجابة الصحيحة)
           </label>
-          {qOptions.map((opt, oIdx) => (
-            <div key={oIdx} className="flex items-center gap-3">
+          {questionOptions.map((option, optionIndex) => (
+            <div key={optionIndex} className="flex items-center gap-3">
               <button
                 onClick={() => {
-                  const newOpts = qOptions.map((o, i) => ({ ...o, isCorrect: i === oIdx }));
-                  setQOptions(newOpts);
+                  const newOptions = questionOptions.map((item, index) => ({
+                    ...item,
+                    isCorrect: index === optionIndex,
+                  }));
+                  setQuestionOptions(newOptions);
                 }}
-                className={`p-2 rounded-full transition-colors ${opt.isCorrect ? 'text-primary bg-primary/10' : 'text-outline hover:bg-surface-container'}`}
+                className={`p-2 rounded-full transition-colors ${option.isCorrect ? 'text-primary bg-primary/10' : 'text-outline hover:bg-surface-container'}`}
               >
-                {opt.isCorrect ? <CheckCircle2 size={24} /> : <Circle size={24} />}
+                {option.isCorrect ? <CheckCircle2 size={24} /> : <Circle size={24} />}
               </button>
               <input
                 type="text"
-                value={opt.text}
+                value={option.text}
                 onChange={(e) => {
-                  const newOpts = [...qOptions];
-                  newOpts[oIdx].text = e.target.value;
-                  setQOptions(newOpts);
+                  const newOptions = [...questionOptions];
+                  newOptions[optionIndex].text = e.target.value;
+                  setQuestionOptions(newOptions);
                 }}
                 className={inputStyles}
-                placeholder={`الخيار ${oIdx + 1}`}
+                placeholder={`الخيار ${optionIndex + 1}`}
               />
-              {qOptions.length > 2 && (
+              {questionOptions.length > 2 && (
                 <button
-                  onClick={() => setQOptions(qOptions.filter((_, i) => i !== oIdx))}
+                  onClick={() =>
+                    setQuestionOptions(questionOptions.filter((_, index) => index !== optionIndex))
+                  }
                   className="p-2 text-error hover:bg-error/10 rounded-full"
                 >
                   <Trash2 size={18} />
@@ -112,9 +117,9 @@ export function AddQuestionForm({
           ))}
           <button
             onClick={() =>
-              setQOptions([
-                ...qOptions,
-                { text: '', isCorrect: false, orderIndex: qOptions.length + 1 },
+              setQuestionOptions([
+                ...questionOptions,
+                { text: '', isCorrect: false, orderIndex: questionOptions.length + 1 },
               ])
             }
             className="text-sm font-medium text-primary hover:text-primary/80 mt-2 flex items-center gap-1"

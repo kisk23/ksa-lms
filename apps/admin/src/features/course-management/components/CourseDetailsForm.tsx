@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { AuthUser } from '@lms/shared-types';
 import { apiClient } from '@shared/lib/api-client';
 import { AlertCircle, Loader2, Check } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -27,9 +28,7 @@ export function CourseDetailsForm({
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [detailsSaveMsg, setDetailsSaveMsg] = useState<string | null>(null);
 
-  const [currentUser, setCurrentUser] = useState<{ id: string; role: string; name: string } | null>(
-    null,
-  );
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const isFirstRender = useRef(true);
   const lastSavedPayloadStr = useRef('');
 
@@ -55,12 +54,7 @@ export function CourseDetailsForm({
     async function loadTeachers() {
       setIsLoadingTeachers(true);
       try {
-        const me = (await apiClient.get('/auth/me')) as {
-          id: string;
-          role: string;
-          name: string;
-          email?: string;
-        };
+        const me = await apiClient.get<AuthUser>('/auth/me');
         setCurrentUser(me);
 
         if (me.role === 'TEACHER') {

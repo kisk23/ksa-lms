@@ -1,3 +1,4 @@
+import type { AuthUser } from '@lms/shared-types';
 import type React from 'react';
 import type { Control } from 'react-hook-form';
 
@@ -234,7 +235,7 @@ export interface CourseDetailsFormProps {
 export interface CourseFormFieldsProps {
   teachers: Teacher[];
   isLoadingTeachers: boolean;
-  currentUser: { id: string; role: string; name: string } | null;
+  currentUser: AuthUser | null;
   headerRight?: React.ReactNode;
 }
 
