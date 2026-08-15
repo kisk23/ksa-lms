@@ -64,10 +64,9 @@ export function CoursesPageClient() {
     category: selectedCategory,
   });
 
-
-  const courses = data?.data ?? [];
-
-  const meta = data?.meta;
+const courseData = data?.data;
+  const courses = courseData?.data ?? [];
+  const meta = courseData?.meta;
 
   // ── Separate query to collect ALL distinct categories from the backend ────
   // Uses a high limit with no category filter so the pill list stays stable
@@ -80,7 +79,7 @@ export function CoursesPageClient() {
   });
 
   const availableCategories = useMemo<string[]>(() => {
-    const allCourses = allData?.data ?? [];
+    const allCourses = allData?.data.data ?? [];
     const seen = new Set<string>();
     for (const course of allCourses) {
       if (course.category) seen.add(course.category);

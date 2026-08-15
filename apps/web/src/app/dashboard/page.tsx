@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ChevronDown, AlertCircle, LayoutGrid, LayoutList } from 'lucide-react';
 import { useStudentDashboard, DashboardStats, EnrolledCourses } from '@/features/dashboard';
+import { authService } from '@/features/auth';
 
 export default function DashboardPage() {
   const searchParams = useSearchParams();
@@ -57,6 +58,14 @@ export default function DashboardPage() {
       return true;
     });
   }, [enrollments, searchVal, selectedStatus, selectedCategory]);
+
+  // get current user
+  // const [user, setUser] = useState<AuthUser | null>(null);
+  // useEffect(()=>{
+  //   authService.getMe().then(data=> data).then((iuser)=> {
+  //       console.log(iuser);
+  //   });
+  // }, [])
 
   return (
     <div className="flex flex-col gap-6" dir="rtl">

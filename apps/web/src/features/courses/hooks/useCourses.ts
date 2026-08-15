@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { courseService } from '../services/course.service';
 import type { CoursesQueryParams } from '../types';
@@ -21,6 +21,6 @@ export function useCourses(params: CoursesQueryParams = {}) {
     queryKey: courseKeys.list(params),
     queryFn: () => courseService.getCourses(params),
     staleTime: 1000 * 60 * 5, // 5 min
-    placeholderData: (prev) => prev, // keep previous data while fetching next page
+    placeholderData: keepPreviousData, // keep previous data while fetching next page
   });
 }
