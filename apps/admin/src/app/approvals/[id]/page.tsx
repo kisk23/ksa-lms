@@ -21,18 +21,25 @@ export default function ApprovalDetailPage({ params }: ApprovalDetailPageProps) 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isCancelled = false;
+
     async function fetchDetail() {
       try {
         setLoading(true);
         const response = await apiClient.get<ApprovalRequest>(`/approvals/${id}`);
-        setApproval(response);
+        if (!isCancelled) setApproval(response);
       } catch (err) {
-        console.error('Failed to fetch approval detail', err);
+        if (!isCancelled) console.error('Failed to fetch approval detail', err);
       } finally {
-        setLoading(false);
+        if (!isCancelled) setLoading(false);
       }
     }
-    fetchDetail();
+
+    void fetchDetail();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [id]);
 
   if (loading) {

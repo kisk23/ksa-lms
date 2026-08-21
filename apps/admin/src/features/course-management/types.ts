@@ -83,19 +83,6 @@ export interface Question {
   options: QuestionOption[];
 }
 
-export interface AddQuestionFormProps {
-  assignmentId: string;
-  questionCount: number;
-  onSuccess: () => Promise<void>;
-  onCancel: () => void;
-}
-
-export interface QuestionCardProps {
-  question: Question;
-  index: number;
-  onDelete: (id: string) => void;
-}
-
 export interface Assignment {
   id: string;
   passingScorePct: number;

@@ -24,7 +24,7 @@ export function QuestionCard({ question, index, onDelete }: QuestionCardProps) {
     <div className="bg-surface border border-outline-variant rounded-xl p-5 shadow-sm">
       <div className="flex justify-between items-start mb-4">
         <h4 className="font-bold text-on-surface font-body-lg-ar">
-          <span className="text-primary ml-2">{index + 1}.</span>
+          <span className="text-primary me-2">{index + 1}.</span>
           {question.text}
         </h4>
         <button
@@ -35,7 +35,7 @@ export function QuestionCard({ question, index, onDelete }: QuestionCardProps) {
           <Trash2 size={18} />
         </button>
       </div>
-      <div className="space-y-2 pr-6">
+      <div className="space-y-2 pe-6">
         {question.options.map((opt) => (
           <div
             key={opt.id}

@@ -102,18 +102,44 @@ export class CoursesService {
    * Get course with security check for drafts
    */
   async findById(id: string, actor?: IUser) {
+    const course = await this.prisma.course.findUnique({
+      where: { id },
+      include: {
+        teacher: { select: { id: true, name: true } },
+        liveSnapshot: true,
+      },
+    });
+
+    if (!course) throw new NotFoundException(`Course #${id} not found`);
+
+    // Draft/archived courses are only visible to their owner and staff
+    const isPublished = course.status === CourseStatus.PUBLISHED;
+    const isOwner = actor && course.teacherUserId === actor.id;
     const isStaff =
       actor && (actor.role === UserRole.SUPER_ADMIN || actor.role === UserRole.ASSISTANT_ADMIN);
-    // Since we need teacher ID to check ownership, we do a basic query first
-    const basicCourse = await this.prisma.course.findUnique({
-      where: { id },
-      select: { teacherUserId: true },
-    });
-    if (!basicCourse) throw new NotFoundException(`Course #${id} not found`);
 
-    const isOwner = actor && basicCourse.teacherUserId === actor.id;
-    const canViewFullLessons = isStaff || isOwner;
+    if (!isPublished && !isOwner && !isStaff) {
+      throw new ForbiddenException('This course is not accessible.');
+    }
 
+    // Students / Public: Serve the snapshot if published
+    if (isPublished && !isOwner && !isStaff) {
+      if (!course.liveSnapshot) {
+        // Fallback for courses published before snapshots were implemented
+        return this.getDraftTree(id);
+      }
+      return {
+        ...((course.liveSnapshot.snapshotData as object) || {}),
+        id: course.id,
+        status: course.status,
+      };
+    }
+
+    // Owner / Staff: Serve the editable draft tree
+    return this.getDraftTree(id);
+  }
+
+  private async getDraftTree(id: string) {
     const course = await this.prisma.course.findUnique({
       where: { id },
       include: {
@@ -131,29 +157,14 @@ export class CoursesService {
                 orderIndex: true,
                 createdAt: true,
                 updatedAt: true,
-                // Only include sensitive fields for owners and staff
-                ...(canViewFullLessons
-                  ? {
-                      videoUrl: true,
-                      videoProvider: true,
-                      assignment: { select: { id: true } },
-                    }
-                  : {}),
+                // videoUrl is intentionally excluded —
+                // it is only returned by GET /dashboard/courses/:id
               },
             },
           },
         },
       },
     });
-
-    if (!course) throw new NotFoundException(`Course #${id} not found`);
-
-    // Draft/archived courses are only visible to their owner and staff
-    const isPublished = course.status === CourseStatus.PUBLISHED;
-
-    if (!isPublished && !isOwner && !isStaff) {
-      throw new ForbiddenException('This course is not accessible.');
-    }
 
     return course;
   }

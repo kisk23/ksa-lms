@@ -36,32 +36,45 @@ export default function CoursesPage() {
   }, [search]);
 
   // Fetch courses from the real API
-  const fetchCourses = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const params = new URLSearchParams();
-      params.set('page', String(currentPage));
-      params.set('limit', String(PAGE_SIZE));
-      if (status !== 'all') params.set('status', status);
-      if (debouncedSearch) params.set('search', debouncedSearch);
+  const fetchCourses = useCallback(
+    async (isCancelled?: () => boolean) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const params = new URLSearchParams();
+        params.set('page', String(currentPage));
+        params.set('limit', String(PAGE_SIZE));
+        if (status !== 'all') params.set('status', status);
+        if (debouncedSearch) params.set('search', debouncedSearch);
 
-      const response = await apiClient.get<CoursesApiResponse>(
-        `/courses/manage?${params.toString()}`,
-      );
-      setCourses(response.data);
-      setMeta(response.meta);
-    } catch (err) {
-      const error = err as Error;
-      console.error('Failed to fetch courses:', error);
-      setError(error.message || 'فشل في تحميل الكورسات');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [currentPage, status, debouncedSearch]);
+        const response = await apiClient.get<CoursesApiResponse>(
+          `/courses/manage?${params.toString()}`,
+        );
+        if (!isCancelled?.()) {
+          setCourses(response.data);
+          setMeta(response.meta);
+        }
+      } catch (err) {
+        if (!isCancelled?.()) {
+          const error = err as Error;
+          console.error('Failed to fetch courses:', error);
+          setError(error.message || 'فشل في تحميل الكورسات');
+        }
+      } finally {
+        if (!isCancelled?.()) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [currentPage, status, debouncedSearch],
+  );
 
   useEffect(() => {
-    fetchCourses();
+    let isCancelled = false;
+    void fetchCourses(() => isCancelled);
+    return () => {
+      isCancelled = true;
+    };
   }, [fetchCourses]);
 
   // Client-side price filtering (not supported by API)

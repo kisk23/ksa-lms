@@ -4,9 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { AuthUser } from '@lms/shared-types';
 import { apiClient } from '@shared/lib/api-client';
 import { AlertCircle, Loader2, Check } from 'lucide-react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
 
+import { AutoSaveWatcher } from './AutoSaveWatcher';
 import { CourseCardPreview } from './CourseCardPreview';
 import { CourseFormFields } from './CourseFormFields';
 import {
@@ -29,8 +30,6 @@ export function CourseDetailsForm({
   const [detailsSaveMsg, setDetailsSaveMsg] = useState<string | null>(null);
 
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
-  const isFirstRender = useRef(true);
-  const lastSavedPayloadStr = useRef('');
 
   const methods = useForm<CreateCourseFormInput, unknown, CreateCourseFormValues>({
     resolver: zodResolver(createCourseSchema),
@@ -48,7 +47,7 @@ export function CourseDetailsForm({
     mode: 'onTouched',
   });
 
-  const { control, watch, getValues } = methods;
+  const { control } = methods;
 
   useEffect(() => {
     async function loadTeachers() {
@@ -125,35 +124,6 @@ export function CourseDetailsForm({
     [currentUser?.role, courseId, course, onUpdate],
   );
 
-  // Debounced Auto-Save on form change
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      lastSavedPayloadStr.current = JSON.stringify(getValues());
-      return;
-    }
-
-    let timeoutId: NodeJS.Timeout;
-    const subscription = watch((value) => {
-      const currentStr = JSON.stringify(value);
-      if (currentStr === lastSavedPayloadStr.current) {
-        return;
-      }
-
-      setSaveStatus('saving');
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        lastSavedPayloadStr.current = currentStr;
-        autoSaveDetails(value as CreateCourseFormInput);
-      }, 1500);
-    });
-
-    return () => {
-      clearTimeout(timeoutId);
-      subscription.unsubscribe();
-    };
-  }, [watch, getValues, autoSaveDetails]);
-
   const watchedTeacherUserId = useWatch({
     control,
     name: 'teacherUserId',
@@ -169,6 +139,7 @@ export function CourseDetailsForm({
           onSubmit={(e) => e.preventDefault()}
           className="lg:col-span-8 space-y-8 bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-6 md:p-8"
         >
+          <AutoSaveWatcher<CreateCourseFormInput> onAutoSave={autoSaveDetails} delay={1500} />
           <CourseFormFields
             teachers={teachers}
             isLoadingTeachers={isLoadingTeachers}
