@@ -18,9 +18,17 @@ const apiClient = axios.create({
 });
 
 export const courseService = {
-  /** GET /courses  →  CoursesService.findAll() */
-  async getCourses(params: CoursesQueryParams = {}): Promise<CoursesListResponse> {
+  /**
+   * GET /courses  →  CoursesService.findAll()
+   * Accepts an optional AbortSignal so callers (e.g. TanStack Query) can
+   * cancel in-flight requests when filters/search change rapidly.
+   */
+  async getCourses(
+    params: CoursesQueryParams = {},
+    config?: { signal?: AbortSignal },
+  ): Promise<CoursesListResponse> {
     const { data } = await apiClient.get<CoursesListResponse>('/courses', {
+      signal: config?.signal,
       params: {
         page: params.page ?? 1,
         limit: params.limit ?? 9,
@@ -33,8 +41,10 @@ export const courseService = {
   },
 
   /** GET /courses/:id  →  CoursesService.findOne() */
-  async getCourse(id: string): Promise<CourseDetails> {
-    const { data } = await apiClient.get<CourseDetails>(`/courses/${id}`);
+  async getCourse(id: string, config?: { signal?: AbortSignal }): Promise<CourseDetails> {
+    const { data } = await apiClient.get<CourseDetails>(`/courses/${id}`, {
+      signal: config?.signal,
+    });
     return data;
   },
 };

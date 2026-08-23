@@ -52,7 +52,7 @@ export default function InstructorProfile({ teacher, courseCount }: InstructorPr
             {courseCount !== undefined && (
               <div className="flex items-center gap-1 text-gray-600">
                 <GraduationCap size={16} strokeWidth={2} className="text-gray-700" />
-                <span className="text-xs">{courseCount + ' Static'} دورة</span>
+                <span className="text-xs">{courseCount.toLocaleString('ar-SA')} دورة</span>
               </div>
             )}
           </div>

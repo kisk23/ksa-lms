@@ -44,9 +44,10 @@ export function CurriculumSidebar({
     ch.lessons.some((l) => l.id === activeLessonId),
   )?.id;
 
-  // Track which chapters are open — default: only the active chapter is open
+  // Track which chapters are open — default: only the active chapter is open.
+  // Lazy initializer avoids rebuilding the Set on every render.
   const [openChapters, setOpenChapters] = useState<Set<string>>(
-    new Set(activeChapterId ? [activeChapterId] : []),
+    () => new Set(activeChapterId ? [activeChapterId] : []),
   );
 
   const toggleChapter = (id: string) => {
@@ -84,10 +85,13 @@ export function CurriculumSidebar({
 
           return (
             <div key={chapter.id} className="border-b border-gray-100 last:border-0">
-              {/* Chapter row */}
+              {/* Chapter row — W3C accordion disclosure pattern */}
               <button
                 onClick={() => toggleChapter(chapter.id)}
-                className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors text-right"
+                id={`chapter-header-${chapter.id}`}
+                aria-expanded={isOpen}
+                aria-controls={`chapter-content-${chapter.id}`}
+                className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors text-right focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="text-gray-400 shrink-0">
@@ -108,7 +112,11 @@ export function CurriculumSidebar({
 
               {/* Lessons */}
               {isOpen && (
-                <div className="pb-1">
+                <div
+                  id={`chapter-content-${chapter.id}`}
+                  aria-labelledby={`chapter-header-${chapter.id}`}
+                  className="pb-1"
+                >
                   {sortedLessons.map((lesson) => {
                     const isActive = lesson.id === activeLessonId;
                     const isCompleted = completedMap.get(lesson.id) ?? false;
@@ -116,7 +124,7 @@ export function CurriculumSidebar({
                     return (
                       <Link
                         key={lesson.id}
-                        href={`/courses/${courseId}/chapters/${chapter.id}/lessons/${lesson.id}`}
+                        href={`/courses/${courseId}/lessons/${lesson.id}`}
                         className={`flex items-center justify-between py-2.5 px-6 transition-colors group ${
                           isActive
                             ? 'bg-primary/5 border-r-4 border-primary'

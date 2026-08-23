@@ -1,4 +1,4 @@
-import type { Value } from '../types';
+import type { Value } from '@/types/about';
 import RevealSection from './reusable/RevealSection';
 import SectionLabel from './reusable/SectionLabel';
 
@@ -64,7 +64,7 @@ export default function ValuesSection() {
 
           <div className="relative z-10 max-w-[820px] mx-auto px-5 text-center">
             <RevealSection>
-              <span className="text-7xl text-primary opacity-30 block mb-6 leading-none">"</span>
+              <span className="text-7xl text-primary opacity-30 block mb-6 leading-none">&quot;</span>
               <blockquote className="text-xl md:text-2xl font-semibold text-gray-800 italic leading-relaxed mb-8">
                 أجمل لحظة في سُلَّم لما بنشوف طالب كان خايف من مادة، وفجأة بفضل ربنا ثم مدرس مخلص،
                 دخل الامتحان وهو واثق من نفسه.. دي قيمتنا الحقيقية.

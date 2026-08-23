@@ -2,16 +2,12 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { QuizResultClient } from '@/features/dashboard';
 
-interface PageProps {
-  params: { id: string };
-}
-
 export const metadata: Metadata = {
   title: 'نتيجة الاختبار | سُلَّم',
   description: 'راجع نتيجتك وملخص أدائك في الاختبار.',
 };
 
-export default function QuizResultPage({ params }: PageProps) {
+export default function QuizResultPage() {
   // Wrap in Suspense because QuizResultClient uses useSearchParams
   return (
     <Suspense

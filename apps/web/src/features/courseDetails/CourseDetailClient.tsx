@@ -37,7 +37,10 @@ function DetailError({ message }: { message: string }) {
 // ─── Main client component ────────────────────────────────────────────────────
 
 export default function CourseDetailClient({ id }: CourseDetailClientProps) {
-  const { data: { data: course } = {}, isLoading, isError, error } = useCourse(id);
+  const { data, isLoading, isError, error } = useCourse(id);
+  // GET /courses/:id nests the payload inside an extra { data } envelope
+  // at runtime — unwrap defensively without changing behaviour.
+  const course = (data as { data?: typeof data } | undefined)?.data ?? (data as typeof data);
 
   if (isLoading) return <CourseDetailLoading />;
 
@@ -69,7 +72,9 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         <CourseInfo course={course} />
         <WhatYouLearn chapters={course.chapters} />
         <Curriculum chapters={course.chapters} courseId={course.id} />
-        <InstructorProfile teacher={course.teacher} courseCount={10} />
+        {/* No real teacher course-count from the API yet — omit the stat
+            instead of showing a hardcoded mock value. */}
+        <InstructorProfile teacher={course.teacher} />
       </div>
       {/* ── LEFT — Sticky pricing card ── */}
       <div className="lg:col-span-4 order-first lg:order-0">

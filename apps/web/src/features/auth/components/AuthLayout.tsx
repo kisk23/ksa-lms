@@ -45,7 +45,11 @@ export function AuthLayout({ children, panel }: AuthLayoutProps) {
           {/* Glassmorphism emblem */}
           <div className="mb-12 bg-white/10 p-6 rounded-2xl backdrop-blur-md border border-white/20 shadow-2xl flex flex-col items-center gap-4 transition-transform hover:-translate-y-2 duration-500">
             {panel.icon ?? <TrendingUp className="text-white w-14 h-14" />}
-            <h2 className="text-white font-bold text-[42px] leading-[1.2] font-arabic">سُلَّم</h2>
+            {/* Brand wordmark — decorative, not a document heading (each form
+                provides its own <h1>) */}
+            <span className="text-white font-bold text-[42px] leading-[1.2] font-arabic">
+              سُلَّم
+            </span>
           </div>
 
           <div className="space-y-6">

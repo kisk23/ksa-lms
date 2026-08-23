@@ -79,7 +79,7 @@ export default function CourseInfo({ course }: CourseInfoProps) {
         {/* Students */}
         <div className="flex items-center gap-1.5 text-gray-600">
           <Users size={18} className="text-gray-700" />
-          <span className="text-sm">{10 + ' Static'} طالب مسجل</span>
+          <span className="text-sm">{course._count.enrollments.toLocaleString('ar-SA')} طالب مسجل</span>
         </div>
       </div>
 

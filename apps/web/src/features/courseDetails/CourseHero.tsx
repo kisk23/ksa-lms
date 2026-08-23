@@ -21,11 +21,11 @@ export default function CourseHero({ youtubeVideoId, posterUrl, title }: CourseH
 
     if (!isPlaying) {
       return (
-        <div
-          className="relative w-full aspect-video rounded-xl overflow-hidden bg-surface group cursor-pointer shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+        <button
+          type="button"
           onClick={() => setIsPlaying(true)}
-          role="button"
           aria-label={`تشغيل ${title ?? 'الفيديو التعريفي'}`}
+          className="relative w-full aspect-video rounded-xl overflow-hidden bg-surface group cursor-pointer shadow-[0_8px_24px_rgba(0,0,0,0.3)] block p-0 border-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/50"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -33,8 +33,8 @@ export default function CourseHero({ youtubeVideoId, posterUrl, title }: CourseH
             alt={title ?? 'Course thumbnail'}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/45 transition-colors">
-            <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
+          <span className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/45 transition-colors">
+            <span className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-8 h-8 text-primary translate-x-0.5"
@@ -43,9 +43,9 @@ export default function CourseHero({ youtubeVideoId, posterUrl, title }: CourseH
               >
                 <path d="M8 5v14l11-7L8 5z" />
               </svg>
-            </div>
-          </div>
-        </div>
+            </span>
+          </span>
+        </button>
       );
     }
 
@@ -83,11 +83,13 @@ export default function CourseHero({ youtubeVideoId, posterUrl, title }: CourseH
       </video>
 
       {!isPlaying && (
-        <div
-          className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/45 transition-colors cursor-pointer"
+        <button
+          type="button"
           onClick={handlePlay}
+          aria-label="تشغيل الفيديو"
+          className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/45 transition-colors cursor-pointer p-0 border-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/50"
         >
-          <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
+          <span className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-8 h-8 text-primary translate-x-0.5"
@@ -96,8 +98,8 @@ export default function CourseHero({ youtubeVideoId, posterUrl, title }: CourseH
             >
               <path d="M8 5v14l11-7L8 5z" />
             </svg>
-          </div>
-        </div>
+          </span>
+        </button>
       )}
     </div>
   );

@@ -9,7 +9,8 @@
   --color-surface: #1e293b;
   --color-surface-hover: #334155;
   --color-text: #f8fafc;
-  --color-text-muted: #94a3b8;
+  /* Contrast-safe muted text: ≥ 4.5:1 on white surfaces (#94a3b8 was ~2.8:1) */
+  --color-text-muted: #475569;
   --color-border: #334155;
   --color-success: #16b88a;
   --color-danger: #ef4444;
@@ -84,7 +85,13 @@
 
   body {
     font-family: "'IBM Plex Sans Arabic', sans-serif";
-    color: var(--color-text);
+    /* Light-theme defaults: previously the body had no background while
+       --color-text was near-white (#f8fafc), producing white-on-white text.
+       Use the light background + on-background tokens instead. */
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+    /* Relative rem units for fluid, user-scalable typography */
+    font-size: 1rem;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }

@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Script from 'next/script';
 import Link from 'next/link';
 import { CreditCard, CheckCircle2, ChevronRight, BookOpen, User } from 'lucide-react';
@@ -28,9 +28,9 @@ declare global {
   }
 }
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
-  const courseId = searchParams.get('courseId');
+  const courseId = searchParams?.get('courseId');
   const { user, isLoading: authLoading } = useAuth();
   const [moyasarLoaded, setMoyasarLoaded] = useState(false);
   const [moyasarError, setMoyasarError] = useState<string | null>(null);
@@ -118,7 +118,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main
+    <div
       className="min-h-screen bg-[#090d16] text-white font-sans selection:bg-indigo-500 selection:text-white"
       dir="rtl"
     >
@@ -250,6 +250,15 @@ export default function CheckoutPage() {
         onLoad={() => setMoyasarLoaded(true)}
         onError={() => setMoyasarError('فشل تحميل نص بوابة الدفع. يرجى التحقق من اتصال الشبكة.')}
       />
-    </main>
+    </div>
+  );
+}
+
+export default function CheckoutPage() {
+  // useSearchParams() requires a Suspense boundary for static prerendering
+  return (
+    <Suspense>
+      <CheckoutContent />
+    </Suspense>
   );
 }

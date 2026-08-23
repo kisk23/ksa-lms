@@ -45,7 +45,9 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
       <div className="flex items-center gap-3 mr-auto">
         {/* Help button */}
         <button
+          type="button"
           className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95"
+          aria-label="المساعدة والدعم"
           title="المساعدة والدعم"
         >
           <HelpCircle size={20} />
@@ -53,7 +55,9 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
 
         {/* Chat button */}
         <button
+          type="button"
           className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95"
+          aria-label="الرسائل"
           title="الرسائل"
         >
           <MessageSquare size={20} />
@@ -61,7 +65,9 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
 
         {/* Notification button with badge */}
         <button
+          type="button"
           className="hover:bg-gray-50 p-2 rounded-full text-gray-500 hover:text-primary transition-all active:scale-95 relative"
+          aria-label="الإشعارات"
           title="الإشعارات"
         >
           <Bell size={20} />
@@ -69,8 +75,10 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
         </button>
 
         {/* Profile Avatar */}
-        <div
-          className="h-8 w-8 rounded-full bg-gray-100 border border-gray-200 overflow-hidden ms-2 cursor-pointer hover:border-primary transition-colors flex items-center justify-center relative"
+        <button
+          type="button"
+          className="h-8 w-8 rounded-full bg-gray-100 border border-gray-200 overflow-hidden ms-2 cursor-pointer hover:border-primary transition-colors flex items-center justify-center relative focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label={user?.name ? `الملف الشخصي لـ ${user.name}` : 'الملف الشخصي'}
           title={user?.name || 'الملف الشخصي'}
         >
           {avatarUrl ? (
@@ -84,7 +92,7 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
           ) : (
             <User size={16} className="text-gray-400" />
           )}
-        </div>
+        </button>
       </div>
     </header>
   );
