@@ -56,7 +56,7 @@ export function CourseCard({ course }: CourseCardProps) {
         <div className="flex justify-between items-center pt-2 border-t border-border/20">
           <span className="text-surface/80 text-xs flex items-center gap-1">
             <Clock size={16} />
-            <span>{course._count.enrollments.toLocaleString('ar-SA')} طالب</span>
+            <span>{(course._count?.enrollments ?? 0).toLocaleString('ar-SA')} طالب</span>
           </span>
           <span className="text-primary font-bold text-sm">{formattedPrice}</span>
         </div>

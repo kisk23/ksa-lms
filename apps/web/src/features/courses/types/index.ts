@@ -65,8 +65,12 @@ export interface Course {
   updatedAt: string;
   /** Resolved from include: { teacher: { select: { id, name } } } */
   teacher: Instructor;
-  /** Resolved from include: { _count: { select: { enrollments, chapters } } } */
-  _count: {
+  /**
+   * Resolved from include: { _count: { select: { enrollments, chapters } } }.
+   * ⚠️ Only present on GET /courses (findAll). The detail endpoint
+   * (GET /courses/:id) does NOT include counts — always guard access.
+   */
+  _count?: {
     enrollments: number;
     chapters: number;
   };
