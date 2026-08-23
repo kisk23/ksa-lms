@@ -50,10 +50,13 @@ export default function Curriculum({ chapters, courseId }: CurriculumProps) {
 
             return (
               <div key={chapter.id} className="border-2 border-gray-300 rounded-lg overflow-hidden">
-                {/* Chapter header */}
+                {/* Chapter header — W3C accordion disclosure pattern */}
                 <button
                   onClick={() => setOpenChapterId(isOpen ? '' : chapter.id)}
-                  className={`w-full flex justify-between items-center p-4 transition-colors cursor-pointer text-right hover:bg-gray-100/20 ${
+                  id={`chapter-header-${chapter.id}`}
+                  aria-expanded={isOpen}
+                  aria-controls={`chapter-content-${chapter.id}`}
+                  className={`w-full flex justify-between items-center p-4 transition-colors cursor-pointer text-right hover:bg-gray-100/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     isOpen ? 'bg-surface-hover/15' : 'bg-surface/10'
                   }`}
                 >
@@ -72,7 +75,11 @@ export default function Curriculum({ chapters, courseId }: CurriculumProps) {
 
                 {/* Lessons list */}
                 {isOpen && (
-                  <div className="border-t border-gray-300 p-4 flex flex-col gap-1 ">
+                  <div
+                    id={`chapter-content-${chapter.id}`}
+                    aria-labelledby={`chapter-header-${chapter.id}`}
+                    className="border-t border-gray-300 p-4 flex flex-col gap-1 "
+                  >
                     {activeLessons.length === 0 ? (
                       <p className="text-xs text-gray-700 py-2 px-2">
                         لا توجد دروس في هذا الفصل بعد.

@@ -2,12 +2,10 @@
 
 import { useState } from 'react';
 import {
-  FileText,
   TrendingUp,
   Award,
   Calendar,
   BookOpen,
-  ArrowUpRight,
   Download,
   Info,
   ChevronDown,
@@ -32,7 +30,6 @@ interface DetailedSubject {
 }
 
 export function ReportsClient() {
-  const [term, setTerm] = useState<'term-1' | 'term-2'>('term-1');
   const [expandedSubjectId, setExpandedSubjectId] = useState<string | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 

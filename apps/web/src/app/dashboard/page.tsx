@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ChevronDown, AlertCircle, LayoutGrid, LayoutList } from 'lucide-react';
 import { useStudentDashboard, DashboardStats, EnrolledCourses } from '@/features/dashboard';
 
-export default function DashboardPage() {
+function DashboardContent() {
   const searchParams = useSearchParams();
-  const searchVal = searchParams.get('search') ?? '';
+  const searchVal = searchParams?.get('search') ?? '';
 
   const { enrollments, stats, isLoading, isError, error, refetch } = useStudentDashboard();
 
@@ -63,7 +63,7 @@ export default function DashboardPage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-on-surface mb-1 font-sans">دوراتي</h2>
+          <h1 className="text-3xl font-bold text-on-surface mb-1 font-sans">دوراتي</h1>
           <p className="text-on-surface-variant text-sm font-medium">
             تابع تقدمك واستكمل مسيرتك التعليمية.
           </p>
@@ -171,5 +171,14 @@ export default function DashboardPage() {
         />
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  // useSearchParams() requires a Suspense boundary for static prerendering
+  return (
+    <Suspense>
+      <DashboardContent />
+    </Suspense>
   );
 }

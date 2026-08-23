@@ -76,11 +76,16 @@ export default function CourseInfo({ course }: CourseInfoProps) {
           <span className="text-gray-600 text-sm">(124 تقييم)</span>
         </div>
 
-        {/* Students */}
-        <div className="flex items-center gap-1.5 text-gray-600">
-          <Users size={18} className="text-gray-700" />
-          <span className="text-sm">{10 + ' Static'} طالب مسجل</span>
-        </div>
+        {/* Students — _count is only returned by the list endpoint, so render
+            the stat only when the API actually provided it */}
+        {course._count?.enrollments !== undefined && (
+          <div className="flex items-center gap-1.5 text-gray-600">
+            <Users size={18} className="text-gray-700" />
+            <span className="text-sm">
+              {course._count.enrollments.toLocaleString('ar-SA')} طالب مسجل
+            </span>
+          </div>
+        )}
       </div>
 
       <hr className="border-gray-300" />

@@ -39,8 +39,8 @@ export const apiClient = axios.create({
  * videoUrl database column into the youtubeVideoId property expected by the frontend.
  */
 export async function getLesson(
-  courseId: string,
-  chapterId: string,
+  _courseId: string,
+  _chapterId: string,
   lessonId: string,
 ): Promise<LessonDetail> {
   const { data } = await apiClient.get<ApiResponse<any>>(`/lessons/${lessonId}`);

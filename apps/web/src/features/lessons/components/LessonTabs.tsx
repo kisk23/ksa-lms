@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import type { LessonDetail, Assignment, LessonFile } from '../types';
 import { AssignmentList } from './AssignmentList';
@@ -28,6 +28,9 @@ interface LessonTabsProps {
  *   الملفات     — downloadable attachments
  *   الواجبات   — assignment list
  *   النقاشات   — placeholder
+ *
+ * Implements the W3C ARIA Tabs pattern: role="tablist"/"tab"/"tabpanel",
+ * aria-selected/aria-controls wiring and Left/Right arrow key navigation.
  */
 export function LessonTabs({
   lesson,
@@ -41,6 +44,7 @@ export function LessonTabs({
   filesError,
 }: LessonTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const tabListRef = useRef<HTMLDivElement>(null);
 
   const tabs: { id: TabId; label: string; badge?: number | string }[] = [
     { id: 'overview', label: 'نظرة عامة' },
@@ -53,39 +57,79 @@ export function LessonTabs({
     // { id: 'discussions',  label: 'النقاشات' },
   ];
 
+  /** W3C pattern: ArrowLeft/ArrowRight move selection (RTL-aware) and focus. */
+  const handleTabKeyDown = (event: React.KeyboardEvent, currentIndex: number) => {
+    let nextIndex: number | null = null;
+
+    if (event.key === 'ArrowRight') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    else if (event.key === 'ArrowLeft') nextIndex = (currentIndex + 1) % tabs.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = tabs.length - 1;
+
+    if (nextIndex === null) return;
+    event.preventDefault();
+
+    const nextTab = tabs[nextIndex];
+    setActiveTab(nextTab.id);
+
+    const buttons = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    buttons?.[nextIndex]?.focus();
+  };
+
   return (
     <div className="flex flex-col gap-0" dir="rtl">
       {/* ── Tab bar ── */}
-      <nav className="border-b border-gray-200 flex gap-0 overflow-x-auto">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-              activeTab === tab.id
-                ? 'border-primary text-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-800'
-            }`}
-          >
-            {tab.label}
-            {tab.badge !== undefined && (
-              <span
-                className={`text-[10px] font-bold px-1.5 rounded-full ${
-                  tab.id === 'assignments' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-600'
-                }`}
-              >
-                {tab.badge}
-              </span>
-            )}
-          </button>
-        ))}
-      </nav>
+      <div
+        ref={tabListRef}
+        role="tablist"
+        aria-label="أقسام الدرس"
+        className="border-b border-gray-200 flex gap-0 overflow-x-auto"
+      >
+        {tabs.map((tab, index) => {
+          const isSelected = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              id={`tab-${tab.id}`}
+              role="tab"
+              type="button"
+              aria-selected={isSelected}
+              aria-controls={`panel-${tab.id}`}
+              tabIndex={isSelected ? 0 : -1}
+              onClick={() => setActiveTab(tab.id)}
+              onKeyDown={(e) => handleTabKeyDown(e, index)}
+              className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                isSelected
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-800'
+              }`}
+            >
+              {tab.label}
+              {tab.badge !== undefined && (
+                <span
+                  className={`text-[10px] font-bold px-1.5 rounded-full ${
+                    tab.id === 'assignments' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-600'
+                  }`}
+                >
+                  {tab.badge}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
 
       {/* ── Tab panels ── */}
       <div className="bg-white border border-t-0 border-gray-200 rounded-b-xl p-5">
         {/* Overview */}
         {activeTab === 'overview' && (
-          <div className="flex flex-col gap-5">
+          <div
+            role="tabpanel"
+            id="panel-overview"
+            aria-labelledby="tab-overview"
+            tabIndex={0}
+            className="flex flex-col gap-5 focus-visible:outline-none"
+          >
             {/* Teacher info strip */}
             <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
               <div className="w-10 h-10 rounded-full bg-primary/20 text-primary font-bold flex items-center justify-center text-sm shrink-0">
@@ -112,16 +156,32 @@ export function LessonTabs({
 
         {/* Files */}
         {activeTab === 'files' && (
-          <LessonFiles files={files} isLoading={filesLoading} error={filesError} />
+          <div
+            role="tabpanel"
+            id="panel-files"
+            aria-labelledby="tab-files"
+            tabIndex={0}
+            className="focus-visible:outline-none"
+          >
+            <LessonFiles files={files} isLoading={filesLoading} error={filesError} />
+          </div>
         )}
 
         {/* Assignments */}
         {activeTab === 'assignments' && (
-          <AssignmentList
-            assignments={assignments}
-            isLoading={assignmentsLoading}
-            error={assignmentsError}
-          />
+          <div
+            role="tabpanel"
+            id="panel-assignments"
+            aria-labelledby="tab-assignments"
+            tabIndex={0}
+            className="focus-visible:outline-none"
+          >
+            <AssignmentList
+              assignments={assignments}
+              isLoading={assignmentsLoading}
+              error={assignmentsError}
+            />
+          </div>
         )}
 
         {/* Discussions placeholder */}

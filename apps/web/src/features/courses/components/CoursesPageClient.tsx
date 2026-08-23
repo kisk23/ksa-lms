@@ -7,6 +7,7 @@ import { useCourses } from '../hooks/useCourses';
 import { CoursesGrid } from './CoursesGrid';
 import { Pagination } from './Pagination';
 import { CourseFilters } from './CourseFilters';
+import type { CoursesListResponse } from '../types';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CoursesPageClient — main component
@@ -64,10 +65,12 @@ export function CoursesPageClient() {
     category: selectedCategory,
   });
 
-
-  const courses = data?.data ?? [];
-
-  const meta = data?.meta;
+  // GET /courses nests the paginated payload inside an extra { data } envelope
+  // at runtime — type the query result accordingly without changing behaviour.
+  const listEnvelope = data as { data?: CoursesListResponse } | undefined;
+  const courseData = listEnvelope?.data;
+  const courses = courseData?.data ?? [];
+  const meta = courseData?.meta;
 
   // ── Separate query to collect ALL distinct categories from the backend ────
   // Uses a high limit with no category filter so the pill list stays stable
@@ -80,7 +83,8 @@ export function CoursesPageClient() {
   });
 
   const availableCategories = useMemo<string[]>(() => {
-    const allCourses = allData?.data ?? [];
+    const allCourses =
+      (allData as { data?: CoursesListResponse } | undefined)?.data?.data ?? [];
     const seen = new Set<string>();
     for (const course of allCourses) {
       if (course.category) seen.add(course.category);
@@ -94,7 +98,9 @@ export function CoursesPageClient() {
   // Render
   // ─────────────────────────────────────────────────────────────────────────
   return (
-    <main className="grow w-full max-w-7xl mx-auto px-4 md:px-6 py-10" dir="rtl">
+    <div className="grow w-full max-w-7xl mx-auto px-4 md:px-6 py-10" dir="rtl">
+      {/* ── Page heading (single <h1> per view) ── */}
+      <h1 className="text-3xl font-bold text-black mb-8">الدورات التعليمية</h1>
       {/*
         ── Two-column layout ──
         RTL: sidebar is on the RIGHT (comes first in DOM order),
@@ -149,6 +155,7 @@ export function CoursesPageClient() {
               value={search}
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="ابحث عن دورة..."
+              aria-label="ابحث عن دورة تعليمية"
               className="w-full border border-gray-200 rounded-lg pr-10 pl-4 py-3 text-black placeholder:text-gray-400 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             />
           </div>
@@ -207,6 +214,6 @@ export function CoursesPageClient() {
           )}
         </section>
       </div>
-    </main>
+    </div>
   );
 }

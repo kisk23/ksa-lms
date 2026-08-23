@@ -56,17 +56,18 @@ export function CourseCard({ course }: CourseCardProps) {
         <div className="flex justify-between items-center pt-2 border-t border-border/20">
           <span className="text-surface/80 text-xs flex items-center gap-1">
             <Clock size={16} />
-            <span>{course._count.enrollments.toLocaleString('ar-SA')} طالب</span>
+            <span>{(course._count?.enrollments ?? 0).toLocaleString('ar-SA')} طالب</span>
           </span>
           <span className="text-primary font-bold text-sm">{formattedPrice}</span>
         </div>
 
-        <button
-          tabIndex={-1}
-          className="mt-1 w-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition-colors py-2 rounded-sm text-xs font-semibold cursor-pointer"
+        {/* Visual CTA — purely decorative: the whole card is a link */}
+        <span
+          aria-hidden="true"
+          className="mt-1 w-full border-2 border-primary text-primary group-hover:bg-primary group-hover:text-white transition-colors py-2 rounded-sm text-xs font-semibold text-center block"
         >
           عرض التفاصيل
-        </button>
+        </span>
       </div>
     </Link>
   );

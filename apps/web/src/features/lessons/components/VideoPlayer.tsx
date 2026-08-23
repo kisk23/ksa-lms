@@ -37,13 +37,11 @@ export function VideoPlayer({ youtubeVideoId, title }: VideoPlayerProps) {
   }
 
   return (
-    <div
-      className="relative w-full aspect-video rounded-xl overflow-hidden bg-[#0f1a37] shadow-[0_8px_32px_rgba(15,26,55,0.2)] group cursor-pointer"
+    <button
+      type="button"
       onClick={() => setPlaying(true)}
-      role="button"
       aria-label={`تشغيل ${title}`}
-      tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && setPlaying(true)}
+      className="relative w-full aspect-video rounded-xl overflow-hidden bg-[#0f1a37] shadow-[0_8px_32px_rgba(15,26,55,0.2)] group cursor-pointer block p-0 border-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/50"
     >
       {/* Thumbnail */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -54,11 +52,11 @@ export function VideoPlayer({ youtubeVideoId, title }: VideoPlayerProps) {
       />
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-        <div className="w-20 h-20 bg-primary/90 hover:bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
+      <span className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+        <span className="w-20 h-20 bg-primary/90 hover:bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
           <Play size={36} className="text-white fill-white translate-x-0.5" />
-        </div>
-      </div>
-    </div>
+        </span>
+      </span>
+    </button>
   );
 }

@@ -24,17 +24,17 @@ export function PaymentTable({
         <table className="min-w-full divide-y divide-zinc-200 text-sm">
           <thead className="bg-zinc-50 text-left text-xs uppercase tracking-wide text-zinc-500">
             <tr>
-              <th className="px-4 py-3">Order</th>
-              <th className="px-4 py-3">Gateway ID</th>
-              <th className="px-4 py-3">Amount</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Updated</th>
-              <th className="px-4 py-3 text-right">Actions</th>
+              <th scope="col" className="px-4 py-3">Order</th>
+              <th scope="col" className="px-4 py-3">Gateway ID</th>
+              <th scope="col" className="px-4 py-3">Amount</th>
+              <th scope="col" className="px-4 py-3">Status</th>
+              <th scope="col" className="px-4 py-3">Updated</th>
+              <th scope="col" className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-100">
             {payments.map((payment) => (
-              <tr key={payment.id} className="text-zinc-800">
+              <tr key={payment.id} className="group/row text-zinc-800">
                 <td className="px-4 py-3 font-medium">{payment.orderId}</td>
                 <td className="px-4 py-3 text-zinc-500">{payment.moyasarPaymentId ?? '-'}</td>
                 <td className="px-4 py-3">
@@ -49,28 +49,36 @@ export function PaymentTable({
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-2">
                     <button
-                      className="rounded border px-2 py-1 hover:bg-zinc-50"
+                      type="button"
+                      aria-label={`عرض تفاصيل الدفعة ${payment.orderId}`}
+                      className="rounded border px-3 py-1.5 min-h-[36px] hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group-focus-within/row:ring-1 group-focus-within/row:ring-primary/40"
                       onClick={() => onOpen(payment)}
                     >
                       View
                     </button>
                     <button
+                      type="button"
                       disabled={busyId === payment.id}
-                      className="rounded border px-2 py-1 hover:bg-zinc-50 disabled:opacity-50"
+                      aria-label={`تأكيد تحصيل الدفعة ${payment.orderId}`}
+                      className="rounded border px-3 py-1.5 min-h-[36px] hover:bg-zinc-50 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       onClick={() => onCapture(payment)}
                     >
                       Capture
                     </button>
                     <button
+                      type="button"
                       disabled={busyId === payment.id}
-                      className="rounded border px-2 py-1 hover:bg-zinc-50 disabled:opacity-50"
+                      aria-label={`استرداد المبلغ للدفعة ${payment.orderId}`}
+                      className="rounded border px-3 py-1.5 min-h-[36px] hover:bg-zinc-50 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       onClick={() => onRefund(payment)}
                     >
                       Refund
                     </button>
                     <button
+                      type="button"
                       disabled={busyId === payment.id}
-                      className="rounded border border-rose-200 px-2 py-1 text-rose-700 hover:bg-rose-50 disabled:opacity-50"
+                      aria-label={`إلغاء الدفعة ${payment.orderId}`}
+                      className="rounded border border-rose-200 px-3 py-1.5 min-h-[36px] text-rose-700 hover:bg-rose-50 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
                       onClick={() => onVoid(payment)}
                     >
                       Void

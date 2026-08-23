@@ -49,7 +49,13 @@ export default function Navbar() {
         <FadeInItem className="md:w-1/6 w-1/2">
 
           <Link href="/" className="flex items-center cursor-pointer ps-2 lg:ps-0">
-            <Image src="/Sullam.svg" alt="Sullam Logo" width={80} height={40} priority />
+            <Image
+              src="/Sullam.svg"
+              alt="شعار منصة سُلَّم التعليمية — الانتقال إلى الصفحة الرئيسية"
+              width={80}
+              height={40}
+              priority
+            />
           </Link>
         </FadeInItem>
 
@@ -57,7 +63,7 @@ export default function Navbar() {
         <FadeInItem className="flex items-center gap-3">
           <button
             type="button"
-            aria-label="Toggle menu"
+            aria-label={collapse ? 'إغلاق القائمة' : 'فتح القائمة'}
             aria-expanded={collapse}
             className={`md:hidden p-2 rounded-lg shadow-md transition ${
               collapsActive ? 'bg-surface text-text' : 'text-primary hover:bg-surface-hover/50'

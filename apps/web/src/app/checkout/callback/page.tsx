@@ -3,14 +3,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { CheckCircle2, XCircle, ArrowLeft, Loader2, Sparkles, BookOpen } from 'lucide-react';
 
 import { paymentsApi } from '@/features/payments/payments.api';
 
-export default function CheckoutCallbackPage() {
+function CheckoutCallbackContent() {
   const searchParams = useSearchParams();
-  const paymentId = searchParams.get('id'); // Moyasar Payment ID starts with pay_
-  const statusParam = searchParams.get('status');
+  const paymentId = searchParams?.get('id'); // Moyasar Payment ID starts with pay_
+  const statusParam = searchParams?.get('status');
 
   // Trigger backend fetch & sync by calling GET /payments/:id
   const {
@@ -181,5 +182,14 @@ export default function CheckoutCallbackPage() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function CheckoutCallbackPage() {
+  // useSearchParams() requires a Suspense boundary for static prerendering
+  return (
+    <Suspense>
+      <CheckoutCallbackContent />
+    </Suspense>
   );
 }

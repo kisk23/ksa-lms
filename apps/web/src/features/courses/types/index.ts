@@ -34,10 +34,15 @@ export interface Chapter {
 /**
  * Lightweight shape returned by GET /courses (list).
  * Matches CoursesService.findAll() → include: { teacher, _count }
+ *
+ * Scalar fields mirror the Prisma `Course` model exactly.
+ * All nullable/optional DB columns are typed as `string | null` or `T | null`.
  */
 export interface Course {
   id: string;
   slug: string;
+  /** FK — the teacher's user ID (raw UUID from the DB) */
+  teacherUserId: string;
   title: string;
   description?: string | null;
   /** Prisma Decimal is serialised as a string over JSON — coerce with Number() before display */
@@ -45,15 +50,30 @@ export interface Course {
   currency: string;
   status: CourseStatus;
   category?: string | null;
+  thumbnailUrl?: string | null;
+  promoVideoUrl?: string | null;
+  promoVideoProvider?: string | null;
   publishedAt?: string | null;
+  /** UUID of the user who published this course */
+  publishedBy?: string | null;
+  archivedAt?: string | null;
+  /** UUID of the user who archived this course */
+  archivedBy?: string | null;
+  /** FK to the live CourseSnapshot used to serve students */
+  liveSnapshotId?: string | null;
   createdAt: string;
   updatedAt: string;
+  /** Resolved from include: { teacher: { select: { id, name } } } */
   teacher: Instructor;
-  _count: {
+  /**
+   * Resolved from include: { _count: { select: { enrollments, chapters } } }.
+   * ⚠️ Only present on GET /courses (findAll). The detail endpoint
+   * (GET /courses/:id) does NOT include counts — always guard access.
+   */
+  _count?: {
     enrollments: number;
     chapters: number;
   };
-  thumbnailUrl?: string | null;
 }
 
 /**

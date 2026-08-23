@@ -12,8 +12,6 @@ import {
   Eye,
   MessageSquare,
   Award,
-  ArrowRight,
-  Maximize2,
   X,
 } from 'lucide-react';
 
@@ -21,7 +19,7 @@ interface GradedAssignmentClientProps {
   assignmentId: string;
 }
 
-export function GradedAssignmentClient({ assignmentId }: GradedAssignmentClientProps) {
+export function GradedAssignmentClient(_props: GradedAssignmentClientProps) {
   const [isInstructionsOpen, setIsInstructionsOpen] = useState<boolean>(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
 

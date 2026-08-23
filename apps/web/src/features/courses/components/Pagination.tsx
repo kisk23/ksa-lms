@@ -40,7 +40,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
         aria-label="الصفحة السابقة"
         className={`${btnBase} border border-border text-text-muted hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed`}
       >
-        ›
+        ‹
       </button>
 
       {pages.map((p) => {
@@ -59,7 +59,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
             className={`${btnBase} ${
               p === page
                 ? 'bg-primary text-white shadow-sm'
-                : 'border border-border text-text hover:bg-surface-hover'
+                : 'border border-border  hover:text-text hover:bg-surface-hover'
             }`}
           >
             {p}
@@ -74,7 +74,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
         aria-label="الصفحة التالية"
         className={`${btnBase} border border-border text-text-muted hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed`}
       >
-        ‹
+        ›
       </button>
     </nav>
   );

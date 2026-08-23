@@ -10,7 +10,6 @@ import {
   CheckCircle,
   XCircle,
   PlayCircle,
-  Plus,
   Tv,
   ArrowLeft,
   Flame,

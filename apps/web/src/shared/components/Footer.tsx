@@ -58,28 +58,29 @@ export default function Footer() {
   if (pathname?.startsWith('/dashboard')) return null;
 
   return (
-    <footer dir="rtl" className="bg-footer-background text-text-muted py-16">
+    <footer dir="rtl" className="bg-footer-background text-gray-300 py-16">
       <div className="px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1 flex flex-col items-center md:items-start">
             <span className="text-3xl font-black text-white tracking-tight block mb-4">سُلَّم</span>
-            <p className="text-text-muted text-sm leading-relaxed mb-6">
+            <p className="text-gray-400 text-sm leading-relaxed mb-6">
               منصة تعليمية رائدة تهدف إلى تمكين الطلاب وتقديم أفضل تجربة تعليمية عبر الإنترنت
               بمعايير عالمية.
             </p>
             <div className="flex gap-3">
               {[
-                { Icon: TwitterIcon, href: 'https://twitter.com' },
-                { Icon: FacebookIcon, href: 'https://facebook.com' },
-                { Icon: InstagramIcon, href: 'https://instagram.com' },
-              ].map(({ Icon, href }, i) => (
+                { Icon: TwitterIcon, href: 'https://twitter.com', label: 'حساب سُلَّم على تويتر' },
+                { Icon: FacebookIcon, href: 'https://facebook.com', label: 'حساب سُلَّم على فيسبوك' },
+                { Icon: InstagramIcon, href: 'https://instagram.com', label: 'حساب سُلَّم على انستقرام' },
+              ].map(({ Icon, href, label }) => (
                 <a
-                  key={i}
+                  key={href}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-primary transition-colors text-white no-underline hover:no-underline"
+                  aria-label={label}
+                  className="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-primary transition-colors text-white no-underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   <Icon />
                 </a>
@@ -153,7 +154,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="pt-8 border-t border-surface flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-          <p>© 2024 سُلَّم للتعليم. جميع الحقوق محفوظة.</p>
+          <p className="text-gray-400">© 2024 سُلَّم للتعليم. جميع الحقوق محفوظة.</p>
           <p className="text-gray-400">صُنع بكل حب لخدمة التعليم</p>
         </div>
       </div>
