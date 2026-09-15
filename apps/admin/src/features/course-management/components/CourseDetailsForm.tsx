@@ -50,21 +50,29 @@ export function CourseDetailsForm({
   const { control } = methods;
 
   useEffect(() => {
+    let isCancelled = false;
+
     async function loadTeachers() {
       setIsLoadingTeachers(true);
       try {
         const me = await apiClient.get<AuthUser>('/auth/me');
+        if (isCancelled) return;
         setCurrentUser(me);
 
         if (me.role === 'TEACHER') {
           setTeachers([{ id: me.id, name: me.name, email: me.email || '' }]);
-          setIsLoadingTeachers(false);
+          if (!isCancelled) {
+            setIsLoadingTeachers(false);
+          }
           return;
         }
 
         const response = (await apiClient.get('/admin/users?role=TEACHER&limit=100')) as
           | { data?: Teacher[]; items?: Teacher[] }
           | Teacher[];
+
+        if (isCancelled) return;
+
         if (
           response &&
           typeof response === 'object' &&
@@ -78,12 +86,21 @@ export function CourseDetailsForm({
           setTeachers(response);
         }
       } catch {
-        setTeachers([]);
+        if (!isCancelled) {
+          setTeachers([]);
+        }
       } finally {
-        setIsLoadingTeachers(false);
+        if (!isCancelled) {
+          setIsLoadingTeachers(false);
+        }
       }
     }
+
     loadTeachers();
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   const autoSaveDetails = useCallback(

@@ -12,6 +12,11 @@ export function AutoSaveWatcher<TFieldValues extends FieldValues = FieldValues>(
 }: AutoSaveWatcherProps<TFieldValues>) {
   const { watch, trigger, getValues } = useFormContext<TFieldValues>();
   const lastSavedPayloadStr = useRef(JSON.stringify(getValues()));
+  const onAutoSaveRef = useRef(onAutoSave);
+
+  useEffect(() => {
+    onAutoSaveRef.current = onAutoSave;
+  });
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -30,7 +35,7 @@ export function AutoSaveWatcher<TFieldValues extends FieldValues = FieldValues>(
         const isValid = await trigger();
         if (isValid) {
           lastSavedPayloadStr.current = currentStr;
-          await onAutoSave(getValues());
+          await onAutoSaveRef.current(getValues());
         }
       }, delay);
     });
@@ -39,7 +44,7 @@ export function AutoSaveWatcher<TFieldValues extends FieldValues = FieldValues>(
       clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
-  }, [watch, trigger, getValues, onAutoSave, delay]);
+  }, [watch, trigger, getValues, delay]);
 
   return null; // Headless component: zero DOM nodes, zero top-level re-renders
 }

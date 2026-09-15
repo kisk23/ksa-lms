@@ -29,36 +29,46 @@ export function AssignmentEditor({ lessonId, lessonTitle, type, onClose }: Assig
   // New question form state
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
 
-  const loadAssignment = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // The backend returns the assignment with questions and options if it exists.
-      // If it doesn't exist, the backend might return null or 404.
-      const res = await apiClient.get<Assignment>(`/lessons/${lessonId}/assignment`);
-      if (res) {
-        setAssignment(res);
-        setPassingScorePct(res.passingScorePct);
-        setMaxAttempts(res.maxAttempts || '');
-        setQuestions(res.questions || []);
-        setShowSettings(false);
+  const loadAssignment = useCallback(
+    async (isCancelled?: () => boolean) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        // The backend returns the assignment with questions and options if it exists.
+        // If it doesn't exist, the backend might return null or 404.
+        const res = await apiClient.get<Assignment>(`/lessons/${lessonId}/assignment`);
+        if (!isCancelled?.() && res) {
+          setAssignment(res);
+          setPassingScorePct(res.passingScorePct);
+          setMaxAttempts(res.maxAttempts || '');
+          setQuestions(res.questions || []);
+          setShowSettings(false);
+        }
+      } catch (err: unknown) {
+        if (isCancelled?.()) return;
+        const e = err as { message?: string; status?: number };
+        const msg = e.message || '';
+        const isNotFound =
+          e.status === 404 || msg.includes('404') || msg.toLowerCase().includes('not found');
+        if (!isNotFound) {
+          setError(msg || `فشل في تحميل ${type === 'QUIZ' ? 'الاختبار' : 'الواجب'}.`);
+        }
+        // If 404 / Not Found, it just means no assignment exists yet, which is fine.
+      } finally {
+        if (!isCancelled?.()) {
+          setIsLoading(false);
+        }
       }
-    } catch (err: unknown) {
-      const e = err as { message?: string; status?: number };
-      const msg = e.message || '';
-      const isNotFound =
-        e.status === 404 || msg.includes('404') || msg.toLowerCase().includes('not found');
-      if (!isNotFound) {
-        setError(msg || `فشل في تحميل ${type === 'QUIZ' ? 'الاختبار' : 'الواجب'}.`);
-      }
-      // If 404 / Not Found, it just means no assignment exists yet, which is fine.
-    } finally {
-      setIsLoading(false);
-    }
-  }, [lessonId, type]);
+    },
+    [lessonId, type],
+  );
 
   useEffect(() => {
-    loadAssignment();
+    let isCancelled = false;
+    void loadAssignment(() => isCancelled);
+    return () => {
+      isCancelled = true;
+    };
   }, [loadAssignment]);
 
   const handleSaveSettings = async () => {

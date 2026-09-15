@@ -27,28 +27,50 @@ export function CourseEditor({ courseId, initialTab }: CourseEditorProps) {
   const [isSubmittingFinal, setIsSubmittingFinal] = useState(false);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
-  const fetchCourse = useCallback(async () => {
-    try {
-      const response = await apiClient.get<ExtendedCourse>(`/courses/${courseId}`);
-      setCourse(response);
-    } catch (err) {
-      setError((err as Error).message || 'فشل في تحميل بيانات الدورة.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [courseId]);
+  const fetchCourse = useCallback(
+    async (isCancelled?: () => boolean) => {
+      try {
+        const response = await apiClient.get<ExtendedCourse>(`/courses/${courseId}`);
+        if (!isCancelled?.()) {
+          setCourse(response);
+        }
+      } catch (err) {
+        if (!isCancelled?.()) {
+          setError((err as Error).message || 'فشل في تحميل بيانات الدورة.');
+        }
+      } finally {
+        if (!isCancelled?.()) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [courseId],
+  );
 
   useEffect(() => {
+    let isCancelled = false;
+
     async function init() {
       try {
         const me = await apiClient.get<AuthUser>('/auth/me');
-        setCurrentUser(me);
+        if (!isCancelled) {
+          setCurrentUser(me);
+        }
       } catch (err) {
-        console.error('Failed to get current user:', err);
+        if (!isCancelled) {
+          console.error('Failed to get current user:', err);
+        }
       }
-      fetchCourse();
+      if (!isCancelled) {
+        await fetchCourse(() => isCancelled);
+      }
     }
+
     init();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [fetchCourse]);
 
   const handleFinalizeCourse = async () => {

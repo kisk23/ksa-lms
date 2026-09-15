@@ -16,6 +16,8 @@ export default function ApprovalsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isCancelled = false;
+
     async function fetchApprovals() {
       try {
         setLoading(true);
@@ -24,6 +26,8 @@ export default function ApprovalsPage() {
         const response = await apiClient.get<{ data: ApprovalRequest[]; meta: unknown }>(
           `/approvals${queryParams}`,
         );
+
+        if (isCancelled) return;
 
         // Map the backend ApprovalRequest to the frontend ApprovalListItem format
         const mapped: ApprovalListItem[] = response.data.map((req) => ({
@@ -38,13 +42,21 @@ export default function ApprovalsPage() {
 
         setApprovals(mapped);
       } catch (err) {
-        console.error('Failed to fetch approvals', err);
+        if (!isCancelled) {
+          console.error('Failed to fetch approvals', err);
+        }
       } finally {
-        setLoading(false);
+        if (!isCancelled) {
+          setLoading(false);
+        }
       }
     }
 
     fetchApprovals();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [status]);
 
   const handleStatusUpdate = (id: string, newStatus: string) => {

@@ -15,14 +15,16 @@ export function CourseCardPreview({
   price: initialPrice,
   currency: initialCurrency,
 }: CourseCardPreviewProps) {
-  const watchedValues = useWatch<CreateCourseFormInput>({
-    control,
-  });
+  const [watchedTitle, watchedThumbnailUrl, watchedPrice, watchedCurrency] =
+    useWatch<CreateCourseFormInput>({
+      control,
+      name: ['title', 'thumbnailUrl', 'price', 'currency'],
+    });
 
-  const title = watchedValues?.title ?? initialTitle ?? '';
-  const thumbnailUrl = watchedValues?.thumbnailUrl ?? initialThumbnailUrl ?? '';
-  const price = watchedValues?.price ?? initialPrice ?? '';
-  const currency = watchedValues?.currency ?? initialCurrency ?? 'SAR';
+  const title = watchedTitle ?? initialTitle ?? '';
+  const thumbnailUrl = watchedThumbnailUrl ?? initialThumbnailUrl ?? '';
+  const price = watchedPrice ?? initialPrice ?? '';
+  const currency = watchedCurrency ?? initialCurrency ?? 'SAR';
 
   return (
     <div className="bg-surface-container-low border border-outline-variant rounded-2xl p-6 shadow-sm">

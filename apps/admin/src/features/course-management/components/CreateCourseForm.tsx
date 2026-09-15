@@ -56,18 +56,23 @@ export function CreateCourseForm() {
 
   // Fetch logged-in user and teachers from backend
   useEffect(() => {
+    let isCancelled = false;
+
     async function loadInitialData() {
       setIsLoadingTeachers(true);
       try {
         // 1. Fetch current user role info
         const me = await apiClient.get<AuthUser>('/auth/me');
+        if (isCancelled) return;
         setCurrentUser(me);
 
         // 2. If the user is a teacher, assign course to themselves and skip fetching other teachers
         if (me.role === 'TEACHER') {
           setValue('teacherUserId', me.id);
           setTeachers([{ id: me.id, name: me.name, email: me.email || '' }]);
-          setIsLoadingTeachers(false);
+          if (!isCancelled) {
+            setIsLoadingTeachers(false);
+          }
           return;
         }
 
@@ -75,6 +80,9 @@ export function CreateCourseForm() {
         const response = (await apiClient.get('/admin/users?role=TEACHER&limit=100')) as
           | { data?: Teacher[]; items?: Teacher[] }
           | Teacher[];
+
+        if (isCancelled) return;
+
         if (
           response &&
           typeof response === 'object' &&
@@ -97,14 +105,22 @@ export function CreateCourseForm() {
           }
         }
       } catch (err) {
+        if (isCancelled) return;
         console.warn('Could not load initial data:', err);
         setTeachers([]);
         setValue('teacherUserId', '');
       } finally {
-        setIsLoadingTeachers(false);
+        if (!isCancelled) {
+          setIsLoadingTeachers(false);
+        }
       }
     }
+
     loadInitialData();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [setValue]);
 
   // Watch only teacherUserId to calculate preview teacher name

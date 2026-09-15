@@ -97,6 +97,8 @@ export function CourseActionsDropdown({ course, onRefresh }: CourseCardProps) {
   };
 
   useEffect(() => {
+    if (!dropdownOpen) return;
+
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
@@ -106,7 +108,7 @@ export function CourseActionsDropdown({ course, onRefresh }: CourseCardProps) {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [dropdownOpen]);
 
   return (
     <div className="relative" ref={dropdownRef}>
