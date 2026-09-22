@@ -160,10 +160,12 @@ export class AssignmentAttemptService {
       //    This prevents concurrent attempts by the same student from racing, while
       //    other students submitting concurrently run completely in parallel without blocking.
       await tx.$executeRaw`
-        SELECT pg_advisory_xact_lock(
-          hashtext(${studentUserId}::text), 
-          hashtext(${assignmentId}::text)
-        )
+        SELECT 1 FROM (
+          SELECT pg_advisory_xact_lock(
+            hashtext(${studentUserId}::text), 
+            hashtext(${assignmentId}::text)
+          )
+        ) as lock
       `;
 
       // b. Safely count attempts now that we have serialized access for this student + assignment
