@@ -2,7 +2,6 @@ import Link from 'next/link';
 
 import type { Course } from '../types';
 import { Clock, UserRound } from 'lucide-react';
-import Image from 'next/image';
 
 interface CourseCardProps {
   course: Course;
@@ -20,17 +19,7 @@ export function CourseCard({ course }: CourseCardProps) {
     >
       {/* Thumbnail */}
       <div className="relative aspect-video bg-gray-50 overflow-hidden flex items-center justify-center">
-        {course.thumbnailUrl ? (
-          <Image
-            src={course.thumbnailUrl}
-            alt={course.title}
-            fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover"
-          />
-        ) : (
-          <Image src="/Logo.svg" alt="" width={60} height={60} />
-        )}
+        <span className="text-4xl">{course.thumbnailUrl || '📚'}</span>
         {/* Rating badge placeholder */}
         <div className="absolute top-2 right-2 bg-white backdrop-blur-sm px-3 py-1 rounded-full text-xs flex items-center gap-1">
           <span className="text-amber-400">★</span>
