@@ -13,7 +13,11 @@ export default function CheckoutCallbackPage() {
   const statusParam = searchParams.get('status');
 
   // Trigger backend fetch & sync by calling GET /payments/:id
-  const { data: payment, isLoading, error } = useQuery({
+  const {
+    data: payment,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['sync-payment', paymentId],
     queryFn: () => (paymentId ? paymentsApi.get(paymentId) : Promise.reject('No payment ID')),
     enabled: !!paymentId,
@@ -21,7 +25,8 @@ export default function CheckoutCallbackPage() {
     staleTime: 0,
   });
 
-  const isSuccess = payment?.status === 'paid' || payment?.status === 'captured' || statusParam === 'paid';
+  const isSuccess =
+    payment?.status === 'paid' || payment?.status === 'captured' || statusParam === 'paid';
   const displayStatus = payment?.status ?? statusParam;
 
   if (isLoading) {
@@ -38,15 +43,23 @@ export default function CheckoutCallbackPage() {
 
   if (error || !paymentId) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#090d16] text-white px-4" dir="rtl">
+      <div
+        className="flex min-h-screen items-center justify-center bg-[#090d16] text-white px-4"
+        dir="rtl"
+      >
         <div className="max-w-md w-full bg-[#111827] border border-zinc-800 rounded-2xl p-8 text-center shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-rose-500"></div>
           <XCircle className="w-16 h-16 text-rose-500 mx-auto mb-6" />
           <h2 className="text-2xl font-bold mb-3">خطأ في التحقق من الدفع</h2>
           <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
-            {error instanceof Error ? error.message : 'لم نتمكن من العثور على تفاصيل عملية الدفع الخاصة بك. يرجى التواصل مع الدعم الفني.'}
+            {error instanceof Error
+              ? error.message
+              : 'لم نتمكن من العثور على تفاصيل عملية الدفع الخاصة بك. يرجى التواصل مع الدعم الفني.'}
           </p>
-          <Link href="/courses" className="inline-flex items-center justify-center gap-2 bg-[#1f2937] hover:bg-[#374151] text-white font-semibold px-6 py-3 rounded-xl transition-all w-full">
+          <Link
+            href="/courses"
+            className="inline-flex items-center justify-center gap-2 bg-[#1f2937] hover:bg-[#374151] text-white font-semibold px-6 py-3 rounded-xl transition-all w-full"
+          >
             <span>تصفح الدورات التدريبية</span>
             <ArrowLeft className="w-4 h-4 rotate-180" />
           </Link>
@@ -56,7 +69,10 @@ export default function CheckoutCallbackPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#090d16] text-white flex items-center justify-center px-4 py-12 relative overflow-hidden" dir="rtl">
+    <main
+      className="min-h-screen bg-[#090d16] text-white flex items-center justify-center px-4 py-12 relative overflow-hidden"
+      dir="rtl"
+    >
       {/* Glow backgrounds */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
@@ -65,7 +81,7 @@ export default function CheckoutCallbackPage() {
           /* Premium Success Screen */
           <div className="bg-[#111827]/90 backdrop-blur-md border border-zinc-800 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-emerald-500"></div>
-            
+
             {/* Sparkles effect */}
             <div className="relative inline-block mb-6">
               <CheckCircle2 className="w-20 h-20 text-emerald-500 animate-bounce" />
@@ -73,7 +89,9 @@ export default function CheckoutCallbackPage() {
             </div>
 
             <h1 className="text-3xl font-extrabold text-white mb-2">تم الاشتراك بنجاح!</h1>
-            <p className="text-zinc-400 text-sm mb-6">أهلاً بك في الدورة التدريبية. تم تفعيل حسابك ويمكنك البدء الآن.</p>
+            <p className="text-zinc-400 text-sm mb-6">
+              أهلاً بك في الدورة التدريبية. تم تفعيل حسابك ويمكنك البدء الآن.
+            </p>
 
             {/* Receipt Summary Card */}
             {payment?.course && (
@@ -83,8 +101,12 @@ export default function CheckoutCallbackPage() {
                     <BookOpen className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white leading-snug line-clamp-1">{payment.course.title}</h3>
-                    <p className="text-xs text-zinc-500 mt-1">المعلم: {payment.course.teacher?.name}</p>
+                    <h3 className="font-bold text-white leading-snug line-clamp-1">
+                      {payment.course.title}
+                    </h3>
+                    <p className="text-xs text-zinc-500 mt-1">
+                      المعلم: {payment.course.teacher?.name}
+                    </p>
                   </div>
                 </div>
                 <div className="border-t border-zinc-900 pt-3 flex justify-between text-sm">
@@ -93,7 +115,9 @@ export default function CheckoutCallbackPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-zinc-400">المبلغ المدفوع</span>
-                  <span className="font-bold text-indigo-400">{(payment.amount / 100).toFixed(2)} ر.س</span>
+                  <span className="font-bold text-indigo-400">
+                    {(payment.amount / 100).toFixed(2)} ر.س
+                  </span>
                 </div>
               </div>
             )}
@@ -120,12 +144,13 @@ export default function CheckoutCallbackPage() {
           /* Premium Failure Screen */
           <div className="bg-[#111827]/90 backdrop-blur-md border border-zinc-800 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-rose-500"></div>
-            
+
             <XCircle className="w-20 h-20 text-rose-500 mx-auto mb-6" />
 
             <h1 className="text-3xl font-extrabold text-white mb-2">فشلت عملية الدفع</h1>
             <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
-              لم نتمكن من معالجة بطاقتك بنجاح. قد يكون ذلك بسبب عدم كفاية الرصيد أو قيود البنك على البطاقة.
+              لم نتمكن من معالجة بطاقتك بنجاح. قد يكون ذلك بسبب عدم كفاية الرصيد أو قيود البنك على
+              البطاقة.
             </p>
 
             <div className="bg-[#0b0f19] border border-zinc-900 rounded-2xl p-4 mb-8 text-sm flex justify-between items-center text-right">

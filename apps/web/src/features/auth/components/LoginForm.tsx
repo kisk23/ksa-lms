@@ -23,7 +23,6 @@ export function LoginForm() {
 
   const queryClient = useQueryClient();
 
-
   const {
     register,
     handleSubmit,
@@ -32,7 +31,6 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-
   const mutation = useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
@@ -40,7 +38,6 @@ export function LoginForm() {
       router.push(redirectPathForUser(data.user));
     },
     onError: (error: Error) => {
-
       toast.error(
         AUTH_ERROR_MESSAGES[error.message] ??
           error.message ??

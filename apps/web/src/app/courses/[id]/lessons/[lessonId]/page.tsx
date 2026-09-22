@@ -4,8 +4,8 @@ import { LessonPageClient } from '@/features/lessons';
 
 interface PageProps {
   params: {
-    id:        string;
-    lessonId:  string;
+    id: string;
+    lessonId: string;
   };
 }
 
@@ -17,10 +17,9 @@ interface PageProps {
  */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/courses/${params.id}`,
-      { next: { revalidate: 60 } },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses/${params.id}`, {
+      next: { revalidate: 60 },
+    });
     if (!res.ok) throw new Error('not found');
 
     const response = await res.json();
@@ -37,12 +36,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
 
     return {
-      title:       lesson ? `${lesson.title} | ${course.title} | سُلَّم` : 'درس | سُلَّم',
+      title: lesson ? `${lesson.title} | ${course.title} | سُلَّم` : 'درس | سُلَّم',
       description: `تعلّم ${lesson?.title ?? ''} ضمن دورة ${course.title}`,
     };
   } catch {
     return {
-      title:       'درس | سُلَّم',
+      title: 'درس | سُلَّم',
       description: 'استعرض محتوى الدرس على منصة سُلَّم التعليمية',
     };
   }
@@ -63,21 +62,19 @@ export default async function LessonPage({ params }: PageProps) {
 
   // Server-side fetch — no auth token needed for public course metadata
   let chapters: any[] = [];
-  let courseTitle  = '';
-  let teacherName  = '';
+  let courseTitle = '';
+  let teacherName = '';
   let chapterId = '';
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}`,
-      { next: { revalidate: 60 } },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}`, {
+      next: { revalidate: 60 },
+    });
     if (res.ok) {
-      
       const response = await res.json();
       const course = response.data;
-      chapters    = course.chapters ?? [];
-      courseTitle = course.title    ?? '';
+      chapters = course.chapters ?? [];
+      courseTitle = course.title ?? '';
       teacherName = course.teacher?.name ?? '';
 
       // Find the chapterId for the current lessonId
@@ -96,9 +93,7 @@ export default async function LessonPage({ params }: PageProps) {
   }
 
   return (
-    <main
-      className="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-10 pt-[96px] pb-10"
-    >
+    <main className="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-10 pt-[96px] pb-10">
       <LessonPageClient
         courseId={courseId}
         chapterId={chapterId}

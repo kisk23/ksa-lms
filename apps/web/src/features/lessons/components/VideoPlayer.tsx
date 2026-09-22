@@ -20,7 +20,7 @@ export function VideoPlayer({ youtubeVideoId, title }: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
 
   const thumbnail = `https://img.youtube.com/vi/${youtubeVideoId}/maxresdefault.jpg`;
-  const embedSrc  = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&rel=0&modestbranding=1`;
+  const embedSrc = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&rel=0&modestbranding=1`;
 
   if (playing) {
     return (
@@ -56,10 +56,7 @@ export function VideoPlayer({ youtubeVideoId, title }: VideoPlayerProps) {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
         <div className="w-20 h-20 bg-primary/90 hover:bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
-          <Play
-            size={36}
-            className="text-white fill-white translate-x-0.5"
-          />
+          <Play size={36} className="text-white fill-white translate-x-0.5" />
         </div>
       </div>
     </div>

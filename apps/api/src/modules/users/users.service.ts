@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto, UpdateUserDto } from './dto';
@@ -22,8 +22,16 @@ export class UsersService {
     });
   }
 
-  async findAll(params: { role?: UserRole; page: number; limit: number; search?: string }) {
-    const { role, page, limit, search } = params;
+  async findAll(params: {
+    role?: UserRole;
+    page: number;
+    limit: number;
+    search?: string;
+    status?: string;
+  }) {
+    const { role, search, status } = params;
+    const page = Number(params.page);
+    const limit = Number(params.limit);
     const skip = (page - 1) * limit;
 
     const where: Prisma.UserWhereInput = {
@@ -37,6 +45,9 @@ export class UsersService {
           { guardianIdentity: { contains: search, mode: 'insensitive' as const } },
         ],
       }),
+      ...(status === 'blocked' && { isActive: false }),
+      ...(status === 'pending' && { isActive: true, isVerified: false }),
+      ...(status === 'active' && { isActive: true, isVerified: true }),
     };
 
     const [data, total] = await Promise.all([
@@ -100,6 +111,50 @@ export class UsersService {
     return this.prisma.user.update({
       where: { id },
       data: { isActive: false },
+    });
+  }
+
+  async lockTeacher(id: string, reason?: string) {
+    const user = await this.findOne(id);
+    if (user.role !== UserRole.TEACHER) {
+      throw new BadRequestException('User is not a teacher');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isLocked: true, lockReason: reason, lockedAt: new Date() },
+    });
+  }
+
+  async unlockTeacher(id: string) {
+    const user = await this.findOne(id);
+    if (user.role !== UserRole.TEACHER) {
+      throw new BadRequestException('User is not a teacher');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isLocked: false, lockReason: null, lockedAt: null },
+    });
+  }
+
+  async banTeacher(id: string, reason?: string, expiresAt?: Date) {
+    const user = await this.findOne(id);
+    if (user.role !== UserRole.TEACHER) {
+      throw new BadRequestException('User is not a teacher');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isBanned: true, banReason: reason, bannedAt: new Date(), banExpiresAt: expiresAt },
+    });
+  }
+
+  async unbanTeacher(id: string) {
+    const user = await this.findOne(id);
+    if (user.role !== UserRole.TEACHER) {
+      throw new BadRequestException('User is not a teacher');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isBanned: false, banReason: null, bannedAt: null, banExpiresAt: null },
     });
   }
 

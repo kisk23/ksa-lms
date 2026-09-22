@@ -1,69 +1,75 @@
 'use client';
 
-import {
-  Calendar,
-  ChevronDown,
-  Eye,
-  EyeOff,
-  GraduationCap,
-  IdCard,
-  Lock,
-  Mail,
-  MapPin,
-  Phone,
-  QrCode,
-  School,
-  User,
-  X,
-  Save,
-  Check,
-  UserPlus,
-} from 'lucide-react';
+import { apiClient } from '@shared/lib/api-client';
+import { Eye, EyeOff, Lock, X, Save } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useState, useRef } from 'react';
 
+import { AddUserSuccess } from './AddUserSuccess';
 import { FormField } from './FormField';
-
-interface AddUserModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAddUser?: (user: {
-    id: string;
-    name: string;
-    email: string;
-    role: 'student' | 'teacher' | 'parent' | 'admin';
-    registeredAt: string;
-    status: 'active' | 'pending' | 'blocked';
-  }) => void;
-}
+import { StaffFormFields } from './StaffFormFields';
+import { StudentFormFields } from './StudentFormFields';
+import {
+  UserRole,
+  type CreateUserResponse,
+  type AddUserModalProps,
+  type CreatedUser,
+  type UserFormProps,
+} from '../types';
 
 export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Submit loading and error states
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Input fields state
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [identity, setIdentity] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isFormValid, setIsFormValid] = useState(false);
+
+  // Student Specific
+  const [guardianName, setGuardianName] = useState('');
+  const [guardianIdentity, setGuardianIdentity] = useState('');
+  const [guardianPhone, setGuardianPhone] = useState('');
+  const [guardianRelationship, setGuardianRelationship] = useState('FATHER');
+  const [hasParentInfo, setHasParentInfo] = useState(true);
+
+  // Dirty state for touch interaction error display
+  const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
+
   const [isSuccess, setIsSuccess] = useState(false);
-  const [createdStudent, setCreatedStudent] = useState<{
-    name: string;
-    email: string;
-    academicId: string;
-  } | null>(null);
-  const [accountType, setAccountType] = useState<'student' | 'teacher' | 'parent' | 'admin'>(
-    'student',
-  );
+  const [createdUser, setCreatedUser] = useState<CreatedUser | null>(null);
+
+  const [accountType, setAccountType] = useState<UserRole>(UserRole.STUDENT);
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const roleInfo = {
-    student: {
+  const roleInfo: Record<
+    UserRole.STUDENT | UserRole.TEACHER | UserRole.PARENT | UserRole.ASSISTANT_ADMIN,
+    {
+      addedMsg: string;
+      nameLabel: string;
+      idLabel: string;
+      viewMsg: string;
+      addAnotherMsg: string;
+      saveBtnMsg: string;
+    }
+  > = {
+    [UserRole.STUDENT]: {
       addedMsg: 'تمت إضافة الطالب بنجاح',
       nameLabel: 'اسم الطالب',
-      idLabel: 'الرقم الأكاديمي',
+      idLabel: 'الرقم الأكاديمي للطلاب',
       viewMsg: 'عرض ملف الطالب',
       addAnotherMsg: 'إضافة طالب آخر',
       saveBtnMsg: 'حفظ وإضافة الطالب',
     },
-    teacher: {
+    [UserRole.TEACHER]: {
       addedMsg: 'تمت إضافة المعلم بنجاح',
       nameLabel: 'اسم المعلم',
       idLabel: 'رقم المعلم الوظيفي',
@@ -71,7 +77,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       addAnotherMsg: 'إضافة معلم آخر',
       saveBtnMsg: 'حفظ وإضافة المعلم',
     },
-    parent: {
+    [UserRole.PARENT]: {
       addedMsg: 'تمت إضافة ولي الأمر بنجاح',
       nameLabel: 'اسم ولي الأمر',
       idLabel: 'رقم ولي الأمر',
@@ -79,183 +85,283 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       addAnotherMsg: 'إضافة ولي أمر آخر',
       saveBtnMsg: 'حفظ وإضافة ولي الأمر',
     },
-    admin: {
-      addedMsg: 'تمت إضافة المشرف بنجاح',
-      nameLabel: 'اسم المشرف',
-      idLabel: 'رقم المشرف الوظيفي',
-      viewMsg: 'عرض ملف المشرف',
-      addAnotherMsg: 'إضافة مشرف آخر',
-      saveBtnMsg: 'حفظ وإضافة المشرف',
+    [UserRole.ASSISTANT_ADMIN]: {
+      addedMsg: 'تمت إضافة المساعد بنجاح',
+      nameLabel: 'اسم المساعد',
+      idLabel: 'رقم المساعد الوظيفي',
+      viewMsg: 'عرض ملف المساعد',
+      addAnotherMsg: 'إضافة مساعد آخر',
+      saveBtnMsg: 'حفظ وإضافة المساعد',
     },
   };
 
-  const handleNumericInput = (e: React.FormEvent<HTMLInputElement>) => {
-    e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
+  const activeRoleInfo = roleInfo[accountType as keyof typeof roleInfo];
+
+  // Validators
+  const isEmailValid = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  const isPhoneValid = (p: string) => /^(05|5)\d{8}$/.test(p.trim());
+  const isIdentityValid = (id: string) => id.trim().length >= 3 && id.trim().length <= 20;
+
+  const passwordChecks = [
+    { label: '8 أحرف على الأقل', met: password.length >= 8 },
+    { label: 'حرف كبير واحد على الأقل (A-Z)', met: /[A-Z]/.test(password) },
+    { label: 'حرف صغير واحد على الأقل (a-z)', met: /[a-z]/.test(password) },
+    { label: 'رقم أو رمز خاص واحد على الأقل (0-9 أو @#$%)', met: /[\d\W]/.test(password) },
+  ];
+  const isPasswordValid = passwordChecks.every((c) => c.met);
+
+  const nameParts = name.trim().split(/\s+/).filter(Boolean);
+  const isNameValid =
+    accountType === UserRole.STUDENT ? nameParts.length >= 4 : name.trim().length >= 3;
+
+  const isFormValid =
+    isNameValid &&
+    isEmailValid(email) &&
+    isIdentityValid(identity) &&
+    isPhoneValid(phone) &&
+    isPasswordValid &&
+    password === confirmPassword &&
+    (accountType !== UserRole.STUDENT ||
+      !hasParentInfo ||
+      (isIdentityValid(guardianIdentity) &&
+        isPhoneValid(guardianPhone) &&
+        guardianName.trim().length >= 3));
+
+  const handleBlur = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const fullNameValue = (formData.get('fullName') as string) || 'أحمد بن محمد القحطاني';
-    const emailValue = (formData.get('email') as string) || 'a.alqahatani@sullam.edu.sa';
+    if (!isFormValid) return;
 
-    const prefixMap = {
-      student: 'STU',
-      teacher: 'TCH',
-      parent: 'PRN',
-      admin: 'ADM',
+    // Helper to format phone to +9665xxxxxxxx format
+    const formatSaudiPhone = (p: string) => {
+      const clean = p.trim();
+      if (clean.startsWith('05')) {
+        return `+966${clean.slice(1)}`;
+      }
+      if (clean.startsWith('5')) {
+        return `+966${clean}`;
+      }
+      return clean;
     };
-    const prefix = prefixMap[accountType];
-    const randomId = String(Math.floor(1000 + Math.random() * 9000));
-    const academicId = `${prefix}-2024-${randomId}#`;
 
-    setCreatedStudent({
-      name: fullNameValue,
-      email: emailValue,
-      academicId,
-    });
+    const formattedPhone = formatSaudiPhone(phone);
+    const formattedGuardianPhone =
+      accountType === UserRole.STUDENT && hasParentInfo
+        ? formatSaudiPhone(guardianPhone)
+        : undefined;
 
-    if (onAddUser) {
-      onAddUser({
-        id: String(Date.now()),
-        name: fullNameValue,
-        email: emailValue,
-        role: accountType,
-        registeredAt: 'اليوم',
-        status: 'active',
+    const payload = {
+      name,
+      email,
+      identity,
+      phone: formattedPhone,
+      password,
+      role: accountType,
+      ...(accountType === UserRole.STUDENT &&
+        hasParentInfo && {
+          guardianIdentity,
+          guardianPhone: formattedGuardianPhone,
+        }),
+    };
+
+    try {
+      setIsSubmitting(true);
+      setSubmitError(null);
+
+      // Perform real NestJS API post call
+      let response;
+
+      if (accountType === UserRole.STUDENT && hasParentInfo) {
+        // Single atomic transaction on the backend via /auth/register
+        const registerPayload = {
+          name,
+          email,
+          phone: formattedPhone,
+          identity,
+          password,
+          guardian: {
+            name: guardianName.trim(),
+            email: `parent_${guardianIdentity}@sulam.sa`,
+            phone: formattedGuardianPhone,
+            identity: guardianIdentity,
+            // Password = guardian's national ID (الهوية) per owner requirement
+            password: guardianIdentity,
+            relationship: guardianRelationship,
+          },
+        };
+
+        const result = await apiClient.post<{ message: string; user: CreateUserResponse }>(
+          '/auth/register',
+          registerPayload,
+        );
+        response = result.user; // Extract the user from the register response
+      } else {
+        // Fallback for other roles or student without parent info
+        response = await apiClient.post<CreateUserResponse>('/admin/users', payload);
+      }
+
+      setCreatedUser({
+        name: response.name,
+        email: response.email,
+        loginId: response.identity,
+        roleLabel: activeRoleInfo.nameLabel,
       });
-    }
 
-    setIsSuccess(true);
+      if (onAddUser) {
+        onAddUser({
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          role: accountType,
+          registeredAt: 'اليوم',
+          status: 'active',
+        });
+      }
+
+      setIsSuccess(true);
+    } catch (err) {
+      const error = err as Error;
+      setSubmitError(error.message || 'حدث خطأ أثناء إنشاء الحساب، يرجى المحاولة مرة أخرى.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const resetForm = () => {
+    setName('');
+    setEmail('');
+    setIdentity('');
+    setPhone('');
+    setPassword('');
+    setConfirmPassword('');
+    setGuardianName('');
+    setGuardianIdentity('');
+    setGuardianPhone('');
+    setGuardianRelationship('FATHER');
+    setHasParentInfo(true);
+    setTouched({});
+    setIsSuccess(false);
+    setCreatedUser(null);
+    setSubmitError(null);
   };
 
   if (!isOpen) return null;
 
   const inputStyles =
-    'w-full pl-4 pr-10 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface placeholder:text-outline/60';
-  const selectStyles =
-    'w-full pl-4 pr-10 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface appearance-none cursor-pointer';
+    'w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface placeholder:text-outline/60';
 
-  if (isSuccess && createdStudent) {
-    const currentRoleInfo = roleInfo[accountType];
+  if (isSuccess && createdUser) {
     return (
-      <div className="fixed inset-0 bg-on-background/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-        <div
-          className="bg-surface rounded-2xl shadow-2xl w-full max-w-[480px] border border-outline-variant overflow-hidden border-t-4 border-primary-container p-8 flex flex-col items-center"
-          dir="rtl"
-        >
-          <div className="w-16 h-16 rounded-full bg-primary-container/10 text-primary-container flex items-center justify-center mb-6 shadow-md">
-            <Check size={28} className="stroke-[3.5]" />
-          </div>
-
-          <h2 className="font-h2-ar text-xl font-bold text-on-surface mb-2 text-center">
-            {currentRoleInfo.addedMsg}
-          </h2>
-          <p className="font-body-md-ar text-sm text-on-surface-variant text-center mb-6 leading-relaxed px-4">
-            تم إنشاء الحساب وإرسال بيانات الدخول إلى البريد الإلكتروني الخاص به.
-          </p>
-
-          <div className="w-full bg-surface-container-low rounded-2xl p-5 space-y-4 mb-8 border border-outline-variant/50">
-            <div className="flex justify-between items-center text-sm">
-              <span className="font-caption-ar text-on-surface-variant flex items-center gap-2">
-                <User size={18} className="text-primary-container" />
-                {currentRoleInfo.nameLabel}
-              </span>
-              <span className="font-body-md-ar font-medium text-on-surface">
-                {createdStudent.name}
-              </span>
-            </div>
-
-            <div className="border-b border-outline-variant/30" />
-
-            <div className="flex justify-between items-center text-sm">
-              <span className="font-caption-ar text-on-surface-variant flex items-center gap-2">
-                <Mail size={18} className="text-primary-container" />
-                البريد الإلكتروني
-              </span>
-              <span className="font-body-md-ar font-medium text-on-surface text-left" dir="ltr">
-                {createdStudent.email}
-              </span>
-            </div>
-
-            <div className="border-b border-outline-variant/30" />
-
-            <div className="flex justify-between items-center text-sm">
-              <span className="font-caption-ar text-on-surface-variant flex items-center gap-2">
-                <IdCard size={18} className="text-primary-container" />
-                {currentRoleInfo.idLabel}
-              </span>
-              <span
-                className="font-body-md-ar font-bold bg-primary-container/10 text-primary-container px-4 py-1.5 rounded-full text-xs text-left"
-                dir="ltr"
-              >
-                {createdStudent.academicId}
-              </span>
-            </div>
-          </div>
-
-          <div className="w-full space-y-4">
-            <button
-              type="button"
-              className="w-full py-3.5 bg-transparent border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-body-md-ar font-semibold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5"
-            >
-              <User size={20} className="stroke-[2.5]" />
-              {currentRoleInfo.viewMsg}
-            </button>
-
-            <div className="flex gap-4 w-full">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSuccess(false);
-                  setCreatedStudent(null);
-                  setPassword('');
-                  setConfirmPassword('');
-                  formRef.current?.reset();
-                  setIsFormValid(false);
-                }}
-                className="flex-1 py-3 bg-transparent border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-sm font-semibold transition-all flex items-center justify-center gap-2"
-              >
-                <UserPlus size={18} />
-                {currentRoleInfo.addAnotherMsg}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSuccess(false);
-                  setCreatedStudent(null);
-                  setPassword('');
-                  setConfirmPassword('');
-                  formRef.current?.reset();
-                  setIsFormValid(false);
-                  onClose();
-                }}
-                className="flex-1 py-3 bg-transparent border border-outline-variant hover:bg-on-surface/5 text-on-surface rounded-xl font-body-md-ar text-[#ef4444] hover:text-[#ef4444]/80 hover:bg-[#ef4444]/5 font-semibold transition-all flex items-center justify-center gap-2"
-              >
-                <X size={18} />
-                إغلاق
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AddUserSuccess
+        createdUser={createdUser}
+        addedMsg={activeRoleInfo.addedMsg}
+        nameLabel={activeRoleInfo.nameLabel}
+        idLabel={activeRoleInfo.idLabel}
+        viewMsg={activeRoleInfo.viewMsg}
+        addAnotherMsg={activeRoleInfo.addAnotherMsg}
+        onResetForm={resetForm}
+        onClose={onClose}
+      />
     );
   }
 
+  const config: Record<
+    UserRole.STUDENT | UserRole.TEACHER | UserRole.ASSISTANT_ADMIN,
+    {
+      title: string;
+      btnSave: string;
+    }
+  > = {
+    [UserRole.STUDENT]: {
+      title: 'إنشاء حساب طالب جديد',
+      btnSave: 'حفظ وإضافة الطالب',
+    },
+    [UserRole.TEACHER]: {
+      title: 'إنشاء حساب معلم جديد',
+      btnSave: 'حفظ وإضافة المعلم',
+    },
+    [UserRole.ASSISTANT_ADMIN]: {
+      title: 'إنشاء حساب مشرف جديد',
+      btnSave: 'حفظ وإضافة المشرف',
+    },
+  };
+
+  const activeConfig = config[accountType as keyof typeof config];
+
+  const formProps: UserFormProps = {
+    data: {
+      name,
+      email,
+      phone,
+      identity,
+      guardianIdentity,
+      guardianPhone,
+      guardianName,
+      guardianRelationship,
+    },
+    onChange: (field, value) => {
+      switch (field) {
+        case 'name':
+          setName(value);
+          break;
+        case 'email':
+          setEmail(value);
+          break;
+        case 'phone':
+          setPhone(value);
+          break;
+        case 'identity':
+          setIdentity(value);
+          break;
+        case 'guardianIdentity':
+          setGuardianIdentity(value);
+          break;
+        case 'guardianPhone':
+          setGuardianPhone(value);
+          break;
+        case 'guardianName':
+          setGuardianName(value);
+          break;
+        case 'guardianRelationship':
+          setGuardianRelationship(value);
+          break;
+      }
+    },
+    touched,
+    onBlur: handleBlur,
+    inputStyles,
+    isNameValid,
+    isEmailValid,
+    isPhoneValid,
+    isIdentityValid,
+    handlePhoneChange: (e, field) => {
+      const val = e.target.value.replace(/[^0-9]/g, '');
+      if (field === 'phone') setPhone(val);
+      else if (field === 'guardianPhone') setGuardianPhone(val);
+    },
+    hasParentInfo,
+    onToggleParentInfo: () => setHasParentInfo(!hasParentInfo),
+  };
+
   return (
-    <div className="fixed inset-0 bg-on-background/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div
-        className="bg-surface rounded-xl shadow-2xl w-full max-w-4xl max-h-[921px] flex flex-col relative border border-outline-variant overflow-hidden"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-on-background/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="bg-surface rounded-xl shadow-2xl w-full max-w-4xl h-[92vh] max-h-[92vh] flex flex-col relative border border-outline-variant overflow-hidden"
         dir="rtl"
       >
+        {/* Header */}
         <div className="px-6 py-4 border-b border-outline-variant flex items-center justify-between bg-surface-container-lowest sticky top-0 z-10">
-          <h2 className="font-h2-ar text-h2-ar text-on-surface">
-            {accountType === 'student' && 'إنشاء حساب طالب جديد'}
-            {accountType === 'teacher' && 'إنشاء حساب معلم جديد'}
-            {accountType === 'parent' && 'إنشاء حساب ولي أمر جديد'}
-            {accountType === 'admin' && 'إنشاء حساب مشرف جديد'}
-          </h2>
+          <h2 className="font-h2-ar text-h2-ar text-on-surface">{activeConfig.title}</h2>
           <button
             type="button"
             onClick={onClose}
@@ -265,504 +371,196 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
           </button>
         </div>
 
+        {/* Form */}
         <form
           ref={formRef}
-          onInput={(e) => setIsFormValid(e.currentTarget.checkValidity())}
-          onChange={(e) => setIsFormValid(e.currentTarget.checkValidity())}
           onSubmit={handleSubmit}
           className="flex-1 flex flex-col overflow-hidden"
         >
-          <div className="flex-1 overflow-y-auto p-6 space-y-8 bg-surface">
-            {/* Account Type Selector */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-8 bg-surface custom-scrollbar">
+            <style
+              dangerouslySetInnerHTML={{
+                __html: `
+              .custom-scrollbar::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+              }
+              .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+              }
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #2446b8;
+                border-radius: 9999px;
+              }
+              .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background-color: #1a3593;
+              }
+            `,
+              }}
+            />
+
+            {/* Account Type Tab Selector */}
             <div className="space-y-3">
-              <label className="block font-caption-ar text-caption-ar text-on-surface-variant font-medium">
-                نوع الحساب
-              </label>
               <div
-                className="flex w-full p-1 bg-surface-container-low rounded-xl gap-1 border border-outline-variant/30"
+                className="flex w-full p-1 bg-surface-container-low rounded-xl gap-1 border border-outline-variant/30 relative"
                 dir="rtl"
               >
-                {(['student', 'teacher', 'parent', 'admin'] as const).map((type) => (
+                {[UserRole.STUDENT, UserRole.TEACHER, UserRole.ASSISTANT_ADMIN].map((type) => (
                   <button
                     key={type}
                     type="button"
-                    onClick={() => setAccountType(type)}
-                    className={`flex-1 py-2.5 text-center rounded-lg font-body-md-ar text-body-md-ar font-semibold transition-all ${
+                    onClick={() => {
+                      setAccountType(type);
+                      setTouched({});
+                    }}
+                    className={`relative flex-1 py-2.5 text-center rounded-lg font-body-md-ar text-body-md-ar font-semibold transition-colors duration-300 outline-none ${
                       accountType === type
-                        ? 'bg-primary-container text-on-primary shadow-sm'
-                        : 'text-on-surface-variant hover:text-on-surface hover:bg-on-surface/5'
+                        ? 'text-on-primary'
+                        : 'text-on-surface-variant hover:text-on-surface'
                     }`}
                   >
-                    {type === 'student' && 'طالب'}
-                    {type === 'teacher' && 'معلم'}
-                    {type === 'parent' && 'ولي أمر'}
-                    {type === 'admin' && 'مشرف'}
+                    {accountType === type && (
+                      <motion.div
+                        layoutId="activeTabBackground"
+                        className="absolute inset-0 bg-primary-container rounded-lg shadow-sm z-0 border border-black/10"
+                        transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                      />
+                    )}
+                    <span className="relative z-10">
+                      {type === UserRole.STUDENT && 'طالب'}
+                      {type === UserRole.TEACHER && 'معلم'}
+                      {type === UserRole.ASSISTANT_ADMIN && 'مشرف'}
+                    </span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Section 1: Personal & Educational/Professional */}
-            <section>
-              <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
-                {accountType === 'student' && 'البيانات الشخصية والتعليمية'}
-                {accountType === 'teacher' && 'البيانات الشخصية والمهنية'}
-                {accountType === 'parent' && 'البيانات الشخصية والاتصال'}
-                {accountType === 'admin' && 'البيانات الشخصية للمشرف'}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  label={
-                    accountType === 'student'
-                      ? 'الاسم الثلاثي للطالب'
-                      : accountType === 'teacher'
-                        ? 'الاسم الثلاثي للمعلم'
-                        : accountType === 'parent'
-                          ? 'الاسم الثلاثي لولي الأمر'
-                          : 'الاسم الثلاثي للمشرف'
-                  }
-                  icon={User}
-                >
-                  <input
-                    required
-                    name="fullName"
-                    className={inputStyles}
-                    placeholder={
-                      accountType === 'student'
-                        ? 'الاسم الثلاثي للطالب'
-                        : accountType === 'teacher'
-                          ? 'الاسم الثلاثي للمعلم'
-                          : accountType === 'parent'
-                            ? 'الاسم الثلاثي لولي الأمر'
-                            : 'الاسم الثلاثي للمشرف'
-                    }
-                    type="text"
-                  />
-                </FormField>
+            {/* Sub-components for Form Fields based on Account Type */}
+            {accountType === UserRole.STUDENT && <StudentFormFields form={formProps} />}
 
-                {(accountType === 'student' || accountType === 'teacher') && (
-                  <FormField label="اسم المدرسة" icon={School}>
-                    <input required className={inputStyles} placeholder="اسم المدرسة" type="text" />
-                  </FormField>
-                )}
-
-                {accountType === 'student' && (
-                  <FormField label="الصف الدراسي" icon={GraduationCap}>
-                    <select required defaultValue="" className={selectStyles}>
-                      <option disabled value="">
-                        الصف الدراسي
-                      </option>
-                      <option value="grade-10">الصف الأول الثانوي</option>
-                      <option value="grade-11">الصف الثاني الثانوي</option>
-                      <option value="grade-12">الصف الثالث الثانوي</option>
-                    </select>
-                    <ChevronDown
-                      size={20}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none"
-                    />
-                  </FormField>
-                )}
-
-                {accountType === 'student' && (
-                  <FormField label="السنة الدراسية" icon={Calendar}>
-                    <select required defaultValue="" className={selectStyles}>
-                      <option disabled value="">
-                        السنة الدراسية
-                      </option>
-                      <option value="2024-2025">2024-2025</option>
-                      <option value="2025-2026">2025-2026</option>
-                    </select>
-                    <ChevronDown
-                      size={20}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none"
-                    />
-                  </FormField>
-                )}
-
-                <FormField
-                  label={
-                    accountType === 'student'
-                      ? 'البريد الإلكتروني للطالب'
-                      : accountType === 'teacher'
-                        ? 'البريد الإلكتروني للمعلم'
-                        : accountType === 'parent'
-                          ? 'البريد الإلكتروني لولي الأمر'
-                          : 'البريد الإلكتروني للمشرف'
-                  }
-                  icon={Mail}
-                >
-                  <input
-                    required
-                    name="email"
-                    className={`${inputStyles} text-left`}
-                    dir="ltr"
-                    placeholder={
-                      accountType === 'student'
-                        ? 'student@example.com'
-                        : accountType === 'teacher'
-                          ? 'teacher@example.com'
-                          : accountType === 'parent'
-                            ? 'parent@example.com'
-                            : 'admin@example.com'
-                    }
-                    type="email"
-                  />
-                </FormField>
-
-                <FormField
-                  label={
-                    accountType === 'student'
-                      ? 'رقم هاتف الطالب'
-                      : accountType === 'teacher'
-                        ? 'رقم هاتف المعلم'
-                        : accountType === 'parent'
-                          ? 'رقم هاتف ولي الأمر'
-                          : 'رقم هاتف المشرف'
-                  }
-                >
-                  <div className="flex gap-2" dir="ltr">
-                    <div className="relative w-28 shrink-0">
-                      <select required className={`${selectStyles} pl-4 pr-8`} dir="ltr">
-                        <option>🇦🇪 +971</option>
-                      </select>
-                      <ChevronDown
-                        size={16}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none"
-                      />
-                    </div>
-                    <div className="relative flex-1" dir="rtl">
-                      <Phone
-                        size={20}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-outline z-10 pointer-events-none"
-                      />
-                      <input
-                        required
-                        onInput={handleNumericInput}
-                        className={`${inputStyles} text-left`}
-                        dir="ltr"
-                        placeholder="5xxxxxxxx"
-                        type="tel"
-                      />
-                    </div>
-                  </div>
-                </FormField>
-
-                {accountType !== 'parent' && (
-                  <FormField
-                    label={
-                      accountType === 'student'
-                        ? 'كود الطالب'
-                        : accountType === 'teacher'
-                          ? 'كود المعلم / الرقم الوظيفي'
-                          : 'رقم المشرف الوظيفي'
-                    }
-                    icon={QrCode}
-                  >
-                    <input
-                      required
-                      className={inputStyles}
-                      placeholder={
-                        accountType === 'student'
-                          ? 'كود الطالب'
-                          : accountType === 'teacher'
-                            ? 'كود المعلم'
-                            : 'رقم المشرف الوظيفي'
-                      }
-                      type="text"
-                    />
-                  </FormField>
-                )}
-
-                <FormField label="الدولة" icon={MapPin}>
-                  <select required defaultValue="" className={selectStyles}>
-                    <option disabled value="">
-                      الدولة
-                    </option>
-                    <option value="saudi-arabia">المملكة العربية السعودية</option>
-                  </select>
-                  <ChevronDown
-                    size={20}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none"
-                  />
-                </FormField>
-              </div>
-            </section>
-
-            {/* Section 2: Verification & Linking Data */}
-
-            {/* Student Specific Section 2 */}
-            {accountType === 'student' && (
-              <section>
-                <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
-                  بيانات ولي الأمر والتحقق
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField label="اسم ولي الأمر" icon={User}>
-                    <input
-                      required
-                      className={inputStyles}
-                      placeholder="اسم ولي الأمر"
-                      type="text"
-                    />
-                  </FormField>
-
-                  <FormField label="رقم هاتف ولي الأمر">
-                    <div className="flex gap-2" dir="ltr">
-                      <div className="relative w-28 shrink-0">
-                        <select required className={`${selectStyles} pl-4 pr-8`} dir="ltr">
-                          <option>🇦🇪 +971</option>
-                        </select>
-                        <ChevronDown
-                          size={16}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none"
-                        />
-                      </div>
-                      <div className="relative flex-1" dir="rtl">
-                        <Phone
-                          size={20}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-outline z-10 pointer-events-none"
-                        />
-                        <input
-                          required
-                          onInput={handleNumericInput}
-                          className={`${inputStyles} text-left`}
-                          dir="ltr"
-                          placeholder="5xxxxxxxx"
-                          type="tel"
-                        />
-                      </div>
-                    </div>
-                  </FormField>
-
-                  <FormField label="رقم هوية الطالب" icon={IdCard}>
-                    <input
-                      required
-                      onInput={handleNumericInput}
-                      className={`${inputStyles} text-left`}
-                      dir="ltr"
-                      placeholder="رقم هوية الطالب"
-                      type="text"
-                    />
-                  </FormField>
-
-                  <FormField label="رقم هوية ولي الأمر" icon={IdCard}>
-                    <input
-                      required
-                      onInput={handleNumericInput}
-                      className={`${inputStyles} text-left`}
-                      dir="ltr"
-                      placeholder="رقم هوية ولي الأمر"
-                      type="text"
-                    />
-                  </FormField>
-                </div>
-              </section>
-            )}
-
-            {/* Teacher Specific Section 2 */}
-            {accountType === 'teacher' && (
-              <section>
-                <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
-                  التحقق والبيانات المهنية
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField label="رقم الهوية الوطنية / الإقامة للمعلم" icon={IdCard}>
-                    <input
-                      required
-                      onInput={handleNumericInput}
-                      className={`${inputStyles} text-left`}
-                      dir="ltr"
-                      placeholder="رقم الهوية الوطنية"
-                      type="text"
-                    />
-                  </FormField>
-
-                  <FormField label="التخصص الدراسي / المادة" icon={GraduationCap}>
-                    <input
-                      required
-                      className={inputStyles}
-                      placeholder="مثال: الرياضيات، الفيزياء، اللغة العربية"
-                      type="text"
-                    />
-                  </FormField>
-                </div>
-              </section>
-            )}
-
-            {/* Parent Specific Section 2 */}
-            {accountType === 'parent' && (
-              <section>
-                <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
-                  بيانات الربط والتحقق لولي الأمر
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField label="رقم الهوية الوطنية لولي الأمر" icon={IdCard}>
-                    <input
-                      required
-                      onInput={handleNumericInput}
-                      className={`${inputStyles} text-left`}
-                      dir="ltr"
-                      placeholder="رقم الهوية الوطنية"
-                      type="text"
-                    />
-                  </FormField>
-
-                  <FormField label="كود الطالب (الابن / الابنة)" icon={QrCode}>
-                    <input
-                      required
-                      className={inputStyles}
-                      placeholder="كود الطالب للربط"
-                      type="text"
-                    />
-                  </FormField>
-
-                  <FormField label="اسم الابن / الابنة" icon={User}>
-                    <input
-                      required
-                      className={inputStyles}
-                      placeholder="الاسم الثلاثي للابن"
-                      type="text"
-                    />
-                  </FormField>
-
-                  <FormField label="صلة القرابة">
-                    <select required defaultValue="" className={selectStyles}>
-                      <option disabled value="">
-                        صلة القرابة
-                      </option>
-                      <option value="father">أب</option>
-                      <option value="mother">أم</option>
-                      <option value="guardian">وصي / آخر</option>
-                    </select>
-                    <ChevronDown
-                      size={20}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none"
-                    />
-                  </FormField>
-                </div>
-              </section>
-            )}
-
-            {/* Admin Specific Section 2 */}
-            {accountType === 'admin' && (
-              <section>
-                <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
-                  التحقق وبيانات الصلاحيات
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField label="رقم الهوية الوطنية للمشرف" icon={IdCard}>
-                    <input
-                      required
-                      onInput={handleNumericInput}
-                      className={`${inputStyles} text-left`}
-                      dir="ltr"
-                      placeholder="رقم الهوية الوطنية"
-                      type="text"
-                    />
-                  </FormField>
-
-                  <FormField label="القسم / إدارة الصلاحيات">
-                    <select required defaultValue="" className={selectStyles}>
-                      <option disabled value="">
-                        إدارة الصلاحيات
-                      </option>
-                      <option value="general">إشراف عام (Full Admin)</option>
-                      <option value="academic">إشراف أكاديمي (Academic Admin)</option>
-                      <option value="support">الدعم الفني والتقني (Support Admin)</option>
-                    </select>
-                    <ChevronDown
-                      size={20}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none"
-                    />
-                  </FormField>
-                </div>
-              </section>
+            {(accountType === UserRole.TEACHER || accountType === UserRole.ASSISTANT_ADMIN) && (
+              <StaffFormFields role={accountType} form={formProps} />
             )}
 
             {/* Section 3: Password & Security */}
-            <section>
+            <section className="space-y-6">
               <h3 className="font-body-lg-ar text-body-lg-ar text-primary-container mb-4 pb-2 border-b border-surface-variant">
                 كلمة المرور والأمان
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField label="كلمة المرور" icon={Lock}>
-                  <input
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className={`${inputStyles} pl-10 text-left`}
-                    dir="ltr"
-                    placeholder="كلمة المرور"
-                    type={showPassword ? 'text' : 'password'}
-                  />
-                  <button
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface-variant z-10"
-                    type="button"
-                  >
-                    {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-                  </button>
+                {/* Password Input */}
+                <FormField
+                  label="كلمة المرور"
+                  error={
+                    touched.password && !isPasswordValid
+                      ? 'يجب أن تحتوي كلمة المرور على 8 أحرف تشمل حرفاً كبيراً، حرفاً صغيراً، ورقم أو رمز خاص'
+                      : undefined
+                  }
+                >
+                  <div className="relative w-full">
+                    <Lock
+                      size={20}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none z-10"
+                    />
+                    <input
+                      required
+                      name="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onBlur={() => handleBlur('password')}
+                      className={`${inputStyles} pl-10 pr-10 text-left`}
+                      dir="ltr"
+                      placeholder="كلمة المرور"
+                      type={showPassword ? 'text' : 'password'}
+                    />
+                    <button
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface-variant z-10 animate-in fade-in"
+                      type="button"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </FormField>
 
+                {/* Confirm Password Input */}
                 <FormField
                   label="تأكيد كلمة المرور"
-                  icon={Lock}
                   error={
-                    confirmPassword && password !== confirmPassword
+                    touched.confirmPassword && confirmPassword && password !== confirmPassword
                       ? 'كلمتا المرور غير متطابقتين'
                       : undefined
                   }
                 >
-                  <input
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`w-full pl-10 pr-10 py-3 bg-surface-container-lowest border rounded-lg focus:ring-2 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface placeholder:text-outline/60 text-left ${
-                      confirmPassword && password !== confirmPassword
-                        ? 'border-error focus:border-error focus:ring-error/20'
-                        : 'border-outline-variant focus:border-primary-container focus:ring-primary-container/20'
-                    }`}
-                    dir="ltr"
-                    placeholder="تأكيد كلمة المرور"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                  />
-                  <button
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface-variant z-10"
-                    type="button"
-                  >
-                    {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-                  </button>
+                  <div className="relative w-full">
+                    <Lock
+                      size={20}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none z-10"
+                    />
+                    <input
+                      required
+                      name="confirmPassword"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      onBlur={() => handleBlur('confirmPassword')}
+                      className={`w-full pl-10 pr-10 py-3 bg-surface border rounded-lg focus:ring-2 outline-none transition-all font-body-md-ar text-body-md-ar text-on-surface placeholder:text-outline/60 text-left ${
+                        touched.confirmPassword && confirmPassword && password !== confirmPassword
+                          ? 'border-error focus:border-error focus:ring-error/20'
+                          : 'border-outline-variant focus:border-primary-container focus:ring-primary-container/20'
+                      }`}
+                      dir="ltr"
+                      placeholder="تأكيد كلمة المرور"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                    />
+                    <button
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface-variant z-10 animate-in fade-in"
+                      type="button"
+                    >
+                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </FormField>
               </div>
             </section>
 
-            <p className="text-xs text-slate-400 font-medium pt-2">يرجى تعبئة جميع الحقول بدقة.</p>
+            {submitError && (
+              <div className="p-4 bg-error-container/10 border border-error/20 text-error rounded-lg font-body-md-ar text-sm text-center">
+                {submitError}
+              </div>
+            )}
+
+            <p className="text-xs text-on-surface-variant/60 font-medium pt-2">
+              يرجى تعبئة جميع الحقول بدقة.
+            </p>
           </div>
 
+          {/* Footer Actions */}
           <div className="p-6 border-t border-outline-variant bg-surface-container-lowest flex items-center justify-start gap-4 sticky bottom-0 z-10">
             <button
-              disabled={!isFormValid || password !== confirmPassword}
-              className={`px-6 py-3 rounded-lg font-body-md-ar text-body-md-ar font-medium flex items-center gap-2 transition-all shadow-sm ${
-                !isFormValid || password !== confirmPassword
+              disabled={!isFormValid || isSubmitting}
+              className={`px-6 py-3 rounded-lg font-body-md-ar text-body-md-ar font-semibold flex items-center gap-2 transition-all shadow-sm ${
+                !isFormValid || isSubmitting
                   ? 'bg-outline/20 text-outline cursor-not-allowed shadow-none opacity-60'
-                  : 'bg-primary-container text-on-primary hover:bg-primary-container/90'
+                  : 'bg-primary-container text-on-primary hover:bg-primary-container/90 hover:-translate-y-0.5'
               }`}
               type="submit"
             >
-              {roleInfo[accountType].saveBtnMsg}
-              <Save size={20} />
+              {isSubmitting ? 'جاري الحفظ...' : activeConfig.btnSave}
+              <Save size={20} className={isSubmitting ? 'animate-spin' : ''} />
             </button>
             <button
               onClick={onClose}
-              className="px-6 py-3 border-[1.5px] border-primary-container text-primary-container rounded-lg font-body-md-ar text-body-md-ar font-medium hover:bg-primary-container/5 transition-colors"
+              disabled={isSubmitting}
+              className="px-6 py-3 border-[1.5px] border-primary-container text-primary-container rounded-lg font-body-md-ar text-body-md-ar font-semibold hover:bg-primary-container/5 transition-colors disabled:opacity-50"
               type="button"
             >
               إلغاء
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

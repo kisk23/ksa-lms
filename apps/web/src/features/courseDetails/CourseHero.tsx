@@ -69,9 +69,7 @@ export default function CourseHero({ youtubeVideoId, posterUrl, title }: CourseH
   };
 
   return (
-    <div
-      className="relative w-full aspect-video rounded-xl overflow-hidden bg-surface group shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
-    >
+    <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-surface group shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
       <video
         ref={videoRef}
         className="w-full h-full object-cover "

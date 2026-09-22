@@ -51,8 +51,8 @@ export default function InstructorProfile({ teacher, courseCount }: InstructorPr
             </div>
             {courseCount !== undefined && (
               <div className="flex items-center gap-1 text-gray-600">
-                <GraduationCap size={16} strokeWidth={2} className='text-gray-700'/>
-                <span className="text-xs">{courseCount + " Static"} دورة</span>
+                <GraduationCap size={16} strokeWidth={2} className="text-gray-700" />
+                <span className="text-xs">{courseCount + ' Static'} دورة</span>
               </div>
             )}
           </div>

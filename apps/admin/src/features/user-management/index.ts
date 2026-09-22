@@ -6,5 +6,5 @@ export { UsersHeader } from './components/UsersHeader';
 export { UsersFilters } from './components/UsersFilters';
 export { UsersTable } from './components/UsersTable';
 export { AddUserModal } from './components/AddUserModal';
-export { MOCK_USERS } from './data/mock-users';
+export { fetchUsers, updateUser, deleteUser } from './data/users-service';
 export type { User, UserRole, UserStatus, RoleFilter, StatusFilter } from './types';

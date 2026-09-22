@@ -20,6 +20,7 @@ import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { TeacherStatusGuard } from '../auth/guards/teacher-status.guard';
 import { Permissions } from '../users/decorators/permissions.decorator';
 import { PermissionsGuard } from '../users/guards/permissions.guard';
 
@@ -43,7 +44,7 @@ export class CoursesController {
 
   @Get('manage')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('VIEW_COURSES')
   @ApiOperation({ summary: 'List courses for management (Dashboard)' })
@@ -56,7 +57,6 @@ export class CoursesController {
       teacherUserId?: string;
       category?: string;
     },
-
   ) {
     // Logic: Teachers can ONLY see their own courses.
     // Admins/Assistants can see all or filter by a specific teacher.
@@ -80,7 +80,7 @@ export class CoursesController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('CREATE_COURSE')
   @ApiOperation({ summary: 'Create a course' })
@@ -90,7 +90,7 @@ export class CoursesController {
 
   @Patch(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('UPDATE_COURSE')
   @ApiOperation({ summary: 'Update course metadata' })
@@ -100,7 +100,7 @@ export class CoursesController {
 
   @Patch(':id/publish')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('PUBLISH_COURSE')
   @ApiOperation({ summary: 'Publish a draft course' })
@@ -110,7 +110,7 @@ export class CoursesController {
 
   @Patch(':id/archive')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('ARCHIVE_COURSE')
   @ApiOperation({ summary: 'Soft-archive a course' })
@@ -120,7 +120,7 @@ export class CoursesController {
 
   @Patch(':id/restore')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('RESTORE_COURSE')
   @ApiOperation({ summary: 'Restore an archived course' })
@@ -130,7 +130,7 @@ export class CoursesController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('DELETE_COURSE')
   @ApiOperation({ summary: 'Hard delete a course (only if no enrollments)' })

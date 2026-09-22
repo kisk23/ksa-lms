@@ -4,9 +4,7 @@ import type {
   LoginResponse,
   RegisterRequest,
   RegisterResponse,
-
   AuthUser,
-
 } from '@lms/shared-types';
 
 export const authService = {
@@ -22,7 +20,6 @@ export const authService = {
     return apiClient.post<void>('/auth/logout');
   },
 
-
   async getMe(): Promise<AuthUser> {
     return apiClient.get<AuthUser>('/auth/me');
   },
@@ -36,7 +33,6 @@ export const authService = {
   },
 };
 
-
 export const AUTH_ERRORS = {
   OTP_VERIFICATION_REQUIRED: 'OTP_VERIFICATION_REQUIRED',
   INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
@@ -47,7 +43,6 @@ export const AUTH_ERRORS = {
   ALREADY_VERIFIED: 'ALREADY_VERIFIED',
   OTP_INVALID: 'OTP_INVALID',
   OTP_EXPIRED: 'OTP_EXPIRED',
-
 } as const;
 
 export const AUTH_ERROR_MESSAGES: Record<string, string> = {
@@ -59,5 +54,4 @@ export const AUTH_ERROR_MESSAGES: Record<string, string> = {
   [AUTH_ERRORS.OTP_INVALID]: 'رمز التحقق غير صحيح.',
   [AUTH_ERRORS.OTP_EXPIRED]: 'انتهت صلاحية رمز التحقق. اطلب رمزاً جديداً.',
   [AUTH_ERRORS.ALREADY_VERIFIED]: 'حسابك موثّق بالفعل.',
-
 };

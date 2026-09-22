@@ -14,10 +14,7 @@ import { AUTH_QUERY_KEY } from '../hooks/useAuth';
 import { FormInput } from './FormInput';
 
 const otpSchema = z.object({
-  code: z
-    .string()
-    .length(6, 'يجب أن يتكون الرمز من 6 أرقام')
-    .regex(/^\d+$/, 'أرقام فقط'),
+  code: z.string().length(6, 'يجب أن يتكون الرمز من 6 أرقام').regex(/^\d+$/, 'أرقام فقط'),
 });
 
 type OtpFormValues = z.infer<typeof otpSchema>;

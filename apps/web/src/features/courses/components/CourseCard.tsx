@@ -11,9 +11,7 @@ interface CourseCardProps {
 export function CourseCard({ course }: CourseCardProps) {
   const numericPrice = Number(course.price);
   const formattedPrice =
-    numericPrice === 0
-      ? 'مجاني'
-      : `${numericPrice.toLocaleString('ar-SA')} ${course.currency}`;
+    numericPrice === 0 ? 'مجاني' : `${numericPrice.toLocaleString('ar-SA')} ${course.currency}`;
 
   return (
     <Link
@@ -37,7 +35,6 @@ export function CourseCard({ course }: CourseCardProps) {
           <span className="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">
             {course.slug}
           </span>
-          
         </div>
 
         {/* Title */}
@@ -59,7 +56,7 @@ export function CourseCard({ course }: CourseCardProps) {
         {/* Footer */}
         <div className="flex justify-between items-center pt-2 border-t border-border/20">
           <span className="text-surface/80 text-xs flex items-center gap-1">
-            <Clock size={16}/>
+            <Clock size={16} />
             <span>{course._count.enrollments.toLocaleString('ar-SA')} طالب</span>
           </span>
           <span className="text-primary font-bold text-sm">{formattedPrice}</span>

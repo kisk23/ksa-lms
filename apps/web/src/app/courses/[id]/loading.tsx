@@ -4,17 +4,10 @@
  */
 export default function CourseDetailLoading() {
   return (
-    <main
-      className="max-w-7xl mx-auto px-4 md:px-6 py-12"
-      dir="rtl"
-    >
+    <main className="max-w-7xl mx-auto px-4 md:px-6 py-12" dir="rtl">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-pulse">
-
-      
-
         {/* ── Main content skeleton ── */}
         <div className="lg:col-span-8 flex flex-col gap-8">
-
           {/* Hero video */}
           <div className="aspect-video w-full rounded-xl bg-gray-200" />
 
@@ -59,10 +52,7 @@ export default function CourseDetailLoading() {
               <div className="h-5 w-24 bg-gray-200 rounded" />
             </div>
             {Array.from({ length: 3 }).map((_, i) => (
-              <div
-                key={i}
-                className="h-14 rounded-lg border-2 border-border bg-gray-200"
-              />
+              <div key={i} className="h-14 rounded-lg border-2 border-border bg-gray-200" />
             ))}
           </div>
 
@@ -76,9 +66,8 @@ export default function CourseDetailLoading() {
               <div className="h-4 w-4/5  bg-gray-200 rounded" />
             </div>
           </div>
-
         </div>
-          {/* ── Pricing card skeleton ── */}
+        {/* ── Pricing card skeleton ── */}
         <div className="lg:col-span-4">
           <div className="rounded-xl border-2 border-gray-200 p-6 flex flex-col gap-5 bg-gray-200">
             {/* Price */}

@@ -1,7 +1,7 @@
 import { Avatar } from '@shared/components/ui/Avatar';
 import { apiClient } from '@shared/lib/api-client';
 import { Eye, CheckCircle2, XCircle, type LucideIcon } from 'lucide-react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { ApprovalStatusPill } from './ApprovalStatusPill';
@@ -17,11 +17,24 @@ type ApprovalRowProps = {
 export function ApprovalRow({ approval, zebra = false, onStatusUpdate }: ApprovalRowProps) {
   const isPending = approval.status === 'PENDING_REVIEW';
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleReview = async (newStatus: string) => {
     try {
       setLoadingAction(newStatus);
-      await apiClient.patch(`/approvals/${approval.id}/review`, { status: newStatus });
+      const payload: { status: string; rejectionReason?: string } = { status: newStatus };
+
+      if (newStatus === 'REJECTED') {
+        const rejectionReason = prompt('سبب الرفض (10 أحرف على الأقل):');
+        if (rejectionReason === null) return;
+        if (rejectionReason.trim().length < 10) {
+          alert('الرجاء إدخال سبب الرفض (10 أحرف على الأقل).');
+          return;
+        }
+        payload.rejectionReason = rejectionReason.trim();
+      }
+
+      await apiClient.patch(`/approvals/${approval.id}/review`, payload);
       if (onStatusUpdate) {
         onStatusUpdate(approval.id, newStatus);
       }
@@ -31,6 +44,17 @@ export function ApprovalRow({ approval, zebra = false, onStatusUpdate }: Approva
     } finally {
       setLoadingAction(null);
     }
+  };
+
+  const handleViewDetails = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      // Mark as seen before navigating so the sidebar fetches the correct updated count
+      await apiClient.patch(`/approvals/${approval.id}/seen`, {});
+    } catch (err) {
+      console.error('Failed to mark as seen', err);
+    }
+    router.push(`/approvals/${approval.id}`);
   };
 
   return (
@@ -56,12 +80,13 @@ export function ApprovalRow({ approval, zebra = false, onStatusUpdate }: Approva
 
       <td className="py-4 px-6">
         <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <ActionLink
-            href={`/approvals/${approval.id}`}
-            icon={Eye}
+          <button
+            onClick={handleViewDetails}
             title="عرض التفاصيل"
-            hoverColor="hover:text-primary-container hover:bg-blue-50"
-          />
+            className="p-1.5 text-slate-400 rounded-lg transition-colors hover:text-primary-container hover:bg-blue-50"
+          >
+            <Eye size={20} />
+          </button>
 
           {isPending && (
             <>
@@ -84,28 +109,6 @@ export function ApprovalRow({ approval, zebra = false, onStatusUpdate }: Approva
         </div>
       </td>
     </tr>
-  );
-}
-
-function ActionLink({
-  href,
-  icon: Icon,
-  title,
-  hoverColor,
-}: {
-  href: string;
-  icon: LucideIcon;
-  title: string;
-  hoverColor: string;
-}) {
-  return (
-    <Link
-      href={href}
-      title={title}
-      className={`p-1.5 text-slate-400 rounded-lg transition-colors ${hoverColor}`}
-    >
-      <Icon size={20} />
-    </Link>
   );
 }
 

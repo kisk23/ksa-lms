@@ -56,7 +56,6 @@ export interface RegisterRequest {
   guardian: GuardianRequest;
 }
 
-
 /** Session payload — tokens live in HttpOnly cookies, not the response body */
 export interface AuthSessionResponse {
   user: AuthUser;
@@ -77,5 +76,4 @@ export interface AuthUser {
   identity: string;
   role: string;
   isVerified: boolean;
-
 }

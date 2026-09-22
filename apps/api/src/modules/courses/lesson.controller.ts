@@ -10,6 +10,7 @@ import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { TeacherStatusGuard } from '../auth/guards/teacher-status.guard';
 import { Permissions } from '../users/decorators/permissions.decorator';
 import { PermissionsGuard } from '../users/guards/permissions.guard';
 
@@ -49,7 +50,7 @@ export class LessonsController {
 
   @Post('chapters/:chapterId/lessons')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('CREATE_LESSON')
   @ApiOperation({ summary: 'Create a lesson in a chapter' })
@@ -65,7 +66,7 @@ export class LessonsController {
 
   @Patch('lessons/:lessonId')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('UPDATE_LESSON')
   @ApiOperation({ summary: 'Update lesson title or video (bumps version on content change)' })
@@ -81,7 +82,7 @@ export class LessonsController {
 
   @Patch('chapters/:chapterId/lessons/reorder')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('UPDATE_LESSON')
   @ApiOperation({ summary: 'Bulk reorder lessons within a chapter' })
@@ -97,7 +98,7 @@ export class LessonsController {
 
   @Delete('lessons/:lessonId')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('DELETE_LESSON')
   @ApiOperation({ summary: 'Soft-archive a lesson' })

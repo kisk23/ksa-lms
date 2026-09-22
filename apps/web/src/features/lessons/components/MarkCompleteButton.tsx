@@ -45,11 +45,7 @@ export function MarkCompleteButton({
       disabled={isPending}
       className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-600 text-white font-semibold text-sm hover:bg-green-700 active:scale-95 transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
     >
-      {isPending ? (
-        <Loader2 size={18} className="animate-spin" />
-      ) : (
-        <CheckCircle2 size={18} />
-      )}
+      {isPending ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle2 size={18} />}
       {isPending ? 'جارٍ الحفظ...' : 'تحديد كمكتمل'}
     </button>
   );

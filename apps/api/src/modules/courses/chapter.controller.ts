@@ -9,6 +9,7 @@ import { GetCurrentUser } from '../auth/decorators/get-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { TeacherStatusGuard } from '../auth/guards/teacher-status.guard';
 import { Permissions } from '../users/decorators/permissions.decorator';
 import { PermissionsGuard } from '../users/guards/permissions.guard';
 // import { EnrollmentGuard } from './guards/enrollment.guard';
@@ -35,7 +36,7 @@ export class ChaptersController {
 
   @Post('courses/:courseId/chapters')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('CREATE_CHAPTER')
   @ApiOperation({ summary: 'Create a chapter in a course' })
@@ -51,7 +52,7 @@ export class ChaptersController {
 
   @Patch('chapters/:id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('UPDATE_CHAPTER')
   @ApiOperation({ summary: 'Update chapter title or order' })
@@ -63,7 +64,7 @@ export class ChaptersController {
 
   @Patch('courses/:courseId/chapters/reorder')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('UPDATE_CHAPTER')
   @ApiOperation({ summary: 'Bulk reorder chapters within a course' })
@@ -79,7 +80,7 @@ export class ChaptersController {
 
   @Delete('chapters/:id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, TeacherStatusGuard, PermissionsGuard)
   @Roles(UserRole.TEACHER, UserRole.SUPER_ADMIN, UserRole.ASSISTANT_ADMIN)
   @Permissions('DELETE_CHAPTER')
   @ApiOperation({ summary: 'Soft-delete a chapter (cascades to lessons)' })

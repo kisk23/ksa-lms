@@ -4,12 +4,8 @@
  */
 export default function LessonLoading() {
   return (
-    <main
-      className="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-10 pt-[96px] pb-10"
-      dir="rtl"
-    >
+    <main className="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-10 pt-[96px] pb-10" dir="rtl">
       <div className="flex flex-col lg:flex-row gap-6 animate-pulse">
-
         {/* Sidebar skeleton */}
         <aside className="w-full lg:w-80 xl:w-[360px] shrink-0 order-2 lg:order-1">
           <div className="bg-gray-100 rounded-xl overflow-hidden">

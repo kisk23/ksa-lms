@@ -27,7 +27,6 @@ export function CourseFilters({
 }: CourseFiltersProps) {
   return (
     <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-5 flex flex-col gap-4">
-
       {/* ── Header ── */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -50,14 +49,10 @@ export function CourseFilters({
 
       {/* ── Category pills ── */}
       <div className="flex flex-col gap-2">
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
-          التصنيف
-        </p>
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">التصنيف</p>
 
         {categories.length === 0 ? (
-          <p className="text-xs text-gray-400 text-center py-3">
-            لا توجد تصنيفات متاحة
-          </p>
+          <p className="text-xs text-gray-400 text-center py-3">لا توجد تصنيفات متاحة</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => {

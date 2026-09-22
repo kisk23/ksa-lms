@@ -33,6 +33,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!user?.isActive) {
       throw new UnauthorizedException();
     }
+
+    if (user.isBanned) {
+      if (!user.banExpiresAt || new Date(user.banExpiresAt) > new Date()) {
+        throw new UnauthorizedException('حسابك موقوف');
+      }
+    }
+
     return user;
   }
 }

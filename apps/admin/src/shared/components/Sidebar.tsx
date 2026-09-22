@@ -1,19 +1,39 @@
 'use client';
 
-import { getPendingApprovalsCount } from '@features/approval-management';
 import { adminAuthService } from '@features/auth';
 import { SIDEBAR_NAV } from '@shared/constants/navigation';
+import { apiClient } from '@shared/lib/api-client';
 import { LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [pendingApprovals, setPendingApprovals] = useState(0);
 
-  // In a real app, this would come from a hook/context/server
+  useEffect(() => {
+    let isMounted = true;
+
+    apiClient
+      .get<{ meta: { total: number } }>('/approvals/unseen-count')
+      .then((res) => {
+        if (isMounted && res?.meta?.total !== undefined) {
+          setPendingApprovals(res.meta.total);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to fetch unseen approvals count:', err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [pathname]);
+
   const badges = {
-    pendingApprovals: getPendingApprovalsCount(),
+    pendingApprovals: pendingApprovals,
   };
 
   async function handleLogout() {
@@ -29,7 +49,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 overflow-y-auto py-sm px-base flex flex-col gap-xs mt-sm text-right">
-        {SIDEBAR_NAV.map((item) => {
+        {SIDEBAR_NAV.filter((item) => !item.hidden).map((item) => {
           const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
           const Icon = item.icon;
           const badgeCount = item.badgeKey ? badges[item.badgeKey] : 0;
