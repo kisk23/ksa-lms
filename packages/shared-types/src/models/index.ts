@@ -184,23 +184,21 @@ export interface AssignmentAttempt {
   id: string;
   assignmentId: string;
   studentUserId: string;
+  attemptNumber: number;
   scorePct: number;
   isPassed: boolean;
-  answers: AssignmentAnswer[];
-  createdAt: string;
-}
-
-export interface AssignmentAnswer {
-  questionId: string;
-  selectedOptionId: string;
-  isCorrect: boolean;
+  submittedAt: string;
+  snapshot: unknown;
 }
 
 export interface AssignmentBestScore {
+  id: string;
   assignmentId: string;
-  scorePct: number;
+  studentUserId: string;
+  bestScorePct: number;
+  bestAttemptId: string;
   isPassed: boolean;
-  attemptsCount: number;
+  updatedAt: string;
 }
 
 // ─── Progress ────────────────────────────────────────

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { QuestionStatus } from "../types";
+import { QuestionStatus } from '../types';
 
 interface QuestionNavigatorProps {
   totalQuestions: number;
@@ -12,12 +12,12 @@ interface QuestionNavigatorProps {
 function getStatus(
   index: number,
   currentQuestion: number,
-  answeredQuestions: Set<number>
+  answeredQuestions: Set<number>,
 ): QuestionStatus {
   const questionNumber = index + 1;
-  if (questionNumber === currentQuestion) return "current";
-  if (answeredQuestions.has(questionNumber)) return "answered";
-  return "unanswered";
+  if (questionNumber === currentQuestion) return 'current';
+  if (answeredQuestions.has(questionNumber)) return 'answered';
+  return 'unanswered';
 }
 
 export default function QuestionNavigator({
@@ -91,7 +91,8 @@ interface NavigatorCircleProps {
 }
 
 function NavigatorCircle({ number, status, onClick }: NavigatorCircleProps) {
-  const base = "w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold cursor-pointer transition-all duration-200 select-none";
+  const base =
+    'w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold cursor-pointer transition-all duration-200 select-none';
 
   const styles = {
     answered: `${base} bg-emerald-600 text-white hover:opacity-90 hover:scale-105`,
@@ -100,7 +101,12 @@ function NavigatorCircle({ number, status, onClick }: NavigatorCircleProps) {
   };
 
   return (
-    <button className={styles[status]} onClick={onClick} aria-label={`السؤال ${number}`}>
+    <button
+      type="button"
+      className={styles[status]}
+      onClick={onClick}
+      aria-label={`السؤال ${number}`}
+    >
       {number}
     </button>
   );

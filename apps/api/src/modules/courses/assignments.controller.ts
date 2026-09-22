@@ -32,8 +32,8 @@ export class AssignmentsController {
   @ApiOperation({
     summary: 'Get assignment for a lesson (enrolled students, owner teacher, staff)',
   })
-  findByLesson(@Param('lessonId') lessonId: string) {
-    return this.assignmentsService.findByLesson(lessonId);
+  findByLesson(@Param('lessonId') lessonId: string, @GetCurrentUser() user: IUser) {
+    return this.assignmentsService.findByLesson(lessonId, user);
   }
 
   @Post('lessons/:lessonId/assignment')

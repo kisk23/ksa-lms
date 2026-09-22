@@ -1,36 +1,32 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo } from "react";
-import Link from "next/link";
-import {
-  AlertCircle,
-  Award,
-  BookOpen,
-  ArrowRight,
-  ChevronLeft,
-  Info,
-  Loader2
-} from "lucide-react";
+import React, { useState, useMemo } from 'react';
+import Link from 'next/link';
+import { AlertCircle, Award, BookOpen, ArrowRight, ChevronLeft, Info, Loader2 } from 'lucide-react';
 
-import { useLesson } from "@/features/lessons/hooks/useLesson";
-import { useAssignments } from "@/features/lessons/hooks/useQueries";
-import { useCourse } from "@/features/courses/hooks/useCourse";
-import { useMarkLessonComplete } from "@/features/lessons/hooks/useMarkLessonComplete";
+import { useLesson } from '@/features/lessons/hooks/useLesson';
+import { useAssignments } from '@/features/lessons/hooks/useQueries';
+import { useCourse } from '@/features/courses/hooks/useCourse';
+import { useMarkLessonComplete } from '@/features/lessons/hooks/useMarkLessonComplete';
 
 import {
   useAssignmentAttempts,
   useAssignmentBestScore,
-  useSubmitAssignment
-} from "../hooks/useAssignment";
-import type { Assignment as UIAssignment, Question as UIQuestion, MCQOption as UIMCQOption } from "../types";
+  useSubmitAssignment,
+} from '../hooks/useAssignment';
+import type {
+  Assignment as UIAssignment,
+  Question as UIQuestion,
+  MCQOption as UIMCQOption,
+} from '../types';
 
-import AssignmentHeader from "./AssignmentHeader";
-import AssignmentProgress from "./AssignmentProgress";
-import QuestionCard from "./QuestionCard";
-import AssignmentFooter from "./AssignmentFooter";
-import QuestionNavigator from "./QuestionNavigator";
+import AssignmentHeader from './AssignmentHeader';
+import AssignmentProgress from './AssignmentProgress';
+import QuestionCard from './QuestionCard';
+import AssignmentFooter from './AssignmentFooter';
+import QuestionNavigator from './QuestionNavigator';
 
-const ARABIC_LETTERS = ["أ", "ب", "ج", "د", "هـ", "و", "ز", "ح", "ط", "ي"];
+const ARABIC_LETTERS = ['أ', 'ب', 'ج', 'د', 'هـ', 'و', 'ز', 'ح', 'ط', 'ي'];
 
 interface AssignmentPageClientProps {
   courseId: string;
@@ -43,7 +39,6 @@ export function AssignmentPageClient({
   lessonId,
   assignmentId,
 }: AssignmentPageClientProps) {
-
   // ── States ─────────────────────────────────────────────────────────────────
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
@@ -56,7 +51,7 @@ export function AssignmentPageClient({
     data: lesson,
     isLoading: lessonLoading,
     error: lessonError,
-  } = useLesson(courseId, "", lessonId);
+  } = useLesson(courseId, '', lessonId);
 
   const {
     data: assignments = [],
@@ -64,35 +59,34 @@ export function AssignmentPageClient({
     error: assignmentError,
   } = useAssignments(lessonId);
   const backendAssignment = assignments[0];
+  const assignmentMatchesRoute = backendAssignment?.id === assignmentId;
 
-  const {
-    data: attempts = [],
-    isLoading: attemptsLoading,
-  } = useAssignmentAttempts(assignmentId);
+  const { data: attempts = [], isLoading: attemptsLoading } = useAssignmentAttempts(
+    assignmentMatchesRoute ? assignmentId : '',
+  );
 
-  const {
-    data: bestScore,
-    isLoading: bestScoreLoading,
-  } = useAssignmentBestScore(assignmentId);
+  const { data: bestScore, isLoading: bestScoreLoading } = useAssignmentBestScore(
+    assignmentMatchesRoute ? assignmentId : '',
+  );
 
   const { data: courseData } = useCourse(courseId);
-  const course = courseData?.data || courseData;
+  const course = courseData;
 
   // Derive chapterId for progress updates
   const chapterId = useMemo(() => {
-    if (!course?.chapters) return "";
+    if (!course?.chapters) return '';
     for (const ch of course.chapters) {
       const found = ch.lessons?.find((l: any) => l.id === lessonId);
       if (found) return ch.id;
     }
-    return "";
+    return '';
   }, [course, lessonId]);
 
   const { mutate: markComplete } = useMarkLessonComplete({ courseId, chapterId, lessonId });
 
   // ── Backend to UI Mapper ───────────────────────────────────────────────────
   const uiAssignment = useMemo<UIAssignment | null>(() => {
-    if (!backendAssignment || !lesson) return null;
+    if (!backendAssignment || !lesson || !assignmentMatchesRoute) return null;
 
     const questions: UIQuestion[] = (backendAssignment.questions ?? []).map((q) => {
       const options: UIMCQOption[] = (q.options ?? []).map((opt, optIndex) => ({
@@ -112,24 +106,28 @@ export function AssignmentPageClient({
     return {
       id: backendAssignment.id,
       lessonId: backendAssignment.lessonId,
-      title: lesson.title || "واجب الدرس",
+      title: lesson.title || 'واجب الدرس',
       passingScorePct: backendAssignment.passingScorePct,
       maxAttempts: backendAssignment.maxAttempts,
       totalQuestions: questions.length,
-      durationMinutes: lesson.duration || (questions.length * 2),
+      durationMinutes: questions.length * 2,
       totalScore: questions.length,
       questions,
     };
-  }, [backendAssignment, lesson]);
+  }, [assignmentMatchesRoute, backendAssignment, lesson]);
 
   // ── Submit Attempt Mutation ────────────────────────────────────────────────
-  const { mutate: submitAttempt, isPending: submitPending } = useSubmitAssignment({
+  const {
+    mutate: submitAttempt,
+    isPending: submitPending,
+    error: submitError,
+  } = useSubmitAssignment({
     assignmentId,
     onSuccess: (data) => {
       setShowConfirmSubmit(false);
       setShowLastAttemptResult(data);
       setShowQuiz(false);
-      
+
       // Auto-complete lesson if they passed the assignment
       if (data.isPassed) {
         markComplete();
@@ -165,16 +163,6 @@ export function AssignmentPageClient({
       questionId: qId,
       selectedOptionId: optId,
     }));
-
-    // Pad unanswered questions
-    uiAssignment.questions.forEach((q) => {
-      if (!selectedAnswers[q.id]) {
-        answersPayload.push({
-          questionId: q.id,
-          selectedOptionId: "",
-        });
-      }
-    });
 
     submitAttempt(answersPayload);
   };
@@ -219,13 +207,20 @@ export function AssignmentPageClient({
   // ── Error / Not Found Experience ───────────────────────────────────────────
   if (lessonError || assignmentError || !uiAssignment) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center" dir="rtl">
+      <div
+        className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center"
+        dir="rtl"
+      >
         <div className="w-20 h-20 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center border border-rose-100 shadow-sm">
           <AlertCircle size={40} />
         </div>
         <h2 className="text-2xl font-black text-[#2A3439]">تعذّر تحميل واجب الدرس</h2>
         <p className="text-[#747685] max-w-md">
-          {assignmentError instanceof Error ? assignmentError.message : "لا يوجد واجب متاح لهذا الدرس حالياً أو حدث خطأ أثناء تحميل البيانات."}
+          {assignmentError instanceof Error
+            ? assignmentError.message
+            : backendAssignment && !assignmentMatchesRoute
+              ? 'رابط الواجب لا يطابق واجب هذا الدرس. ارجع إلى صفحة الدرس وافتح الواجب مرة أخرى.'
+              : 'لا يوجد واجب متاح لهذا الدرس حالياً أو حدث خطأ أثناء تحميل البيانات.'}
         </p>
         <div className="flex gap-4">
           <Link
@@ -245,6 +240,7 @@ export function AssignmentPageClient({
   const attemptsRemaining = maxAttempts !== null ? Math.max(maxAttempts - attemptsCount, 0) : null;
   const hasPassed = bestScore?.isPassed === true;
   const isAttemptsExhausted = maxAttempts !== null && attemptsCount >= maxAttempts;
+  const hasQuestions = uiAssignment.totalQuestions > 0;
 
   // Decide if we should show the summary dashboard first
   const showDashboard = !showQuiz;
@@ -253,9 +249,16 @@ export function AssignmentPageClient({
     <div className="max-w-6xl mx-auto px-4 md:px-6 py-12" dir="rtl">
       {/* ── BREADCRUMBS ── */}
       <nav className="mb-8 flex items-center gap-2 text-sm text-[#747685] font-semibold select-none">
-        <Link href={`/courses/${courseId}`} className="hover:text-primary transition-colors">الدورة</Link>
+        <Link href={`/courses/${courseId}`} className="hover:text-primary transition-colors">
+          الدورة
+        </Link>
         <ChevronLeft size={16} className="text-[#c4c5d6]" />
-        <Link href={`/courses/${courseId}/lessons/${lessonId}`} className="hover:text-primary transition-colors">{lesson?.title}</Link>
+        <Link
+          href={`/courses/${courseId}/lessons/${lessonId}`}
+          className="hover:text-primary transition-colors"
+        >
+          {lesson?.title}
+        </Link>
         <ChevronLeft size={16} className="text-[#c4c5d6]" />
         <span className="text-[#2A3439]">واجب الدرس</span>
       </nav>
@@ -274,7 +277,9 @@ export function AssignmentPageClient({
               {uiAssignment.title}
             </h1>
             <p className="text-[#747685] font-medium max-w-lg mx-auto">
-              اجتياز هذا الواجب بنسبة لا تقل عن <span className="text-primary font-bold">{uiAssignment.passingScorePct}%</span> مطلوب لإكمال الدرس الحالي.
+              اجتياز هذا الواجب بنسبة لا تقل عن{' '}
+              <span className="text-primary font-bold">{uiAssignment.passingScorePct}%</span> مطلوب
+              لإكمال الدرس الحالي.
             </p>
           </div>
 
@@ -285,8 +290,14 @@ export function AssignmentPageClient({
                 <Award size={32} />
               </div>
               <div className="text-center md:text-right flex-1">
-                <h3 className="text-lg font-bold text-emerald-900 mb-1">تهانينا! لقد اجتزت هذا الواجب بنجاح</h3>
-                <p className="text-sm text-emerald-700 font-medium">أعلى درجة حصلت عليها هي <span className="font-bold">{bestScore.bestScorePct}%</span>. يمكنك المتابعة إلى الدروس التالية.</p>
+                <h3 className="text-lg font-bold text-emerald-900 mb-1">
+                  تهانينا! لقد اجتزت هذا الواجب بنجاح
+                </h3>
+                <p className="text-sm text-emerald-700 font-medium">
+                  أعلى درجة حصلت عليها هي{' '}
+                  <span className="font-bold">{bestScore.bestScorePct}%</span>. يمكنك المتابعة إلى
+                  الدروس التالية.
+                </p>
               </div>
             </div>
           ) : isAttemptsExhausted ? (
@@ -296,27 +307,41 @@ export function AssignmentPageClient({
               </div>
               <div className="text-center md:text-right flex-1">
                 <h3 className="text-lg font-bold text-rose-900 mb-1">لقد استنفدت جميع المحاولات</h3>
-                <p className="text-sm text-rose-700 font-medium">الحد الأقصى للمحاولات هو <span className="font-bold">{maxAttempts}</span>. يرجى التواصل مع المعلم لطلب إعادة المحاولة.</p>
+                <p className="text-sm text-rose-700 font-medium">
+                  الحد الأقصى للمحاولات هو <span className="font-bold">{maxAttempts}</span>. يرجى
+                  التواصل مع المعلم لطلب إعادة المحاولة.
+                </p>
               </div>
             </div>
           ) : showLastAttemptResult ? (
-            <div className={`mb-10 rounded-3xl p-6 border flex flex-col md:flex-row items-center gap-5 ${
-              showLastAttemptResult.isPassed 
-                ? "bg-emerald-50/70 border-emerald-100 text-emerald-800" 
-                : "bg-amber-50/60 border-amber-100 text-amber-900"
-            }`}>
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
-                showLastAttemptResult.isPassed ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"
-              }`}>
+            <div
+              className={`mb-10 rounded-3xl p-6 border flex flex-col md:flex-row items-center gap-5 ${
+                showLastAttemptResult.isPassed
+                  ? 'bg-emerald-50/70 border-emerald-100 text-emerald-800'
+                  : 'bg-amber-50/60 border-amber-100 text-amber-900'
+              }`}
+            >
+              <div
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
+                  showLastAttemptResult.isPassed
+                    ? 'bg-emerald-100 text-emerald-600'
+                    : 'bg-amber-100 text-amber-600'
+                }`}
+              >
                 {showLastAttemptResult.isPassed ? <Award size={32} /> : <Info size={32} />}
               </div>
               <div className="text-center md:text-right flex-1">
                 <h3 className="text-lg font-bold mb-1">
-                  {showLastAttemptResult.isPassed ? "أحسنت! نجحت المحاولة الأخيرة" : "لم يتم اجتياز المحاولة الأخيرة"}
+                  {showLastAttemptResult.isPassed
+                    ? 'أحسنت! نجحت المحاولة الأخيرة'
+                    : 'لم يتم اجتياز المحاولة الأخيرة'}
                 </h3>
                 <p className="text-sm font-medium">
-                  حصلت على درجة <span className="font-bold">{showLastAttemptResult.scorePct}%</span>. 
-                  {!showLastAttemptResult.isPassed && attemptsRemaining !== null && ` لديك ${attemptsRemaining} محاولات متبقية.`}
+                  حصلت على درجة <span className="font-bold">{showLastAttemptResult.scorePct}%</span>
+                  .
+                  {!showLastAttemptResult.isPassed &&
+                    attemptsRemaining !== null &&
+                    ` لديك ${attemptsRemaining} محاولات متبقية.`}
                 </p>
               </div>
             </div>
@@ -326,20 +351,28 @@ export function AssignmentPageClient({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
             <div className="bg-[#FAF9F6] border border-[#c4c5d6]/20 rounded-2xl p-4 text-center">
               <span className="text-[#747685] text-xs font-bold block mb-1">الأسئلة</span>
-              <span className="text-xl font-bold text-[#2A3439]">{uiAssignment.totalQuestions} سؤال</span>
+              <span className="text-xl font-bold text-[#2A3439]">
+                {uiAssignment.totalQuestions} سؤال
+              </span>
             </div>
             <div className="bg-[#FAF9F6] border border-[#c4c5d6]/20 rounded-2xl p-4 text-center">
               <span className="text-[#747685] text-xs font-bold block mb-1">الوقت المقدر</span>
-              <span className="text-xl font-bold text-[#2A3439]">{uiAssignment.durationMinutes} دقيقة</span>
+              <span className="text-xl font-bold text-[#2A3439]">
+                {uiAssignment.durationMinutes} دقيقة
+              </span>
             </div>
             <div className="bg-[#FAF9F6] border border-[#c4c5d6]/20 rounded-2xl p-4 text-center">
               <span className="text-[#747685] text-xs font-bold block mb-1">نسبة النجاح</span>
-              <span className="text-xl font-bold text-primary">{uiAssignment.passingScorePct}%</span>
+              <span className="text-xl font-bold text-primary">
+                {uiAssignment.passingScorePct}%
+              </span>
             </div>
             <div className="bg-[#FAF9F6] border border-[#c4c5d6]/20 rounded-2xl p-4 text-center">
-              <span className="text-[#747685] text-xs font-bold block mb-1">المحاولات المتبقية</span>
+              <span className="text-[#747685] text-xs font-bold block mb-1">
+                المحاولات المتبقية
+              </span>
               <span className="text-xl font-bold text-[#2A3439]">
-                {maxAttempts === null ? "غير محدود" : `${attemptsRemaining} من ${maxAttempts}`}
+                {maxAttempts === null ? 'غير محدود' : `${attemptsRemaining} من ${maxAttempts}`}
               </span>
             </div>
           </div>
@@ -377,12 +410,12 @@ export function AssignmentPageClient({
                           )}
                         </td>
                         <td className="p-4 text-xs text-[#747685]">
-                          {new Date(attempt.submittedAt).toLocaleDateString("ar-SA", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
+                          {new Date(attempt.submittedAt).toLocaleDateString('ar-SA', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
                           })}
                         </td>
                       </tr>
@@ -401,12 +434,17 @@ export function AssignmentPageClient({
             >
               العودة للدرس
             </Link>
-            {!hasPassed && !isAttemptsExhausted && (
+            {!hasQuestions && (
+              <p className="w-full text-center text-sm font-semibold text-amber-700">
+                لم تُضف أسئلة إلى هذا الواجب بعد.
+              </p>
+            )}
+            {hasQuestions && !hasPassed && !isAttemptsExhausted && (
               <button
                 onClick={handleStartAttempt}
                 className="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-[#1e3ba3] text-white rounded-full font-bold shadow-lg shadow-blue-500/10 hover:shadow-xl hover:-translate-y-0.5 active:scale-98 transition-all text-sm"
               >
-                {attemptsCount > 0 ? "إعادة المحاولة" : "ابدأ المحاولة الآن"}
+                {attemptsCount > 0 ? 'إعادة المحاولة' : 'ابدأ المحاولة الآن'}
               </button>
             )}
           </div>
@@ -416,12 +454,10 @@ export function AssignmentPageClient({
            ACTIVE QUIZ RENDER
            ═════════════════════════════════════════════════════════════════════ */
         <div className="flex flex-col lg:flex-row gap-8 items-start w-full relative">
-          
           {/* Main content pane */}
           <section className="flex-1 w-full order-1 lg:order-2 lg:max-w-[73%]">
-            
             <AssignmentHeader assignment={uiAssignment} />
-            
+
             <AssignmentProgress
               currentQuestion={currentQuestion}
               totalQuestions={uiAssignment.totalQuestions}
@@ -429,7 +465,9 @@ export function AssignmentPageClient({
 
             <QuestionCard
               question={uiAssignment.questions[currentQuestion - 1]}
-              selectedOption={selectedAnswers[uiAssignment.questions[currentQuestion - 1]?.id] || null}
+              selectedOption={
+                selectedAnswers[uiAssignment.questions[currentQuestion - 1]?.id] || null
+              }
               onSelectOption={handleSelectOption}
             />
 
@@ -457,21 +495,40 @@ export function AssignmentPageClient({
       {/* ── CONFIRM SUBMIT DIALOG ── */}
       {showConfirmSubmit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-slate-100 text-center animate-in fade-in zoom-in duration-200">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="submit-dialog-title"
+            className="bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-slate-100 text-center animate-in fade-in zoom-in duration-200"
+          >
             <div className="w-16 h-16 bg-blue-50 text-primary rounded-2xl flex items-center justify-center mx-auto mb-5">
               <BookOpen size={32} />
             </div>
-            
-            <h3 className="text-2xl font-black text-[#2A3439] mb-3">تسليم حل الواجب؟</h3>
-            
+
+            <h3 id="submit-dialog-title" className="text-2xl font-black text-[#2A3439] mb-3">
+              تسليم حل الواجب؟
+            </h3>
+
             {answeredQuestionsSet.size < uiAssignment.totalQuestions ? (
               <p className="text-amber-600 font-bold mb-6 flex items-center gap-2 justify-center bg-amber-50 rounded-2xl p-3 text-sm">
                 <AlertCircle size={18} />
-                <span>انتبه: لم تقم بحل جميع الأسئلة ({answeredQuestionsSet.size} من {uiAssignment.totalQuestions})</span>
+                <span>
+                  انتبه: لم تقم بحل جميع الأسئلة ({answeredQuestionsSet.size} من{' '}
+                  {uiAssignment.totalQuestions})
+                </span>
               </p>
             ) : (
               <p className="text-[#747685] font-semibold mb-6">
                 هل أنت متأكد من رغبتك في تسليم الحل وتقييم إجاباتك؟
+              </p>
+            )}
+
+            {submitError instanceof Error && (
+              <p
+                role="alert"
+                className="mb-6 rounded-2xl bg-rose-50 p-3 text-sm font-bold text-rose-700"
+              >
+                {submitError.message}
               </p>
             )}
 
