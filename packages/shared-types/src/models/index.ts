@@ -180,6 +180,27 @@ export interface Assignment {
   questions: Question[];
 }
 
+export interface AssignmentAttempt {
+  id: string;
+  assignmentId: string;
+  studentUserId: string;
+  attemptNumber: number;
+  scorePct: number;
+  isPassed: boolean;
+  submittedAt: string;
+  snapshot: unknown;
+}
+
+export interface AssignmentBestScore {
+  id: string;
+  assignmentId: string;
+  studentUserId: string;
+  bestScorePct: number;
+  bestAttemptId: string;
+  isPassed: boolean;
+  updatedAt: string;
+}
+
 // ─── Progress ────────────────────────────────────────
 export interface LessonProgress {
   id: string;
@@ -267,24 +288,4 @@ export interface ISection {
   order: number;
   courseId: string;
   archivedAt?: Date;
-}
-
-// ─── Teacher ─────────────────────────────────────────
-export interface Teacher {
-  /** Stable identifier used in routing */
-  id: string;
-  /** Full display name, including academic title (e.g. "د. طارق عبدالرحمن") */
-  name: string;
-  /** Short qualification / bio line shown under the name */
-  title: string;
-  /** Profile photo URL. Falls back to initials when missing. */
-  image?: string;
-  /** Average rating out of 5 */
-  rating: number;
-  /** Total number of enrolled students */
-  studentsCount: number;
-  /** The subject this teacher is associated with */
-  subjectId: string;
-  /** Display label for the subject pill (e.g. "فيزياء") */
-  subjectLabel: string;
 }

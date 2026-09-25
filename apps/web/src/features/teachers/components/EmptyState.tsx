@@ -4,8 +4,8 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({
-  title = "لا يوجد معلمون متاحون حالياً",
-  description = "نعمل على إضافة معلمين لهذه المادة قريباً، يرجى المحاولة لاحقاً.",
+  title = 'لا يوجد معلمون متاحون حالياً',
+  description = 'نعمل على إضافة معلمين لهذه المادة قريباً، يرجى المحاولة لاحقاً.',
 }: EmptyStateProps) {
   return (
     <div
@@ -13,7 +13,10 @@ export function EmptyState({
       className="mb-16 flex flex-col items-center justify-center rounded-2xl border border-dashed border-outline-variant bg-surface-container-lowest px-6 py-16 text-center"
     >
       <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface-container">
-        <span className="material-symbols-outlined text-[32px] text-on-surface-variant" aria-hidden="true">
+        <span
+          className="material-symbols-outlined text-[32px] text-on-surface-variant"
+          aria-hidden="true"
+        >
           person_search
         </span>
       </div>

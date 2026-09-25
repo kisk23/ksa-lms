@@ -1,4 +1,4 @@
-import type { Teacher } from '@lms/shared-types/src/models/index.ts';
+import type { Teacher } from '@/features/teachers/types/teacher';
 
 const mockTeachers: Teacher[] = [
   {

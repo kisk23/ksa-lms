@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export interface BreadcrumbItem {
   label: string;
@@ -11,7 +11,10 @@ interface BreadcrumbsProps {
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
-    <nav aria-label="مسار التصفح" className="mb-3 flex items-center gap-2 text-sm text-on-surface-variant">
+    <nav
+      aria-label="مسار التصفح"
+      className="mb-3 flex items-center gap-2 text-sm text-on-surface-variant"
+    >
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
         return (
@@ -22,8 +25,8 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
               </Link>
             ) : (
               <span
-                className={isLast ? "font-medium text-on-surface" : undefined}
-                aria-current={isLast ? "page" : undefined}
+                className={isLast ? 'font-medium text-on-surface' : undefined}
+                aria-current={isLast ? 'page' : undefined}
               >
                 {item.label}
               </span>

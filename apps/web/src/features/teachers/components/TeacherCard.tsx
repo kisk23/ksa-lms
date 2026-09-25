@@ -1,4 +1,5 @@
-import type { Teacher } from "@lms/shared-types/src/models/index.ts";
+import Image from 'next/image';
+import type { Teacher } from '@/features/teachers/types/teacher';
 
 interface TeacherCardProps {
   teacher: Teacher;
@@ -6,21 +7,23 @@ interface TeacherCardProps {
 }
 
 function getInitials(name: string): string {
-  const cleaned = name.replace(/^(د\.|أ\.|م\.)\s*/, "");
+  const cleaned = name.replace(/^(د\.|أ\.|م\.)\s*/, '');
   return cleaned.trim().slice(0, 1);
 }
 
 export function TeacherCard({ teacher, onSelect }: TeacherCardProps) {
-  const formattedStudents = teacher.studentsCount.toLocaleString("ar-EG");
+  const formattedStudents = teacher.studentsCount.toLocaleString('ar-EG');
 
   return (
     <article className="group flex h-full flex-col items-center rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative mb-4">
         <div className="h-24 w-24 rounded-full bg-linear-to-tr from-primary-fixed-dim to-primary-container p-1">
           {teacher.image ? (
-            <img
+            <Image
               src={teacher.image}
               alt={`الصورة الشخصية لـ ${teacher.name}`}
+              width={96}
+              height={96}
               className="h-full w-full rounded-full border-2 border-white object-cover"
             />
           ) : (

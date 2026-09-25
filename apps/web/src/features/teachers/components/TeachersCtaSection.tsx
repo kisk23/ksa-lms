@@ -1,15 +1,12 @@
-import Link from "next/link";
-import { ArrowLeft, BookOpen, MessageCircle } from "lucide-react";
+import Link from 'next/link';
+import { ArrowLeft, BookOpen, MessageCircle } from 'lucide-react';
 
 interface TeachersCtaSectionProps {
   browseSubjectsHref: string;
   contactHref: string;
 }
 
-export function TeachersCtaSection({
-  browseSubjectsHref,
-  contactHref,
-}: TeachersCtaSectionProps) {
+export function TeachersCtaSection({ browseSubjectsHref, contactHref }: TeachersCtaSectionProps) {
   return (
     <section className="overflow-hidden rounded-3xl border border-outline-variant bg-surface-container-low px-8 py-12">
       <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
@@ -17,13 +14,11 @@ export function TeachersCtaSection({
           <BookOpen className="h-8 w-8" />
         </div>
 
-        <h2 className="mb-3 text-3xl font-bold text-on-surface">
-          لم تجد المعلم المناسب؟
-        </h2>
+        <h2 className="mb-3 text-3xl font-bold text-on-surface">لم تجد المعلم المناسب؟</h2>
 
         <p className="mb-8 max-w-2xl text-lg leading-8 text-on-surface-variant">
-          استكشف المزيد من المواد الدراسية أو تواصل معنا لمساعدتك في اختيار
-          المعلم الذي يناسب احتياجاتك التعليمية.
+          استكشف المزيد من المواد الدراسية أو تواصل معنا لمساعدتك في اختيار المعلم الذي يناسب
+          احتياجاتك التعليمية.
         </p>
 
         <div className="flex flex-col gap-4 sm:flex-row">

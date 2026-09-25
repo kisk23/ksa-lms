@@ -3,6 +3,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
 type ApiErrorPayload = {
   message?: string | string[];
   errors?: Record<string, string[]>;
+  cause?: string;
 };
 
 export const ADMIN_SESSION_EXPIRED_EVENT = 'admin-session-expired';
@@ -57,7 +58,11 @@ async function refreshAccessToken(): Promise<void> {
 
 async function readError(response: Response): Promise<string> {
   const payload = (await response.json().catch(() => undefined)) as ApiErrorPayload | undefined;
-  return messageFromApiPayload(payload) ?? `HTTP ${response.status}`;
+  const baseMessage = messageFromApiPayload(payload) ?? `HTTP ${response.status}`;
+  if (payload?.cause) {
+    return `${baseMessage} | Cause: ${payload.cause}`;
+  }
+  return baseMessage;
 }
 
 function shouldAttemptRefresh(endpoint: string): boolean {

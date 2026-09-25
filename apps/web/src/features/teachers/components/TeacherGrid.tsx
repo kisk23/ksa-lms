@@ -1,5 +1,5 @@
-import type { Teacher } from "@lms/shared-types/src/models/index.ts";
-import { TeacherCard } from "./TeacherCard";
+import type { Teacher } from '@/features/teachers/types/teacher';
+import { TeacherCard } from './TeacherCard';
 
 interface TeacherGridProps {
   teachers: Teacher[];

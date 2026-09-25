@@ -3,15 +3,17 @@ import type { Subject } from '@/features/subjects/types/study';
 interface SubjectCardProps {
   subject: Subject;
   onClick: () => void;
+  isActive?: boolean;
 }
 
-export function SubjectCard({ subject, onClick }: SubjectCardProps) {
+export function SubjectCard({ subject, onClick, isActive = true }: SubjectCardProps) {
   const formattedTeacherCount = subject.teacherCount.toLocaleString('ar-EG');
 
   return (
     <button
       type="button"
       onClick={onClick}
+      tabIndex={isActive ? 0 : -1}
       aria-label={`${subject.name}، ${formattedTeacherCount} معلم متاح`}
       className="group flex min-h-40 w-full flex-col justify-between rounded-2xl border border-outline-variant bg-white p-6 text-right transition-all duration-300 hover:-translate-y-1 hover:border-primary-container hover:shadow-lg focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary-container cursor-pointer"
     >

@@ -1,46 +1,56 @@
-"use client";
+'use client';
 
-import { useRouter, useSearchParams } from "next/navigation";
-import type { Teacher } from "@lms/shared-types/src/models/index.ts";
-import { Breadcrumbs } from "@/features/teachers/components/Breadcrumbs";
-import { PageHeader } from "@/features/teachers/components/PageHeader";
-import { TeachersToolbar } from "@/features/teachers/components/TeachersToolbar";
-import { TeacherGrid } from "@/features/teachers/components/TeacherGrid";
-import { LoadingSkeleton } from "@/features/teachers/components/LoadingSkeleton";
-import { EmptyState } from "@/features/teachers/components/EmptyState";
-import { useTeachers } from "@/features/teachers/hooks/useTeachers";
-import { sortOptions } from "@/features/teachers/sortOptions";
-import { TeachersCtaSection } from "@/features/teachers/components/TeachersCtaSection";
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import type { Teacher } from '@/features/teachers/types/teacher';
+import { Breadcrumbs } from '@/features/teachers/components/Breadcrumbs';
+import { PageHeader } from '@/features/teachers/components/PageHeader';
+import { TeachersToolbar } from '@/features/teachers/components/TeachersToolbar';
+import { TeacherGrid } from '@/features/teachers/components/TeacherGrid';
+import { LoadingSkeleton } from '@/features/teachers/components/LoadingSkeleton';
+import { EmptyState } from '@/features/teachers/components/EmptyState';
+import { useTeachers } from '@/features/teachers/hooks/useTeachers';
+import { sortOptions } from '@/features/teachers/sortOptions';
+import { TeachersCtaSection } from '@/features/teachers/components/TeachersCtaSection';
+import { findStageById, findSubjectInStage } from '@/features/teachers/utils/studyLookup';
 
 export default function TeachersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const subjectId = searchParams.get("subject");
-  const subjectLabel = searchParams.get("subjectLabel") ?? subjectId ?? "المادة";
+  const stageId = searchParams?.get('stage') ?? null;
+  const subjectId = searchParams?.get('subject') ?? null;
+  const stage = findStageById(stageId);
+  const subject = findSubjectInStage(stage, subjectId);
+  const { teachers, isLoading, error, sortBy, setSortBy, retry } = useTeachers(subject?.id ?? null);
 
-  const stageId = searchParams.get("stage");
-  let stageLabel = "";
-  if (stageId == "middle") {
-    stageLabel = "المتوسطة";
-  } else if (stageId == "primary") {
-    stageLabel = "الابتدائية";
-  } else if (stageId == "secondary") {
-    stageLabel = "الثانوية";
-  } else {
-    stageLabel = "";
+  if (!stage || !subject) {
+    return (
+      <main className="mx-auto flex max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6">
+        <h1 className="mb-3 text-3xl font-bold text-on-surface">اختر المرحلة والمادة أولاً</h1>
+        <p className="mb-8 text-on-surface-variant">
+          رابط المعلمين غير مكتمل أو غير صالح. اختر مادة من صفحة المواد للمتابعة.
+        </p>
+        <Link
+          href="/subjects"
+          className="rounded-xl bg-primary-container px-6 py-3 font-bold text-white"
+        >
+          استعرض المواد
+        </Link>
+      </main>
+    );
   }
 
-  const { teachers, isLoading, error, sortBy, setSortBy, retry } =
-    useTeachers(subjectId);
+  const stageLabel = stage.name;
+  const subjectLabel = subject.name;
 
   const handleSelectTeacher = (teacher: Teacher) => {
     router.push(`/courses?teacher=${teacher.id}&subject=${teacher.subjectId}`);
   };
 
   const breadcrumbItems = [
-    { label: "الرئيسية", href: "/" },
-    { label: "المواد", href: "/subjects" },
+    { label: 'الرئيسية', href: '/' },
+    { label: 'المواد', href: '/subjects' },
     { label: `معلمو المرحلة ${stageLabel} لمادة ${subjectLabel}` },
   ];
 
@@ -66,10 +76,7 @@ export default function TeachersPage() {
           role="alert"
           className="mb-8 flex flex-col items-center gap-4 rounded-2xl border border-error/30 bg-error-container/30 px-6 py-10 text-center"
         >
-          <span
-            className="material-symbols-outlined text-[40px] text-error"
-            aria-hidden="true"
-          >
+          <span className="material-symbols-outlined text-[40px] text-error" aria-hidden="true">
             error_outline
           </span>
           <p className="text-lg font-semibold text-on-error-container">{error}</p>
@@ -104,10 +111,7 @@ export default function TeachersPage() {
 
       {/* CTA Section */}
       <div className="mt-16">
-        <TeachersCtaSection
-          browseSubjectsHref="/subjects"
-          contactHref="#"
-        />
+        <TeachersCtaSection browseSubjectsHref="/subjects" contactHref="#" />
       </div>
     </main>
   );

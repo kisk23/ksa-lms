@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { Teacher } from '@lms/shared-types/src/models/index.ts';
-import type { SortOption } from '@/features/teachers/types/teacher';
+import type { SortOption, Teacher } from '@/features/teachers/types/teacher';
 import { getTeachersBySubject } from '@/features/teachers/data/teachers';
 
 interface UseTeachersResult {
@@ -43,6 +42,7 @@ export function useTeachers(subjectId: string | null): UseTeachersResult {
   useEffect(() => {
     if (!subjectId) {
       setTeachers([]);
+      setError(null);
       setIsLoading(false);
       return;
     }

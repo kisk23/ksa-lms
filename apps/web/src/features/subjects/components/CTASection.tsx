@@ -22,7 +22,7 @@ export function CTASection({
 }: CTASectionProps) {
   return (
     <section className="grid grid-cols-1 overflow-hidden rounded-2xl lg:grid-cols-2 gap-6">
-      <div className="relative flex flex-col justify-center overflow-hidden bg-primary-container p-16 text-white">
+      <div className="relative flex flex-col justify-center overflow-hidden bg-primary-container p-6 text-white sm:p-10 lg:p-16">
         <div className="relative z-10">
           <h2 className="mb-2 text-3xl font-bold">{title}</h2>
           <p className="mb-10 max-w-md text-lg leading-relaxed text-gray-300">{description}</p>
@@ -50,7 +50,7 @@ export function CTASection({
         </span>
       </div>
 
-      <div className="flex flex-col justify-center border-t border-outline-variant bg-surface-container-high p-16 lg:border-t-0 lg:border-r">
+      <div className="flex flex-col justify-center border-t border-outline-variant bg-surface-container-high p-6 sm:p-10 lg:border-t-0 lg:border-r lg:p-16">
         <h4 className="mb-3 text-2xl font-semibold text-primary-container">{supportTitle}</h4>
         <p className="mb-10 max-w-sm text-base leading-relaxed text-on-surface-variant">
           {supportDescription}

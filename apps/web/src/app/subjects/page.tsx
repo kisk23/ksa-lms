@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { HeroSection, StageSelector, CTASection } from "@/features/subjects/components";
-import { useStageSelection } from "@/features/subjects/hooks/useStageSelection";
-import type { StudyStage } from "@/features/subjects/types/study";
+import { useRouter } from 'next/navigation';
+import { HeroSection, StageSelector, CTASection } from '@/features/subjects/components';
+import { useStageSelection } from '@/features/subjects/hooks/useStageSelection';
+import type { StudyStage } from '@/features/subjects/types/study';
 
 export default function SubjectsPage() {
   const router = useRouter();

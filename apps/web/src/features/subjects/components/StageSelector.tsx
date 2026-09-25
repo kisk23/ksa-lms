@@ -56,6 +56,7 @@ export function StageSelector({
                 title={stage.name}
                 description={stage.description}
                 onClick={() => onStageSelect(stage)}
+                isActive={!isFlipped}
               />
             ))}
           </div>
@@ -71,6 +72,7 @@ export function StageSelector({
               selectedStage={selectedStage}
               onSubjectSelect={(subjectId) => onSubjectSelect(selectedStage, subjectId)}
               onBack={onBack}
+              isActive={isFlipped}
             />
           )}
         </div>

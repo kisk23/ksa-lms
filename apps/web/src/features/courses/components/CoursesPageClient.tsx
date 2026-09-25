@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 import { useCourses } from '../hooks/useCourses';
 import { CoursesGrid } from './CoursesGrid';
@@ -13,6 +14,8 @@ import { CourseFilters } from './CourseFilters';
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function CoursesPageClient() {
+  const searchParams = useSearchParams();
+  const teacherUserId = searchParams?.get('teacher') ?? undefined;
   // ── Search state ──────────────────────────────────────────────────────────
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -62,9 +65,11 @@ export function CoursesPageClient() {
     limit: 9,
     search: debouncedSearch || undefined,
     category: selectedCategory,
+    teacherUserId,
   });
 
   const courses = data?.data ?? [];
+
   const meta = data?.meta;
 
   // ── Separate query to collect ALL distinct categories from the backend ────
@@ -75,6 +80,7 @@ export function CoursesPageClient() {
     page: 1,
     limit: 200,
     search: debouncedSearch || undefined,
+    teacherUserId,
   });
 
   const availableCategories = useMemo<string[]>(() => {
