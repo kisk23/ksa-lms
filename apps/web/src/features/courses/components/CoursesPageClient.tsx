@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 import { useCourses } from '../hooks/useCourses';
 import { CoursesGrid } from './CoursesGrid';
@@ -13,6 +14,8 @@ import { CourseFilters } from './CourseFilters';
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function CoursesPageClient() {
+  const searchParams = useSearchParams();
+  const teacherUserId = searchParams?.get('teacher') ?? undefined;
   // ── Search state ──────────────────────────────────────────────────────────
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -62,8 +65,8 @@ export function CoursesPageClient() {
     limit: 9,
     search: debouncedSearch || undefined,
     category: selectedCategory,
+    teacherUserId,
   });
-
 
   const courses = data?.data ?? [];
 
@@ -77,6 +80,7 @@ export function CoursesPageClient() {
     page: 1,
     limit: 200,
     search: debouncedSearch || undefined,
+    teacherUserId,
   });
 
   const availableCategories = useMemo<string[]>(() => {
@@ -138,7 +142,7 @@ export function CoursesPageClient() {
         {/* ════════════════════════════════════════════════
             MAIN CONTENT — search bar + grid + pagination
             ════════════════════════════════════════════════ */}
-        <section className="flex-1 flex flex-col gap-6 min-w-0">
+        <section className="flex-1 flex flex-col gap-6 min-w-0 w-full">
           {/* ── Search bar ── */}
           <div className="relative w-full">
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none select-none">

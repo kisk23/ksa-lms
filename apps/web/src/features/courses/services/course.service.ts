@@ -27,6 +27,7 @@ export const courseService = {
         ...(params.search ? { search: params.search } : {}),
         ...(params.status ? { status: params.status } : {}),
         ...(params.category ? { category: params.category } : {}),
+        ...(params.teacherUserId ? { teacherUserId: params.teacherUserId } : {}),
       },
     });
     return data;
