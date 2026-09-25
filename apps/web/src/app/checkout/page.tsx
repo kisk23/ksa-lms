@@ -187,13 +187,11 @@ function CheckoutContent() {
                 {/* Course Details */}
                 <div className="flex gap-4">
                   {course.thumbnailUrl && (
-
                     <Image
                       src={course.thumbnailUrl}
                       alt={course.title}
                       width={96}
                       height={64}
-
                       className="w-24 h-16 object-cover rounded-lg border border-zinc-850"
                     />
                   )}

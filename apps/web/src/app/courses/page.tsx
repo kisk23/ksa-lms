@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 
 import { CoursesPageClient } from '@/features/courses/components/CoursesPageClient';
 import { courseKeys } from '@/features/courses/hooks/useCourses';
@@ -8,7 +9,7 @@ import { courseService } from '@/features/courses/services/course.service';
 const INITIAL_PARAMS = { page: 1, limit: 9 } as const;
 
 export const metadata: Metadata = {
-  title: 'الدورات | سُلَّم',
+  title: 'الدورات',
   description: 'استعرض جميع الدورات التعليمية المتاحة على منصة سُلَّم',
   alternates: { canonical: '/courses' },
   openGraph: {
@@ -37,14 +38,22 @@ export default async function CoursesPage() {
     },
   });
 
-  await queryClient.prefetchQuery({
-    queryKey: courseKeys.list(INITIAL_PARAMS),
-    queryFn: () => courseService.getCourses(INITIAL_PARAMS),
-  });
+  // A backend outage must not turn the catalog route into a server-rendering
+  // failure; the client query will display its normal retry/error state.
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: courseKeys.list(INITIAL_PARAMS),
+      queryFn: () => courseService.getCourses(INITIAL_PARAMS),
+    });
+  } catch {
+    // Intentionally leave the dehydrated cache empty.
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CoursesPageClient />
+      <Suspense fallback={null}>
+        <CoursesPageClient />
+      </Suspense>
     </HydrationBoundary>
   );
 }

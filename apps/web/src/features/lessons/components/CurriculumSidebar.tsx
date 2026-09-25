@@ -87,6 +87,7 @@ export function CurriculumSidebar({
             <div key={chapter.id} className="border-b border-gray-100 last:border-0">
               {/* Chapter row — W3C accordion disclosure pattern */}
               <button
+                type="button"
                 onClick={() => toggleChapter(chapter.id)}
                 id={`chapter-header-${chapter.id}`}
                 aria-expanded={isOpen}

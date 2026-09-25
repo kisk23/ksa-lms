@@ -17,6 +17,14 @@ import {
   RefundMethod,
   SessionPlatform,
   LiveSessionStatus,
+  NotificationType,
+  NotificationEvent,
+  NotificationChannel,
+  NotificationStatus,
+  ReferenceType,
+  CourseAuditAction,
+  RequestType,
+  ApprovalStatus,
 } from '../src/generated/client';
 
 const connectionString = process.env.DATABASE_URL!;
@@ -34,6 +42,18 @@ async function main() {
 
   console.log('🧹 Cleaning up old database records...');
   // Delete in reverse order of foreign key dependencies to prevent errors
+  // Some existing development databases still contain the legacy snapshot table,
+  // which is no longer represented in schema.prisma but references approvals.
+  await prisma.$executeRawUnsafe(`
+    DO $$
+    BEGIN
+      IF to_regclass('public.course_snapshots') IS NOT NULL THEN
+        DELETE FROM "course_snapshots";
+      END IF;
+    END $$;
+  `);
+  await prisma.approvalRequest.deleteMany();
+  await prisma.notification.deleteMany();
   await prisma.refund.deleteMany();
   await prisma.paymentWebhookEvent.deleteMany();
   await prisma.payment.deleteMany();
@@ -182,6 +202,15 @@ async function main() {
       description: 'تعلم أساسيات البرمجة من الصفر باستخدام لغة بايثون',
       price: new Decimal('199.00'),
       status: CourseStatus.PUBLISHED,
+    },
+  });
+
+  await prisma.courseAuditLog.create({
+    data: {
+      courseId: course.id,
+      action: CourseAuditAction.PUBLISHED,
+      performedBy: superAdmin.id,
+      metadata: { source: 'development-seed' },
     },
   });
 
@@ -468,7 +497,7 @@ async function main() {
     },
   });
 
-  await prisma.refund.create({
+  const refund = await prisma.refund.create({
     data: {
       paymentId: payment3.id,
       requestedBy: superAdmin.id,
@@ -481,7 +510,7 @@ async function main() {
   });
 
   // ── Promo Codes ──────────────────────────────────
-  await prisma.promoCode.create({
+  const eidPromo = await prisma.promoCode.create({
     data: {
       code: 'EID20',
       discountType: DiscountType.PERCENTAGE,
@@ -503,8 +532,16 @@ async function main() {
     },
   });
 
+  await prisma.promoCodeUsage.create({
+    data: {
+      promoCodeId: eidPromo.id,
+      studentUserId: student.id,
+      periodVersion: eidPromo.periodVersion,
+    },
+  });
+
   // ── Live Sessions ────────────────────────────────
-  await prisma.liveSession.create({
+  const liveSession = await prisma.liveSession.create({
     data: {
       courseId: course.id,
       teacherUserId: teacher.id,
@@ -517,7 +554,111 @@ async function main() {
     },
   });
 
+  await prisma.liveSessionNotification.create({
+    data: {
+      sessionId: liveSession.id,
+      recipientId: student.id,
+      type: NotificationType.SESSION_SCHEDULED,
+      status: NotificationStatus.PENDING,
+    },
+  });
+
+  // ── Generic Notifications ────────────────────────
+  await prisma.notification.createMany({
+    data: [
+      {
+        recipientId: student.id,
+        type: NotificationEvent.PAYMENT_SUCCESS,
+        channel: NotificationChannel.IN_APP,
+        status: NotificationStatus.SENT,
+        referenceId: payment1.id,
+        referenceType: ReferenceType.PAYMENT,
+        payload: { amount: 199, currency: 'SAR', courseTitle: course.title },
+        sentAt: new Date(),
+      },
+      {
+        recipientId: student3.id,
+        type: NotificationEvent.REFUND_PROCESSED,
+        channel: NotificationChannel.EMAIL,
+        status: NotificationStatus.SENT,
+        referenceId: refund.id,
+        referenceType: ReferenceType.REFUND,
+        payload: { amount: 199, currency: 'SAR', courseTitle: course.title },
+        sentAt: new Date(),
+      },
+    ],
+  });
+
+  // ── Payment Webhook Audit ────────────────────────
+  await prisma.paymentWebhookEvent.create({
+    data: {
+      eventId: 'seed-payment-captured',
+      paymentId: payment1.id,
+      eventType: 'payment.captured',
+      payload: {
+        id: 'seed-payment-captured',
+        status: 'captured',
+        amount: 19900,
+        currency: 'SAR',
+      },
+    },
+  });
+
+  // ── Approval Workflow ────────────────────────────
+  const pendingCourse = await prisma.course.create({
+    data: {
+      teacherUserId: teacher.id,
+      slug: 'javascript-foundations',
+      title: 'أساسيات JavaScript',
+      description: 'دورة قيد المراجعة لاختبار دورة عمل الموافقات.',
+      price: new Decimal('149.00'),
+      status: CourseStatus.PENDING_REVIEW,
+    },
+  });
+
+  const pendingChapter = await prisma.chapter.create({
+    data: {
+      courseId: pendingCourse.id,
+      title: 'مقدمة JavaScript',
+      orderIndex: 1,
+    },
+  });
+
+  const pendingLesson = await prisma.lesson.create({
+    data: {
+      chapterId: pendingChapter.id,
+      title: 'المتغيرات وأنواع البيانات',
+      orderIndex: 1,
+      videoUrl: 'dQw4w9WgXcQ',
+    },
+  });
+
+  await prisma.approvalRequest.createMany({
+    data: [
+      {
+        requestType: RequestType.NEW_COURSE,
+        status: ApprovalStatus.PENDING_REVIEW,
+        courseId: pendingCourse.id,
+        requestedBy: teacher.id,
+      },
+      {
+        requestType: RequestType.NEW_LESSON,
+        status: ApprovalStatus.APPROVED,
+        courseId: pendingCourse.id,
+        lessonId: pendingLesson.id,
+        requestedBy: teacher.id,
+        reviewedBy: superAdmin.id,
+        reviewedAt: new Date(),
+      },
+    ],
+  });
+
   console.log('✅ Seed Sulam LMS development database completed successfully!');
+  console.log('📋 Development login credentials:');
+  console.log('   superadmin@sulam.sa / Admin@1234');
+  console.log('   teacher@sulam.sa    / Teacher@1234');
+  console.log('   student@sulam.sa    / Student@1234');
+  console.log('   parent@sulam.sa     / Parent@1234');
 }
 
 main()

@@ -52,6 +52,7 @@ export default function Curriculum({ chapters, courseId }: CurriculumProps) {
               <div key={chapter.id} className="border-2 border-gray-300 rounded-lg overflow-hidden">
                 {/* Chapter header — W3C accordion disclosure pattern */}
                 <button
+                  type="button"
                   onClick={() => setOpenChapterId(isOpen ? '' : chapter.id)}
                   id={`chapter-header-${chapter.id}`}
                   aria-expanded={isOpen}

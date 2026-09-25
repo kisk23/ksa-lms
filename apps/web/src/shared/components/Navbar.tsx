@@ -14,10 +14,26 @@ import { useRouter } from 'next/navigation';
 import { FadeInSection, FadeInItem } from './FadeInSection';
 
 const NAV_LINKS = [
-  { href: '/', label: 'الرئيسية' },
-  { href: '/courses', label: 'الدورات' },
-  { href: '/teachers', label: 'المعلمون' },
-  { href: '/about', label: 'عن سُلَّم' },
+  {
+    href: '/',
+    label: 'الرئيسية',
+    activePaths: ['/'],
+  },
+  {
+    href: '/courses',
+    label: 'الدورات',
+    activePaths: ['/courses'],
+  },
+  {
+    href: '/subjects',
+    label: 'المعلمون',
+    activePaths: ['/subjects', '/teachers'],
+  },
+  {
+    href: '/about',
+    label: 'عن سُلَّم',
+    activePaths: ['/about'],
+  },
 ] as const;
 
 export default function Navbar() {
@@ -37,7 +53,6 @@ export default function Navbar() {
     },
   });
 
-
   if (pathname?.startsWith('/dashboard')) return null;
 
   return (
@@ -47,7 +62,6 @@ export default function Navbar() {
         className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4"
       >
         <FadeInItem className="md:w-1/6 w-1/2">
-
           <Link href="/" className="flex items-center cursor-pointer ps-2 lg:ps-0">
             <Image
               src="/Sullam.svg"
@@ -84,8 +98,15 @@ export default function Navbar() {
         >
           <div className="w-full md:w-4/6 flex md:justify-center ">
             <ul className="font-medium flex flex-col md:flex-row space-x-0 md:space-x-4 mt-4 md:mt-0 gap-1 md:gap-0">
-              {NAV_LINKS.map(({ href, label }) => {
-                const active = pathname === href;
+              {NAV_LINKS.map(({ href, label, activePaths }) => {
+                const active = activePaths.some((path) => {
+                  if (path === '/') {
+                    return pathname === '/';
+                  }
+
+                  return pathname === path || pathname?.startsWith(`${path}/`) === true;
+                });
+
                 return (
                   <li key={href}>
                     <Link

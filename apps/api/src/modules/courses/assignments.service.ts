@@ -1,4 +1,4 @@
-import { IUser } from '@lms/shared-types';
+import { IUser, UserRole } from '@lms/shared-types';
 import {
   BadRequestException,
   ConflictException,
@@ -125,14 +125,23 @@ export class AssignmentsService {
    * 1 — findByLesson(lessonId)
    * Returns the active assignment with questions and options ordered by index.
    */
-  async findByLesson(lessonId: string) {
+  async findByLesson(lessonId: string, actor: IUser) {
+    const canSeeCorrectAnswers = actor.role !== UserRole.STUDENT;
     const assignment = await this.prisma.assignment.findUnique({
       where: { lessonId },
       include: {
         questions: {
           orderBy: { orderIndex: 'asc' },
           include: {
-            options: { orderBy: { orderIndex: 'asc' } },
+            options: {
+              orderBy: { orderIndex: 'asc' },
+              select: {
+                id: true,
+                text: true,
+                orderIndex: true,
+                ...(canSeeCorrectAnswers ? { isCorrect: true } : {}),
+              },
+            },
           },
         },
       },

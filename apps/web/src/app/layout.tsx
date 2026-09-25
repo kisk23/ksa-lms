@@ -46,9 +46,6 @@ export const metadata: Metadata = {
     description: 'نظام إدارة تعلم حديث للطلاب والمعلمين.',
     images: ['/Sullam.svg'],
   },
-  alternates: {
-    canonical: '/',
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,22 +1,30 @@
 import type { Metadata } from 'next';
 
 import CourseDetailClient from '@/features/courseDetails/CourseDetailClient';
+import type { CourseDetails } from '@/features/courses/types';
 
 interface PageProps {
   params: { id: string };
 }
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
+const API_URL = process.env.API_INTERNAL_URL
+  ? `${process.env.API_INTERNAL_URL}${process.env.API_PREFIX ?? '/api/v1'}`
+  : (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1');
 
 /** Fetches the course from the API; returns null on any failure. */
-async function fetchCourse(id: string) {
+interface ApiResponse<T> {
+  data: T;
+}
+
+async function fetchCourse(id: string): Promise<CourseDetails | null> {
   try {
     const res = await fetch(`${API_URL}/courses/${id}`, {
       next: { revalidate: 60 }, // ISR: re-fetch at most every 60 s
     });
     if (!res.ok) throw new Error('not found');
-    return await res.json();
+    const payload = (await res.json()) as ApiResponse<CourseDetails>;
+    return payload.data;
   } catch {
     return null;
   }
@@ -32,13 +40,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!course) {
     return {
-      title: 'تفاصيل الدورة | سُلَّم',
+      title: 'تفاصيل الدورة',
       description: 'استعرض تفاصيل الدورة التعليمية على منصة سُلَّم',
       alternates: { canonical: `/courses/${params.id}` },
     };
   }
 
-  const title = `${course.title} | سُلَّم`;
+  const title = course.title;
   const description = course.description ?? `دورة ${course.title} على منصة سُلَّم التعليمية`;
   const url = `/courses/${params.id}`;
 
@@ -70,16 +78,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
  * Builds schema.org JSON-LD structured data (Course + BreadcrumbList +
  * Organization) so search engines can render rich snippets.
  */
-function buildJsonLd(course: Record<string, unknown>) {
-  const chapters = Array.isArray(course.chapters) ? course.chapters : [];
-  const teacher = course.teacher as { name?: string } | undefined;
+function buildJsonLd(course: CourseDetails) {
+  const chapters = course.chapters;
+  const teacher = course.teacher;
 
   const courseLd = {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: course.title,
-    description:
-      (course.description as string) ?? `دورة ${course.title} على منصة سُلَّم التعليمية`,
+    description: course.description ?? `دورة ${course.title} على منصة سُلَّم التعليمية`,
     url: `${SITE_URL}/courses/${course.id}`,
     inLanguage: 'ar',
     provider: {
@@ -93,7 +100,7 @@ function buildJsonLd(course: Record<string, unknown>) {
           offers: {
             '@type': 'Offer',
             price: Number(course.price),
-            priceCurrency: (course.currency as string) ?? 'SAR',
+            priceCurrency: course.currency ?? 'SAR',
             availability: 'https://schema.org/InStock',
           },
         }

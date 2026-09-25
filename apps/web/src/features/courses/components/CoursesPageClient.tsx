@@ -2,18 +2,20 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 import { useCourses } from '../hooks/useCourses';
 import { CoursesGrid } from './CoursesGrid';
 import { Pagination } from './Pagination';
 import { CourseFilters } from './CourseFilters';
-import type { CoursesListResponse } from '../types';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CoursesPageClient — main component
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function CoursesPageClient() {
+  const searchParams = useSearchParams();
+  const teacherUserId = searchParams?.get('teacher') ?? undefined;
   // ── Search state ──────────────────────────────────────────────────────────
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -63,14 +65,12 @@ export function CoursesPageClient() {
     limit: 9,
     search: debouncedSearch || undefined,
     category: selectedCategory,
+    teacherUserId,
   });
 
-  // GET /courses nests the paginated payload inside an extra { data } envelope
-  // at runtime — type the query result accordingly without changing behaviour.
-  const listEnvelope = data as { data?: CoursesListResponse } | undefined;
-  const courseData = listEnvelope?.data;
-  const courses = courseData?.data ?? [];
-  const meta = courseData?.meta;
+  const courses = data?.data ?? [];
+
+  const meta = data?.meta;
 
   // ── Separate query to collect ALL distinct categories from the backend ────
   // Uses a high limit with no category filter so the pill list stays stable
@@ -80,11 +80,11 @@ export function CoursesPageClient() {
     page: 1,
     limit: 200,
     search: debouncedSearch || undefined,
+    teacherUserId,
   });
 
   const availableCategories = useMemo<string[]>(() => {
-    const allCourses =
-      (allData as { data?: CoursesListResponse } | undefined)?.data?.data ?? [];
+    const allCourses = allData?.data ?? [];
     const seen = new Set<string>();
     for (const course of allCourses) {
       if (course.category) seen.add(course.category);
@@ -144,7 +144,7 @@ export function CoursesPageClient() {
         {/* ════════════════════════════════════════════════
             MAIN CONTENT — search bar + grid + pagination
             ════════════════════════════════════════════════ */}
-        <section className="flex-1 flex flex-col gap-6 min-w-0">
+        <section className="flex-1 flex flex-col gap-6 min-w-0 w-full">
           {/* ── Search bar ── */}
           <div className="relative w-full">
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none select-none">

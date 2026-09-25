@@ -29,12 +29,13 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
 
   return (
     <nav
-      aria-label="pagination"
+      aria-label="صفحات الدورات"
       className="flex justify-center items-center gap-1.5 mt-10 pt-6 border-t border-border/50"
       dir="rtl"
     >
       {/* Previous (RTL: right side) */}
       <button
+        type="button"
         disabled={page === 1}
         onClick={() => onPageChange(page - 1)}
         aria-label="الصفحة السابقة"
@@ -53,6 +54,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
         }
         return (
           <button
+            type="button"
             key={p}
             onClick={() => onPageChange(p)}
             aria-current={p === page ? 'page' : undefined}
@@ -69,6 +71,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
 
       {/* Next (RTL: left side) */}
       <button
+        type="button"
         disabled={page === totalPages}
         onClick={() => onPageChange(page + 1)}
         aria-label="الصفحة التالية"

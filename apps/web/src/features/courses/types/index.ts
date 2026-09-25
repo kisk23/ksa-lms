@@ -106,4 +106,5 @@ export interface CoursesQueryParams {
   search?: string;
   status?: CourseStatus;
   category?: string;
+  teacherUserId?: string;
 }

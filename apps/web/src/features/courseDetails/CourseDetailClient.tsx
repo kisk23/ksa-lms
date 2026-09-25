@@ -38,9 +38,7 @@ function DetailError({ message }: { message: string }) {
 
 export default function CourseDetailClient({ id }: CourseDetailClientProps) {
   const { data, isLoading, isError, error } = useCourse(id);
-  // GET /courses/:id nests the payload inside an extra { data } envelope
-  // at runtime — unwrap defensively without changing behaviour.
-  const course = (data as { data?: typeof data } | undefined)?.data ?? (data as typeof data);
+  const course = data;
 
   if (isLoading) return <CourseDetailLoading />;
 
@@ -57,11 +55,9 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
   // Pick the YouTube ID of the first non-archived lesson across all chapters
   const firstLesson = course.chapters
     .slice()
-    .sort((a: any, b: any) => a.orderIndex - b.orderIndex)
-    .flatMap((ch: any) =>
-      ch.lessons
-        .filter((l: any) => !l.isArchived)
-        .sort((a: any, b: any) => a.orderIndex - b.orderIndex),
+    .sort((a, b) => a.orderIndex - b.orderIndex)
+    .flatMap((ch) =>
+      ch.lessons.filter((lesson) => !lesson.isArchived).sort((a, b) => a.orderIndex - b.orderIndex),
     )[0];
 
   return (

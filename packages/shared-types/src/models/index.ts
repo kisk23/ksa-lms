@@ -180,6 +180,27 @@ export interface Assignment {
   questions: Question[];
 }
 
+export interface AssignmentAttempt {
+  id: string;
+  assignmentId: string;
+  studentUserId: string;
+  attemptNumber: number;
+  scorePct: number;
+  isPassed: boolean;
+  submittedAt: string;
+  snapshot: unknown;
+}
+
+export interface AssignmentBestScore {
+  id: string;
+  assignmentId: string;
+  studentUserId: string;
+  bestScorePct: number;
+  bestAttemptId: string;
+  isPassed: boolean;
+  updatedAt: string;
+}
+
 // ─── Progress ────────────────────────────────────────
 export interface LessonProgress {
   id: string;

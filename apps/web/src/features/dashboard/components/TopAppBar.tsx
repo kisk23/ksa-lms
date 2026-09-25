@@ -75,10 +75,8 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
         </button>
 
         {/* Profile Avatar */}
-        <button
-          type="button"
-          className="h-8 w-8 rounded-full bg-gray-100 border border-gray-200 overflow-hidden ms-2 cursor-pointer hover:border-primary transition-colors flex items-center justify-center relative focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          aria-label={user?.name ? `الملف الشخصي لـ ${user.name}` : 'الملف الشخصي'}
+        <div
+          className="h-8 w-8 rounded-full bg-gray-100 border border-gray-200 overflow-hidden ms-2 flex items-center justify-center relative"
           title={user?.name || 'الملف الشخصي'}
         >
           {avatarUrl ? (
@@ -92,7 +90,7 @@ export function TopAppBar({ onToggleSidebar }: TopAppBarProps) {
           ) : (
             <User size={16} className="text-gray-400" />
           )}
-        </button>
+        </div>
       </div>
     </header>
   );
