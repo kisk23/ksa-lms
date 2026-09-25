@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import type { Teacher } from '@/features/teachers/types/teacher';
 import { Breadcrumbs } from '@/features/teachers/components/Breadcrumbs';
 import { PageHeader } from '@/features/teachers/components/PageHeader';
@@ -14,7 +15,7 @@ import { sortOptions } from '@/features/teachers/sortOptions';
 import { TeachersCtaSection } from '@/features/teachers/components/TeachersCtaSection';
 import { findStageById, findSubjectInStage } from '@/features/teachers/utils/studyLookup';
 
-export default function TeachersPage() {
+function TeachersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -114,5 +115,13 @@ export default function TeachersPage() {
         <TeachersCtaSection browseSubjectsHref="/subjects" contactHref="#" />
       </div>
     </main>
+  );
+}
+
+export default function TeachersPage() {
+  return (
+    <Suspense fallback={null}>
+      <TeachersContent />
+    </Suspense>
   );
 }

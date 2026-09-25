@@ -53,8 +53,8 @@ export default function PricingCard({ course }: PricingCardProps) {
       {/* Features */}
       <div className="flex flex-col gap-4">
         <h4 className="font-semibold text-black">تتضمن هذه الدورة:</h4>
-        {COURSE_FEATURES.map((f, i) => (
-          <div key={i} className="flex items-center gap-3 text-gray-600">
+        {COURSE_FEATURES.map((f) => (
+          <div key={f.label} className="flex items-center gap-3 text-gray-600">
             <span className="shrink-0 text-primary ">{f.icon}</span>
             <span className="text-sm">{f.label}</span>
           </div>

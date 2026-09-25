@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from 'react';
 
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -11,12 +11,18 @@ interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
-  ({ label, error, icon, labelSuffix, className = '', ...props }, ref) => {
+  ({ label, error, icon, labelSuffix, className = '', id, ...props }, ref) => {
+    // Stable id so <label htmlFor> is always associated with the input,
+    // even when consumers don't pass one explicitly.
+    const generatedId = useId();
+    const inputId = id ?? generatedId;
+    const errorId = `${inputId}-error`;
+
     return (
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <label
-            htmlFor={props.id}
+            htmlFor={inputId}
             className="text-[14px] leading-normal font-semibold text-[#0f1a37] font-arabic"
           >
             {label}
@@ -33,16 +39,19 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
           <input
             ref={ref}
+            id={inputId}
+            aria-invalid={!!error || undefined}
+            aria-describedby={error ? errorId : undefined}
             {...props}
             className={[
               'w-full bg-white border rounded-lg px-4 py-3',
               'text-[16px] leading-[1.6] text-[#0f1a37] placeholder:text-[#747685]',
               'font-arabic',
-              'focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20',
+              'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus:border-primary',
               'transition-all duration-200 shadow-sm',
               icon ? 'pr-12' : '',
               error
-                ? 'border-[#ba1a1a] focus:border-[#ba1a1a] focus:ring-[#ba1a1a]/20'
+                ? 'border-[#ba1a1a] focus:border-[#ba1a1a] focus-visible:ring-[#ba1a1a]/20'
                 : 'border-[#c4c5d6]',
               className,
             ]
@@ -52,7 +61,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         </div>
 
         {error && (
-          <p className="text-[#ba1a1a] text-[13px] font-arabic" role="alert">
+          <p id={errorId} className="text-[#ba1a1a] text-[13px] font-arabic" role="alert">
             {error}
           </p>
         )}

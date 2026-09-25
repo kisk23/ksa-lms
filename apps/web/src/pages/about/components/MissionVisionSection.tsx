@@ -32,7 +32,7 @@ export default function MissionVisionSection() {
               <h3 className="text-xl font-black text-gray-900 mb-3">رؤيتنا</h3>
               <p className="text-gray-600 leading-relaxed">
                 عالم لا يُحدّد فيه مكان ميلادك أو إمكانات أسرتك مسار تعليمك. نحلم بيوم يقول فيه كل
-                طالب: "وجدتُ المدرس الذي كنت أبحث عنه."
+                طالب: &quot;وجدتُ المدرس الذي كنت أبحث عنه.&quot;
               </p>
             </div>
           </RevealSection>

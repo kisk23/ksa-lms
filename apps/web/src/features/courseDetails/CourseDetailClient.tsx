@@ -37,7 +37,8 @@ function DetailError({ message }: { message: string }) {
 // ─── Main client component ────────────────────────────────────────────────────
 
 export default function CourseDetailClient({ id }: CourseDetailClientProps) {
-  const { data: { data: course } = {}, isLoading, isError, error } = useCourse(id);
+  const { data, isLoading, isError, error } = useCourse(id);
+  const course = data;
 
   if (isLoading) return <CourseDetailLoading />;
 
@@ -54,11 +55,9 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
   // Pick the YouTube ID of the first non-archived lesson across all chapters
   const firstLesson = course.chapters
     .slice()
-    .sort((a: any, b: any) => a.orderIndex - b.orderIndex)
-    .flatMap((ch: any) =>
-      ch.lessons
-        .filter((l: any) => !l.isArchived)
-        .sort((a: any, b: any) => a.orderIndex - b.orderIndex),
+    .sort((a, b) => a.orderIndex - b.orderIndex)
+    .flatMap((ch) =>
+      ch.lessons.filter((lesson) => !lesson.isArchived).sort((a, b) => a.orderIndex - b.orderIndex),
     )[0];
 
   return (
@@ -69,7 +68,9 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         <CourseInfo course={course} />
         <WhatYouLearn chapters={course.chapters} />
         <Curriculum chapters={course.chapters} courseId={course.id} />
-        <InstructorProfile teacher={course.teacher} courseCount={10} />
+        {/* No real teacher course-count from the API yet — omit the stat
+            instead of showing a hardcoded mock value. */}
+        <InstructorProfile teacher={course.teacher} />
       </div>
       {/* ── LEFT — Sticky pricing card ── */}
       <div className="lg:col-span-4 order-first lg:order-0">

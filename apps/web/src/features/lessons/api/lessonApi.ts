@@ -17,6 +17,10 @@ interface ApiResponse<T> {
   timestamp: string;
 }
 
+type LessonApiPayload = Omit<LessonDetail, 'youtubeVideoId'> & {
+  videoUrl: string;
+};
+
 /**
  * Shared axios instance — reads base URL from env.
  * Set in apps/web/.env.local:
@@ -39,11 +43,11 @@ export const apiClient = axios.create({
  * videoUrl database column into the youtubeVideoId property expected by the frontend.
  */
 export async function getLesson(
-  courseId: string,
-  chapterId: string,
+  _courseId: string,
+  _chapterId: string,
   lessonId: string,
 ): Promise<LessonDetail> {
-  const { data } = await apiClient.get<ApiResponse<any>>(`/lessons/${lessonId}`);
+  const { data } = await apiClient.get<ApiResponse<LessonApiPayload>>(`/lessons/${lessonId}`);
 
   const lesson = data.data;
 
@@ -97,8 +101,8 @@ export async function getAssignments(lessonId: string): Promise<Assignment[]> {
     );
 
     return [data.data];
-  } catch (error: any) {
-    if (error?.response?.status === 404) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
       return [];
     }
     throw error;
@@ -118,8 +122,8 @@ export async function getLessonFiles(lessonId: string): Promise<LessonFile[]> {
     const { data } = await apiClient.get<ApiResponse<LessonFile[]>>(`/lessons/${lessonId}/files`);
 
     return data.data;
-  } catch (error: any) {
-    if (error?.response?.status === 404) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
       return [];
     }
     throw error;

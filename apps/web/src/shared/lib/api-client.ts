@@ -61,7 +61,6 @@ axiosClient.interceptors.response.use(
       status === 401 &&
       original &&
       !original._retry &&
-      !original.url?.includes('/auth/me') &&
       !original.url?.includes('/auth/login') &&
       !original.url?.includes('/auth/register') &&
       !original.url?.includes('/auth/refresh')

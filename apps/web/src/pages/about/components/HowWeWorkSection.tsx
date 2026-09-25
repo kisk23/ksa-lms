@@ -1,4 +1,4 @@
-import type { Step } from '../types';
+import type { Step } from '@/types/about';
 import RevealSection from './reusable/RevealSection';
 import SectionLabel from './reusable/SectionLabel';
 

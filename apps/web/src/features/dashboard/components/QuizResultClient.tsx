@@ -36,10 +36,10 @@ export function QuizResultClient() {
   const params = useSearchParams();
   const router = useRouter();
 
-  const score = parseInt(params.get('score') ?? '0', 10);
-  const total = parseInt(params.get('total') ?? '1', 10);
-  const elapsedSec = parseInt(params.get('elapsed') ?? '0', 10);
-  const quizId = params.get('quizId') ?? '1';
+  const score = parseInt(params?.get('score') ?? '0', 10);
+  const total = parseInt(params?.get('total') ?? '1', 10);
+  const elapsedSec = parseInt(params?.get('elapsed') ?? '0', 10);
+  const quizId = params?.get('quizId') ?? '1';
 
   const percentage = Math.round((score / total) * 100);
   const grade = gradeLabel(percentage);

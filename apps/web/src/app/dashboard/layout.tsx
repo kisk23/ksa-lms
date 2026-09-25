@@ -28,14 +28,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Header - Top AppBar covering full width */}
       <TopAppBar onToggleSidebar={() => setSidebarOpen((prev) => !prev)} />
 
-      {/* Main Content Page Canvas - offset matches narrow or wide sidebar */}
-      <main
+      {/* Main Content Page Canvas - offset matches narrow or wide sidebar.
+          A <div> is used because the root layout already provides the single
+          <main id="main-content"> landmark for the whole app. */}
+      <div
         className={`min-h-screen pt-16 transition-all duration-300 ${
           sidebarOpen ? 'lg:mr-72' : 'lg:mr-20'
         }`}
       >
         <div className="p-6 md:p-8 max-w-7xl mx-auto w-full">{children}</div>
-      </main>
+      </div>
     </div>
   );
 }

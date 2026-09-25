@@ -26,7 +26,7 @@ interface UseMarkLessonCompleteOptions {
  */
 export function useMarkLessonComplete({
   courseId,
-  chapterId,
+  chapterId: _chapterId,
   lessonId,
 }: UseMarkLessonCompleteOptions) {
   const qc = useQueryClient();

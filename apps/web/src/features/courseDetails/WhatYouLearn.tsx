@@ -31,8 +31,8 @@ export default function WhatYouLearn({ chapters }: WhatYouLearnProps) {
     <div className="p-6 rounded-xl border border-gray-300 bg-surface/5" dir="rtl">
       <h2 className="text-xl font-bold text-black mb-6">ماذا ستتعلم؟</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {points.map((point, i) => (
-          <div key={i} className="flex items-start gap-3">
+        {points.map((point) => (
+          <div key={point} className="flex items-start gap-3">
             <span className="text-green-500">
               <CheckIcon />
             </span>

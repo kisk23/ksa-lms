@@ -93,7 +93,7 @@ export default async function LessonPage({ params }: PageProps) {
   }
 
   return (
-    <main className="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-10 pt-[96px] pb-10">
+    <div className="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-10 pt-[96px] pb-10">
       <LessonPageClient
         courseId={courseId}
         chapterId={chapterId}
@@ -102,6 +102,6 @@ export default async function LessonPage({ params }: PageProps) {
         courseTitle={courseTitle}
         teacherName={teacherName}
       />
-    </main>
+    </div>
   );
 }

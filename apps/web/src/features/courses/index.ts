@@ -2,6 +2,6 @@
 // Courses Feature — Public API
 // ─────────────────────────────────────────
 export { CourseCard } from './components/CourseCard';
-export { CourseList } from './components/CourseList';
+export { CoursesGrid } from './components/CoursesGrid';
 export { useCourses } from './hooks/useCourses';
-export { coursesService } from './services/course.service';
+export { courseService } from './services/course.service';

@@ -28,7 +28,7 @@ export default function StorySection() {
             القصة وراء الاسم
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-7 leading-snug">
-            "سُلَّم" مش مجرد كلمة، دي وعد بالارتفاع.
+            &quot;سُلَّم&quot; مش مجرد كلمة، دي وعد بالارتفاع.
           </h2>
           <div className="space-y-5 text-gray-600 leading-loose">
             <p className="text-lg">

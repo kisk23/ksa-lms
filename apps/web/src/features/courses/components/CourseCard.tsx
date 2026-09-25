@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 import type { Course } from '../types';
 import { Clock, UserRound } from 'lucide-react';
@@ -19,7 +20,19 @@ export function CourseCard({ course }: CourseCardProps) {
     >
       {/* Thumbnail */}
       <div className="relative aspect-video bg-gray-50 overflow-hidden flex items-center justify-center">
-        <span className="text-4xl">{course.thumbnailUrl || '📚'}</span>
+        {course.thumbnailUrl ? (
+          <Image
+            src={course.thumbnailUrl}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <span className="text-4xl" aria-hidden="true">
+            📚
+          </span>
+        )}
         {/* Rating badge placeholder */}
         <div className="absolute top-2 right-2 bg-white backdrop-blur-sm px-3 py-1 rounded-full text-xs flex items-center gap-1">
           <span className="text-amber-400">★</span>
@@ -56,17 +69,18 @@ export function CourseCard({ course }: CourseCardProps) {
         <div className="flex justify-between items-center pt-2 border-t border-border/20">
           <span className="text-surface/80 text-xs flex items-center gap-1">
             <Clock size={16} />
-            <span>{course._count.enrollments.toLocaleString('ar-SA')} طالب</span>
+            <span>{(course._count?.enrollments ?? 0).toLocaleString('ar-SA')} طالب</span>
           </span>
           <span className="text-primary font-bold text-sm">{formattedPrice}</span>
         </div>
 
-        <button
-          tabIndex={-1}
-          className="mt-1 w-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition-colors py-2 rounded-sm text-xs font-semibold cursor-pointer"
+        {/* Visual CTA — purely decorative: the whole card is a link */}
+        <span
+          aria-hidden="true"
+          className="mt-1 w-full border-2 border-primary text-primary group-hover:bg-primary group-hover:text-white transition-colors py-2 rounded-sm text-xs font-semibold text-center block"
         >
           عرض التفاصيل
-        </button>
+        </span>
       </div>
     </Link>
   );
